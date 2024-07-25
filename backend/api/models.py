@@ -53,12 +53,22 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.username
 
+class Keyword(models.Model):
+    keyword = models.CharField(max_length=50, unique=True)
 
-# class Keyword(models.Model):
-#     keyword = models.CharField(max_length=50, unique=True)
+    def __str__(self):
+        return self.keyword
 
-#     def __str__(self):
-#         return self.keyword
+class Project(models.Model):
+    project_id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="projects") # 다른 곳에서 user.projects하면 Project object를 다 접근할 수 있게 됨
+    title = models.CharField(max_length=100)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    keywords = models.ManyToManyField(Keyword, blank=True)
+
+    def __str__(self):
+        return self.title
 
 # class Profile(models.Model):
 #     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="profile")
@@ -69,22 +79,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 #     def __str__(self):
 #         return self.user_name
-
-# class Project(models.Model):
-#     project_id = models.AutoField(primary_key=True)
-#     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="projects")
-#     title = models.CharField(max_length=100)
-#     content = models.TextField()
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     keywords = models.ManyToManyField(Keyword, blank=True)
-
-#     def save(self, *args, **kwargs):
-#         if self.keywords.count() > 3:
-#             raise ValueError("A project can have a maximum of 3 keywords.")
-#         super().save(*args, **kwargs)
-
-#     def __str__(self):
-#         return self.title
 
 # class InvitationLink(models.Model):
 #     id = models.AutoField(primary_key=True)

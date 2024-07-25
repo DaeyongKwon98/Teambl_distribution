@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser
+from .models import CustomUser, Project, Keyword
 
 # Json object를 Python object로 convert해준다. (and vice versa)
 
@@ -27,3 +27,32 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data['password'])
             validated_data.pop('password')
         return super().update(instance, validated_data)
+
+class ProjectSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+    keywords = serializers.SlugRelatedField(
+        slug_field='keyword',
+        queryset=Keyword.objects.all(),
+        many=True
+    )
+    class Meta:
+        model = Project
+        fields = ["project_id", "user", "title", "content", "created_at", "keywords"]
+        extra_kwargs = {"user": {"read_only": True}}
+
+    def create(self, validated_data):
+        keywords_data = validated_data.pop('keywords', [])
+        project = Project.objects.create(**validated_data)
+        project.keywords.set(keywords_data)
+        return project
+
+    def update(self, instance, validated_data):
+        keywords_data = validated_data.pop('keywords', [])
+        instance = super().update(instance, validated_data)
+        instance.keywords.set(keywords_data)
+        return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['keywords'] = [keyword.keyword for keyword in instance.keywords.all()]
+        return representation
