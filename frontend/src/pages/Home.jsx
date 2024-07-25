@@ -39,18 +39,22 @@ function Home() {
 
   const createProject = (e) => {
     e.preventDefault();
-    
+
     // 전송할 데이터 로그 확인
     console.log({ content, title, keywords });
 
     api
-      .post("/api/projects/", { content, title, keywords })
+      .post("/api/projects/", {
+        content,
+        title,
+        keywords,
+      })
       .then((res) => {
         if (res.status === 201) alert("Project created!");
         else alert("Failed to create project.");
         getProjects();
-        setContent("");  // 폼 초기화
-        setTitle("");    // 폼 초기화
+        setContent(""); // 폼 초기화
+        setTitle(""); // 폼 초기화
         setKeywords([]); // 폼 초기화
       })
       .catch((error) => {
@@ -62,30 +66,30 @@ function Home() {
           alert(`Failed to create project: ${error.message}`);
         }
       });
-};
+  };
 
-//   const createProject = (e) => {
-//     e.preventDefault();
-//     api
-//       .post("/api/projects/", { content, title, keywords })
-//       .then((res) => {
-//         if (res.status === 201) alert("Project created!");
-//         else alert("Failed to create project.");
-//         getProjects();
-//         setContent("");  // 폼 초기화
-//         setTitle("");    // 폼 초기화
-//         setKeywords([]); // 폼 초기화
-//       })
-//       .catch((error) => {
-//         if (error.response) {
-//           console.log(error.response.data);
-//           alert(`Failed to create project: ${error.response.data}`);
-//         } else {
-//           console.log(error.message);
-//           alert(`Failed to create project: ${error.message}`);
-//         }
-//       });
-//   };
+  //   const createProject = (e) => {
+  //     e.preventDefault();
+  //     api
+  //       .post("/api/projects/", { content, title, keywords })
+  //       .then((res) => {
+  //         if (res.status === 201) alert("Project created!");
+  //         else alert("Failed to create project.");
+  //         getProjects();
+  //         setContent("");  // 폼 초기화
+  //         setTitle("");    // 폼 초기화
+  //         setKeywords([]); // 폼 초기화
+  //       })
+  //       .catch((error) => {
+  //         if (error.response) {
+  //           console.log(error.response.data);
+  //           alert(`Failed to create project: ${error.response.data}`);
+  //         } else {
+  //           console.log(error.message);
+  //           alert(`Failed to create project: ${error.message}`);
+  //         }
+  //       });
+  //   };
 
   const addKeyword = () => {
     if (keywords.length < 3 && keywordInput.trim()) {
@@ -105,7 +109,11 @@ function Home() {
       <div className="projects-section">
         <h2>Projects</h2>
         {projects.map((project) => (
-          <Project project={project} onDelete={deleteProject} key={project.project_id} />
+          <Project
+            project={project}
+            onDelete={deleteProject}
+            key={project.project_id}
+          />
         ))}
       </div>
       <h2>Create a Project</h2>
@@ -144,7 +152,10 @@ function Home() {
         <ul>
           {keywords.map((keyword, index) => (
             <li key={index}>
-              {keyword} <button type="button" onClick={() => removeKeyword(index)}>Remove</button>
+              {keyword}{" "}
+              <button type="button" onClick={() => removeKeyword(index)}>
+                Remove
+              </button>
             </li>
           ))}
         </ul>
