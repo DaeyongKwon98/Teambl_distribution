@@ -1,8 +1,13 @@
-from rest_framework import generics, status
-from rest_framework.response import Response
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import CustomUser, Project
 from .serializers import CustomUserSerializer, ProjectSerializer
+import json
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views import View
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -32,3 +37,27 @@ class ProjectDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Project.objects.filter(user=user)  # user가 user인 note만 필터
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class SendCodeView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            email = data.get("email")
+            code = data.get("code")
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+
+        if not email or not code:
+            return JsonResponse({"error": "Email and code are required"}, status=400)
+
+        send_mail(
+            "Your verification code",
+            f"Your verification code is {code}",
+            "from@example.com",
+            [email],
+            fail_silently=False,
+        )
+
+        return JsonResponse({"message": "Verification code sent"}, status=200)
