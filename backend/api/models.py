@@ -9,57 +9,52 @@ from django.contrib.auth.models import (
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, username, password=None, **extra_fields):
-        if not username:
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
             raise ValueError("The Email field must be set")
-        user = self.model(username=username, **extra_fields)
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, password=None, **extra_fields):
-        extra_fields.setdefault("is_superuser", True)
+    def create_superuser(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_active", True)
+        extra_fields.setdefault("is_superuser", True)
 
-        if extra_fields.get("is_superuser") is not True:
-            raise ValueError("Superuser must have is_superuser=True.")
-        if extra_fields.get("is_staff") is not True:
-            raise ValueError("Superuser must have is_staff=True.")
-
-        return self.create_user(username, password, **extra_fields)
+        return self.create_user(email, password, **extra_fields)
 
 
 class CustomUser(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=128, unique=True)
+    email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)
     last_login = models.DateTimeField(null=True, blank=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     data_joined = models.DateTimeField(auto_now_add=True)
-    groups = models.ManyToManyField(
-        Group,
-        related_name="customuser_set",
-        blank=True,
-        help_text="The groups this user belongs to.",
-        verbose_name="groups",
-    )
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name="customuser_set",
-        blank=True,
-        help_text="Specific permissions for this user.",
-        verbose_name="user permissions",
-    )
+    # groups = models.ManyToManyField(
+    #     Group,
+    #     related_name="customuser_set",
+    #     blank=True,
+    #     help_text="The groups this user belongs to.",
+    #     verbose_name="groups",
+    # )
+    # user_permissions = models.ManyToManyField(
+    #     Permission,
+    #     related_name="customuser_set",
+    #     blank=True,
+    #     help_text="Specific permissions for this user.",
+    #     verbose_name="user permissions",
+    # )
 
-    USERNAME_FIELD = "username"
+    USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
 
     objects = CustomUserManager()
 
     def __str__(self):
-        return self.username
+        return self.email
 
 
 class Keyword(models.Model):
@@ -87,10 +82,12 @@ class Profile(models.Model):
     user = models.OneToOneField(
         CustomUser, on_delete=models.CASCADE, related_name="profile"
     )
-    user_name = models.CharField(max_length=100)
-    major = models.CharField(max_length=100)
-    year = models.IntegerField()
-    keywords = models.ManyToManyField(Keyword, blank=True)
+    user_name = models.CharField(max_length=100)  # 이름
+    school = models.CharField(max_length=100)  # 학교
+    current_academic_degree = models.CharField(max_length=10)  # 학력
+    year = models.IntegerField()  # 입학연도
+    major = models.CharField(max_length=100)  # 전공
+    keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
 
     def __str__(self):
         return self.user_name

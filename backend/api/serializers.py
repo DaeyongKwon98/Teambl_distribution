@@ -1,30 +1,32 @@
 from rest_framework import serializers
 from .models import CustomUser, Project, Keyword, Profile
 
-# Json object를 Python object로 convert해준다. (and vice versa)
-
 
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
         model = Keyword
-        fields = ["id", "keyword"]
+        fields = ["keyword"]
 
 
 class ProfileSerializer(serializers.ModelSerializer):
-    keywords = KeywordSerializer(many=True, required=False)
+    keywords = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
-        fields = ["user_name", "major", "year", "keywords"]
+        fields = [
+            "user_name",
+            "school",
+            "current_academic_degree",
+            "year",
+            "major",
+            "keywords",
+        ]
+
+    def get_keywords(self, obj):
+        return [keyword.keyword for keyword in obj.keywords.all()]
 
     def create(self, validated_data):
-        keywords_data = validated_data.pop("keywords", [])
         profile = Profile.objects.create(**validated_data)
-        for keyword_data in keywords_data:
-            keyword, created = Keyword.objects.get_or_create(
-                keyword=keyword_data["keyword"]
-            )
-            profile.keywords.add(keyword)
         return profile
 
 
@@ -35,7 +37,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             "id",
-            "username",
+            "email",
             "password",
             "last_login",
             "is_superuser",
@@ -54,15 +56,21 @@ class CustomUserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        username = validated_data.pop("username")
-        password = validated_data.pop("password")
-        profile_data = validated_data.pop("profile")
+        profile_data = self.initial_data.get("profile", {})
+        keywords_data = profile_data.pop("keywords", [])
 
+        # CustomUser 인스턴스 생성
         user = CustomUser.objects.create_user(
-            username=username, password=password, **validated_data
+            email=validated_data["email"], password=validated_data["password"]
         )
-        profile_data["user"] = user
-        ProfileSerializer().create(profile_data)
+
+        # Profile 인스턴스 생성 및 CustomUser와 연결
+        profile = Profile.objects.create(user=user, **profile_data)
+
+        # Keywords 추가
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            profile.keywords.add(keyword_obj)
 
         return user
 
@@ -76,40 +84,33 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
-    keywords = serializers.SlugRelatedField(
-        slug_field="keyword", queryset=Keyword.objects.all(), many=True
-    )
+    keywords = serializers.SerializerMethodField()
 
     class Meta:
         model = Project
         fields = ["project_id", "user", "title", "content", "created_at", "keywords"]
         extra_kwargs = {"user": {"read_only": True}}
 
+    def get_keywords(self, obj):
+        return [keyword.keyword for keyword in obj.keywords.all()]
+
     def create(self, validated_data):
-        print("프로젝트 생성")
-        keywords_data = validated_data.pop("keywords", [])
+        # 키워드를 initial_data에서 추출
+        keywords_data = self.initial_data.get("keywords", [])
+
+        # keywords 필드를 validated_data에서 제거
+        validated_data.pop("keywords", None)
+
+        # Project 인스턴스 생성
         project = Project.objects.create(**validated_data)
-        project.keywords.set(keywords_data)
+
+        # 키워드를 프로젝트와 연결
+        keyword_objs = []
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            keyword_objs.append(keyword_obj)
+
+        # set() 메서드를 사용하여 Many-to-Many 관계 설정
+        project.keywords.set(keyword_objs)
 
         return project
-
-    def update(self, instance, validated_data):
-        keywords_data = validated_data.pop("keywords", [])
-        instance = super().update(instance, validated_data)
-        # instance.keywords.set(keywords_data)
-
-        instance.keywords.clear()
-        for keyword_data in keywords_data:
-            keyword, created = Keyword.objects.get_or_create(
-                keyword=keyword_data["keyword"]
-            )
-            instance.keywords.add(keyword)
-
-        return instance
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        representation["keywords"] = [
-            keyword.keyword for keyword in instance.keywords.all()
-        ]
-        return representation
