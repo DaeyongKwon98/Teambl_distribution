@@ -2,7 +2,6 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import NewRegister from "./pages/NewRegister";
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -15,8 +14,7 @@ function Logout() {
 function RegisterAndLogout() {
   // register하면 정보 클리어 해줘야한대
   localStorage.clear();
-  // return <Register />
-  return <NewRegister />;
+  return <Register />;
 }
 
 function App() {

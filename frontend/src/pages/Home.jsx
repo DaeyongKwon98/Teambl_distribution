@@ -58,11 +58,11 @@ function Home() {
         setKeywords([]); // 폼 초기화
       })
       .catch((error) => {
+        console.log(error.response);
+        console.log(error.message);
         if (error.response) {
-          console.log(error.response.data);
           alert(`Failed to create project: ${error.response.data}`);
         } else {
-          console.log(error.message);
           alert(`Failed to create project: ${error.message}`);
         }
       });
