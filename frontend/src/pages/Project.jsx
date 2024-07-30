@@ -69,11 +69,17 @@ function Project() {
   };
 
   const addKeyword = () => {
-    if (keywords.length < 3 && keywordInput.trim()) {
+    if (
+      keywords.length < 3 &&
+      keywordInput.trim() &&
+      !keywords.includes(keywordInput)
+    ) {
       setKeywords([...keywords, keywordInput.trim()]);
       setKeywordInput("");
     } else if (keywords.length >= 3) {
       alert("You can only add up to 3 keywords.");
+    } else if (keywords.includes(keywordInput)) {
+      alert("이미 등록한 키워드입니다.");
     }
   };
 

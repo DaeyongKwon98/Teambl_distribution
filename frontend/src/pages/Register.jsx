@@ -47,7 +47,7 @@ function Register() {
     try {
       await api.post("/api/send_code/", { email, code });
       setCodeSent(true);
-      alert("인증 코드가 이메일로 전송되었습니다.");
+      alert(`인증 코드가 이메일로 전송되었습니다.\n 인증코드는: ${code}`);
     } catch (error) {
       console.error(error);
       alert("인증 코드 전송 실패");
