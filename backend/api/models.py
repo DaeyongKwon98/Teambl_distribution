@@ -95,7 +95,7 @@ class Profile(models.Model):
 
 class InvitationLink(models.Model):
     inviter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="invitation_links")
-    invitee_name = models.CharField(max_length=255, default="Unknown")
+    invitee_name = models.CharField(max_length=255)
     link = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
