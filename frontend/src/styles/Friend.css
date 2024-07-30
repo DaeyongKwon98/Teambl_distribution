@@ -1,0 +1,33 @@
+/* Friend.css */
+
+/* Container for the whole page */
+.friend-container {
+    text-align: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Heading styles */
+  .friend-container h1 {
+    font-size: 2em;
+    color: #333;
+    margin-bottom: 20px;
+  }
+  
+  /* Button styles */
+  .friend-container button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1em;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  /* Button hover effect */
+  .friend-container button:hover {
+    background-color: #0056b3;
+  }
+  

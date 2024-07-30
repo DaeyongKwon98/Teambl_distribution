@@ -93,17 +93,17 @@ class Profile(models.Model):
         return self.user_name
 
 
-# class InvitationLink(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     inviter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="invitation_links")
-#     link = models.CharField(max_length=255, unique=True)
-#     created_at = models.DateTimeField(auto_now_add=True)
+class InvitationLink(models.Model):
+    inviter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="invitation_links")
+    invitee_name = models.CharField(max_length=255, default="Unknown")
+    link = models.CharField(max_length=255, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
 
-#     class Meta:
-#         unique_together = ('inviter', 'link')
+    class Meta:
+        unique_together = ('inviter', 'link')
 
-#     def __str__(self):
-#         return self.link
+    def __str__(self):
+        return self.link
 
 # class Friend(models.Model):
 #     to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="friends_to")

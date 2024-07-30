@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Project, Keyword, Profile
+from .models import CustomUser, Project, Keyword, Profile, InvitationLink
 
 
 class KeywordSerializer(serializers.ModelSerializer):
@@ -114,3 +114,9 @@ class ProjectSerializer(serializers.ModelSerializer):
         project.keywords.set(keyword_objs)
 
         return project
+
+class InvitationLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvitationLink
+        fields = ['id', 'inviter', 'invitee_name', 'link', 'created_at']
+        read_only_fields = ['inviter', 'created_at']

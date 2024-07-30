@@ -7,6 +7,7 @@ import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Friend from "./pages/Friend";
+import Invite from "./pages/Invite";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -48,6 +49,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Friend />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/invite"
+          element={
+            <ProtectedRoute>
+              <Invite />
             </ProtectedRoute>
           }
         />

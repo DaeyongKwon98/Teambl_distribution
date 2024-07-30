@@ -9,4 +9,7 @@ urlpatterns = [
         name="delete-project",
     ),
     path("send_code/", views.SendCodeView.as_view(), name="send_code"),
+    path("create-invitation-link/", views.CreateInvitationLinkView.as_view(), name='create-invitation-link'),
+    path('delete-invitation-link/<int:pk>/', views.InvitationLinkDelete.as_view(), name='delete-invitation-link'),
+    path('invitation-links/', views.InvitationLinkList.as_view(), name='invitation-links'),
 ]
