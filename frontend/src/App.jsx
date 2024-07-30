@@ -2,9 +2,11 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Home from "./pages/Home";
+import Project from "./pages/Project";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Home from "./pages/Home";
+import Friend from "./pages/Friend";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -12,7 +14,7 @@ function Logout() {
 }
 
 function RegisterAndLogout() {
-  // register하면 정보 클리어 해줘야한대
+  // register하면 정보 클리어 해줘야 한다
   localStorage.clear();
   return <Register />;
 }
@@ -33,6 +35,22 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<RegisterAndLogout />} />
+        <Route
+          path="/projects"
+          element={
+            <ProtectedRoute>
+              <Project />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/friends"
+          element={
+            <ProtectedRoute>
+              <Friend />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

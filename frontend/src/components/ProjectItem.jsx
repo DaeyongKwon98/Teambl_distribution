@@ -1,7 +1,7 @@
 import React from "react";
-import "../styles/Project.css";
+import "../styles/ProjectItem.css";
 
-function Project({ project, onDelete }) {
+function ProjectItem({ project, onDelete }) {
   const formattedDate = new Date(project.created_at).toLocaleDateString(
     "en-US"
   );
@@ -27,4 +27,4 @@ function Project({ project, onDelete }) {
   );
 }
 
-export default Project;
+export default ProjectItem;

@@ -1,68 +1,44 @@
-/* Container for the whole page */
-div {
-  font-family: Arial, sans-serif;
-}
+/* GPT로 만든 임시 css 파일 */
 
-/* Styles for the projects section */
-.projects-section {
-  margin-bottom: 2rem;
-}
-
-.projects-section h2 {
-  color: #333;
-  font-size: 24px;
-}
-
-/* Styles for individual projects - assuming your Project component has some container element */
-.project {
-  background-color: #f9f9f9;
-  border-left: 5px solid #007bff;
-  margin: 10px 0;
-  padding: 10px 15px;
-  border-radius: 5px;
-}
-
-/* Styles for the form section */
-form {
-  background-color: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 500px;
-  margin: auto;
-}
-
-form h2 {
-  color: #333;
-  font-size: 24px;
-  margin-bottom: 20px;
-}
-
-form label {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-form input,
-form textarea {
-  width: 100%;
-  padding: 8px;
-  margin: 8px 0 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-form input[type="submit"] {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 16px;
-}
-
-form input[type="submit"]:hover {
-  background-color: #0056b3;
-}
+/* Center the container and apply basic styling */
+.home-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh; /* Full height of the viewport */
+    text-align: center;
+    background-color: #f5f5f5; /* Light grey background */
+  }
+  
+  .home-container h1 {
+    color: #333;
+    font-size: 36px;
+    margin-bottom: 20px;
+  }
+  
+  /* Button styling */
+  .home-container button {
+    background-color: #007bff; /* Blue background */
+    color: white; /* White text */
+    border: none; /* Remove border */
+    border-radius: 5px; /* Rounded corners */
+    padding: 10px 20px; /* Padding */
+    font-size: 16px; /* Font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    margin: 10px; /* Spacing between buttons */
+    transition: background-color 0.3s; /* Smooth transition for background color */
+  }
+  
+  .home-container button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+  }
+  
+  .home-container button:last-of-type {
+    background-color: #28a745; /* Green background */
+  }
+  
+  .home-container button:last-of-type:hover {
+    background-color: #218838; /* Darker green on hover */
+  }
+  
