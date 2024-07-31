@@ -12,4 +12,5 @@ urlpatterns = [
     path("create-invitation-link/", views.CreateInvitationLinkView.as_view(), name='create-invitation-link'),
     path('delete-invitation-link/<int:pk>/', views.InvitationLinkDelete.as_view(), name='delete-invitation-link'),
     path('invitation-links/', views.InvitationLinkList.as_view(), name='invitation-links'),
+    path('welcome/', views.WelcomeView.as_view(), name='welcome-view'),
 ]
