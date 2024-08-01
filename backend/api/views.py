@@ -63,15 +63,6 @@ class SendCodeView(View):
         )
 
         return JsonResponse({"message": "Verification code sent"}, status=200)
-
-# class CreateInvitationLinkView(generics.CreateAPIView):
-#     serializer_class = InvitationLinkSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def perform_create(self, serializer):
-#         unique_code = str(uuid4()) # Generate a unique link using uuid4
-#         link = f"{self.request.build_absolute_uri('/invite')}?code={unique_code}"
-#         serializer.save(inviter=self.request.user, link=link)
         
         
 class InvitationLinkList(generics.ListAPIView):
@@ -95,7 +86,6 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             link=f"http://localhost:5173/welcome?code={unique_code}"
-            #link=f"http://localhost:5173/welcome?code={unique_code}&name={name}&inviter_name={inviter_name}"
         )
 
         return Response({'link': invitation_link.link, 'id': invitation_link.id}, status=201)
@@ -110,8 +100,6 @@ class WelcomeView(generics.GenericAPIView):
             invite_link = get_object_or_404(InvitationLink, link__endswith=code)
             inviter_name = invite_link.inviter.profile.user_name
             invitee_name = invite_link.invitee_name
-
-            print(invitee_name, inviter_name)
 
             return Response({
                 'inviter_name': inviter_name,

@@ -15,10 +15,21 @@ function Logout() {
   return <Navigate to="/login/" />; // 로그인 페이지로 이동시키기
 }
 
-function RegisterAndLogout() {
-  // register하면 정보 클리어 해줘야 한다
-  localStorage.clear();
-  return <Register />;
+// function RegisterAndLogout() {
+//   // register하면 정보 클리어 해줘야 한다
+//   localStorage.clear();
+//   return <Register />;
+// }
+
+// Custom route to check for the invited status
+function ProtectedRegisterRoute({ children }) {
+  const invited = localStorage.getItem('invited') === 'true';
+  console.log("Invited status in ProtectedRegisterRoute:", invited);
+  if (invited) {
+    return children;
+  } else {
+    return <Navigate to="/" />;
+  }
 }
 
 function App() {
@@ -36,7 +47,14 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route path="/register" element={<RegisterAndLogout />} />
+        <Route 
+          path="/register" 
+          element={
+            <ProtectedRegisterRoute>
+              <Register />
+            </ProtectedRegisterRoute>
+          } 
+        />
         <Route
           path="/projects"
           element={

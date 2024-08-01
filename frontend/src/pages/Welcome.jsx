@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../styles/Welcome.css";
 
 const Welcome = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const code = queryParams.get('code');
+  const navigate = useNavigate();
 
   const [inviterName, setInviterName] = useState('');
   const [inviteeName, setInviteeName] = useState('');
@@ -18,6 +19,7 @@ const Welcome = () => {
         .then(response => {
           setInviterName(response.data.inviter_name);
           setInviteeName(response.data.invitee_name);
+          localStorage.setItem('invited', 'true');
         })
         .catch(error => {
           console.error("There was an error fetching the invitation details:", error);
@@ -27,6 +29,10 @@ const Welcome = () => {
       setError(true); // 코드가 없는 경우에도 에러 상태 설정
     }
   }, [code]);
+
+  const handleRegister = () => {
+    navigate('/register');
+  };
 
   if (error) {
     return (
@@ -41,7 +47,7 @@ const Welcome = () => {
     <div className="welcome-container">
       <h1>환영합니다, {inviteeName}님.</h1>
       <p>{inviterName}님이 {inviteeName}님을 초대했습니다.</p>
-      <button onClick={() => window.location.href='/register'}>회원가입</button>
+      <button onClick={handleRegister}>회원가입</button>
     </div>
   );
 }
