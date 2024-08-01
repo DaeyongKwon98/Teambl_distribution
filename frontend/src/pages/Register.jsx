@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api";
 import { useNavigate } from "react-router-dom";
 
@@ -18,6 +18,15 @@ function Register() {
 
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const invited = localStorage.getItem('invited');
+    console.log("Invited status in Register component:", invited);
+    if (invited !== 'true') {
+      console.log("Redirecting to /login because invited is not true");
+      navigate('/login'); // 초대받지 않은 경우 로그인 페이지로 리다이렉트
+    }
+  }, [navigate]);
+
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
@@ -34,6 +43,7 @@ function Register() {
       });
       // 회원가입에 성공한 경우, 로그인 화면으로 가기
       console.log(response.data);
+      localStorage.removeItem('invited'); // 초대받은 경우에만 초대 상태 초기화
       navigate("/login");
     } catch (error) {
       alert("회원가입 실패");

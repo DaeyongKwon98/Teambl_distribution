@@ -3,8 +3,8 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
-    Group,
-    Permission,
+    # Group,
+    # Permission,
 )
 
 
@@ -80,7 +80,7 @@ class Project(models.Model):
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE, related_name="profile"
+        CustomUser, on_delete=models.CASCADE, related_name="profile", primary_key=True
     )
     user_name = models.CharField(max_length=100)  # 이름
     school = models.CharField(max_length=100)  # 학교

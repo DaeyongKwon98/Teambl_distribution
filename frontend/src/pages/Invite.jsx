@@ -29,7 +29,7 @@ function Invite() {
     if (name.trim() !== "") {
       try {
         const response = await api.post('/api/create-invitation-link/', { name });
-        const newLink = { invitee_name: name, link: response.data.link, id: response.data.id }; // ID와 이름을 포함하여 newLink 객체 생성
+        const newLink = { invitee_name: name, inviter_name: response.data.inviter_name, link: response.data.link, id: response.data.id }; // ID와 이름을 포함하여 newLink 객체 생성
         setLinks([...links, newLink]);
         setName(""); // 입력 필드를 초기화
       } catch (error) {

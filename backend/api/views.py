@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from uuid import uuid4
 from rest_framework.response import Response
+from django.shortcuts import get_object_or_404
 
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()  # user create할때 확인할 object
@@ -62,15 +63,6 @@ class SendCodeView(View):
         )
 
         return JsonResponse({"message": "Verification code sent"}, status=200)
-
-class CreateInvitationLinkView(generics.CreateAPIView):
-    serializer_class = InvitationLinkSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_create(self, serializer):
-        unique_code = str(uuid4()) # Generate a unique link using uuid4
-        link = f"{self.request.build_absolute_uri('/invite')}?code={unique_code}"
-        serializer.save(inviter=self.request.user, link=link)
         
         
 class InvitationLinkList(generics.ListAPIView):
@@ -80,28 +72,41 @@ class InvitationLinkList(generics.ListAPIView):
     def get_queryset(self):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
-    
+    from django.shortcuts import redirect
+
 class CreateInvitationLinkView(generics.CreateAPIView):
     serializer_class = InvitationLinkSerializer
     permission_classes = [IsAuthenticated]
 
     def create(self, request):
         unique_code = str(uuid4())
-        link = f"{request.build_absolute_uri('/invite')}?code={unique_code}"
-
         name = request.data.get('name', '')
 
-        # InvitationLink 객체를 생성하고 저장
         invitation_link = InvitationLink.objects.create(
             inviter=request.user,
             invitee_name=name,
-            link=link,
+            link=f"http://localhost:5173/welcome?code={unique_code}"
         )
 
-        # 생성된 객체를 시리얼라이저로 변환하여 반환
-        serializer = self.get_serializer(invitation_link)
-        return Response(serializer.data, status=201)
-    
+        return Response({'link': invitation_link.link, 'id': invitation_link.id}, status=201)
+
+class WelcomeView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        code = request.query_params.get('code', None)
+        if code:
+            # code로 InvitationLink 객체를 찾기
+            invite_link = get_object_or_404(InvitationLink, link__endswith=code)
+            inviter_name = invite_link.inviter.profile.user_name
+            invitee_name = invite_link.invitee_name
+
+            return Response({
+                'inviter_name': inviter_name,
+                'invitee_name': invitee_name,
+            })
+        return Response({"message": "Invalid invitation code."}, status=400)
+
 class InvitationLinkDelete(generics.DestroyAPIView):
     serializer_class = InvitationLinkSerializer
     permission_classes = [IsAuthenticated]
