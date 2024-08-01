@@ -8,11 +8,8 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Friend from "./pages/Friend";
 import Invite from "./pages/Invite";
-<<<<<<< HEAD
 import Search from "./pages/Search";
-=======
 import Welcome from "./pages/Welcome";
->>>>>>> 35549e974a58e997c13a453582d87e6b992370db
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -27,7 +24,7 @@ function Logout() {
 
 // Custom route to check for the invited status
 function ProtectedRegisterRoute({ children }) {
-  const invited = localStorage.getItem('invited') === 'true';
+  const invited = localStorage.getItem("invited") === "true";
   console.log("Invited status in ProtectedRegisterRoute:", invited);
   if (invited) {
     return children;
@@ -51,13 +48,13 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
-        <Route 
-          path="/register" 
+        <Route
+          path="/register"
           element={
             <ProtectedRegisterRoute>
               <Register />
             </ProtectedRegisterRoute>
-          } 
+          }
         />
         <Route
           path="/projects"
@@ -83,7 +80,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-<<<<<<< HEAD
         <Route
           path="/search"
           element={
@@ -92,9 +88,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-=======
         <Route path="/welcome" element={<Welcome />} />
->>>>>>> 35549e974a58e997c13a453582d87e6b992370db
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

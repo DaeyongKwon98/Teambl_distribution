@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import CustomUser, Project, Keyword, Profile, InvitationLink
+from .models import CustomUser, Project, Keyword, Profile, InvitationLink, Friend
 
 
 class KeywordSerializer(serializers.ModelSerializer):
@@ -115,8 +115,64 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         return project
 
+
 class InvitationLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvitationLink
-        fields = ['id', 'inviter', 'invitee_name', 'link', 'created_at']
-        read_only_fields = ['inviter', 'created_at']
+        fields = ["id", "inviter", "invitee_name", "link", "created_at"]
+        read_only_fields = ["inviter", "created_at"]
+
+
+class FriendCreateSerializer(serializers.ModelSerializer):
+    to_user_email = serializers.EmailField(write_only=True)
+    from_user = CustomUserSerializer(read_only=True)
+    to_user = CustomUserSerializer(read_only=True)
+    id = serializers.IntegerField(read_only=True)
+
+    class Meta:
+        model = Friend
+        fields = ["id", "from_user", "to_user", "status", "to_user_email"]
+        read_only_fields = ["id", "from_user", "to_user"]
+
+    def validate_to_user_email(self, value):
+        try:
+            to_user = CustomUser.objects.get(email=value)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError("User with this email does not exist.")
+        return to_user
+
+    def validate(self, attrs):
+        if "to_user_email" in attrs:
+            from_user = self.context["request"].user
+            to_user = attrs["to_user_email"]
+
+            if from_user == to_user:
+                raise serializers.ValidationError(
+                    "You cannot be friends with yourself."
+                )
+
+            if Friend.objects.filter(from_user=from_user, to_user=to_user).exists():
+                raise serializers.ValidationError("Friendship request already exists.")
+
+            attrs["from_user"] = from_user
+            attrs["to_user"] = to_user
+
+        return attrs
+
+    def create(self, validated_data):
+        from_user = self.context["request"].user
+        to_user = validated_data.pop("to_user")
+        return Friend.objects.create(
+            from_user=from_user, to_user=to_user, status="pending"
+        )
+
+
+class FriendUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = ["status"]
+
+    def validate_status(self, value):
+        if value not in dict(Friend.STATUS_CHOICES).keys():
+            raise serializers.ValidationError("Invalid status")
+        return value

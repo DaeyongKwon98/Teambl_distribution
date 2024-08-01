@@ -94,24 +94,40 @@ class Profile(models.Model):
 
 
 class InvitationLink(models.Model):
-    inviter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="invitation_links")
+    inviter = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="invitation_links"
+    )
     invitee_name = models.CharField(max_length=255)
     link = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('inviter', 'link')
+        unique_together = ("inviter", "link")
 
     def __str__(self):
         return self.link
 
-# class Friend(models.Model):
-#     to_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="friends_to")
-#     from_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="friends_from")
-#     created_at = models.DateTimeField(auto_now_add=True)
 
-#     class Meta:
-#         unique_together = ('to_user', 'from_user')
+# user A가 user B에게 1촌 신청해서 수락 된 경우.
+# from_user: A, to_user: B
+class Friend(models.Model):
+    # 좌: db 저장 형태, 우: 실제 표시 형태
+    STATUS_CHOICES = [
+        ("pending", "Pending"),
+        ("accepted", "Accepted"),
+        ("rejected", "Rejected"),
+    ]
+    from_user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="friends_from"
+    )
+    to_user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="friends_to"
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 
-#     def __str__(self):
-#         return f"{self.from_user.email} is friends with {self.to_user.email}"
+    class Meta:
+        unique_together = ("to_user", "from_user")
+
+    def __str__(self):
+        return f"{self.from_user.email} is friends with {self.to_user.email}, status: {self.status}"
