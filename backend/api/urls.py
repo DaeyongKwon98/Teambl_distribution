@@ -36,4 +36,6 @@ urlpatterns = [
     ),
     path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
     path("search/", views.SearchUsersAPIView.as_view(), name="search-view"),
+    path("change-password/", views.ChangePasswordView.as_view(), name="change-password"),
+    path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
 ]

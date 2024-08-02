@@ -3,8 +3,6 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
     PermissionsMixin,
-    # Group,
-    # Permission,
 )
 
 
@@ -33,20 +31,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     data_joined = models.DateTimeField(auto_now_add=True)
-    # groups = models.ManyToManyField(
-    #     Group,
-    #     related_name="customuser_set",
-    #     blank=True,
-    #     help_text="The groups this user belongs to.",
-    #     verbose_name="groups",
-    # )
-    # user_permissions = models.ManyToManyField(
-    #     Permission,
-    #     related_name="customuser_set",
-    #     blank=True,
-    #     help_text="Specific permissions for this user.",
-    #     verbose_name="user permissions",
-    # )
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
@@ -56,13 +40,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.keyword
-
 
 class Project(models.Model):
     project_id = models.AutoField(primary_key=True)

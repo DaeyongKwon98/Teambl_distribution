@@ -7,7 +7,6 @@ class KeywordSerializer(serializers.ModelSerializer):
         model = Keyword
         fields = ["keyword"]
 
-
 class ProfileSerializer(serializers.ModelSerializer):
     keywords = serializers.SerializerMethodField()
 
