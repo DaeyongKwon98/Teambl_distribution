@@ -32,6 +32,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileSerializer()
+    code = serializers.CharField(write_only=True, required=False)
 
     class Meta:
         model = CustomUser
@@ -45,6 +46,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "is_active",
             "data_joined",
             "profile",
+            "code",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -56,7 +58,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         }
 
     def create(self, validated_data):
-        profile_data = self.initial_data.get("profile", {})
+        profile_data = validated_data.pop("profile", {})
         keywords_data = profile_data.pop("keywords", [])
 
         # CustomUser 인스턴스 생성
@@ -74,12 +76,12 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
         return user
 
-    # TODO: keywords 로직이 변경됨에 따라 update 로직 수정 필요!
     def update(self, instance, validated_data):
         if "password" in validated_data:
             instance.set_password(validated_data["password"])
             validated_data.pop("password")
         return super().update(instance, validated_data)
+
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -128,7 +130,6 @@ class FriendCreateSerializer(serializers.ModelSerializer):
     from_user = CustomUserSerializer(read_only=True)
     to_user = CustomUserSerializer(read_only=True)
     id = serializers.IntegerField(read_only=True)
-
     class Meta:
         model = Friend
         fields = ["id", "from_user", "to_user", "status", "to_user_email"]

@@ -19,13 +19,37 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from .HelperFuntions import get_user_distance
 from django.db.models import Q
-
+import logging
+from rest_framework.exceptions import ValidationError
 
 class CreateUserView(generics.CreateAPIView):
-    queryset = CustomUser.objects.all()  # user create할때 확인할 object
-    serializer_class = CustomUserSerializer  # email, password를 봐야함을 알려줌
-    permission_classes = [AllowAny]  # 모든 사람이 create user할 수 있도록 허가
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [AllowAny]
 
+    def perform_create(self, serializer):
+        code = self.request.data.get('code')
+        
+        if code:
+            invitation = InvitationLink.objects.filter(link__contains=code).first()
+            if not invitation:
+                raise ValidationError("Invalid invitation code.")
+            inviter_id = invitation.inviter_id
+        else:
+            inviter_id = None
+
+        user = serializer.save()
+
+        # 회원가입에 성공한 경우 Friend 추가
+        if inviter_id:
+            from_user = CustomUser.objects.get(id=inviter_id)
+            to_user = user
+            Friend.objects.create(from_user=from_user, to_user=to_user, status='accepted')
+
+        # 회원가입에 성공한 경우 초대 링크 상태를 accepted로 변경
+        if invitation:
+            invitation.status = 'accepted'
+            invitation.save()
 
 class CurrentUserView(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
@@ -90,9 +114,6 @@ class InvitationLinkList(generics.ListAPIView):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
 
-    from django.shortcuts import redirect
-
-
 class CreateInvitationLinkView(generics.CreateAPIView):
     serializer_class = InvitationLinkSerializer
     permission_classes = [IsAuthenticated]
@@ -140,7 +161,7 @@ class InvitationLinkDelete(generics.DestroyAPIView):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
 
-
+logger = logging.getLogger(__name__)
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer
     permission_classes = [IsAuthenticated]
@@ -150,7 +171,17 @@ class ListCreateFriendView(generics.ListCreateAPIView):
         return Friend.objects.filter(from_user=user) | Friend.objects.filter(
             to_user=user
         )
-
+        
+    def perform_create(self, serializer):
+            from_user = self.request.user
+            to_user_id = serializer.validated_data.get('to_user').id
+            try:
+                to_user = CustomUser.objects.get(id=to_user_id)
+                logger.info(f'Creating friendship: from_user={from_user.email}, to_user={to_user.email}')
+                serializer.save(from_user=from_user, to_user=to_user, status='accepted')
+            except CustomUser.DoesNotExist:
+                logger.error(f'User with id {to_user_id} does not exist')
+                raise ValidationError("User with this ID does not exist.")
 
 class FriendUpdateView(generics.UpdateAPIView):
     serializer_class = FriendUpdateSerializer
@@ -169,7 +200,7 @@ class FriendUpdateView(generics.UpdateAPIView):
 
 class FriendDeleteView(generics.DestroyAPIView):
     serializer_class = FriendCreateSerializer
-    permission_classes = [IsAuthenticated]  # authenticated돼야 삭제 가능
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user

@@ -8,20 +8,19 @@ function Friend() {
   const [friendEmail, setFriendEmail] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
 
-  // 화면 이동을 위한 변수
   const navigate = useNavigate();
 
   useEffect(() => {
-    getCurrentUser(); // 현재 사용자 정보를 가져오는 함수 호출
+    getCurrentUser();
     getFriends();
   }, []);
 
   const getCurrentUser = () => {
     api
-      .get("/api/current-user/") // 현재 사용자 정보를 가져오는 엔드포인트 호출
+      .get("/api/current-user/")
       .then((res) => res.data)
       .then((data) => {
-        setCurrentUser(data); // 현재 사용자 정보를 상태에 저장
+        setCurrentUser(data);
       })
       .catch((err) => alert(err));
   };
@@ -106,32 +105,26 @@ function Friend() {
 
       <div>
         <h2>친구 목록</h2>
-        {friendList.map((friend, index) => (
-          <>
-            <div key={friend.id}>
-              <p>
-                {`${friend.from_user.email} 과 1촌인 친구 ${friend.to_user.email}`}{" "}
-                (1촌 신청 상태: {friend.status})
-              </p>
-              <button onClick={() => deleteFriend(friend.id)}>
-                1촌 삭제하기
-              </button>
-              {currentUser && currentUser.email === friend.to_user.email && (
-                <>
-                  <button
-                    onClick={() => updateFriendStatus(friend.id, "accepted")}
-                  >
-                    수락
-                  </button>
-                  <button
-                    onClick={() => updateFriendStatus(friend.id, "rejected")}
-                  >
-                    거절
-                  </button>
-                </>
-              )}
-            </div>
-          </>
+        {friendList.map((friend) => (
+          <div key={friend.id}>
+            <p>
+              {`${friend.from_user.email} 과 1촌인 친구 ${friend.to_user.email}`}{" "}
+              (1촌 신청 상태: {friend.status})
+            </p>
+            {friend.status !== 'pending' && (
+              <button onClick={() => deleteFriend(friend.id)}>1촌 삭제하기</button>
+            )}
+            {currentUser && currentUser.email === friend.to_user.email && friend.status === 'pending' && (
+              <>
+                <button onClick={() => updateFriendStatus(friend.id, "accepted")}>
+                  수락
+                </button>
+                <button onClick={() => updateFriendStatus(friend.id, "rejected")}>
+                  거절
+                </button>
+              </>
+            )}
+          </div>
         ))}
       </div>
     </div>

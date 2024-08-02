@@ -15,15 +15,20 @@ function Register() {
   const [generatedCode, setGeneratedCode] = useState("");
   const [codeSent, setCodeSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
+  const [inviteCode, setInviteCode] = useState(null);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    const invite_code = localStorage.getItem('invite_code');
+    console.log("Invite Code from localStorage:", invite_code);
+    setInviteCode(invite_code);
+
     const invited = localStorage.getItem('invited');
     console.log("Invited status in Register component:", invited);
     if (invited !== 'true') {
       console.log("Redirecting to /login because invited is not true");
-      navigate('/login'); // 초대받지 않은 경우 로그인 페이지로 리다이렉트
+      navigate('/login');
     }
   }, [navigate]);
 
@@ -40,14 +45,21 @@ function Register() {
           year,
           major,
         },
+        code: inviteCode,  // 초대 코드를 서버로 전달
       });
+      const newUser = response.data;
+      console.log("User registered successfully:", newUser);
+
       // 회원가입에 성공한 경우, 로그인 화면으로 가기
-      console.log(response.data);
       localStorage.removeItem('invited'); // 초대받은 경우에만 초대 상태 초기화
+      localStorage.removeItem('invite_code'); // 초대 코드를 삭제
       navigate("/login");
     } catch (error) {
       alert("회원가입 실패");
-      console.error(error);
+      console.error("Registration error:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+      }
     }
   };
 

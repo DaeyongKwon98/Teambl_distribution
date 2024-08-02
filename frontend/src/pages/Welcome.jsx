@@ -11,7 +11,7 @@ const Welcome = () => {
 
   const [inviterName, setInviterName] = useState('');
   const [inviteeName, setInviteeName] = useState('');
-  const [error, setError] = useState(false); // 에러 상태 추가
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     if (code) {
@@ -20,13 +20,14 @@ const Welcome = () => {
           setInviterName(response.data.inviter_name);
           setInviteeName(response.data.invitee_name);
           localStorage.setItem('invited', 'true');
+          localStorage.setItem('invite_code', code);  // 초대 코드를 로컬 스토리지에 저장
         })
         .catch(error => {
           console.error("There was an error fetching the invitation details:", error);
-          setError(true); // 에러 상태 설정
+          setError(true);
         });
     } else {
-      setError(true); // 코드가 없는 경우에도 에러 상태 설정
+      setError(true);
     }
   }, [code]);
 
