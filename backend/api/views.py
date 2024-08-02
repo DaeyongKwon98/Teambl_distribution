@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 from rest_framework import generics, status
+=======
+from rest_framework import generics, permissions, status
+>>>>>>> 005eb3d3aeda8ccf3b65f17e86aa9459d79ebecc
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import CustomUser, Profile, Project, InvitationLink, Friend
 from .serializers import (
@@ -22,6 +26,7 @@ from .HelperFuntions import get_user_distance
 from django.db.models import Q
 import logging
 from rest_framework.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 
 class CreateUserView(generics.CreateAPIView):
@@ -63,10 +68,41 @@ class CurrentUserView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+User = get_user_model()
+class ChangePasswordView(generics.UpdateAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+    lookup_field = 'id'
+
+    def get_object(self):
+        return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        new_password = request.data.get('new_password')
+        if not new_password:
+            return Response({"detail": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        instance.set_password(new_password)
+        instance.save()
+        return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
+
+class DeleteUserView(generics.DestroyAPIView):
+    queryset = User.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
+
+    def destroy(self, request, *args, **kwargs):
+        user = self.get_object()
+        user.delete()
+        return Response({"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
 
 class ProjectListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]  # authenticated되지 않으면 사용 불가
+    permission_classes = [IsAuthenticated]
     queryset = Project.objects.all()
 
     def perform_create(self, serializer):
@@ -80,11 +116,11 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
 class ProjectDelete(generics.DestroyAPIView):
     serializer_class = ProjectSerializer
-    permission_classes = [IsAuthenticated]  # authenticated돼야 삭제 가능
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user = self.request.user
-        return Project.objects.filter(user=user)  # user가 user인 note만 필터
+        return Project.objects.filter(user=user)  # user가 user인 project만 필터
 
 
 @method_decorator(csrf_exempt, name="dispatch")

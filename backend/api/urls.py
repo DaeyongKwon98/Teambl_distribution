@@ -36,9 +36,14 @@ urlpatterns = [
     ),
     path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
     path("search/", views.SearchUsersAPIView.as_view(), name="search-view"),
+<<<<<<< HEAD
     path(
         "get-user-distance/<int:pk>/",
         views.GetUserDistanceAPIView.as_view(),
         name="get-user-distance",
     ),
+=======
+    path("change-password/", views.ChangePasswordView.as_view(), name="change-password"),
+    path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
+>>>>>>> 005eb3d3aeda8ccf3b65f17e86aa9459d79ebecc
 ]
