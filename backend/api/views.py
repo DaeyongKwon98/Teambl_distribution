@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from rest_framework import generics, status
-=======
 from rest_framework import generics, permissions, status
->>>>>>> 005eb3d3aeda8ccf3b65f17e86aa9459d79ebecc
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import CustomUser, Profile, Project, InvitationLink, Friend
 from .serializers import (
@@ -68,24 +64,33 @@ class CurrentUserView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
 User = get_user_model()
+
+
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.IsAuthenticated]
-    lookup_field = 'id'
+    lookup_field = "id"
 
     def get_object(self):
         return self.request.user
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
-        new_password = request.data.get('new_password')
+        new_password = request.data.get("new_password")
         if not new_password:
-            return Response({"detail": "New password is required."}, status=status.HTTP_400_BAD_REQUEST)
-        
+            return Response(
+                {"detail": "New password is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
         instance.set_password(new_password)
         instance.save()
-        return Response({"detail": "Password changed successfully."}, status=status.HTTP_200_OK)
+        return Response(
+            {"detail": "Password changed successfully."}, status=status.HTTP_200_OK
+        )
+
 
 class DeleteUserView(generics.DestroyAPIView):
     queryset = User.objects.all()
@@ -97,7 +102,9 @@ class DeleteUserView(generics.DestroyAPIView):
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()
         user.delete()
-        return Response({"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        return Response(
+            {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
+        )
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
