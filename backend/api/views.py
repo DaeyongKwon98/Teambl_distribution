@@ -1,4 +1,4 @@
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import CustomUser, Profile, Project, InvitationLink, Friend
 from .serializers import (
@@ -7,6 +7,7 @@ from .serializers import (
     InvitationLinkSerializer,
     FriendCreateSerializer,
     FriendUpdateSerializer,
+    SearchSerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -22,14 +23,15 @@ from django.db.models import Q
 import logging
 from rest_framework.exceptions import ValidationError
 
+
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [AllowAny]
 
     def perform_create(self, serializer):
-        code = self.request.data.get('code')
-        
+        code = self.request.data.get("code")
+
         if code:
             invitation = InvitationLink.objects.filter(link__contains=code).first()
             if not invitation:
@@ -44,12 +46,15 @@ class CreateUserView(generics.CreateAPIView):
         if inviter_id:
             from_user = CustomUser.objects.get(id=inviter_id)
             to_user = user
-            Friend.objects.create(from_user=from_user, to_user=to_user, status='accepted')
+            Friend.objects.create(
+                from_user=from_user, to_user=to_user, status="accepted"
+            )
 
         # 회원가입에 성공한 경우 초대 링크 상태를 accepted로 변경
         if invitation:
-            invitation.status = 'accepted'
+            invitation.status = "accepted"
             invitation.save()
+
 
 class CurrentUserView(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
@@ -114,6 +119,7 @@ class InvitationLinkList(generics.ListAPIView):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
 
+
 class CreateInvitationLinkView(generics.CreateAPIView):
     serializer_class = InvitationLinkSerializer
     permission_classes = [IsAuthenticated]
@@ -161,7 +167,10 @@ class InvitationLinkDelete(generics.DestroyAPIView):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
 
+
 logger = logging.getLogger(__name__)
+
+
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer
     permission_classes = [IsAuthenticated]
@@ -171,17 +180,20 @@ class ListCreateFriendView(generics.ListCreateAPIView):
         return Friend.objects.filter(from_user=user) | Friend.objects.filter(
             to_user=user
         )
-        
+
     def perform_create(self, serializer):
-            from_user = self.request.user
-            to_user_id = serializer.validated_data.get('to_user').id
-            try:
-                to_user = CustomUser.objects.get(id=to_user_id)
-                logger.info(f'Creating friendship: from_user={from_user.email}, to_user={to_user.email}')
-                serializer.save(from_user=from_user, to_user=to_user, status='accepted')
-            except CustomUser.DoesNotExist:
-                logger.error(f'User with id {to_user_id} does not exist')
-                raise ValidationError("User with this ID does not exist.")
+        from_user = self.request.user
+        to_user_id = serializer.validated_data.get("to_user").id
+        try:
+            to_user = CustomUser.objects.get(id=to_user_id)
+            logger.info(
+                f"Creating friendship: from_user={from_user.email}, to_user={to_user.email}"
+            )
+            serializer.save(from_user=from_user, to_user=to_user, status="accepted")
+        except CustomUser.DoesNotExist:
+            logger.error(f"User with id {to_user_id} does not exist")
+            raise ValidationError("User with this ID does not exist.")
+
 
 class FriendUpdateView(generics.UpdateAPIView):
     serializer_class = FriendUpdateSerializer
@@ -209,33 +221,71 @@ class FriendDeleteView(generics.DestroyAPIView):
         )  # user가 포함된 친구 필터
 
 
+class GetUserDistanceAPIView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def retrieve(self, request, *args, **kwargs):
+        user = request.user
+        target_user_id = kwargs.get("pk")
+        try:
+            target_user = CustomUser.objects.get(id=target_user_id)
+        except CustomUser.DoesNotExist:
+            return Response(
+                {"error": "Target user not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+        distance = get_user_distance(user, target_user)
+        return Response({"distance": distance}, status=status.HTTP_200_OK)
+
+
 class SearchUsersAPIView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        query = self.request.query_params.get("q", "")  # 검색 쿼리
-        degrees = self.request.query_params.getlist("degree")  # 촌수
-        majors = self.request.query_params.getlist("major")  # 전공
+    # 변수를 쿼리가 아닌 JSON 형식으로 전달받기 위해 POST 요청으로 변경
+    # GET 요청 시 쿼리를 포함한 url이 너무 길어져서 반려.
+    def post(self, request, *args, **kwargs):
+        serializer = SearchSerializer(data=request.data)
+        if serializer.is_valid():
+            query = serializer.validated_data.get("q", "")
+            degrees = serializer.validated_data.get("degree", [])
+            majors = serializer.validated_data.get("major", [])
 
-        # 1. 검색 쿼리로 필터링
-        profiles = Profile.objects.filter(keywords__icontains=query)
+            print("Received Degrees:", degrees)
 
-        # 2. 전공 필터링
-        if majors:
-            profiles = profiles.filter(major__in=majors)
+            # 전체 프로필을 가져옵니다.
+            filtered_profiles = Profile.objects.all()
 
-        # 3. 촌수 필터링
-        if degrees:
+            # 1. 검색 쿼리로 필터링
+            if query != "":
+                filtered_profiles = filtered_profiles.filter(
+                    keywords__keyword__icontains=query
+                )
+
+            # 2. 전공 필터링
+            if majors:
+                filtered_profiles = filtered_profiles.filter(major__in=majors)
+
+            # 3. 촌수 필터링 (비어있는 경우 1, 2, 3촌 다 포함)
+            if not degrees:
+                degrees = [1, 2, 3]
             degrees = list(map(int, degrees))
             user = self.request.user
-            filtered_profiles = []
+            degree_filtered_profiles = []
+            print("Filtered Degrees:", degrees)
 
-            for profile in profiles:
+            for profile in filtered_profiles:
                 target_user = profile.user
                 distance = get_user_distance(user, target_user)
                 if distance is not None and distance in degrees:
-                    filtered_profiles.append(profile)
+                    degree_filtered_profiles.append(profile)
 
-            profiles = filtered_profiles
+            filtered_profiles = degree_filtered_profiles
+            print("Filtered Profiles:", filtered_profiles)
 
-        return CustomUser.objects.filter(profile__in=profiles)
+            custom_users = CustomUser.objects.filter(profile__in=filtered_profiles)
+
+            serializer = self.get_serializer(custom_users, many=True)
+            return Response(serializer.data)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

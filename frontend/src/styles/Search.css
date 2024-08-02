@@ -1,0 +1,15 @@
+.major-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; /* 버튼 간의 간격 조정 */
+}
+
+.major-element {
+  background-color: hsl(211, 100%, 80%);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 14px;
+}

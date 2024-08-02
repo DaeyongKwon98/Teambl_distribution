@@ -2,43 +2,69 @@
 
 /* Center the container and apply basic styling */
 .home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh; /* Full height of the viewport */
-    text-align: center;
-    background-color: #f5f5f5; /* Light grey background */
-  }
-  
-  .home-container h1 {
-    color: #333;
-    font-size: 36px;
-    margin-bottom: 20px;
-  }
-  
-  /* Button styling */
-  .home-container button {
-    background-color: #007bff; /* Blue background */
-    color: white; /* White text */
-    border: none; /* Remove border */
-    border-radius: 5px; /* Rounded corners */
-    padding: 10px 20px; /* Padding */
-    font-size: 16px; /* Font size */
-    cursor: pointer; /* Pointer cursor on hover */
-    margin: 10px; /* Spacing between buttons */
-    transition: background-color 0.3s; /* Smooth transition for background color */
-  }
-  
-  .home-container button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  .home-container button:last-of-type {
-    background-color: #28a745; /* Green background */
-  }
-  
-  .home-container button:last-of-type:hover {
-    background-color: #218838; /* Darker green on hover */
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh; /* Full height of the viewport */
+  text-align: center;
+  background-color: #f5f5f5; /* Light grey background */
+}
+
+.home-container h1 {
+  color: #333;
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+/* Button styling */
+.home-container .button1 {
+  background-color: #007bff; /* Blue background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin: 10px; /* Spacing between buttons */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  width: 6em;
+}
+
+.home-container .button1:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.home-container .button2 {
+  background-color: #1ee100; /* Blue background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin: 10px; /* Spacing between buttons */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  width: 6em;
+}
+
+.home-container .button2:hover {
+  background-color: #3fac00; /* Darker blue on hover */
+}
+
+.home-container .button3 {
+  background-color: #ff7700; /* Blue background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin: 10px; /* Spacing between buttons */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  width: 6em;
+}
+
+.home-container .button3:hover {
+  background-color: #c35b00; /* Darker blue on hover */
+}

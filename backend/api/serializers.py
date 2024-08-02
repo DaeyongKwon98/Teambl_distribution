@@ -83,7 +83,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 
-
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
     keywords = serializers.SerializerMethodField()
@@ -130,6 +129,7 @@ class FriendCreateSerializer(serializers.ModelSerializer):
     from_user = CustomUserSerializer(read_only=True)
     to_user = CustomUserSerializer(read_only=True)
     id = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Friend
         fields = ["id", "from_user", "to_user", "status", "to_user_email"]
@@ -177,3 +177,9 @@ class FriendUpdateSerializer(serializers.ModelSerializer):
         if value not in dict(Friend.STATUS_CHOICES).keys():
             raise serializers.ValidationError("Invalid status")
         return value
+
+
+class SearchSerializer(serializers.Serializer):
+    q = serializers.CharField(required=False, allow_blank=True)
+    degree = serializers.ListField(child=serializers.IntegerField(), required=False)
+    major = serializers.ListField(child=serializers.CharField(), required=False)
