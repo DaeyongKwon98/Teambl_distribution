@@ -35,7 +35,7 @@ function ProtectedRoute({children}) {
             setIsAuthorized(false);
             return;
         }
-        const decoded = jwtDecode(token);
+        const decoded = jwtDecode(token); //token있는 경우
         const tokenExpiration = decoded.exp;
         const now = Date.now() / 1000; // ms말고 second로 표시
 

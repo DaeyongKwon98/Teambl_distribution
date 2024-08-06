@@ -32,7 +32,7 @@ const Welcome = () => {
   }, [code]);
 
   const handleRegister = () => {
-    navigate('/register');
+    navigate('/certify');
   };
 
   if (error) {
@@ -45,11 +45,22 @@ const Welcome = () => {
   }
 
   return (
-    <div className="welcome-container">
-      <h1>환영합니다, {inviteeName}님.</h1>
-      <p>{inviterName}님이 {inviteeName}님을 초대했습니다.</p>
-      <button onClick={handleRegister}>회원가입</button>
+    <div className='welcome'>
+      <div className='welcome-container'>
+        <div className='welcome-intro'>
+          <span className='welcome-name' style={{color: '#0000b3'}}>{inviterName}</span><span className='welcome-name'>님이&nbsp; </span>
+          <span className='welcome-name' style={{color: '#0000b3'}} >{inviteeName}</span><span className='welcome-name'>님을 팀블에 초대했습니다.</span>
+        </div>
+        <div className='welcome-teambl'>팀원 찾기의 새로운 기준, 팀블!</div>
+        <label className='welcome-outro'>지인 네트워크를 통해 최적의 팀원을 구하세요.</label>
+        <button type='button' className='welcome-nextBtn' onClick={handleRegister}>회원가입 시작하기</button>
+      </div>
     </div>
+    // <div className="welcome-container">
+    //   <h1>환영합니다, {inviteeName}님.</h1>
+    //   <p>{inviterName}님이 {inviteeName}님을 초대했습니다.</p>
+    //   <button onClick={handleRegister}>회원가입</button>
+    // </div>
   );
 }
 

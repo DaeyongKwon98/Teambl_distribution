@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\User\Desktop\TeamBL\TechWithTim_Django_React_Tutorial\env
+set VIRTUAL_ENV=C:\Users\HOME\Desktop\singup4\env
 
 if not defined PROMPT set PROMPT=$P$G
 
