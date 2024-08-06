@@ -10,6 +10,7 @@ import Friend from "./pages/Friend";
 import Invite from "./pages/Invite";
 import Search from "./pages/Search";
 import Welcome from "./pages/Welcome";
+import NewInvite from "./pages/NewInvite";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -76,7 +77,7 @@ function App() {
           path="/invite"
           element={
             <ProtectedRoute>
-              <Invite />
+              <NewInvite />
             </ProtectedRoute>
           }
         />
