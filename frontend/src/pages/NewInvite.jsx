@@ -133,16 +133,27 @@ function NewInvite() {
     const expiredDate = new Date(
       createdDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );
-    return expiredDate.toLocaleDateString();
+    return expiredDate;
   };
 
   const getExpiredDateFromCurrentDate = () => {
     const currentDate = new Date();
-    // linkObj.created_at이 Date 객체라고 가정
     const expiredDate = new Date(
       currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
     );
-    return expiredDate.toLocaleDateString();
+    return expiredDate;
+  };
+
+  const formatDate = (date) => {
+    const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hourCycle: "h23",
+    };
+    return date.toLocaleString("ko-KR", options);
   };
 
   return (
@@ -211,7 +222,9 @@ function NewInvite() {
                 <div className="expiration-container">
                   <div className="expiration-info">
                     <p className="expiration-title">링크 유효 기간</p>
-                    <p className="expiration-date">{expiredDate}</p>
+                    <p className="expiration-date">{`${formatDate(
+                      expiredDate
+                    )}까지`}</p>
                   </div>
                   <button
                     className={`copy-link-button ${
@@ -283,7 +296,7 @@ function NewInvite() {
               <div className="expiration-info">
                 <p className="expiration-title">링크 유효 기간</p>
                 <p className="expiration-date">
-                  {getExpiredDateFromCurrentDate()}
+                  {`${formatDate(getExpiredDateFromCurrentDate())}까지`}
                 </p>
               </div>
               <button
