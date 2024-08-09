@@ -54,9 +54,9 @@ function App() {
         <Route
           path="/welcome"
           element={
-            <ProtectedRegisterRoute>
+            // <ProtectedRegisterRoute>
               <Welcome />
-            </ProtectedRegisterRoute>
+            // </ProtectedRegisterRoute>
           }
         />
         <Route
