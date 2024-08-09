@@ -3,6 +3,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import CustomUser, Profile, Project, InvitationLink, Friend
 from .serializers import (
     CustomUserSerializer,
+    ProfileCreateSerializer,
+    ProfileUpdateSerializer,
     ProjectSerializer,
     InvitationLinkSerializer,
     FriendCreateSerializer,
@@ -13,6 +15,7 @@ import json
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views import View
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from uuid import uuid4
@@ -33,6 +36,7 @@ class CreateUserView(generics.CreateAPIView):
     def perform_create(self, serializer):
         code = self.request.data.get("code")
 
+        # code를 통해 db에서 해당 invite link 찾기
         if code:
             invitation = InvitationLink.objects.filter(link__contains=code).first()
             if not invitation:
@@ -105,6 +109,23 @@ class DeleteUserView(generics.DestroyAPIView):
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
+
+
+class CurrentProfileView(generics.RetrieveAPIView):
+    serializer_class = ProfileCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
+
+
+class ProfileUpdateView(generics.UpdateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        return Profile.objects.get(user=self.request.user)
 
 
 class ProjectListCreate(generics.ListCreateAPIView):
@@ -192,6 +213,20 @@ class WelcomeView(generics.GenericAPIView):
             invite_link = get_object_or_404(InvitationLink, link__endswith=code)
             inviter_name = invite_link.inviter.profile.user_name
             invitee_name = invite_link.invitee_name
+
+            # Calculate the expiration date (7 days after creation)
+            expired_date = invite_link.created_at + timezone.timedelta(days=7)
+            current_date = timezone.now()
+
+            # Check if the invitation link is expired
+            if current_date > expired_date:
+                invite_link.status = "expired"
+                invite_link.save()
+                return Response({"message": "Invitation link is expired"}, status=400)
+
+            # Check if the invitation link is expired
+            if invite_link.status == "accepted":
+                return Response({"message": "Invitation link already used"}, status=400)
 
             return Response(
                 {

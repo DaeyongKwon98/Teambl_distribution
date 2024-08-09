@@ -1,14 +1,29 @@
 from django.urls import path
 from . import views
 
+# User
 urlpatterns = [
+    path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
+    path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
+]
+
+# Profile
+urlpatterns += [
+    path("profile/update/", views.ProfileUpdateView.as_view(), name="update-profile"),
+]
+
+# Project
+urlpatterns += [
     path("projects/", views.ProjectListCreate.as_view(), name="project-list"),
     path(
         "projects/delete/<int:pk>/",
         views.ProjectDelete.as_view(),
         name="delete-project",
     ),
-    path("send_code/", views.SendCodeView.as_view(), name="send_code"),
+]
+
+# Invitation
+urlpatterns += [
     path(
         "create-invitation-link/",
         views.CreateInvitationLinkView.as_view(),
@@ -22,7 +37,10 @@ urlpatterns = [
     path(
         "invitation-links/", views.InvitationLinkList.as_view(), name="invitation-links"
     ),
-    path("welcome/", views.WelcomeView.as_view(), name="welcome-view"),
+]
+
+# Friends
+urlpatterns += [
     path("friends/", views.ListCreateFriendView.as_view(), name="friend-list"),
     path(
         "friends/update/<int:pk>/",
@@ -34,7 +52,12 @@ urlpatterns = [
         views.FriendDeleteView.as_view(),
         name="friend-delete",
     ),
-    path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
+]
+
+# Others
+urlpatterns += [
+    path("send_code/", views.SendCodeView.as_view(), name="send_code"),
+    path("welcome/", views.WelcomeView.as_view(), name="welcome-view"),
     path("search/", views.SearchUsersAPIView.as_view(), name="search-view"),
     path(
         "get-user-distance/<int:pk>/",
@@ -44,5 +67,4 @@ urlpatterns = [
     path(
         "change-password/", views.ChangePasswordView.as_view(), name="change-password"
     ),
-    path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
 ]
