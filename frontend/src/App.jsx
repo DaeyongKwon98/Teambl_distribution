@@ -2,12 +2,14 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Certify from './pages/Certify';
+import End from './pages/End';
 import Project from "./pages/Project";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Home from "./pages/Home";
 import Friend from "./pages/Friend";
-import Invite from "./pages/Invite";
+// import Invite from "./pages/Invite";
 import Search from "./pages/Search";
 import Welcome from "./pages/Welcome";
 import NewInvite from "./pages/NewInvite";
@@ -30,7 +32,7 @@ function ProtectedRegisterRoute({ children }) {
   if (invited) {
     return children;
   } else {
-    return <Navigate to="/" />;
+    return <Navigate to="/logout" />;
   }
 }
 
@@ -50,13 +52,36 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route
+          path="/welcome"
+          element={
+            <ProtectedRegisterRoute>
+              <Welcome />
+            </ProtectedRegisterRoute>
+          }
+        />
+        <Route
+          path="/certify"
+          element={
+            <ProtectedRegisterRoute>
+              <Certify />
+            </ProtectedRegisterRoute>
+          }
+        />
+        <Route
           path="/register"
           element={
             <ProtectedRegisterRoute>
               <Register />
             </ProtectedRegisterRoute>
           }
-        />
+        /><Route
+        path="/end"
+        element={
+          <ProtectedRegisterRoute>
+            <End />
+          </ProtectedRegisterRoute>
+        }
+      />
         <Route
           path="/projects"
           element={
@@ -89,7 +114,6 @@ function App() {
             </ProtectedRoute>
           }
         />
-        <Route path="/welcome" element={<Welcome />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>

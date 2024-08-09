@@ -1,0 +1,63 @@
+.end{
+  margin: 0 auto;
+  width: 300px;
+  min-width: 300px;
+  /* border: 1px solid black; */
+  
+}
+.end-container{
+  margin: 80px 20px 0px;
+  /* display: flex;
+  flex-direction: column; */
+}
+span.end-name, span.end-nim{
+  font-weight: bold;
+  font-size: 20px;
+}
+span.end-name{
+  line-height: 1.5em;
+}
+label.end-label1{
+  margin-top: 30px;
+  display: inline-block;
+  font-size: 12px;
+
+}
+label.end-label2{
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 10px;
+}
+button.end-profileBtn{
+  background-color: transparent;
+  height: 2rem;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 0.8rem;
+  margin-top: 200px;
+  padding: 10px;
+
+}
+button.end-loginBtn{
+  background-color: #0000b3;
+  height: 2rem;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 0.8rem;
+  margin-top: 20px;
+  padding: 10px;
+}
+button.end-profileBtn:hover{
+  cursor: default;
+}
+button.end-loginBtn:hover{
+  cursor: pointer;
+}
