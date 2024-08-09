@@ -40,11 +40,13 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
+
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
 
     def __str__(self):
         return self.keyword
+
 
 class Project(models.Model):
     project_id = models.AutoField(primary_key=True)
@@ -70,32 +72,69 @@ class Profile(models.Model):
     year = models.IntegerField()  # 입학연도
     major = models.CharField(max_length=100)  # 전공
     keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
+    one_degree_count = models.IntegerField(default=0)  # 1촌 수
+    introduction = models.TextField(default="", max_length=1000)  # 소개
 
     def __str__(self):
         return self.user_name
 
+
+# 툴 (프로필과 1:N)
+class Tool(models.Model):
+    tool = models.CharField(max_length=100)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="tools")
+
+    def __str__(self):
+        return self.name
+
+
+# 경험 (프로필과 1:N)
+class Experience(models.Model):
+    experience = models.TextField()
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="experiences"
+    )
+
+    def __str__(self):
+        return self.description[:50]  # 첫 50자를 보여줌
+
+
+# 포트폴리오 링크 (프로필과 1:N)
+class PortfolioLink(models.Model):
+    portfolioLink = models.URLField()
+    profile = models.ForeignKey(
+        Profile, on_delete=models.CASCADE, related_name="portfolio_links"
+    )
+
+    def __str__(self):
+        return self.urls
+
+
 class InvitationLink(models.Model):
     STATUS_CHOICES = [
-        ('pending', 'Pending'),
-        ('accepted', 'Accepted'),
-        ('expired', 'Expired'),
+        ("pending", "Pending"),
+        ("accepted", "Accepted"),
+        ("expired", "Expired"),
     ]
 
-    inviter = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="invitation_links")
+    inviter = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="invitation_links"
+    )
     invitee_name = models.CharField(max_length=255)
     link = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
         max_length=10,
         choices=STATUS_CHOICES,
-        default='pending',
+        default="pending",
     )
 
     class Meta:
-        unique_together = ('inviter', 'link')
+        unique_together = ("inviter", "link")
 
     def __str__(self):
         return self.link
+
 
 # user A가 user B에게 1촌 신청해서 수락 된 경우. from_user: A, to_user: B
 class Friend(models.Model):

@@ -1,0 +1,398 @@
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #ffffff;
+}
+
+.container {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 18px;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  width: 100%;
+}
+
+.back-icon {
+  width: 18px;
+  height: 18px;
+  margin-bottom: 12px;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-size: 15.4px;
+  font-weight: bold;
+  margin: 0 0 6px 0;
+}
+
+.subtitle {
+  font-size: 10.8px;
+  color: #121212;
+}
+
+.remaining-invites {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  width: fit-content;
+}
+
+.remaining-text {
+  font-size: 9.2px;
+  font-weight: bold;
+  color: #121212;
+  margin-bottom: 3px;
+  text-align: center;
+  width: 100%;
+}
+
+.count-box {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  background-color: #eef4ff;
+  padding: 6.2px 9.2px;
+  border-radius: 3px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.count-number {
+  font-size: 18.5px;
+  color: #0923a9;
+}
+
+.count-unit {
+  font-size: 9.2px;
+  font-weight: bold;
+  color: #000000;
+}
+
+.invite-form {
+  display: flex;
+  gap: 6.2px;
+  margin-bottom: 18px;
+}
+
+.name-input {
+  flex: 1;
+  padding: 6.2px;
+  font-size: 10.8px;
+  border: none;
+  background-color: #f5f5f5;
+  border-radius: 3px;
+}
+
+.generate-link {
+  padding: 6.2px 12.3px;
+  font-size: 10.8px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #a8a8a8;
+  border: none;
+  border-radius: 3px;
+}
+
+.generate-link.active {
+  background-color: #0923a9;
+  cursor: pointer;
+}
+
+.invite-status-title {
+  font-size: 12.3px;
+  font-weight: bold;
+  margin-bottom: 12.3px;
+}
+
+.init-invite-status {
+  padding: 15.4px;
+  background-color: #eef4ff;
+  border-radius: 6.2px;
+  text-align: center;
+}
+
+.init-invite-status p {
+  margin: 0;
+  font-size: 9.2px;
+  color: #595959;
+}
+
+.init-invite-status p:first-child {
+  font-size: 10.8px;
+  margin-bottom: 6.2px;
+}
+
+.invite-status {
+  display: flex;
+  flex-direction: column;
+  gap: 9.2px;
+  margin-bottom: 18px;
+}
+
+.invite-status .invite-card {
+  display: flex;
+  flex-direction: column;
+  background-color: #eef4ff;
+  border-radius: 6.2px;
+  padding: 12.3px;
+}
+
+.invite-status .invitee-name {
+  font-size: 12.3px;
+  font-weight: bold;
+  color: #121212;
+  margin: 0px;
+}
+
+.invite-status .expiration-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12.3px;
+}
+
+.invite-status .expiration-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.invite-status .expiration-title {
+  font-size: 9.2px;
+  color: #595959;
+  margin: 0;
+}
+
+.invite-status .expiration-date {
+  font-size: 9.2px;
+  color: #121212;
+  margin: 0;
+}
+
+.invite-status .copy-link-button {
+  display: flex;
+  align-items: center;
+  padding: 0px 9.2px;
+  background-color: #ffffff;
+  color: #121212;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.invite-status .copy-icon {
+  margin-right: 6.2px;
+  width: 12.3px;
+  height: 12.3px;
+}
+
+.invite-status .copy-link-title {
+  font-size: 10.8px;
+  font-weight: bold;
+  color: #121212;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #fff;
+  border-radius: 6.2px;
+  padding: 18.5px;
+  max-width: 246.2px;
+  width: 100%;
+  position: relative;
+}
+
+.modal-title {
+  font-size: 12.3px;
+  color: #121212;
+  margin-bottom: 12.3px;
+}
+
+.modal-divider {
+  border: none;
+  border-top: 1px solid #ddd;
+  margin: 12.3px 0;
+}
+
+.modal-content .invitee-name {
+  font-size: 12.3px;
+  font-weight: bold;
+  color: #121212;
+  margin-bottom: 12.3px;
+}
+
+.modal-content .expiration-container {
+  display: flex;
+  align-items: center;
+  gap: 12.3px;
+}
+
+.modal-content .expiration-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  flex: 1;
+}
+
+.modal-content .expiration-title {
+  font-size: 9.2px;
+  color: #595959;
+  margin: 0;
+}
+
+.modal-content .expiration-date {
+  font-size: 9.2px;
+  color: #121212;
+  margin-top: 3px;
+  margin-bottom: 0px;
+}
+
+.modal-content .copy-link-button {
+  display: flex;
+  align-items: center;
+  padding: 7.7px 11.5px;
+  background-color: #eef4ff;
+  color: #121212;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  margin: 0px;
+}
+
+.modal-content .copy-link-button .copy-icon {
+  margin-right: 6.2px;
+  width: 12.3px;
+  height: 12.3px;
+}
+
+.modal-content .copy-link-button .copy-link-title {
+  font-size: 10.8px;
+  font-weight: bold;
+  color: #121212;
+  margin: 0px;
+}
+
+.copy-link-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.close-modal-button {
+  position: absolute;
+  top: 4.6px;
+  right: 4.6px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.close-modal-button img {
+  width: 9.2px;
+  height: 9.2px;
+  margin: 9.2px;
+}
+
+.invite-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.revoke-invite-button {
+  font-size: 10.8px;
+  color: #595959;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+  margin-left: 7.7px;
+}
+
+.del-modal-content {
+  background: #fff;
+  border-radius: 6.2px;
+  padding: 18.5px;
+  max-width: 246.2px;
+  width: 100%;
+  text-align: center;
+}
+
+.del-modal-content .modal-title {
+  font-size: 12.3px;
+  color: #121212;
+  font-weight: bold;
+  margin-bottom: 12.3px;
+}
+
+.del-modal-content .modal-description {
+  font-size: 9.2px;
+  color: #595959;
+  margin-bottom: 18.5px;
+}
+
+.del-modal-content .modal-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.del-modal-content .modal-button {
+  font-size: 12.3px;
+  padding: 6.2px 12.3px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.del-modal-content .cancel-button {
+  background-color: #fff;
+  color: #121212;
+}
+
+.del-modal-content .confirm-button {
+  background-color: #fff;
+  color: #2546f3;
+}
+
+.copy-message {
+  position: fixed;
+  bottom: 76.9px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  padding: 7.7px 15.4px;
+  border-radius: 3.8px;
+  font-size: 10.8px;
+  z-index: 1000;
+}

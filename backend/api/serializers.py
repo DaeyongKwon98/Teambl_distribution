@@ -1,5 +1,15 @@
 from rest_framework import serializers
-from .models import CustomUser, Project, Keyword, Profile, InvitationLink, Friend
+from .models import (
+    CustomUser,
+    Project,
+    Keyword,
+    Profile,
+    InvitationLink,
+    Friend,
+    Tool,
+    Experience,
+    PortfolioLink,
+)
 
 
 class KeywordSerializer(serializers.ModelSerializer):
@@ -7,8 +17,30 @@ class KeywordSerializer(serializers.ModelSerializer):
         model = Keyword
         fields = ["keyword"]
 
-class ProfileSerializer(serializers.ModelSerializer):
+
+class ToolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tool
+        fields = ["id", "tool"]
+
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = ["id", "experience"]
+
+
+class PortfolioLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PortfolioLink
+        fields = ["id", "portfolioLink"]
+
+
+class ProfileCreateSerializer(serializers.ModelSerializer):
     keywords = serializers.SerializerMethodField()
+    tools = ToolSerializer(many=True, required=False)
+    experiences = ExperienceSerializer(many=True, required=False)
+    portfolio_links = PortfolioLinkSerializer(many=True, required=False)
 
     class Meta:
         model = Profile
@@ -19,6 +51,11 @@ class ProfileSerializer(serializers.ModelSerializer):
             "year",
             "major",
             "keywords",
+            "one_degree_count",
+            "introduction",
+            "tools",
+            "experiences",
+            "portfolio_links",
         ]
 
     def get_keywords(self, obj):
@@ -29,8 +66,62 @@ class ProfileSerializer(serializers.ModelSerializer):
         return profile
 
 
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(required=False)
+    school = serializers.CharField(required=False)
+    current_academic_degree = serializers.CharField(required=False)
+    year = serializers.IntegerField(required=False)
+    major = serializers.CharField(required=False)
+    tools = ToolSerializer(many=True, required=False)
+    experiences = ExperienceSerializer(many=True, required=False)
+    portfolio_links = PortfolioLinkSerializer(many=True, required=False)
+
+    class Meta:
+        model = Profile
+        fields = [
+            "user_name",
+            "school",
+            "current_academic_degree",
+            "year",
+            "major",
+            "tools",
+            "experiences",
+            "portfolio_links",
+        ]
+
+    def update(self, instance, validated_data):
+        tools_data = validated_data.pop("tools", None)
+        experiences_data = validated_data.pop("experiences", None)
+        portfolio_links_data = validated_data.pop("portfolio_links", None)
+
+        # Update basic fields only if they are provided in the validated_data
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # Update tools
+        if tools_data is not None:
+            instance.tools.all().delete()  # 기존 tools 삭제
+            for tool_data in tools_data:
+                Tool.objects.create(profile=instance, **tool_data)
+
+        # Update experiences
+        if experiences_data is not None:
+            instance.experiences.all().delete()  # 기존 experiences 삭제
+            for experience_data in experiences_data:
+                Experience.objects.create(profile=instance, **experience_data)
+
+        # Update portfolio links
+        if portfolio_links_data is not None:
+            instance.portfolio_links.all().delete()  # 기존 portfolio links 삭제
+            for portfolio_link_data in portfolio_links_data:
+                PortfolioLink.objects.create(profile=instance, **portfolio_link_data)
+
+        return instance
+
+
 class CustomUserSerializer(serializers.ModelSerializer):
-    profile = ProfileSerializer()
+    profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
 
     class Meta:

@@ -1,6 +1,6 @@
 .welcome{
   margin: 0 auto;
-  width: 300px;
+  width: 100vw;
   min-width: 300px;
   /* border: 1px solid black; */
   
@@ -37,7 +37,7 @@ label.welcome-outro{
 button.welcome-nextBtn{
   background-color: #0000b3;
   height: 2rem;
-  width: 100%;
+  width: 300px;
   border: none;
   border-radius: 5px;
   color: white;
@@ -47,6 +47,6 @@ button.welcome-nextBtn{
   margin-top: 250px;
   padding: 10px;
 }
-button.nextBtn:hover{
+button.welcome-nextBtn:hover{
   cursor: pointer;
 }

@@ -141,23 +141,23 @@ function Certify(){
           onClick={handleSendCode}
         >인증코드 받기</button>
       </div>
-      <div className='certify-email'>
-        <input 
-          type='password' 
-          className='certify-email' 
-          placeholder=' 인증코드 입력' 
-          onChange={(e)=>setVerificationCode(e.target.value)} 
-          value={verificationCode}
-          required
-        />
-        {codeSent && (
-        <button 
-          type="button" 
-          className='certify-emailBtn'
-          onClick={handleVerifyCode}
-        >인증코드 확인</button>
-        )}
-      </div>
+      {codeSent && (
+        <div className='certify-email'>
+          <input 
+            type='password' 
+            className='certify-email' 
+            placeholder=' 인증코드 입력' 
+            onChange={(e)=>setVerificationCode(e.target.value)} 
+            value={verificationCode}
+            required
+          />
+          <button 
+            type="button" 
+            className='certify-emailBtn'
+            onClick={handleVerifyCode}
+          >인증코드 확인</button>
+        </div>
+      )}
       <label ref={labelRef1}></label>
       <label className='certify-label' >비밀번호<br/></label>
       <input 

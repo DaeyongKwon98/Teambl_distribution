@@ -2,12 +2,14 @@ form.register{
   margin: 0 auto;
   width: 300px;
   min-width: 300px;
+  padding: 0;
+  box-shadow: none;
   /* border: 1px solid black; */
   
 }
 .register-back button{
   border: none;
-  background-image: url('../assets/left-arrow.png');
+  /* background-image: url('../assets/left-arrow.png'); */
   background-size: cover;
   width: 20px;
   height: 20px;
@@ -15,7 +17,7 @@ form.register{
   margin: 10px;
 }
 .register-back button:hover{
-  cursor: pointer;
+  cursor: default;
 }
 label.register-label{
   display: inline-block;
@@ -25,11 +27,11 @@ label.register-label{
   font-weight: bold;
 }
 form.register h4{
-  margin: 10px 10px;
+  margin: 10px 0px;
 }
 .register-container{
   /* border: 1px solid black; */
-  margin: 0px 10px 0px;
+  margin: 0px;
   display: flex;
   flex-direction: column;
 }
@@ -38,7 +40,8 @@ input.register-input{
   border: none;
   border-radius: 5px;
   height: 2rem;
-  margin-bottom: 5px;
+  margin: 0px;
+  /* padding: 0px; */
   flex-grow: 1;
 
 }
