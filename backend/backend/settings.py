@@ -30,7 +30,7 @@ SECRET_KEY = "django-insecure-jd9qaa+@9qbnje0^e2agmrdouf#k$%4s889v0b8k0^om-kc+bo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*", "teambl-distribution.onrender.com"]
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
