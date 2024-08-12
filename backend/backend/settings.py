@@ -108,6 +108,10 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": BASE_DIR / "db.postgresql",
+        "USER": "teambl_postgresql_db_user",
+        "PASSWORD": "KXxoTI415IFRykSpeWQDQZMbO9l715gk",
+        "HOST": "dpg-cqsnja5umphs73c1t0pg-a",
+        "PORT": "5432",
     }
 }
 
