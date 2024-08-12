@@ -57,8 +57,8 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    #"backend.api",
-    "api",
+    "backend.api",
+    #"api",
     "rest_framework",
     "corsheaders",
 ]
@@ -74,8 +74,8 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-#ROOT_URLCONF = "backend.backend.urls"
-ROOT_URLCONF = "backend.urls"
+ROOT_URLCONF = "backend.backend.urls"
+#ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [
     {
