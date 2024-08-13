@@ -27,6 +27,7 @@ import logging
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
+logger = logging.getLogger(__name__)
 
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -204,38 +205,85 @@ class CreateInvitationLinkView(generics.CreateAPIView):
         )
 
 
+# class WelcomeView(generics.GenericAPIView):
+#     permission_classes = [AllowAny]
+
+#     def get(self, request):
+#         code = request.query_params.get("code", None)
+#         if code:
+#             # code로 InvitationLink 객체를 찾기
+#             invite_link = get_object_or_404(InvitationLink, link__endswith=code)
+#             inviter_name = invite_link.inviter.profile.user_name
+#             invitee_name = invite_link.invitee_name
+
+#             # Calculate the expiration date (7 days after creation)
+#             expired_date = invite_link.created_at + timezone.timedelta(days=7)
+#             current_date = timezone.now()
+
+#             # Check if the invitation link is expired
+#             if current_date > expired_date:
+#                 invite_link.status = "expired"
+#                 invite_link.save()
+#                 return Response({"message": "Invitation link is expired"}, status=400)
+
+#             # Check if the invitation link is expired
+#             if invite_link.status == "accepted":
+#                 return Response({"message": "Invitation link already used"}, status=400)
+
+#             return Response(
+#                 {
+#                     "inviter_name": inviter_name,
+#                     "invitee_name": invitee_name,
+#                 }
+#             )
+#         return Response({"message": "Invalid invitation code."}, status=400)
+
 class WelcomeView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
         code = request.query_params.get("code", None)
+        logger.debug(f"Received request with code: {code}")  # 로그 추가
+
         if code:
-            # code로 InvitationLink 객체를 찾기
-            invite_link = get_object_or_404(InvitationLink, link__endswith=code)
-            inviter_name = invite_link.inviter.profile.user_name
-            invitee_name = invite_link.invitee_name
+            try:
+                # code로 InvitationLink 객체를 찾기
+                invite_link = get_object_or_404(InvitationLink, link__endswith=code)
+                inviter_name = invite_link.inviter.profile.user_name
+                invitee_name = invite_link.invitee_name
 
-            # Calculate the expiration date (7 days after creation)
-            expired_date = invite_link.created_at + timezone.timedelta(days=7)
-            current_date = timezone.now()
+                logger.debug(f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}")  # 로그 추가
 
-            # Check if the invitation link is expired
-            if current_date > expired_date:
-                invite_link.status = "expired"
-                invite_link.save()
-                return Response({"message": "Invitation link is expired"}, status=400)
+                # 만료 날짜 계산 (생성 후 7일)
+                expired_date = invite_link.created_at + timezone.timedelta(days=7)
+                current_date = timezone.now()
 
-            # Check if the invitation link is expired
-            if invite_link.status == "accepted":
-                return Response({"message": "Invitation link already used"}, status=400)
+                # 초대 링크가 만료되었는지 확인
+                if current_date > expired_date:
+                    invite_link.status = "expired"
+                    invite_link.save()
+                    logger.warning(f"Invitation link expired: code={code}")  # 로그 추가
+                    return Response({"message": "Invitation link is expired"}, status=400)
 
-            return Response(
-                {
-                    "inviter_name": inviter_name,
-                    "invitee_name": invitee_name,
-                }
-            )
-        return Response({"message": "Invalid invitation code."}, status=400)
+                # 초대 링크가 이미 사용되었는지 확인
+                if invite_link.status == "accepted":
+                    logger.warning(f"Invitation link already used: code={code}")  # 로그 추가
+                    return Response({"message": "Invitation link already used"}, status=400)
+
+                # 성공적으로 초대 링크 반환
+                logger.info(f"Invitation link valid: code={code}, inviter={inviter_name}, invitee={invitee_name}")  # 로그 추가
+                return Response(
+                    {
+                        "inviter_name": inviter_name,
+                        "invitee_name": invitee_name,
+                    }
+                )
+            except Exception as e:
+                logger.error(f"Error processing invitation link: {str(e)}")  # 오류 로그 추가
+                return Response({"message": "An error occurred while processing the invitation link."}, status=500)
+        else:
+            logger.warning("Invalid invitation code provided")  # 로그 추가
+            return Response({"message": "Invalid invitation code."}, status=400)
 
 
 class InvitationLinkDelete(generics.DestroyAPIView):
@@ -245,9 +293,6 @@ class InvitationLinkDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
-
-
-logger = logging.getLogger(__name__)
 
 
 class ListCreateFriendView(generics.ListCreateAPIView):
