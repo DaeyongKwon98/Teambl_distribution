@@ -195,7 +195,8 @@ class CreateInvitationLinkView(generics.CreateAPIView):
         invitation_link = InvitationLink.objects.create(
             inviter=request.user,
             invitee_name=name,
-            link=f"http://localhost:5173/welcome?code={unique_code}",
+            #link=f"http://localhost:5173/welcome?code={unique_code}",
+            link=f"https://teambl-distribution.vercel.app/welcome?code={unique_code}",
         )
 
         return Response(
