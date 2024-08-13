@@ -14,7 +14,8 @@ function ProjectItem({ project, onDelete }) {
       <p className="project-content">Content: {project.content}</p>
       <p className="project-keywords">Keyword: {keywordsString}</p>
       <p className="project-user">
-        Created by: {project.user.profile.user_name}
+        {/* Created by: {project.user.profile.user_name} */}
+        Created by: {project.user && project.user.profile ? project.user.profile.user_name : "Unknown User"}
       </p>
       <p className="project-date">Created at: {formattedDate}</p>
       <button
