@@ -132,7 +132,9 @@ class ProfileUpdateView(generics.UpdateAPIView):
 class ProjectListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
-    queryset = Project.objects.all()
+    #queryset = Project.objects.all()
+    def get_queryset(self):
+        return Project.objects.filter(user=self.request.user) # 현재 로그인된 사용자의 프로젝트만 반환
 
     def perform_create(self, serializer):
         if serializer.is_valid():
