@@ -19,6 +19,7 @@ const Welcome = () => {
       console.log("API URL:", apiUrl);
       axios.get(`${apiUrl}/api/welcome/?code=${code}`)
         .then(response => {
+          console.log("API response:", response.data);
           setInviterName(response.data.inviter_name);
           setInviteeName(response.data.invitee_name);
           localStorage.setItem('invited', 'true');
