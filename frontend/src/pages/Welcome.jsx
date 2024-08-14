@@ -15,7 +15,8 @@ const Welcome = () => {
 
   useEffect(() => {
     if (code) {
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL;  // Vercel 환경 변수에서 백엔드 URL 가져오기
+      // const apiUrl = process.env.NEXT_PUBLIC_API_URL;  // Vercel 환경 변수에서 백엔드 URL 가져오기
+      const apiUrl = import.meta.env.VITE_API_URL;
       console.log("API URL:", apiUrl);
       axios.get(`${apiUrl}/api/welcome/?code=${code}`)
         .then(response => {
