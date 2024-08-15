@@ -1,0 +1,55 @@
+.login-container {
+    width: 300px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  h1 {
+    color: #3b5998;
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .login-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+  }
+  
+  .error {
+    color: red;
+    font-size: 12px;
+  }
+  
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .login-button {
+    padding: 10px;
+    border: none;
+    background-color: #3b5998;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .links {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .links span {
+    cursor: pointer;
+    color: #999;
+    text-decoration: underline;
+  }
+  
