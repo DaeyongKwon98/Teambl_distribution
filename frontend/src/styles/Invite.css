@@ -25,9 +25,10 @@ body {
 }
 
 .back-icon {
-  width: 32px; /* 원래 18px,18px */
-  height: 32px;
+  width: 18px;
+  height: 18px;
   margin-bottom: 12px;
+  flex-shrink: 0; /* 아이콘이 축소되지 않도록 설정 */
 }
 
 .title-container {
