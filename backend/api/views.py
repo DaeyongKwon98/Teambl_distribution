@@ -5,6 +5,7 @@ from .serializers import (
     CustomUserSerializer,
     ProfileCreateSerializer,
     ProfileUpdateSerializer,
+    KeywordSerializer,
     ProjectSerializer,
     InvitationLinkSerializer,
     FriendCreateSerializer,
