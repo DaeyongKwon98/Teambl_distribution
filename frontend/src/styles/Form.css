@@ -1,22 +1,19 @@
-.form-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin: 50px auto;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    max-width: 400px;
+.login-container {
+    width: 300px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
   }
   
-  .form-input {
-    width: 90%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
+  h1 {
+    color: #3b5998;
+    text-align: center;
+    font-size: 24px;
+  }
+  
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
   }
   
   .form-button {
@@ -33,4 +30,35 @@
   
   .form-button:hover {
     background-color: #0056b3;
+  }
+
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .login-button {
+    padding: 10px;
+    border: none;
+    background-color: #3b5998;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .links {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .links span {
+    cursor: pointer;
+    color: #999;
+    text-decoration: underline;
+  }
+
+  .error {
+    color: red;
+    font-size: 12px;
   }
