@@ -9,6 +9,7 @@ function Form({ route, method }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const name = method === "login" ? "Login" : "Register";
@@ -17,7 +18,7 @@ function Form({ route, method }) {
     // submit됐을때 처리
     setLoading(true);
     e.preventDefault();
-
+    
     try {
       const res = await api.post(route, { email, password }); // request가 오류 없으면
       if (method === "login") {
@@ -28,8 +29,8 @@ function Form({ route, method }) {
       } else {
         navigate("/login");
       }
-    } catch (error) {
-      alert(error);
+    } catch (e) {
+      alert(e);
     } finally {
       setLoading(false);
     }
