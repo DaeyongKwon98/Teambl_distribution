@@ -22,7 +22,7 @@ const LoginPage = () => {
     } else {
       // 로그인 로직 처리
       console.log('로그인 성공');
-      navigate('/myprofile')
+      navigate('/')
     }
   };
 
