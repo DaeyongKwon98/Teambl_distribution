@@ -154,6 +154,10 @@ class ProjectDelete(generics.DestroyAPIView):
         user = self.request.user
         return Project.objects.filter(user=user)  # user가 user인 project만 필터
 
+class KeywordListView(generics.ListAPIView):
+    serializer_class = KeywordSerializer
+    permission_classes = [IsAuthenticated]
+    queryset = Keyword.objects.all()
 
 @method_decorator(csrf_exempt, name="dispatch")
 class SendCodeView(View):
