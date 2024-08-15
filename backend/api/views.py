@@ -398,20 +398,32 @@ class SearchUsersAPIView(generics.ListAPIView):
             degrees = list(map(int, degrees))
             user = self.request.user
             degree_filtered_profiles = []
+            profile_with_distances = []
+
             print("Filtered Degrees:", degrees)
 
             for profile in filtered_profiles:
                 target_user = profile.user
                 distance = get_user_distance(user, target_user)
                 if distance is not None and distance in degrees:
-                    degree_filtered_profiles.append(profile)
+                    # 촌수와 프로필을 함께 저장
+                    profile_with_distances.append((profile, distance))
 
-            filtered_profiles = degree_filtered_profiles
-            print("Filtered Profiles:", filtered_profiles)
+            # 촌수 오름차순으로 정렬
+            profile_with_distances.sort(key=lambda x: x[1])
 
-            custom_users = CustomUser.objects.filter(profile__in=filtered_profiles)
+            # 정렬된 프로필 목록 추출
+            degree_filtered_profiles = [
+                profile for profile, distance in profile_with_distances
+            ]
 
-            serializer = self.get_serializer(custom_users, many=True)
+            # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
+            sorted_custom_users = [
+                CustomUser.objects.get(profile=profile)
+                for profile, _ in profile_with_distances
+            ]
+
+            serializer = self.get_serializer(sorted_custom_users, many=True)
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
