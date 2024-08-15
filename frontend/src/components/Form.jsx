@@ -37,34 +37,63 @@ function Form({ route, method }) {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="form-container">
-      <h1>{name}</h1>
-      <input
-        className="form-input"
-        type="text"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        placeholder="Email"
-      />
-      <input
-        className="form-input"
-        type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="Password"
-      />
-      <div className="checkbox-container">
-        <input type="checkbox" id="keep-login" />
-        <label htmlFor="keep-login">로그인 상태 유지</label>
+    // <form onSubmit={handleSubmit} className="form-container">
+    //   <h1>{name}</h1>
+    //   <input
+    //     className="form-input"
+    //     type="text"
+    //     value={email}
+    //     onChange={(e) => setEmail(e.target.value)}
+    //     placeholder="Email"
+    //   />
+    //   <input
+    //     className="form-input"
+    //     type="password"
+    //     value={password}
+    //     onChange={(e) => setPassword(e.target.value)}
+    //     placeholder="Password"
+    //   />
+    //   <div className="checkbox-container">
+    //     <input type="checkbox" id="keep-login" />
+    //     <label htmlFor="keep-login">로그인 상태 유지</label>
+    //   </div>
+    //   {error && <p className="error">{error}</p>}
+    //   {loading && <LoadingIndicator />}
+    //   <button className="login-button" type="submit"> 로그인 </button>
+    //   <div className="links">
+    //     <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
+    //     <span onClick={() => navigate('/start')}>회원가입</span>
+    //   </div>
+    // </form>
+
+    <div className="login-container">
+      <h1>TEAMBL</h1>
+      <div className="login-form">
+        <input
+          type="text"
+          placeholder="Email"
+          value={id}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <div className="checkbox-container">
+          <input type="checkbox" id="keep-login" />
+          <label htmlFor="keep-login">로그인 상태 유지</label>
+        </div>
+        {error && <p className="error">{error}</p>}
+        {loading && <LoadingIndicator />}
+        <button className="login-button" onClick={handleLogin}>로그인</button>
+        <div className="links">
+          <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
+          <span onClick={() => navigate('/start')}>회원가입</span>
+        </div>
       </div>
-      {error && <p className="error">{error}</p>}
-      {loading && <LoadingIndicator />}
-      <button className="login-button" type="submit"> 로그인 </button>
-      <div className="links">
-        <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
-        <span onClick={() => navigate('/start')}>회원가입</span>
-      </div>
-    </form>
+    </div>
   );
 }
 
