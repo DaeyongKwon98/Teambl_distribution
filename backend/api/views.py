@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import CustomUser, Profile, Project, InvitationLink, Friend
+from .models import CustomUser, Profile, Keyword, Project, InvitationLink, Friend
 from .serializers import (
     CustomUserSerializer,
     ProfileCreateSerializer,
