@@ -75,6 +75,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     tools = ToolSerializer(many=True, required=False)
     experiences = ExperienceSerializer(many=True, required=False)
     portfolio_links = PortfolioLinkSerializer(many=True, required=False)
+    keywords = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -87,12 +88,20 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             "tools",
             "experiences",
             "portfolio_links",
+            "keywords",
         ]
+
+    def get_keywords(self, obj):
+        return [keyword.keyword for keyword in obj.keywords.all()]
 
     def update(self, instance, validated_data):
         tools_data = validated_data.pop("tools", None)
         experiences_data = validated_data.pop("experiences", None)
         portfolio_links_data = validated_data.pop("portfolio_links", None)
+        # 키워드를 initial_data에서 추출
+        keywords_data = self.initial_data.get("keywords", [])
+        # keywords 필드를 validated_data에서 제거
+        validated_data.pop("keywords", None)
 
         # Update basic fields only if they are provided in the validated_data
         for attr, value in validated_data.items():
@@ -117,7 +126,25 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             for portfolio_link_data in portfolio_links_data:
                 PortfolioLink.objects.create(profile=instance, **portfolio_link_data)
 
+        # Update keywords
+        if keywords_data is not None:
+            keyword_objs = []
+            for keyword in keywords_data:
+                keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+                keyword_objs.append(keyword_obj)
+
+            # set() 메서드를 사용하여 Many-to-Many 관계 설정
+            instance.keywords.set(keyword_objs)
+
         return instance
+
+    def to_representation(self, instance):
+        """Return instance data including the keywords as a list of strings."""
+        representation = super().to_representation(instance)
+        representation["keywords"] = [
+            keyword.keyword for keyword in instance.keywords.all()
+        ]
+        return representation
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
