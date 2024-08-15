@@ -86,7 +86,7 @@ function Form({ route, method }) {
           <label htmlFor="keep-login">로그인 상태 유지</label>
         </div>
         {error && <p className="error">{error}</p>}
-        {loading && <LoadingIndicator />}
+        {/* {loading && <LoadingIndicator />} */}
         <button className="login-button" onClick={handleSubmit}>로그인</button>
         <div className="links">
           <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
