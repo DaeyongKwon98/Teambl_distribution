@@ -52,10 +52,17 @@ function Form({ route, method }) {
         onChange={(e) => setPassword(e.target.value)}
         placeholder="Password"
       />
+      <div className="checkbox-container">
+        <input type="checkbox" id="keep-login" />
+        <label htmlFor="keep-login">로그인 상태 유지</label>
+      </div>
+      {error && <p className="error">{error}</p>}
       {loading && <LoadingIndicator />}
-      <button className="form-button" type="submit">
-        {name}
-      </button>
+      <button className="form-button" type="submit"> {로그인} </button>
+      <div className="links">
+        <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
+        <span onClick={() => navigate('/start')}>회원가입</span>
+      </div>
     </form>
   );
 }
