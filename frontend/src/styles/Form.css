@@ -16,7 +16,7 @@
     gap: 10px;
   }
   
-  .form-button {
+/*   .form-button {
     width: 95%;
     padding: 10px;
     margin: 20px 0;
@@ -30,7 +30,7 @@
   
   .form-button:hover {
     background-color: #0056b3;
-  }
+  } */
 
   .checkbox-container {
     display: flex;
