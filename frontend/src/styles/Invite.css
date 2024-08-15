@@ -33,7 +33,12 @@ body {
 .title-container {
   display: flex;
   flex-direction: column;
+  align-items: flex-start; /* 자식 요소를 왼쪽에 정렬 */
+  padding: 0;
+  margin: 0;
 }
+
+
 
 .title {
   font-size: 15.4px;
