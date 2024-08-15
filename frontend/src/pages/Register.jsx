@@ -107,9 +107,9 @@ function Register() {
       const newUser = response.data;
       console.log("User registered successfully:", newUser);
 
-      // 회원가입에 성공한 경우, 로그인 화면으로 가기
-      localStorage.removeItem('invited'); // 초대받은 경우에만 초대 상태 초기화
-      localStorage.removeItem('invite_code'); // 초대 코드를 삭제
+      // // 회원가입에 성공한 경우, 로그인 화면으로 가기
+      // localStorage.removeItem('invited'); // 초대받은 경우에만 초대 상태 초기화
+      // localStorage.removeItem('invite_code'); // 초대 코드를 삭제
       navigate("/end", {
         state : {
           user_name : user_name
