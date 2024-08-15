@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
-import "../styles/NewInvite.css";
+import "../styles/Invite.css";
 import BackIcon from "../assets/backIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import CopyIcon from "../assets/copyIcon.svg";
 
-function NewInvite() {
+function Invite() {
   const [name, setName] = useState("");
   const [links, setLinks] = useState([]);
   const [linkToRemove, setLinkToRemove] = useState(null);
@@ -316,4 +316,4 @@ function NewInvite() {
   );
 }
 
-export default NewInvite;
+export default Invite;
