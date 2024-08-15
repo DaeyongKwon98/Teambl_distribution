@@ -1,4 +1,5 @@
 .loader-container {
+    position: fixed;           /* 화면에 고정 */
     display: flex;
     justify-content: center;
     align-items: center;
