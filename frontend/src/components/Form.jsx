@@ -87,7 +87,7 @@ function Form({ route, method }) {
         </div>
         {error && <p className="error">{error}</p>}
         {loading && <LoadingIndicator />}
-        <button className="login-button" type="submit">로그인</button>
+        <button className="login-button" onClick={haldleSubmit}>로그인</button>
         <div className="links">
           <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
           <span onClick={() => navigate('/start')}>회원가입</span>
