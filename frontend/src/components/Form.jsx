@@ -72,7 +72,7 @@ function Form({ route, method }) {
         <input
           type="text"
           placeholder="Email"
-          value={id}
+          value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
