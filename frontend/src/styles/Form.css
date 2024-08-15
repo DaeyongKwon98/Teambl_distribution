@@ -1,4 +1,20 @@
-.login-container {
+/* .form-button {
+    width: 95%;
+    padding: 10px;
+    margin: 20px 0;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .form-button:hover {
+    background-color: #0056b3;
+  } */
+
+  .login-container {
     width: 300px;
     margin: 0 auto;
     font-family: Arial, sans-serif;
@@ -16,28 +32,23 @@
     gap: 10px;
   }
   
-/*   .form-button {
-    width: 95%;
+  .login-form input {
     padding: 10px;
-    margin: 20px 0;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.2s ease-in-out;
+    border: 1px solid #ddd;
+    border-radius: 5px;
   }
   
-  .form-button:hover {
-    background-color: #0056b3;
-  } */
-
+  .error {
+    color: red;
+    font-size: 12px;
+  }
+  
   .checkbox-container {
     display: flex;
     align-items: center;
     gap: 5px;
   }
-
+  
   .login-button {
     padding: 10px;
     border: none;
@@ -57,8 +68,4 @@
     color: #999;
     text-decoration: underline;
   }
-
-  .error {
-    color: red;
-    font-size: 12px;
-  }
+  
