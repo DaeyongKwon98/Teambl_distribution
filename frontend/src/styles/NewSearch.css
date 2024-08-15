@@ -22,12 +22,15 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
-  align-items: center; /* 버튼 안의 이미지 중앙 정렬 */
+  height: 100%; /* .top-bar의 높이에 맞춤 */
+  display: flex;
+  align-items: center; /* 버튼 내부에서 아이콘을 수직으로 중앙 정렬 */
 }
 
 .back-icon {
   width: 15.38px;
   height: 12.3px;
+  margin: auto 0; /* 상하 여백을 자동으로 설정하여 아이콘을 중앙 정렬 */
 }
 
 .search-input {
