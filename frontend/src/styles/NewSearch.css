@@ -22,6 +22,7 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
+  align-items: center; /* 버튼 안의 이미지 중앙 정렬 */
 }
 
 .back-icon {
