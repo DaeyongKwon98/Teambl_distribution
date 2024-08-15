@@ -12,6 +12,11 @@ urlpatterns += [
     path("profile/update/", views.ProfileUpdateView.as_view(), name="update-profile"),
 ]
 
+# Keyword
+urlpatterns += [
+    path("keywords/", views.KeywordListView.as_view(), name="keyword-list"),
+]
+
 # Project
 urlpatterns += [
     path("projects/", views.ProjectListCreate.as_view(), name="project-list"),
