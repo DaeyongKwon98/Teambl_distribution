@@ -8,7 +8,7 @@
 
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import "../styles/Login.css";
 
 const LoginPage = () => {
   const [id, setId] = useState('');
