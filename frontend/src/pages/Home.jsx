@@ -19,6 +19,14 @@ function Home() {
     navigate("/search");
   };
 
+  const goToProfile = () => {
+    navigate("/profile",{
+      state : {
+        prevPage:'home'
+      }
+    });
+  };
+  
   const handleChangePassword = async () => {
     try {
       const response = await api.patch("/api/change-password/", {
@@ -68,6 +76,9 @@ function Home() {
       </button>
       <button onClick={goToSearch} className="button3">
         Search
+      </button>
+      <button onClick={goToProfile} className="button4">
+        Profile
       </button>
       <div className="password-change-container">
         <h2>Change Password</h2>
