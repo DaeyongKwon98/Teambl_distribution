@@ -1,0 +1,95 @@
+.tool {
+  width: 300px;
+  margin: 20px auto 0;
+  font-family: Arial, sans-serif;
+}
+
+.tool-feature {
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+label.tool-definition{
+  display: inline-block;
+  font-size: 12px;
+  margin: 0px 10px 5px;
+  color: hsl(0, 0%, 50%);
+}
+
+.tool-lists {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+}
+
+.tool-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0px;
+  border-bottom: 1px solid #ddd;
+  overflow: auto;
+}
+.tool-item button{
+  width: 20px;
+  height: 20px;
+  color: hsl(0, 0%, 50%);
+  border: none;
+}
+
+.tool-description {
+  text-align: start;
+  color: #333;
+  font-size: 14px;
+}
+
+.tool-period {
+  text-align: end;
+  color: #999;
+}
+
+.tool-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.tool-input input {
+  margin: 5px 0px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.tool-btnGroup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.tool-addBtn {
+  margin: 5px 0px;
+  padding: 5px;
+  border: none;
+  width: 72.5%;
+  background-color: #3b5998;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.tool-cancelBtn {
+  margin: 5px 0px;
+  padding: 5px;
+  border: none;
+  width: 22.5%;
+  background-color: #f44336;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.tool-addTool {
+  text-align: center;
+  margin: 5px;
+  color: #999;
+  cursor: pointer;
+}
