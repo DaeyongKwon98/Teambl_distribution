@@ -1,0 +1,96 @@
+.portf {
+  width: 300px;
+  margin: 20px auto 0;
+  font-family: Arial, sans-serif;
+}
+
+.portf-feature {
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+label.portf-definition{
+  display: inline-block;
+  font-size: 12px;
+  margin: 0px 10px 5px;
+  color: hsl(0, 0%, 50%);
+}
+
+.portf-lists {
+  padding: 5px 10px;
+  border-radius: 5px;
+  background-color: #f1f1f1;
+}
+
+.portf-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0px;
+  border-bottom: 1px solid #ddd;
+  overflow: auto;
+}
+.portf-item button{
+  width: 20px;
+  height: 20px;
+  color: hsl(0, 0%, 50%);
+  border: none;
+}
+
+
+.portf-description {
+  text-align: start;
+  color: #333;
+  font-size: 14px;
+}
+
+.portf-period {
+  text-align: end;
+  color: #999;
+}
+
+.portf-input {
+  display: flex;
+  flex-direction: column;
+}
+
+.portf-input input {
+  margin: 5px 0px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.portf-btnGroup {
+  display: flex;
+  justify-content: space-between;
+}
+
+.portf-addBtn {
+  margin: 5px 0px;
+  padding: 5px;
+  border: none;
+  width: 72.5%;
+  background-color: #3b5998;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.portf-cancelBtn {
+  margin: 5px 0px;
+  padding: 5px;
+  border: none;
+  width: 22.5%;
+  background-color: #f44336;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.portf-addPortfolio {
+  text-align: center;
+  margin: 5px;
+  color: #999;
+  cursor: pointer;
+}
