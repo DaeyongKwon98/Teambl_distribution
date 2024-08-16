@@ -13,6 +13,8 @@ import Invite from "./pages/Invite";
 import Search from "./pages/Search";
 import Welcome from "./pages/Welcome";
 import NewSearch from "./pages/NewSearchPage/NewSearch";
+import Profile from './pages/Profile';
+import EditProfile from './pages/EditProfile';
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -111,6 +113,22 @@ function App() {
           element={
             <ProtectedRoute>
               <NewSearch />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/editprofile"
+          element={
+            <ProtectedRoute>
+              <EditProfile />
             </ProtectedRoute>
           }
         />
