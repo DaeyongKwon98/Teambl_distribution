@@ -152,8 +152,8 @@ function Invite() {
   return (
     <div className="container">
       <header className="header">
-        <button className="back-button" onClick={() => window.history.back()}>
-          <img src={BackIcon} alt="뒤로가기 아이콘" className="back-icon" />
+        <button className="back-button">
+          <img src={BackIcon} alt="뒤로가기 아이콘" className="back-icon" onClick={() => window.history.back()} />
         </button>
         <div className="header-content">
           <div className="title-container">
