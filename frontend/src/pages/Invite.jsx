@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Invite.css";
 import BackIcon from "../assets/backIcon.svg";
@@ -16,12 +15,6 @@ function Invite() {
   const [inviteGenerated, setInviteGenerated] = useState(false);
   const [showRevokeModal, setShowRevokeModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
-
-  const navigate = useNavigate();
-
-  const goBack = () => {
-    navigate("/");
-  };
 
   // 백엔드에서 유저의 link를 가져오는 메소드
   const fetchLinks = async () => {
@@ -159,12 +152,9 @@ function Invite() {
   return (
     <div className="container">
       <header className="header">
-        <img
-          src={BackIcon}
-          alt="뒤로가기 아이콘"
-          className="back-icon"
-          onClick={goBack}
-        />
+        <button className="back-button" onClick={() => window.history.back()}>
+          <img src={BackIcon} alt="뒤로가기 아이콘" className="back-icon" />
+        </button>
         <div className="header-content">
           <div className="title-container">
             <h1 className="title">초대하기</h1>
