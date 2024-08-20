@@ -190,7 +190,7 @@ function Invite() {
         </button>
       </div>
       <h2 className="invite-status-title">초대 현황</h2>
-{links.length > 0 ? (
+  {links.length > 0 ? (
   links.map((linkObj, index) => {
     const expiredDate = getExpiredDate(linkObj);
 
@@ -223,7 +223,7 @@ function Invite() {
               <button
                 className="view-profile-button"
                 onClick={() =>
-                  (window.location.href = /profile/${linkObj.invitee_name})
+                  (window.location.href = `/profile/${linkObj.invitee_name}`)
                 }
               >
                 프로필 확인하기
