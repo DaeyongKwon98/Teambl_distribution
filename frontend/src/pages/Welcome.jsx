@@ -57,7 +57,10 @@ const Welcome = () => {
   if (loading) {
     return (
       <div className="loading-container">
-        <div className="loading-text">로딩 중...</div>
+        <div className="loading-text">
+          <div className="loading-subtext">팀원 찾기의 새로운 기준,</div>
+          <div className="loading-highlight">팀블!</div>
+        </div>
       </div>
     );
   }
