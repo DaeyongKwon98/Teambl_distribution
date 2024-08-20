@@ -9,6 +9,7 @@ from .models import (
     Tool,
     Experience,
     PortfolioLink,
+    Notification,
 )
 
 
