@@ -211,40 +211,6 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             {"link": invitation_link.link, "id": invitation_link.id}, status=201
         )
 
-
-# class WelcomeView(generics.GenericAPIView):
-#     permission_classes = [AllowAny]
-
-#     def get(self, request):
-#         code = request.query_params.get("code", None)
-#         if code:
-#             # code로 InvitationLink 객체를 찾기
-#             invite_link = get_object_or_404(InvitationLink, link__endswith=code)
-#             inviter_name = invite_link.inviter.profile.user_name
-#             invitee_name = invite_link.invitee_name
-
-#             # Calculate the expiration date (7 days after creation)
-#             expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
-#             current_date = timezone.now()
-
-#             # Check if the invitation link is expired
-#             if current_date > expired_date:
-#                 invite_link.status = "expired"
-#                 invite_link.save()
-#                 return Response({"message": "Invitation link is expired"}, status=400)
-
-#             # Check if the invitation link is expired
-#             if invite_link.status == "accepted":
-#                 return Response({"message": "Invitation link already used"}, status=400)
-
-#             return Response(
-#                 {
-#                     "inviter_name": inviter_name,
-#                     "invitee_name": invitee_name,
-#                 }
-#             )
-#         return Response({"message": "Invalid invitation code."}, status=400)
-
 class WelcomeView(generics.GenericAPIView):
     permission_classes = [AllowAny]
 
@@ -262,7 +228,7 @@ class WelcomeView(generics.GenericAPIView):
                 logger.debug(f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}")  # 로그 추가
 
                 # 만료 날짜 계산 (생성 후 7일)
-                expired_date = invite_link.created_at + timezone.timedelta(days=7)
+                expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
                 current_date = timezone.now()
 
                 # 초대 링크가 만료되었는지 확인
