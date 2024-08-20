@@ -12,8 +12,8 @@ const Welcome = () => {
   const [inviterName, setInviterName] = useState('');
   const [inviteeName, setInviteeName] = useState('');
   const [error, setError] = useState(false);
-  const [errorType, setErrorType] = useState('');  // 에러 타입을 저장하기 위한 상태
-  const [loading, setLoading] = useState(true);    // 로딩 상태를 추가
+  const [errorType, setErrorType] = useState('');  // 에러 타입 저장하기 위한 상태
+  const [loading, setLoading] = useState(true);    // 로딩 상태 추가
 
   useEffect(() => {
     if (code) {
