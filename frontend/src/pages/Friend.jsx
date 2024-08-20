@@ -68,7 +68,7 @@ function Friend() {
     api
       .patch(`/api/friends/update/${id}/`, { status })
       .then((response) => {
-        alert("친추 업데이트 완료");
+        alert("친구 업데이트 완료");
         getFriends();
       })
       .catch((error) => {
@@ -80,7 +80,7 @@ function Friend() {
     api
       .delete(`/api/friends/delete/${id}/`)
       .then((res) => {
-        if (res.status === 204) alert("Friend deleted!");
+        if (res.status === 204) alert("친구 삭제 완료");
         else alert("Failed to delete Friend.");
         getFriends();
       })
