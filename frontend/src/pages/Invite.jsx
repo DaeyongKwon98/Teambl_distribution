@@ -254,7 +254,8 @@ function Invite() {
                     className="copy-icon"
                   />
                   <p className="copy-link-title">
-                    {isExpired ? "재생성" : "링크 복사"}
+                    {/* {isExpired ? "재생성" : "링크 복사"} */}
+                    링크 복사
                   </p>
                 </button>
               </>
