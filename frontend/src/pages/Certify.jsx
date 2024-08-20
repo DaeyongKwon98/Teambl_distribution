@@ -26,7 +26,7 @@ function Certify(){
   useEffect(()=>{
     if(email!=='') {
       setEmailBtnActive((EBA)=>EBA=true);
-      checkEmailExists(); // 이메일 중복 체크 함수 호출
+      setEmailError(""); // 이메일이 비어있으면 에러 메시지 초기화
     }
     else {
       setEmailBtnActive((EBA)=>EBA=false);
@@ -58,11 +58,14 @@ function Certify(){
         try {
             const response = await api.post('/api/check-email/', { email });
             setEmailError("");  // 이메일 사용 가능
+            return false;
         } catch (error) {
             if (error.response && error.response.status === 400) {
                 setEmailError("이미 가입된 회원입니다.");  // 이메일 중복
+                return true;
             } else {
                 setEmailError("이메일 확인 중 오류가 발생했습니다.");
+                return true;
             }
         }
     };
@@ -106,6 +109,14 @@ function Certify(){
   // }
   
   const handleSendCode = async () => {
+    
+    const isEmailExists = await checkEmailExists(); // 이메일 중복 체크
+
+    if (isEmailExists) {
+      alert("이미 가입된 이메일입니다."); // 중복일 경우 경고 메시지
+      return; // 중복일 경우 코드 전송 중단
+    }
+    
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
     try {
