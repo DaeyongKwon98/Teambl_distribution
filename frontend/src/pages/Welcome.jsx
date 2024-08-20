@@ -12,10 +12,10 @@ const Welcome = () => {
   const [inviterName, setInviterName] = useState('');
   const [inviteeName, setInviteeName] = useState('');
   const [error, setError] = useState(false);
+  const [errorType, setErrorType] = useState('');  // 에러 타입을 저장하기 위한 상태
 
   useEffect(() => {
     if (code) {
-      // const apiUrl = process.env.NEXT_PUBLIC_API_URL;  // Vercel 환경 변수에서 백엔드 URL 가져오기
       const apiUrl = import.meta.env.VITE_API_URL;
       console.log("API URL:", apiUrl);
       axios.get(`${apiUrl}/api/welcome/?code=${code}`)
@@ -28,9 +28,15 @@ const Welcome = () => {
         })
         .catch(error => {
           console.error("There was an error fetching the invitation details:", error);
+          if (error.response && error.response.data.error_type) {
+            setErrorType(error.response.data.error_type);  // error_type 상태 업데이트
+          } else {
+            setErrorType('unknown');  // 알 수 없는 오류의 경우
+          }
           setError(true);
         });
     } else {
+      setErrorType('invalid');
       setError(true);
     }
   }, [code]);
@@ -40,12 +46,28 @@ const Welcome = () => {
   };
 
   if (error) {
-    return (
-      <div className="error-container">
-        <h1>유효하지 않은 초대 링크입니다.</h1>
-        <p>올바른 링크를 사용해 주세요.</p>
-      </div>
-    );
+    if (errorType === 'expired') {
+      return (
+        <div className="error-container">
+          <h1>초대 링크가 만료되었습니다.</h1>
+          <p>새로운 링크를 요청해 주세요.</p>
+        </div>
+      );
+    } else if (errorType === 'invalid') {
+      return (
+        <div className="error-container">
+          <h1>유효하지 않은 초대 링크입니다.</h1>
+          <p>올바른 링크를 사용해 주세요.</p>
+        </div>
+      );
+    } else {
+      return (
+        <div className="error-container">
+          <h1>알 수 없는 오류가 발생했습니다.</h1>
+          <p>다시 시도해 주세요.</p>
+        </div>
+      );
+    }
   }
 
   return (
@@ -60,11 +82,6 @@ const Welcome = () => {
         <button type='button' className='welcome-nextBtn' onClick={handleRegister}>회원가입 시작하기</button>
       </div>
     </div>
-    // <div className="welcome-container">
-    //   <h1>환영합니다, {inviteeName}님.</h1>
-    //   <p>{inviterName}님이 {inviteeName}님을 초대했습니다.</p>
-    //   <button onClick={handleRegister}>회원가입</button>
-    // </div>
   );
 }
 
