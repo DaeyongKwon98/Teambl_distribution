@@ -302,3 +302,10 @@ class SearchSerializer(serializers.Serializer):
     q = serializers.CharField(required=False, allow_blank=True)
     degree = serializers.ListField(child=serializers.IntegerField(), required=False)
     major = serializers.ListField(child=serializers.CharField(), required=False)
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ["id", "user", "message", "created_at", "is_read"]
+        read_only_fields = ["id", "user", "created_at"]
