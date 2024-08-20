@@ -134,7 +134,7 @@ function Invite() {
     const currentDate = new Date();
     const expiredDate = new Date(
       // currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
-      createdDate.getTime() + 60 * 1000
+      currentDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
