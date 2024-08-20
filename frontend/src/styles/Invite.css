@@ -421,7 +421,6 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px; /* 다른 요소들과의 간격 */
 }
 
 .invite-status.accepted .invitee-name {
@@ -434,16 +433,13 @@ body {
 .invite-status.accepted .status-label {
   font-size: 12.3px;
   color: #595959;
-  margin: 0 10px;
+  margin: 0 0 0 10px;
 }
 
 .view-profile-button {
   background-color: #4CAF50; /* 초록색 배경 */
   color: white; /* 텍스트 색상 흰색 */
-  padding: 7.7px 15.4px; /* 패딩 설정 */
-  border: none; /* 테두리 제거 */
-  border-radius: 3px; /* 모서리를 둥글게 */
-  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
+@@ -423,6 +446,7 @@ body {
   font-size: 10.8px; /* 폰트 크기 설정 */
   font-weight: bold; /* 폰트 두께 설정 */
   transition: background-color 0.3s ease; /* 배경색 전환 효과 */
@@ -451,14 +447,7 @@ body {
 }
 
 .view-profile-button:hover {
-  background-color: #45a049; /* 마우스 오버 시 배경색을 약간 어둡게 변경 */
-}
-
-.view-profile-button:active {
-  background-color: #397d3b; /* 클릭 시 배경색을 더 어둡게 변경 */
-}
-
-.view-profile-button:focus {
+@@ -437,3 +461,4 @@ body {
   outline: none; /* 포커스 시 아웃라인 제거 */
   box-shadow: 0 0 0 2px #80c683; /* 포커스 시 박스 섀도 추가 */
 }
