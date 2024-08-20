@@ -294,7 +294,7 @@ function Profile() {
                 className="profile-deleteBtn"
                 type="button"
                 onClick={() => handleTagDelete(index)}
-              ></button>
+              >X</button>
             </span>
           ))}
           {tagVisible && (
@@ -333,7 +333,7 @@ function Profile() {
               <button
                 className="profile-deleteBtn"
                 onClick={() => handleExperienceDelete(index)}
-              ></button>
+              >X</button>
             </div>
           ))}
           <input
@@ -366,7 +366,7 @@ function Profile() {
               <button
                 className="profile-deleteBtn"
                 onClick={() => handleToolDelete(index)}
-              ></button>
+              >X</button>
             </div>
           ))}
           <input
