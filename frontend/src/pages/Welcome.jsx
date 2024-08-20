@@ -55,7 +55,11 @@ const Welcome = () => {
   };
 
   if (loading) {
-    return <div className="loading">로딩 중...</div>;  // 로딩 중일 때 표시할 내용
+    return (
+      <div className="loading-container">
+        <div className="loading-text">로딩 중...</div>
+      </div>
+    );
   }
 
   if (error) {
