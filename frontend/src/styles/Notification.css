@@ -1,0 +1,180 @@
+.notification-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.notification-container h1 {
+  text-align: center;
+  color: #333;
+}
+
+.notification-container h2 {
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.notification-input {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.notification-input input {
+  width: 75%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.notification-input button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.notification-input button:hover {
+  background-color: #0056b3;
+}
+
+.notification-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.notification-list li {
+  background-color: white;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.notification-list li.read {
+  background-color: #e6ffe6;
+}
+
+.notification-list li.unread {
+  background-color: #ffe6e6;
+}
+
+.notification-list li .notification-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.notification-list li .message {
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
+}
+
+.notification-list li .status {
+  font-size: 14px;
+  font-weight: bold;
+  color: #888;
+}
+
+.notification-list li .notification-buttons {
+  display: flex;
+  justify-content: flex-start;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.notification-list li .notification-buttons button {
+  padding: 8px 12px;
+  font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.notification-list li .notification-buttons button.mark-read {
+  background-color: #28a745;
+  color: white;
+}
+
+.notification-list li .notification-buttons button.mark-read:hover {
+  background-color: #218838;
+}
+
+.notification-list li .notification-buttons button.edit {
+  background-color: #007bff;
+  color: white;
+}
+
+.notification-list li .notification-buttons button.edit:hover {
+  background-color: #0056b3;
+}
+
+.notification-list li .notification-buttons button.delete {
+  background-color: #dc3545;
+  color: white;
+}
+
+.notification-list li .notification-buttons button.delete:hover {
+  background-color: #c82333;
+}
+
+.notification-list li .created-at {
+  font-size: 12px;
+  color: #888;
+  text-align: left;
+  margin-top: 5px;
+}
+
+/* New Styles for edit-input-text, save, and cancel buttons */
+.notification-list li .edit-input-text {
+  width: 95%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.notification-list li .edit-buttons {
+  display: flex;
+}
+
+.notification-list li .save {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.notification-list li .save:hover {
+  background-color: #218838;
+}
+
+.notification-list li .cancel {
+  background-color: #dc3545;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.notification-list li .cancel:hover {
+  background-color: #c82333;
+}
