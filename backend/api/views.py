@@ -251,6 +251,9 @@ class WelcomeView(generics.GenericAPIView):
                         "invitee_name": invitee_name,
                     }
                 )
+            except InvitationLink.DoesNotExist:
+                logger.warning(f"Invalid invitation code: {code}")  # 로그 추가
+                return Response({"message": "Invalid invitation code.", "error_type": "invalid"}, status=400)
             except Exception as e:
                 logger.error(f"Error processing invitation link: {str(e)}")  # 오류 로그 추가
                 return Response({"message": "An error occurred while processing the invitation link."}, status=500)
