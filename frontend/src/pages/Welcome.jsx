@@ -28,14 +28,19 @@ const Welcome = () => {
         })
         .catch(error => {
           console.error("There was an error fetching the invitation details:", error);
+
           if (error.response && error.response.data.error_type) {
-            setErrorType(error.response.data.error_type);  // error_type 상태 업데이트
+            const errorTypeFromServer = error.response.data.error_type;
+            console.log("Error Type from server:", errorTypeFromServer);  // error_type 출력
+            setErrorType(errorTypeFromServer);  // error_type 상태 업데이트
           } else {
-            setErrorType('unknown');  // 알 수 없는 오류의 경우
+            console.log("Unknown error type or no error type provided.");  // 알 수 없는 오류의 경우
+            setErrorType('unknown');
           }
           setError(true);
         });
     } else {
+      console.log("No code provided in the URL.");  // URL에 code가 없을 경우
       setErrorType('invalid');
       setError(true);
     }
