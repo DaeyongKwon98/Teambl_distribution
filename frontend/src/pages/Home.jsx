@@ -20,13 +20,17 @@ function Home() {
   };
 
   const goToProfile = () => {
-    navigate("/profile",{
-      state : {
-        prevPage:'home'
-      }
+    navigate("/profile", {
+      state: {
+        prevPage: "home",
+      },
     });
   };
-  
+
+  const goToNotification = () => {
+    navigate("/notification");
+  };
+
   const handleChangePassword = async () => {
     try {
       const response = await api.patch("/api/change-password/", {
@@ -79,6 +83,9 @@ function Home() {
       </button>
       <button onClick={goToProfile} className="button4">
         Profile
+      </button>
+      <button onClick={goToNotification} className="button5">
+        Notification
       </button>
       <div className="password-change-container">
         <h2>Change Password</h2>
