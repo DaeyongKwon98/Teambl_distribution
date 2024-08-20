@@ -85,3 +85,21 @@
 .home-container .button4:hover {
   background-color: hsl(60, 100%, 40%); /* Darker blue on hover */
 }
+
+.home-container .button5 {
+  background-color: hsl(20, 100%, 60%); /* yellow background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin: 10px; /* Spacing between buttons */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  width: 7em;
+  text-align: center; /* Center text horizontally */
+  display: inline-block; /* Ensure the button is treated as a block-level element */
+}
+
+.home-container .button5:hover {
+  background-color: hsl(20, 100%, 80%); /* Lighter color on hover */
