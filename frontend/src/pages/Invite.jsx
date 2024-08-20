@@ -206,6 +206,7 @@ function Invite() {
             <p className="invitee-name">{linkObj.invitee_name}</p>
             {linkObj.status !== "accepted" ? (
               <>
+                {console.log("Status is not accepted, showing revoke button.")}
                 <button
                   className="revoke-invite-button"
                   onClick={() => handleRevokeInvite(linkObj)}
@@ -213,21 +214,20 @@ function Invite() {
                   초대 회수
                 </button>
               </>
-            ): null}
+            ) : (
+              console.log("Status is accepted, hiding revoke button.")
+            )}
           </div>
           <div className="expiration-container">
             {linkObj.status === "accepted" ? (
-              <div className="accepted-container">
-                <p className="invitee-name">{linkObj.invitee_name}</p>
-                <button
-                  className="view-profile-button"
-                  onClick={() =>
-                    (window.location.href = `/profile/${linkObj.invitee_name}`)
-                  }
-                >
-                  프로필 확인
-                </button>
-              </div>
+              <button
+                className="view-profile-button"
+                onClick={() =>
+                  (window.location.href = /profile/${linkObj.invitee_name})
+                }
+              >
+                프로필 확인하기
+              </button>
             ) : (
               <>
                 <div className="expiration-info">
