@@ -413,6 +413,29 @@ body {
 
 /* 아래는 대용 추가 */
 
+/* 가입 완료 상태를 위한 스타일링 */
+.invite-status.accepted {
+  background-color: #f5f5f5; /* 회색 배경 */
+  border-radius: 6.2px;
+  padding: 12.3px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.invite-status.accepted .invitee-name {
+  font-size: 12.3px;
+  font-weight: bold;
+  color: #121212;
+  margin: 0;
+}
+
+.invite-status.accepted .status-label {
+  font-size: 12.3px;
+  color: #595959;
+  margin: 0 0 0 10px;
+}
+
 .view-profile-button {
   background-color: #4CAF50; /* 초록색 배경 */
   color: white; /* 텍스트 색상 흰색 */
@@ -423,6 +446,7 @@ body {
   font-size: 10.8px; /* 폰트 크기 설정 */
   font-weight: bold; /* 폰트 두께 설정 */
   transition: background-color 0.3s ease; /* 배경색 전환 효과 */
+  margin-left: auto; /* 버튼을 오른쪽에 배치 */
 }
 
 .view-profile-button:hover {
@@ -437,3 +461,4 @@ body {
   outline: none; /* 포커스 시 아웃라인 제거 */
   box-shadow: 0 0 0 2px #80c683; /* 포커스 시 박스 섀도 추가 */
 }
+
