@@ -57,10 +57,20 @@ button.welcome-nextBtn:hover{
   align-items: center;
   height: 100vh; /* 화면 전체 높이 */
   background-color: #f8f9fa; /* 배경색 설정 */
+  text-align: center; /* 텍스트를 가운데 정렬 */
 }
 
 .loading-text {
   font-size: 24px; /* 텍스트 크기 설정 */
   font-weight: bold; /* 텍스트 두께 설정 */
-  color: #0923A9; /* 텍스트 색상 설정 */
+  color: #333; /* 텍스트 색상 설정 */
+  line-height: 1.5; /* 줄 간격 설정 */
+}
+
+.loading-subtext {
+  color: #333; /* 검은색(진한 회색) */
+}
+
+.loading-highlight {
+  color: #0923A9; /* 파란색 */
 }
