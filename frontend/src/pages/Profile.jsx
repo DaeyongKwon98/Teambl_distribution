@@ -421,7 +421,7 @@ function Profile() {
               <button
                 className="profile-deleteBtn"
                 onClick={() => handlePortfolioDelete(index)}
-              ></button>
+              >X</button>
             </div>
           ))}
 
