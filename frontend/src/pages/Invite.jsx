@@ -206,7 +206,7 @@ function Invite() {
             <p className="invitee-name">{linkObj.invitee_name}</p>
             {linkObj.status !== "accepted" ? (
               <>
-                {console.log("Status is not accepted, showing revoke button.")}
+                {/* {console.log("Status is not accepted, showing revoke button.")} */}
                 <button
                   className="revoke-invite-button"
                   onClick={() => handleRevokeInvite(linkObj)}
@@ -215,7 +215,8 @@ function Invite() {
                 </button>
               </>
             ) : (
-              console.log("Status is accepted, hiding revoke button.")
+              // console.log("Status is accepted, hiding revoke button.")
+              null
             )}
           </div>
           <div className="expiration-container">
