@@ -270,6 +270,13 @@ class InvitationLinkDelete(generics.DestroyAPIView):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
 
+# Friend가 변경될 때 (create, update, delete) Profile 모델의 1촌 수도 같이 업데이트 해주는 함수.
+def update_profile_one_degree_count(user):
+    profile = user.profile  # User를 통해 Profile에 접근
+    profile.one_degree_count = Friend.objects.filter(
+        Q(from_user=user) | Q(to_user=user), status="accepted"
+    ).count()
+    profile.save()
 
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer
@@ -290,6 +297,11 @@ class ListCreateFriendView(generics.ListCreateAPIView):
                 f"Creating friendship: from_user={from_user.email}, to_user={to_user.email}"
             )
             serializer.save(from_user=from_user, to_user=to_user, status="accepted")
+            
+            # Profile의 one_degree_count도 같이 업데이트
+            update_profile_one_degree_count(from_user)
+            update_profile_one_degree_count(to_user)
+            
         except CustomUser.DoesNotExist:
             logger.error(f"User with id {to_user_id} does not exist")
             raise ValidationError("User with this ID does not exist.")
@@ -304,11 +316,10 @@ class FriendUpdateView(generics.UpdateAPIView):
         return Friend.objects.filter(Q(from_user=user) | Q(to_user=user))
 
     def perform_update(self, serializer):
-        print(
-            f"Performing update with data: {serializer.validated_data}"
-        )  # Debugging line
+        friend = serializer.save()
         super().perform_update(serializer)
-
+        update_profile_one_degree_count(friend.from_user)
+        update_profile_one_degree_count(friend.to_user)
 
 class FriendDeleteView(generics.DestroyAPIView):
     serializer_class = FriendCreateSerializer
@@ -319,7 +330,12 @@ class FriendDeleteView(generics.DestroyAPIView):
         return Friend.objects.filter(
             Q(from_user=user) | Q(to_user=user)
         )  # user가 포함된 친구 필터
-
+        
+    # 1촌 삭제 시에 from_user, to_user의 profile에 1촌 수를 빼주기
+    def perform_destroy(self, instance):
+        super().perform_destroy(instance)
+        update_profile_one_degree_count(instance.from_user)
+        update_profile_one_degree_count(instance.to_user)
 
 class GetUserDistanceAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
@@ -401,3 +417,43 @@ class SearchUsersAPIView(generics.ListAPIView):
             return Response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class NotificationListCreateView(generics.ListCreateAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        # 현재 로그인한 사용자에게만 해당하는 알림을 반환합니다.
+        user = self.request.user
+        return Notification.objects.filter(user=user).order_by("-created_at")
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class NotificationUpdateView(generics.UpdateAPIView):
+    serializer_class = NotificationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # 현재 로그인한 사용자의 특정 알림을 업데이트합니다.
+        user = self.request.user
+        notification = get_object_or_404(
+            Notification, pk=self.kwargs.get("pk"), user=user
+        )
+        return notification
+
+    def perform_update(self, serializer):
+        serializer.save()
+
+
+class NotificationDeleteView(generics.DestroyAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        # 현재 로그인한 사용자의 특정 알림을 삭제합니다.
+        user = self.request.user
+        notification = get_object_or_404(
+            Notification, pk=self.kwargs.get("pk"), user=user
+        )
+        return notification
