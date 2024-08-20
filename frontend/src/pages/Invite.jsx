@@ -190,57 +190,72 @@ function Invite() {
         </button>
       </div>
       <h2 className="invite-status-title">초대 현황</h2>
-      {links.length > 0 ? (
-        links.map((linkObj, index) => {
-          const expiredDate = getExpiredDate(linkObj);
+{links.length > 0 ? (
+  links.map((linkObj, index) => {
+    const expiredDate = getExpiredDate(linkObj);
 
-          const currentTime = new Date();
-          const isExpired = currentTime > expiredDate;
+    const currentTime = new Date();
+    const isExpired = currentTime > expiredDate;
 
-          return (
-            <div className="invite-status" key={index}>
-              <div className="invite-card">
-                <div className="invite-card-header">
-                  <p className="invitee-name">{linkObj.invitee_name}</p>
-                  <button
-                    className="revoke-invite-button"
-                    onClick={() => handleRevokeInvite(linkObj)}
-                  >
-                    초대 회수
-                  </button>
+    return (
+      <div className="invite-status" key={index}>
+        <div className="invite-card">
+          <div className="invite-card-header">
+            <p className="invitee-name">{linkObj.invitee_name}</p>
+            <button
+              className="revoke-invite-button"
+              onClick={() => handleRevokeInvite(linkObj)}
+            >
+              초대 회수
+            </button>
+          </div>
+          <div className="expiration-container">
+            {linkObj.status === "accepted" ? (
+              <button
+                className="view-profile-button"
+                onClick={() =>
+                  (window.location.href = `/profile/${linkObj.invitee_name}`)
+                }
+              >
+                프로필 확인하기
+              </button>
+            ) : (
+              <>
+                <div className="expiration-info">
+                  <p className="expiration-title">링크 유효 기간</p>
+                  <p className="expiration-date">
+                    {isExpired ? "기간 만료" : `${formatDate(expiredDate)}까지`}
+                  </p>
                 </div>
-                <div className="expiration-container">
-                  <div className="expiration-info">
-                    <p className="expiration-title">링크 유효 기간</p>
-                    <p className="expiration-date">{`${formatDate(
-                      expiredDate
-                    )}까지`}</p>
-                  </div>
-                  <button
-                    className={`copy-link-button ${
-                      isExpired ? "disabled" : ""
-                    }`}
-                    onClick={() => !isExpired && handleCopyLink(linkObj.link)}
-                    disabled={isExpired}
-                  >
-                    <img
-                      src={CopyIcon}
-                      alt="복사 아이콘"
-                      className="copy-icon"
-                    />
-                    <p className="copy-link-title">링크 복사</p>
-                  </button>
-                </div>
-              </div>
-            </div>
-          );
-        })
-      ) : (
-        <div className="init-invite-status">
-          <p>아직 초대한 사람이 없네요!</p>
-          <p>주위를 둘러보며 팀블에 함께할 지인을 찾아보세요.</p>
+                <button
+                  className={`copy-link-button ${
+                    isExpired ? "disabled" : ""
+                  }`}
+                  onClick={() => !isExpired && handleCopyLink(linkObj.link)}
+                  disabled={isExpired}
+                >
+                  <img
+                    src={CopyIcon}
+                    alt="복사 아이콘"
+                    className="copy-icon"
+                  />
+                  <p className="copy-link-title">
+                    {isExpired ? "재생성" : "링크 복사"}
+                  </p>
+                </button>
+              </>
+            )}
+          </div>
         </div>
-      )}
+      </div>
+        );
+      })
+    ) : (
+      <div className="init-invite-status">
+        <p>아직 초대한 사람이 없네요!</p>
+        <p>주위를 둘러보며 팀블에 함께할 지인을 찾아보세요.</p>
+      </div>
+    )}
 
       {showRevokeModal && (
         <div className="modal-overlay">
