@@ -124,7 +124,8 @@ function Invite() {
     const createdDate = new Date(linkObj.created_at);
     // linkObj.created_at이 Date 객체라고 가정
     const expiredDate = new Date(
-      createdDate.getTime() + 7 * 24 * 60 * 60 * 1000
+      // createdDate.getTime() + 7 * 24 * 60 * 60 * 1000
+      createdDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
@@ -132,7 +133,8 @@ function Invite() {
   const getExpiredDateFromCurrentDate = () => {
     const currentDate = new Date();
     const expiredDate = new Date(
-      currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+      // currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+      createdDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
