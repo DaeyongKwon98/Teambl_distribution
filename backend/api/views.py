@@ -221,7 +221,7 @@ class WelcomeView(generics.GenericAPIView):
         if code:
             try:
                 # code로 InvitationLink 객체를 찾기
-                invite_link = get_object_or_404(InvitationLink, link__endswith=code)
+                invite_link = InvitationLink.objects.get(link__endswith=code)
                 inviter_name = invite_link.inviter.profile.user_name
                 invitee_name = invite_link.invitee_name
 
@@ -256,7 +256,7 @@ class WelcomeView(generics.GenericAPIView):
                 return Response({"message": "Invalid invitation code.", "error_type": "invalid"}, status=400)
             except Exception as e:
                 logger.error(f"Error processing invitation link: {str(e)}")  # 오류 로그 추가
-                return Response({"message": "An error occurred while processing the invitation link."}, status=500)
+                return Response({"message": "An error occurred while processing the invitation link.", "error_type": "unknown"}, status=500)
         else:
             logger.warning("Invalid invitation code provided")  # 로그 추가
             return Response({"message": "Invalid invitation code.", "error_type": "invalid"}, status=400)
