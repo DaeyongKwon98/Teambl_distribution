@@ -227,7 +227,7 @@ class WelcomeView(generics.GenericAPIView):
 
                 logger.debug(f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}")  # 로그 추가
 
-                # 만료 날짜 계산 (생성 후 7일)
+                # 만료 날짜 계산 (생성 후 1분)
                 expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
                 current_date = timezone.now()
 
@@ -236,7 +236,7 @@ class WelcomeView(generics.GenericAPIView):
                     invite_link.status = "expired"
                     invite_link.save()
                     logger.warning(f"Invitation link expired: code={code}")  # 로그 추가
-                    return Response({"message": "Invitation link is expired"}, status=400)
+                    return Response({"message": "Invitation link is expired", "error_type": "expired"}, status=400)
 
                 # 초대 링크가 이미 사용되었는지 확인
                 if invite_link.status == "accepted":
@@ -256,7 +256,7 @@ class WelcomeView(generics.GenericAPIView):
                 return Response({"message": "An error occurred while processing the invitation link."}, status=500)
         else:
             logger.warning("Invalid invitation code provided")  # 로그 추가
-            return Response({"message": "Invalid invitation code."}, status=400)
+            return Response({"message": "Invalid invitation code.", "error_type": "invalid"}, status=400)
 
 
 class InvitationLinkDelete(generics.DestroyAPIView):
