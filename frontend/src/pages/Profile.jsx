@@ -1,41 +1,43 @@
-import React,{useState, useEffect, useRef} from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { useDropzone } from 'react-dropzone';
-import '../styles/Profile.css'
-import '../styles/ExperienceList.css';
-import '../styles/IntroductionForm.css';
-import '../styles/Tool.css';
-import '../styles/Portfolio.css';
-import api from '../api';
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useDropzone } from "react-dropzone";
+import profileImg from "../assets/Profile/student.png";
+import friendIcon from "../assets/Profile/friend.png";
+import "../styles/Profile.css";
+import "../styles/ExperienceList.css";
+import "../styles/IntroductionForm.css";
+import "../styles/Tool.css";
+import "../styles/Portfolio.css";
+import api from "../api";
 
-function Profile(){
+function Profile() {
   const navigate = useNavigate();
   const location = useLocation();
-  const userInfo = {...location.state};
+  const userInfo = { ...location.state };
 
-  const [user_name, setUserName] = useState('');
-  const [school, setSchool] = useState('');
-  const [current_academic_degree, setCurrentAcademicDegree] = useState('');
-  const [year, setYear] = useState('');
-  const [major, setMajor] = useState('');
-  const [one_degree_count, setOneDegreeCount] = useState('');
+  const [user_name, setUserName] = useState("");
+  const [school, setSchool] = useState("");
+  const [current_academic_degree, setCurrentAcademicDegree] = useState("");
+  const [year, setYear] = useState("");
+  const [major, setMajor] = useState("");
+  const [one_degree_count, setOneDegreeCount] = useState("");
 
-  const [image, setImage] = useState('src/assets/student.png');
-  const [tags, setTags] = useState(['Java', 'Python']);
-  const [newTag, setNewTag] = useState('');
-  const [tagFull, setTagFull] = useState(false)
-  
-  const [experiences, setExperiences] = useState([]);  
-  const [newExperience, setNewExperience] = useState('');
-  
+  const [image, setImage] = useState(profileImg);
+  const [tags, setTags] = useState(["Java", "Python"]);
+  const [newTag, setNewTag] = useState("");
+  const [tagFull, setTagFull] = useState(false);
+
+  const [experiences, setExperiences] = useState([]);
+  const [newExperience, setNewExperience] = useState("");
+
   const [tools, setTools] = useState([]);
-  const [newTool, setNewTool] = useState('');
+  const [newTool, setNewTool] = useState("");
 
-  const [introduction, setIntroduction] = useState('');
-  const [savedIntroduction, setSavedIntroduction] = useState('');
+  const [introduction, setIntroduction] = useState("");
+  const [savedIntroduction, setSavedIntroduction] = useState("");
 
   const [portfolios, setPortfolios] = useState([]);
-  const [newPortfolio, setNewPortfolio] = useState('');
+  const [newPortfolio, setNewPortfolio] = useState("");
 
   const [tagVisible, setTagVisible] = useState(false);
   const [experienceVisible, setExperienceVisible] = useState(false);
@@ -54,167 +56,192 @@ function Profile(){
     reader.readAsDataURL(file);
   };
 
-  useEffect(()=>{
-    if (tags.length>=5) setTagFull(true);
-  },[tags])
+  useEffect(() => {
+    if (tags.length >= 5) setTagFull(true);
+  }, [tags]);
 
-  const { getRootProps, getInputProps } = useDropzone({ onDrop, noClick: true });
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    noClick: true,
+  });
 
   const handleImageClick = () => {
-    document.getElementById('fileInput').click();
+    document.getElementById("fileInput").click();
   };
 
-  useEffect(()=>{
+  useEffect(() => {
     fetchProfile();
-  },[])
+  }, []);
 
-  const fetchProfile = async () =>{
+  const fetchProfile = async () => {
     try {
-      const response = await api.get('/api/current-user/');
+      const response = await api.get("/api/current-user/");
       // console.log(response.data.profile)
-      if(prevPage==='editprofile'){
+      if (prevPage === "editprofile") {
         setUserName(userInfo.user_name);
         setSchool(userInfo.school);
         setCurrentAcademicDegree(userInfo.current_academic_degree);
         setYear(userInfo.year);
         setMajor(userInfo.major);
-      }
-      else{
+      } else {
         setUserName(response.data.profile.user_name);
         setSchool(response.data.profile.school);
         setCurrentAcademicDegree(response.data.profile.current_academic_degree);
         setYear(response.data.profile.year);
         setMajor(response.data.profile.major);
       }
-      setOneDegreeCount(response.data.profile.one_degree_count);
 
-      if( response.data.profile.keywords.length!=0)
-        setTags([...tags, response.data.profile.keywords]);
-      if( response.data.profile.experiences.length!=0)
+      const oneDegreeCount = await fetchFriendCount();
+      setOneDegreeCount(oneDegreeCount);
+
+      if (response.data.profile.keywords.length != 0) {
+        setTags([...response.data.profile.keywords]);
+      }
+      if (response.data.profile.experiences.length != 0)
         setExperiences(response.data.profile.experiences);
-      if( response.data.profile.tools.length!=0)
+      if (response.data.profile.tools.length != 0)
         setTools(response.data.profile.tools);
-      if( response.data.profile.introduction)
-        setSavedIntroduction(response.data.profile.introduction);
-      if( response.data.profile.portfolio_links.length!=0)
+      if (response.data.profile.introduction)
+        setIntroduction(response.data.profile.introduction);
+      if (response.data.profile.portfolio_links.length != 0)
         setPortfolios(response.data.profile.portfolio_links);
-    }catch(error){
+    } catch (error) {
       console.error("Failed to fetch current user profile:", error);
+    }
+  };
+
+  const handleBack = () => {
+    navigate("/");
+  };
+  const fetchFriendCount = async () => {
+    try {
+      const response = await api.get("/api/friends/");
+      // console.log(response.data);
+      const friendList = await response.data;
+
+      // 상태가 "accepted"인 항목들만 필터링
+      const acceptedFriendList = friendList.filter(
+        (item) => item.status === "accepted"
+      );
+
+      // "accepted" 상태의 항목 개수를 세어 반환
+      // console.log(acceptedFriendList.length);
+      return acceptedFriendList.length;
+    } catch (error) {
+      console.error("Failed to fetch current user friends list:", error);
     }
   };
 
   const handleAddTag = () => {
     if (newTag) {
       setTags([...tags, newTag]);
-      setNewTag('');
+      setNewTag("");
       setTagVisible(false);
     }
   };
 
   const handleCancel = () => {
-    setNewTag('');
+    setNewTag("");
     setTagVisible(false);
   };
-  
-  const handleTagDelete = (index) =>{
-    const newtags = tags.filter((_, i)=>i!==index)
+
+  const handleTagDelete = (index) => {
+    const newtags = tags.filter((_, i) => i !== index);
     setTags(newtags);
   };
 
-  function handleEdit(){
-    navigate('/editprofile', {
+  function handleEdit() {
+    navigate("/editprofile", {
       state: {
-        user_name : user_name,
-        school : school,
-        current_academic_degree : current_academic_degree,
-        year : year,
-        major : major
-      }
+        user_name: user_name,
+        school: school,
+        current_academic_degree: current_academic_degree,
+        year: year,
+        major: major,
+      },
     });
   }
   const handleAddExperience = () => {
     if (newExperience) {
-      setExperiences([...experiences, {experience : newExperience}]);
-      setNewExperience('');
+      setExperiences([...experiences, { experience: newExperience }]);
+      setNewExperience("");
       setExperienceVisible(false);
       // console.log(experiences)
     }
   };
 
-  const handleExperienceCancel = () => {
+  /* const handleExperienceCancel = () => {
     setNewExperience('');
     setExperienceVisible(false);
-  };
+  }; */
 
-  const handleExperienceDelete = (index) =>{
-    const newExps = experiences.filter((_,i)=>i!==index)
+  const handleExperienceDelete = (index) => {
+    const newExps = experiences.filter((_, i) => i !== index);
     setExperiences(newExps);
   };
 
   const handleAddTool = () => {
     if (newTool) {
-      setTools([...tools, {tool:newTool}]);
-      setNewTool('');
+      setTools([...tools, { tool: newTool }]);
+      setNewTool("");
       setToolVisible(false);
     }
   };
 
   const handleToolCancel = () => {
-    setNewTool('');
+    setNewTool("");
     setToolVisible(false);
   };
-  
-  const handleToolDelete = (index) =>{
-    const newtools = tools.filter((_,i)=>i!==index)
+
+  const handleToolDelete = (index) => {
+    const newtools = tools.filter((_, i) => i !== index);
     setTools(newtools);
   };
-  
+
   const handleIntroductionSave = () => {
     setSavedIntroduction(introduction);
     setIntroductionVisible(false);
-  };  
+  };
 
   const handleAddPortfolio = () => {
     if (newPortfolio) {
-      setPortfolios([...portfolios, {portfolioLink:newPortfolio}]);
-      setNewPortfolio('');
+      setPortfolios([...portfolios, { portfolioLink: newPortfolio }]);
+      setNewPortfolio("");
       setPortfVisible(false);
     }
   };
-  
+
   const handlePortfolioCancel = () => {
-    setNewPortfolio('');
+    setNewPortfolio("");
     setPortfVisible(false);
   };
 
-  const handlePortfolioDelete = (index) =>{
-    const newportfs = portfolios.filter((_,i)=>i!==index)
+  const handlePortfolioDelete = (index) => {
+    const newportfs = portfolios.filter((_, i) => i !== index);
     setPortfolios(newportfs);
   };
-
 
   const handleSave = async (e) => {
     e.preventDefault();
     try {
       const response = await api.put("/api/profile/update/", {
-            
-        user_name, 
+        user_name,
         school,
         current_academic_degree,
         year,
         major,
-        introduction:savedIntroduction,
+        one_degree_count: one_degree_count,
+        introduction: introduction,
         experiences,
         tools,
-        portfolio_links:portfolios
-        
+        portfolio_links: portfolios,
+        keywords: tags,
       });
       const newUser = response.data;
-      console.log("User registered successfully:", newUser);
-      navigate('/profile');
-      
+      console.log("Profile update successfully:", newUser);
+      navigate("/profile");
     } catch (error) {
-      alert("회원가입 실패");
+      alert("프로필 업데이트 실패");
       console.error("Registration error:", error);
       if (error.response) {
         console.error("Error response data:", error.response.data);
@@ -222,41 +249,52 @@ function Profile(){
     }
   };
 
-  return(
-    <form onSubmit={handleSave} className='profile'>
-      <div className='profile-back'>
-        <button type="button" disabled={true}></button>
+  return (
+    <form onSubmit={handleSave} className="profile">
+      <div className="profile-back">
+        <button type="button" onClick={handleBack}></button>
       </div>
       <h4>내 프로필</h4>
       <div className="profile-card">
         <div className="profile-header">
           <div className="profile-imageContainer" {...getRootProps()}>
             <img src={image} alt="Profile" onClick={handleImageClick} />
-            <input {...getInputProps()} id="fileInput" type="file" style={{ display: 'none' }} />
+            <input
+              {...getInputProps()}
+              id="fileInput"
+              type="file"
+              style={{ display: "none" }}
+            />
           </div>
           <div className="profile-info">
-            <div className='profile-name'>
+            <div className="profile-name">
               <h2>{user_name}</h2>
-              <button className='profile-editBtn' onClick={handleEdit}></button>
+              <button className="profile-editBtn" onClick={handleEdit}></button>
             </div>
-            <div className='profile-line'></div>
-            <p>{`${school} · ${year} · ${current_academic_degree}`}</p>
-            <p>{major}</p>
-            <div className='profile-friend'>
-              <img src='src/assets/friend.png' alt="friend-icon" />
-              <span className='profile-oneDegree'>{`1촌 ${one_degree_count}명`}</span>
+            <div className="profile-line"></div>
+            <pre>{school + " | " + year + " | " + current_academic_degree}</pre>
+            <pre>{major}</pre>
+            <div className="profile-friend">
+              <img src={friendIcon} alt="friend-icon" />
+              <span className="profile-oneDegree">{`1촌 ${one_degree_count}명`}</span>
             </div>
           </div>
         </div>
         <div className="profile-tags">
-          <div className='profile-feature'>
+          <div className="profile-feature">
             키워드
-            <label className='profile-definition'>키워드는 5개까지 입력 가능합니다.</label>
+            <label className="profile-definition">
+              본인을 나타내는 키워드를 입력해보세요. (최대5개)
+            </label>
           </div>
           {tags.map((tag, index) => (
             <span key={index} className="profile-tag">
               {tag}
-              <button type='button' onClick={()=>(handleTagDelete(index))}>X</button>
+              <button
+                className="profile-deleteBtn"
+                type="button"
+                onClick={() => handleTagDelete(index)}
+              ></button>
             </span>
           ))}
           {tagVisible && (
@@ -272,163 +310,142 @@ function Profile(){
             </div>
           )}
           {!tagFull && !tagVisible && (
-            <span className="profile-addTag" onClick={() => setTagVisible(true)}>
+            <span
+              className="profile-addTag"
+              onClick={() => setTagVisible(true)}
+            >
               + 추가
             </span>
           )}
         </div>
-      </div> 
-      
+      </div>
+
       <div className="ex">
-        <div className='ex-feature'>
+        <div className="ex-feature">
           경험
-          <label className='ex-definition'>본인의 경험을 추가해보세요.</label>
+          {/* <label className='ex-definition'>본인의 경험을 추가해보세요.</label> */}
         </div>
         <div className="ex-lists">
-          {experiences.map((exp , index) => (
+          {experiences.map((exp, index) => (
             <div key={index} className="ex-item">
               <span className="ex-description">{exp.experience}</span>
               {/* <span className="ex-period">{exp.period}</span> */}
-              <button onClick={()=>(handleExperienceDelete(index))}>X</button>
+              <button
+                className="profile-deleteBtn"
+                onClick={() => handleExperienceDelete(index)}
+              ></button>
             </div>
           ))}
-          {experienceVisible ? (
-            <div className="ex-input">
-              <input
-                type="text"
-                placeholder="경험"
-                value={newExperience.description}
-                onChange={(e) => setNewExperience(e.target.value)}
-              />
-              {/* <input
-                type="text"
-                placeholder="기간"
-                value={newExperience.period}
-                onChange={(e) => setNewExperience({ ...newExperience, period: e.target.value })}
-              /> */}
-              <div className="ex-btnGroup">
-                <button type='button' className="ex-addBtn" onClick={handleAddExperience}>추가</button>
-                <button type='button' className="ex-cancelBtn" onClick={handleExperienceCancel}>삭제</button>
-              </div>
-            </div>
-          ) : (
-            <div className="ex-addExperience" onClick={() => setExperienceVisible(true)}>
-              + 추가하기
-            </div>
-          )}
+          <input
+            maxLength="20"
+            type="text"
+            placeholder="본인의 경험을 추가해보세요."
+            className="profile-input"
+            value={newExperience}
+            onChange={(e) => setNewExperience(e.target.value)}
+          />
+          <div
+            className="ex-addExperience"
+            onClick={() => handleAddExperience()}
+          >
+            + 추가하기
+          </div>
         </div>
       </div>
 
       <div className="tool">
-        <div className='tool-feature'>
+        <div className="tool-feature">
           툴
-          <label className='tool-definition'>본인이 다룰 수 있는 툴을 추가해보세요.</label>
+          {/* <label className='tool-definition'>본인이 다룰 수 있는 툴을 추가해보세요.</label> */}
         </div>
         <div className="tool-lists">
           {tools.map((t, index) => (
             <div key={index} className="tool-item">
               <span className="tool-description">{t.tool}</span>
               {/* <span className="tool-period">{exp.period}</span> */}
-              <button onClick={()=>(handleToolDelete(index))}>X</button>
+              <button
+                className="profile-deleteBtn"
+                onClick={() => handleToolDelete(index)}
+              ></button>
             </div>
           ))}
-          {toolVisible ? (
-            <div className="tool-input">
-              <input
-                type="text"
-                placeholder="경험"
-                value={newTool.description}
-                onChange={(e) => setNewTool(e.target.value)}
-              />
-              {/* <input
-                type="text"
-                placeholder="기간"
-                value={newTool.period}
-                onChange={(e) => setNewTool({ ...newTool, period: e.target.value })}
-              /> */}
-              <div className="tool-btnGroup">
-                <button type='button' className="tool-addBtn" onClick={handleAddTool}>추가</button>
-                <button type='button' className="tool-cancelBtn" onClick={handleToolCancel}>삭제</button>
-              </div>
-            </div>
-          ) : (
-            <div className="tool-addTool" onClick={() => setToolVisible(true)}>
-              + 추가하기
-            </div>
-          )}
-        </div>
-      </div>
-      
-      <div className="introduction-form">
-        <div className='intro-feature'>
-          소개
-        </div>
-        {introductionVisible ? (
-          <div className="textwithbutton">
-            <textarea
-              placeholder=""
-              value={introduction}
-              onChange={(e)=>setIntroduction(e.target.value)}
-            />
-            <button onClick={handleIntroductionSave}>저장하기</button>
+          <input
+            maxLength="20"
+            type="text"
+            placeholder="본인이 다룰 수 있는 툴을 추가해보세요."
+            className="profile-input"
+            value={newTool}
+            onChange={(e) => setNewTool(e.target.value)}
+          />
+          <div className="tool-addTool" onClick={() => handleAddTool(true)}>
+            + 추가하기
           </div>
-        ) : (
-          <div className="saved-introduction" onClick={() => setIntroductionVisible(true)}>
-            {savedIntroduction || (
-              <p className="placeholder">
-                관심 있는 분야, 이루고자 하는 목표, 전문성을 알기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요.
-              </p>
-            )}
-          </div>
-        )}
-      </div>
-      
-      <div className="portf">
-        <div className='portf-feature'>
-          포트폴리오
-          <label className='portf-definition'>포트폴리오 링크를 추가해보세요.</label>
-        </div>
-        <div className="portf-lists">
-          {portfolios.map((p,index) => (
-            <div key={index} className="portf-item" >
-              <span className="portf-description"><a href={p.portfolioLink} target='_blank'>{p.portfolioLink}</a></span>
-              {/* <span className="portf-period">{exp.period}</span> */}
-              <button onClick={()=>(handlePortfolioDelete(index))}>X</button>
-            </div>
-          ))}
-          {portfVisible ? (
-            <div className="portf-input">
-              <input
-                type="text"
-                placeholder="경험"
-                value={newPortfolio.description}
-                onChange={(e) => setNewPortfolio(e.target.value)}
-              />
-              {/* <input
-                type="text"
-                placeholder="기간"
-                value={newPortfolio.period}
-                onChange={(e) => setNewPortfolio({ ...newPortfolio, period: e.target.value })}
-              /> */}
-              <div className="portf-btnGroup">
-                <button type='button' className="portf-addBtn" onClick={handleAddPortfolio}>추가</button>
-                <button type='button' className="portf-cancelBtn" onClick={handlePortfolioCancel}>삭제</button>
-              </div>
-            </div>
-          ) : (
-            <div className="portf-addPortfolio" onClick={() => setPortfVisible(true)}>
-              + 추가하기
-            </div>
-          )}
         </div>
       </div>
 
-      <button 
-        type='submit' 
-        className='profile-submitBtn' 
-      >저장</button>
+      <div className="introduction-form">
+        <div className="intro-feature">소개</div>
+        <div className="saved-introduction">
+          {/* <input 
+            type="text"
+            placeholder="관심 있는 분야, 이루고자 하는 목표, 전문성을 쌓기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요."
+            className='profile-input intro-input'
+            value={introduction}
+            onChange={(e)=>setIntroduction(e.target.value)}
+          /> */}
+          <textarea
+            maxLength="100"
+            type="text"
+            placeholder="관심 있는 분야, 이루고자 하는 목표, 전문성을 쌓기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요."
+            className="profile-input intro-input"
+            value={introduction}
+            onChange={(e) => setIntroduction(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="portf">
+        <div className="portf-feature">
+          포트폴리오
+          {/* <label className='portf-definition'>포트폴리오 링크를 추가해보세요.</label> */}
+        </div>
+        <div className="portf-lists">
+          {portfolios.map((p, index) => (
+            <div key={index} className="portf-item">
+              <span className="portf-description">
+                <a href={p.portfolioLink} target="_blank">
+                  {p.portfolioLink}
+                </a>
+              </span>
+              {/* <span className="portf-period">{exp.period}</span> */}
+              <button
+                className="profile-deleteBtn"
+                onClick={() => handlePortfolioDelete(index)}
+              ></button>
+            </div>
+          ))}
+
+          <input
+            type="text"
+            placeholder="포트폴리오 링크를 추가해보세요."
+            className="profile-input"
+            value={newPortfolio}
+            onChange={(e) => setNewPortfolio(e.target.value)}
+          />
+          <div
+            className="portf-addPortfolio"
+            onClick={() => handleAddPortfolio(true)}
+          >
+            + 추가하기
+          </div>
+        </div>
+      </div>
+
+      <button type="submit" className="profile-submitBtn">
+        저장
+      </button>
     </form>
   );
 }
 
-export default Profile
+export default Profile;
