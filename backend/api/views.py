@@ -224,7 +224,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
 #             invitee_name = invite_link.invitee_name
 
 #             # Calculate the expiration date (7 days after creation)
-#             expired_date = invite_link.created_at + timezone.timedelta(days=7)
+#             expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
 #             current_date = timezone.now()
 
 #             # Check if the invitation link is expired
