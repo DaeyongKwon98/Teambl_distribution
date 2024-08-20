@@ -1,6 +1,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import CustomUser, Profile, Keyword, Project, InvitationLink, Friend
+from .models import CustomUser, Profile, Keyword, Project, InvitationLink, Friend, Notification
 from .serializers import (
     CustomUserSerializer,
     ProfileCreateSerializer,
@@ -11,6 +11,7 @@ from .serializers import (
     FriendCreateSerializer,
     FriendUpdateSerializer,
     SearchSerializer,
+    NotificationSerializer,
 )
 import json
 from django.core.mail import send_mail
