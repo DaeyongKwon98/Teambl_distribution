@@ -413,27 +413,34 @@ body {
 
 /* 아래는 대용 추가 */
 
-.accepted-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12.3px 0; /* 필요 시 상하 패딩 조절 */
-}
-
-.accepted-container .invitee-name {
-  margin: 0; /* 필요 시 여백 조절 */
-  font-size: 12.3px;
-  font-weight: bold;
-  color: #121212;
-}
-
 .view-profile-button {
-  background: none;
-  color: #595959;
+  background: none; /* 배경 제거 */
+  color: #595959; /* 텍스트 색상 동일하게 설정 */
+  font-size: 10.8px; /* 폰트 크기 설정 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 커서를 포인터로 변경 */
+  text-decoration: underline; /* 텍스트 밑줄 */
+  padding: 0; /* 패딩 제거 */
+  margin-left: auto; /* 버튼을 오른쪽 끝으로 이동 */
+  margin-right: 0; /* 오른쪽 여백 제거 */
+}
+
+.view-profile-button:hover {
+  color: #333; /* 호버 시 텍스트 색상 어둡게 변경 */
+}
+
+.view-profile-button:focus {
+  outline: none; /* 포커스 시 아웃라인 제거 */
+}
+
+.revoke-invite-button {
   font-size: 10.8px;
+  color: #595959;
+  background: none;
   border: none;
   cursor: pointer;
   text-decoration: underline;
   padding: 0;
-  margin-left: auto; /* 버튼을 오른쪽 끝으로 이동 */
+  margin-left: 7.7px;
 }
+
