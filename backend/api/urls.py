@@ -59,6 +59,25 @@ urlpatterns += [
     ),
 ]
 
+# Notifications
+urlpatterns += [
+    path(
+        "notifications/",
+        views.NotificationListCreateView.as_view(),
+        name="notification-list",
+    ),
+    path(
+        "notifications/update/<int:pk>/",
+        views.NotificationUpdateView.as_view(),
+        name="notification-update",
+    ),
+    path(
+        "notifications/delete/<int:pk>/",
+        views.NotificationDeleteView.as_view(),
+        name="notification-delete",
+    ),
+]
+
 # Others
 urlpatterns += [
     path("send_code/", views.SendCodeView.as_view(), name="send_code"),
