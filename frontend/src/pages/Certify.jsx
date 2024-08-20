@@ -150,12 +150,14 @@ function Certify(){
             placeholder=' 인증코드 입력' 
             onChange={(e)=>setVerificationCode(e.target.value)} 
             value={verificationCode}
+            disabled={isVerified} // 이메일 인증 성공 시 인증코드 입력 필드를 비활성화
             required
           />
           <button 
             type="button" 
             className='certify-emailBtn'
             onClick={handleVerifyCode}
+            disabled={isVerified} // 이메일 인증 성공 시 인증코드 확인 버튼을 비활성화
           >인증코드 확인</button>
         </div>
       )}
