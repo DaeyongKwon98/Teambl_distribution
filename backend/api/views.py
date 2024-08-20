@@ -458,3 +458,17 @@ class NotificationDeleteView(generics.DestroyAPIView):
             Notification, pk=self.kwargs.get("pk"), user=user
         )
         return notification
+
+# 이미 존재하는 이메일인지 확인
+class CheckEmailExistsView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        if not email:
+            return Response({"message": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
+            
+        if CustomUser.objects.filter(email=email).exists():
+            return Response({"message": "이미 사용중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        return Response({"message": "사용 가능한 이메일입니다."}, status=status.HTTP_200_OK)
