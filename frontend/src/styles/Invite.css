@@ -414,17 +414,21 @@ body {
 /* 아래는 대용 추가 */
 
 .view-profile-button {
-  background-color: #4CAF50; /* 초록색 배경 */
-  color: white; /* 텍스트 색상 흰색 */
-@@ -423,6 +446,7 @@ body {
+  background: none; /* 배경 제거 */
+  color: #595959; /* 텍스트 색상 동일하게 설정 */
   font-size: 10.8px; /* 폰트 크기 설정 */
-  font-weight: bold; /* 폰트 두께 설정 */
-  transition: background-color 0.3s ease; /* 배경색 전환 효과 */
-  margin-left: auto; /* 버튼을 오른쪽에 배치 */
+  border: none; /* 테두리 제거 */
+  cursor: pointer; /* 커서를 포인터로 변경 */
+  text-decoration: underline; /* 텍스트 밑줄 */
+  padding: 0; /* 패딩 제거 */
+  margin-left: auto; /* 버튼을 오른쪽 끝으로 이동 */
+  margin-right: 0; /* 오른쪽 여백 제거 */
 }
 
 .view-profile-button:hover {
-@@ -437,3 +461,4 @@ body {
+  color: #333; /* 호버 시 텍스트 색상 어둡게 변경 */
+}
+
+.view-profile-button:focus {
   outline: none; /* 포커스 시 아웃라인 제거 */
-  box-shadow: 0 0 0 2px #80c683; /* 포커스 시 박스 섀도 추가 */
 }
