@@ -198,11 +198,6 @@ function Invite() {
 
     const currentTime = new Date();
     const isExpired = currentTime > expiredDate;
-
-    console.log(linkObj.status);
-    console.log(currentTime);
-    console.log(expiredDate);
-    console.log(isExpired);
     
     return (
       <div className="invite-status" key={index}>
