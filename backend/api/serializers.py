@@ -240,7 +240,7 @@ class InvitationLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvitationLink
         fields = ["id", "inviter", "invitee_name", "link", "created_at", "status"]
-        read_only_fields = ["inviter", "created_at", "status"]
+        read_only_fields = ["id", "inviter", "created_at"]
 
 
 class FriendCreateSerializer(serializers.ModelSerializer):
