@@ -204,13 +204,18 @@ function Invite() {
         <div className="invite-card">
           <div className="invite-card-header">
             <p className="invitee-name">{linkObj.invitee_name}</p>
-            {linkObj.status !== "accepted" && (
-            <button
-              className="revoke-invite-button"
-              onClick={() => handleRevokeInvite(linkObj)}
-            >
-              초대 회수
-            </button>
+            {linkObj.status !== "accepted" ? (
+              <>
+                {console.log("Status is not accepted, showing revoke button.")}
+                <button
+                  className="revoke-invite-button"
+                  onClick={() => handleRevokeInvite(linkObj)}
+                >
+                  초대 회수
+                </button>
+              </>
+            ) : (
+              console.log("Status is accepted, hiding revoke button.")
             )}
           </div>
           <div className="expiration-container">
