@@ -13,6 +13,7 @@ const Welcome = () => {
   const [inviteeName, setInviteeName] = useState('');
   const [error, setError] = useState(false);
   const [errorType, setErrorType] = useState('');  // 에러 타입을 저장하기 위한 상태
+  const [loading, setLoading] = useState(true);    // 로딩 상태를 추가
 
   useEffect(() => {
     if (code) {
@@ -25,6 +26,7 @@ const Welcome = () => {
           setInviteeName(response.data.invitee_name);
           localStorage.setItem('invited', 'true');
           localStorage.setItem('invite_code', code);  // 초대 코드를 로컬 스토리지에 저장
+          setLoading(false); // 로딩 완료
         })
         .catch(error => {
           console.error("There was an error fetching the invitation details:", error);
@@ -38,17 +40,23 @@ const Welcome = () => {
             setErrorType('unknown');
           }
           setError(true);
+          setLoading(false); // 로딩 완료
         });
     } else {
       console.log("No code provided in the URL.");  // URL에 code가 없을 경우
       setErrorType('invalid');
       setError(true);
+      setLoading(false); // 로딩 완료
     }
   }, [code]);
 
   const handleRegister = () => {
     navigate('/certify');
   };
+
+  if (loading) {
+    return <div className="loading">로딩 중...</div>;  // 로딩 중일 때 표시할 내용
+  }
 
   if (error) {
     if (errorType === 'expired') {
