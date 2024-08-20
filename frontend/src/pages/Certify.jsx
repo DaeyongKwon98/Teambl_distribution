@@ -133,11 +133,12 @@ function Certify(){
           placeholder=' 이메일 입력' 
           onChange={(e)=>setEmail(e.target.value)} 
           value={email}
+          disabled={isVerified} // 이메일 인증 성공 시 필드를 비활성화
         />
         <button 
           type="button" 
           className='certify-emailBtn'
-          disabled={!emailBtnActive} 
+          disabled={!emailBtnActive || isVerified} // 이메일 인증 성공 시 버튼 비활성화
           onClick={handleSendCode}
         >인증코드 받기</button>
       </div>
@@ -185,4 +186,4 @@ function Certify(){
   );
 }
 
-export default Certify
+export default Certify;
