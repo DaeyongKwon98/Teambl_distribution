@@ -15,17 +15,24 @@ function Certify(){
   const [codeSent, setCodeSent] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
-  let [emailBtnActive, setEmailBtnActive] = useState(false);
-  let [nextBtnActive, setNextBtnActive] = useState(false);
+  const [emailBtnActive, setEmailBtnActive] = useState(false);
+  const [nextBtnActive, setNextBtnActive] = useState(false);
   // let [code , setCode] = useState('');
-  let [pwCheck, setPwCheck] = useState('');
+  const [pwCheck, setPwCheck] = useState('');
+  const [emailError, setEmailError] = useState("");
   // let [valid1, setValid1] = useState(false);
   // let [valid2, setValid2] = useState(false);
 
   useEffect(()=>{
-    if(email!=='') setEmailBtnActive((EBA)=>EBA=true);
-    else setEmailBtnActive((EBA)=>EBA=false);
-  },[email])
+    if(email!=='') {
+      setEmailBtnActive((EBA)=>EBA=true);
+      checkEmailExists(); // 이메일 중복 체크 함수 호출
+    }
+    else {
+      setEmailBtnActive((EBA)=>EBA=false);
+      setEmailError(""); // 이메일이 비어있으면 에러 메시지 초기화
+    }
+  },[email]);
 
   // useEffect(()=>{
   //   if(code===codekey){
@@ -47,6 +54,18 @@ function Certify(){
 
   // },[code])
 
+  const checkEmailExists = async () => {
+        try {
+            const response = await api.post('/api/check-email/', { email });
+            setEmailError("");  // 이메일 사용 가능
+        } catch (error) {
+            if (error.response && error.response.status === 400) {
+                setEmailError("이미 가입된 회원입니다.");  // 이메일 중복
+            } else {
+                setEmailError("이메일 확인 중 오류가 발생했습니다.");
+            }
+        }
+    };
   
   useEffect(()=>{
     if(password===pwCheck && password!==''){
@@ -71,9 +90,7 @@ function Certify(){
   useEffect(()=>{
     if(isVerified&&isChecked) setNextBtnActive(true);
     else setNextBtnActive(false);
-  },[isVerified,isChecked])
-
-
+  },[isVerified,isChecked, emailError]);
 
   function handleNext(){
     navigate('/register',{
@@ -82,10 +99,12 @@ function Certify(){
         password : password
       }
     });
-  }
+  };
+  
   // function handleBack(){
   //   navigate('/welcome');
   // }
+  
   const handleSendCode = async () => {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
@@ -106,13 +125,12 @@ function Certify(){
       labelRef1.current.style.color='green';
       setIsVerified(true);
       alert("이메일 인증 성공");
-    }else if (verificationCode!==generatedCode && verificationCode!=='') {
+    } else if (verificationCode!==generatedCode && verificationCode!=='') {
       labelRef1.current.innerHTML='인증코드가 일치하지 않습니다.';
       labelRef1.current.style.fontSize='10px';
       labelRef1.current.style.color='red';
       setIsVerified(false);
-    }
-    else {
+    } else {
       labelRef1.current.innerHTML='';
       setIsVerified(false);
       alert("인증 코드가 일치하지 않습니다.");
