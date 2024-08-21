@@ -77,22 +77,22 @@ function Home() {
     <div className="home-container">
       <h1>Home Page</h1>
       <button onClick={goToProjects} className="button1">
-        Project
+        프로젝트
       </button>
       <button onClick={goToFriends} className="button2">
-        Friend
+        일촌
       </button>
       <button onClick={goToSearch} className="button3">
-        Search
+        탐색
       </button>
       <button onClick={goToInvite} className="button4">
-        Invite
+        초대
       </button>
       <button onClick={goToProfile} className="button5">
-        Profile
+        내 프로필
       </button>
       <button onClick={goToNotification} className="button6">
-        Notification
+        알림
       </button>
       <div className="password-change-container">
         <h2>Change Password</h2>
