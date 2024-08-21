@@ -37,6 +37,7 @@ function Form({ route, method }) {
         navigate("/login");
       }
     } catch (e) {
+      console.log(e.response);
       if (e.response) {  // Errors that come from the API response
           if (e.response.data.email) {
             setError("가입되지 않은 이메일입니다.");
