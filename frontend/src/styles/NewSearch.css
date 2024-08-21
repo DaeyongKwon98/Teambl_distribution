@@ -30,7 +30,7 @@ body {
 .back-icon {
   width: 15.38px;
   height: 12.3px;
-  margin: auto 0; /* 상하 여백을 자동으로 설정하여 아이콘을 중앙 정렬 */
+  margin: 0;
 }
 
 .search-input {
