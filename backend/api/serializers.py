@@ -308,5 +308,10 @@ class SearchSerializer(serializers.Serializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ["id", "user", "message", "created_at", "is_read"]
+        fields = ["id", "user", "message", "created_at", "is_read", "notification_type"]
         read_only_fields = ["id", "user", "created_at"]
+
+    def validate_notification_type(self, value):
+        if value not in dict(Notification.NOTIFICATION_TYPE_CHOICES).keys():
+            raise serializers.ValidationError("Invalid notification type")
+        return value
