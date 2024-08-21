@@ -19,36 +19,35 @@ function Form({ route, method }) {
     setLoading(true);
     e.preventDefault();
     
-    try {
-      const res = await api.post(route, { email, password }); // request가 오류 없으면
-      if (method === "login") {
-        // access, refresh token 얻어서 저장하기
-        localStorage.setItem(ACCESS_TOKEN, res.data.access);
-        localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
-        navigate("/");
-      } else {
-        navigate("/login");
-      }
-    } catch (e) {
-      // alert(e);
-      if (e.response.status === 400) { // Errors that come from the API response
-          if (e.response.data.non_field_errors) {
-            setError('이메일 또는 비밀번호가 틀립니다.');
-          } else if (e.response.data.email) {
-            setError('가입되지 않은 이메일입니다.');
-          } else {
-            setError('입력하신 정보에 오류가 있습니다.');
-          }
-        } else {
-          setError('서버에 문제가 있습니다. 나중에 다시 시도해 주세요.');
-        }
-      } else { // Errors not related to the API response (network errors, etc.)
-        setError('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
-      }     
-    } finally {
-      setLoading(false);
+  try {
+    const res = await api.post(route, { email, password }); // request가 오류 없으면
+    if (method === "login") {
+      // access, refresh token 얻어서 저장하기
+      localStorage.setItem(ACCESS_TOKEN, res.data.access);
+      localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+      navigate("/");
+    } else {
+      navigate("/login");
     }
-  };
+  } catch (e) {
+    if (e.response) {  // Errors that come from the API response
+      if (e.response.status === 400) {
+        if (e.response.data.non_field_errors) {
+          setError('이메일 또는 비밀번호가 틀립니다.');
+        } else if (e.response.data.email) {
+          setError('가입되지 않은 이메일입니다.');
+        } else {
+          setError('입력하신 정보에 오류가 있습니다.');
+        }
+      } else {
+        setError('서버에 문제가 있습니다. 나중에 다시 시도해 주세요.');
+      }
+    } else {  // Errors not related to the API response (network errors, etc.)
+      setError('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+    }
+  } finally {
+    setLoading(false);
+  }
 
   return (
     <div className="login-container">
