@@ -39,8 +39,7 @@ function Form({ route, method }) {
     } catch (e) {
       // console.log(e.response);
       if (e.response) {  // Errors that come from the API response
-            setError("이메일 또는 비밀번호가 틀립니다.");
-          }
+          setError("이메일 또는 비밀번호가 틀립니다.");
       } else {  // Errors not related to the API response (network errors, etc.)
         setError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
       }
