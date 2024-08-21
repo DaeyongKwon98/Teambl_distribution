@@ -38,7 +38,6 @@ function Form({ route, method }) {
       }
     } catch (e) {
       if (e.response) {  // Errors that come from the API response
-        if (e.response.status === 400) {
           if (e.response.data.email) {
             setError("가입되지 않은 이메일입니다.");
           } else if (e.response.data.non_field_errors) {
@@ -46,9 +45,6 @@ function Form({ route, method }) {
           } else {
             setError("입력하신 정보에 오류가 있습니다.");
           }
-        } else {
-          setError("서버에 문제가 있습니다. 나중에 다시 시도해 주세요.");
-        }
       } else {  // Errors not related to the API response (network errors, etc.)
         setError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
       }
