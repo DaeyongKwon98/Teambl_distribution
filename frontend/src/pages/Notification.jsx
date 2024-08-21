@@ -78,7 +78,8 @@ const Notification = () => {
     <div className="notification-container">
       <h1>Notifications</h1>
 
-      <div className="notification-input">
+      {/* 알림 추가 기능 주석처리 */}
+      {/* <div className="notification-input">
         <input
           type="text"
           value={newMessage}
@@ -86,7 +87,7 @@ const Notification = () => {
           placeholder="Enter notification message"
         />
         <button onClick={addNotification}>추가</button>
-      </div>
+      </div> */}
 
       <div>
         <h2>Notification List</h2>
