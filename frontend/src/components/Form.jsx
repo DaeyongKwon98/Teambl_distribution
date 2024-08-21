@@ -16,8 +16,15 @@ function Form({ route, method }) {
 
   const handleSubmit = async (e) => {
     // submit됐을때 처리
-    setLoading(true);
     e.preventDefault();
+
+    // Check if both email and password are provided
+    if (!email || !password) {
+      setError("이메일과 비밀번호를 모두 입력하세요.");
+      return;
+    }
+
+    setLoading(true);
     
     try {
       const res = await api.post(route, { email, password }); // request가 오류 없으면
@@ -32,18 +39,18 @@ function Form({ route, method }) {
     } catch (e) {
       if (e.response) {  // Errors that come from the API response
         if (e.response.status === 400) {
-          if (e.response.data.non_field_errors) {
-            setError('이메일 또는 비밀번호가 틀립니다.');
-          } else if (e.response.data.email) {
-            setError('가입되지 않은 이메일입니다.');
+          if (e.response.data.email) {
+            setError("가입되지 않은 이메일입니다.");
+          } else if (e.response.data.non_field_errors) {
+            setError("이메일 또는 비밀번호가 틀립니다.");
           } else {
-            setError('입력하신 정보에 오류가 있습니다.');
+            setError("입력하신 정보에 오류가 있습니다.");
           }
         } else {
-          setError('서버에 문제가 있습니다. 나중에 다시 시도해 주세요.');
+          setError("서버에 문제가 있습니다. 나중에 다시 시도해 주세요.");
         }
       } else {  // Errors not related to the API response (network errors, etc.)
-        setError('네트워크 오류가 발생했습니다. 다시 시도해 주세요.');
+        setError("네트워크 오류가 발생했습니다. 다시 시도해 주세요.");
       }
     } finally {
       setLoading(false);
