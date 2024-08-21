@@ -18,8 +18,12 @@
 }
 
 /* Button styling */
-.home-container .button1 {
-  background-color: #007bff; /* Blue background */
+.home-container .button1, 
+.home-container .button2, 
+.home-container .button3, 
+.home-container .button4, 
+.home-container .button5,
+.home-container .button6 {
   color: white; /* White text */
   border: none; /* Remove border */
   border-radius: 5px; /* Rounded corners */
@@ -28,94 +32,54 @@
   cursor: pointer; /* Pointer cursor on hover */
   margin: 10px; /* Spacing between buttons */
   transition: background-color 0.3s; /* Smooth transition for background color */
-  width: 6em;
+  width: 6em; /* Width adjusted to be consistent */
 }
 
-.home-container .button1:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+/* Individual button colors */
+.home-container .button1 {
+  background-color: #007bff; /* Blue background */
 }
 
 .home-container .button2 {
-  background-color: #1ee100; /* Blue background */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Padding */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin: 10px; /* Spacing between buttons */
-  transition: background-color 0.3s; /* Smooth transition for background color */
-  width: 6em;
-}
-
-.home-container .button2:hover {
-  background-color: #3fac00; /* Darker blue on hover */
+  background-color: #1ee100; /* Green background */
 }
 
 .home-container .button3 {
-  background-color: #ff7700; /* Blue background */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Padding */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin: 10px; /* Spacing between buttons */
-  transition: background-color 0.3s; /* Smooth transition for background color */
-  width: 6em;
-}
-
-.home-container .button3:hover {
-  background-color: #c35b00; /* Darker blue on hover */
+  background-color: #ff7700; /* Orange background */
 }
 
 .home-container .button4 {
-  background-color: yellow; /* yellow background */
-  color: Black; /* Black text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Padding */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin: 10px; /* Spacing between buttons */
-  transition: background-color 0.3s; /* Smooth transition for background color */
-  width: 6em;
-}
-
-.home-container .button4:hover {
-  background-color: hsl(60, 100%, 40%); /* Darker blue on hover */
+  background-color: yellow; /* Yellow background */
+  color: black; /* Black text for better contrast */
 }
 
 .home-container .button5 {
-  background-color: hsl(20, 100%, 60%); /* yellow background */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Padding */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin: 10px; /* Spacing between buttons */
-  transition: background-color 0.3s; /* Smooth transition for background color */
-  width: 7em;
-  text-align: center; /* Center text horizontally */
-  display: inline-block; /* Ensure the button is treated as a block-level element */
-}
-
-.home-container .button5:hover {
-  background-color: hsl(20, 100%, 80%); /* Lighter color on hover */
+  background-color: #ff6347; /* Tomato background */
 }
 
 .home-container .button6 {
   background-color: #8a2be2; /* Purple background */
-  color: white; /* White text */
-  border: none; /* Remove border */
-  border-radius: 5px; /* Rounded corners */
-  padding: 10px 20px; /* Padding */
-  font-size: 16px; /* Font size */
-  cursor: pointer; /* Pointer cursor on hover */
-  margin: 10px; /* Spacing between buttons */
-  transition: background-color 0.3s; /* Smooth transition for background color */
-  width: 6em;
+}
+
+/* Hover effects */
+.home-container .button1:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.home-container .button2:hover {
+  background-color: #3fac00; /* Darker green on hover */
+}
+
+.home-container .button3:hover {
+  background-color: #c35b00; /* Darker orange on hover */
+}
+
+.home-container .button4:hover {
+  background-color: hsl(60, 100%, 40%); /* Darker yellow on hover */
+}
+
+.home-container .button5:hover {
+  background-color: #e5533b; /* Darker tomato on hover */
 }
 
 .home-container .button6:hover {
