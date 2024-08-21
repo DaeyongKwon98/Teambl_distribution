@@ -58,11 +58,18 @@ class CreateUserView(generics.CreateAPIView):
                 from_user=from_user, to_user=to_user, status="accepted"
             )
 
-        # 회원가입에 성공한 경우 초대 링크 상태를 accepted로 변경
+        # 회원가입에 성공한 경우 초대 링크 상태를 accepted로 변경 / 알림 생성
         if invitation:
             invitation.status = "accepted"
             invitation.save()
 
+            # 초대 링크 사용 가입 알림 생성
+            user_profile = Profile.objects.get(user=user)
+            Notification.objects.create(
+                user=from_user,
+                message=f"{user_profile.user_name} has joined using your invitation link.",
+                notification_type='invitation_register'
+            )
 
 class CurrentUserView(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
@@ -71,9 +78,7 @@ class CurrentUserView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
-
 User = get_user_model()
-
 
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -98,7 +103,6 @@ class ChangePasswordView(generics.UpdateAPIView):
             {"detail": "Password changed successfully."}, status=status.HTTP_200_OK
         )
 
-
 class DeleteUserView(generics.DestroyAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.IsAuthenticated]
@@ -112,7 +116,6 @@ class DeleteUserView(generics.DestroyAPIView):
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
-
 
 class CurrentProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileCreateSerializer
@@ -232,12 +235,19 @@ class WelcomeView(generics.GenericAPIView):
                 expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
                 current_date = timezone.now()
 
-                # 초대 링크가 만료되었는지 확인
+                # 초대 링크가 만료된 경우
                 if current_date > expired_date:
                     invite_link.status = "expired"
                     invite_link.save()
                     logger.warning(f"Invitation link expired: code={code}")  # 로그 추가
                     return Response({"message": "Invitation link is expired", "error_type": "expired"}, status=400)
+
+                    # 초대 링크 만료 알림 생성
+                    Notification.objects.create(
+                        user=invite_link.inviter,
+                        message=f"{invitee_name} tried to register with expired invitation link.",
+                        notification_type='invitation_expired'
+                    )
 
                 # 초대 링크가 이미 사용되었는지 확인
                 if invite_link.status == "accepted":
@@ -298,6 +308,14 @@ class ListCreateFriendView(generics.ListCreateAPIView):
                 f"Creating friendship: from_user={from_user.email}, to_user={to_user.email}"
             )
             serializer.save(from_user=from_user, to_user=to_user, status="accepted")
+
+            # 친구 추가 요청 알림 생성
+            user_profile = Profile.objects.get(user=from_user)
+            Notification.objects.create(
+                user=to_user,
+                message=f"{user_profile.user_name} has sent you a friend request.",
+                notification_type='friend_request'
+            )
             
             # Profile의 one_degree_count도 같이 업데이트
             update_profile_one_degree_count(from_user)
@@ -318,9 +336,28 @@ class FriendUpdateView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         friend = serializer.save()
-        super().perform_update(serializer)
-        update_profile_one_degree_count(friend.from_user)
-        update_profile_one_degree_count(friend.to_user)
+        status = serializer.validated_data.get('status')
+        from_user = friend.from_user
+        to_user = friend.to_user
+
+        if status == "accepted":
+            # 친구 요청 수락 시 알림 생성
+            Notification.objects.create(
+                user=from_user,
+                message=f"{to_user.username} has accepted your friend request.",
+                notification_type='friend_accept'
+            )
+        elif status == "rejected":
+            # 친구 요청 거절 시 알림 생성
+            Notification.objects.create(
+                user=from_user,
+                message=f"{to_user.username} has rejected your friend request.",
+                notification_type='friend_reject'
+            )
+
+        # Profile의 one_degree_count 업데이트
+        update_profile_one_degree_count(from_user)
+        update_profile_one_degree_count(to_user)
 
 class FriendDeleteView(generics.DestroyAPIView):
     serializer_class = FriendCreateSerializer
