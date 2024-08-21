@@ -4,6 +4,7 @@ import Profile1 from "../assets/NewSearch/profile1.jpg";
 import Profile2 from "../assets/NewSearch/profile2.jpg";
 import CheckIcon from "../assets/NewSearch/checkIcon.svg";
 import NoCheckIcon from "../assets/NewSearch/nocheckIcon.svg";
+import "../styles/NewSearch.css";
 
 // 포함되어야 하는 정보
 // 프로필 이미지, 이름, 촌수, 입학년도, 학교, 전공, 키워드들
@@ -28,30 +29,43 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
   }, [user.id]);
 
   return (
-    <div className="team-member">
+    <div className="newSearch-team-member">
       <img
         src={user.image}
         alt={user.profile.user_name}
-        className="profile-image"
+        className="newSearch-profile-image"
       />
-      <div className="member-info">
-        <p className="member-name-relation">
-          <strong className="member-name">{user.profile.user_name}</strong>
-          <span className="member-relation"> · {relationshipDegree}촌</span>
+      <div className="newSearch-member-info">
+        <p className="newSearch-member-name-relation">
+          <strong className="newSearch-member-name">
+            {user.profile.user_name}
+          </strong>
+          <span className="newSearch-member-relation">
+            {" "}
+            · {relationshipDegree}촌
+          </span>
         </p>
-        <p className="member-details">
+        <p className="newSearch-member-details">
           {user.profile.year} | {user.profile.school} | {user.profile.major}
         </p>
-        <p className="member-keywords">{user.profile.keywords.join(" / ")}</p>
+        <p className="newSearch-member-keywords">
+          {user.profile.keywords.join(" / ")}
+        </p>
       </div>
       <button
-        className={`add-button ${relationshipDegree === 1 ? "checked" : ""}`}
+        className={`newSearch-add-button ${
+          relationshipDegree === 1 ? "checked" : ""
+        }`}
         disabled={relationshipDegree === 1}
       >
         {relationshipDegree === 1 ? (
-          <img src={CheckIcon} alt="이미1촌" className="check-icon" />
+          <img src={CheckIcon} alt="이미1촌" className="newSearch-check-icon" />
         ) : (
-          <img src={NoCheckIcon} alt="1촌신청" className="check-icon" />
+          <img
+            src={NoCheckIcon}
+            alt="1촌신청"
+            className="newSearch-check-icon"
+          />
         )}
       </button>
     </div>
