@@ -236,6 +236,7 @@ class Friend(models.Model):
 class Notification(models.Model):
     NOTIFICATION_TYPE_CHOICES = [
         ('invitation_register', 'Invitation Register'),
+        ('invitation_expired', 'Invitation Expired'),
         ('friend_accept', 'Friend Accept'),
         ('friend_reject', 'Friend Reject'),
         ('friend_request', 'Friend Request'),
