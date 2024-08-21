@@ -240,7 +240,6 @@ class WelcomeView(generics.GenericAPIView):
                     invite_link.status = "expired"
                     invite_link.save()
                     logger.warning(f"Invitation link expired: code={code}")  # 로그 추가
-                    return Response({"message": "Invitation link is expired", "error_type": "expired"}, status=400)
 
                     # 초대 링크 만료 알림 생성
                     Notification.objects.create(
@@ -248,6 +247,7 @@ class WelcomeView(generics.GenericAPIView):
                         message=f"{invitee_name} tried to register with expired invitation link.",
                         notification_type='invitation_expired'
                     )
+                    return Response({"message": "Invitation link is expired", "error_type": "expired"}, status=400)
 
                 # 초대 링크가 이미 사용되었는지 확인
                 if invite_link.status == "accepted":
