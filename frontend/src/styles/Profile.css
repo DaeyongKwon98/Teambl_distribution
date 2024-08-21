@@ -1,4 +1,4 @@
-.profile{
+.profile {
   /* border: 1px solid black; */
   width: 300px;
   margin: 0 auto;
@@ -6,20 +6,21 @@
   display: flex;
   flex-direction: column;
 }
-.profile-back button{
+.profile-back button {
   border: none;
-  background-image: url('../assets/left-arrow.png');
+  background-image: url("../assets/Profile/left-arrow.png");
   background-size: cover;
   width: 20px;
   height: 20px;
   margin: 10px 0px;
 }
-.profile-back button:hover{
+.profile-back button:hover {
   cursor: pointer;
 }
-.profile h4{
+.profile h4 {
   margin: 10px 0px;
-}.profile-card {
+}
+.profile-card {
   width: 300px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
@@ -44,22 +45,23 @@
   border-radius: 7px;
 }
 
-.profile-name, .profile-friend{
+.profile-name,
+.profile-friend {
   display: flex;
   align-items: center;
   margin-top: 10px;
 }
 
-button.profile-editBtn{
+button.profile-editBtn {
   padding: 0px;
   margin-left: 5px;
   width: 15px;
   height: 15px;
-  background-image: url('src/assets/pencil.png');
+  background-image: url("src/assets/Profile/pencil.png");
   background-size: cover;
   border: none;
 }
-button.profile-editBtn:hover{
+button.profile-editBtn:hover {
   cursor: pointer;
 }
 
@@ -70,37 +72,35 @@ button.profile-editBtn:hover{
   display: inline-block;
 }
 
-.profile-line{
+.profile-line {
   border-top: 3px solid hsla(240, 100%, 35%);
   margin: 10px 0px;
   width: 25px;
-
 }
 
-.profile-info p, span.profile-oneDegree{
+.profile-info p,
+span.profile-oneDegree {
   margin: 2px 0 5px;
   font-size: 14px;
-  color:black;
-
+  color: black;
 }
 
-.profile-friend img{
+.profile-friend img {
   width: 20px;
   height: 20px;
   margin-right: 5px;
 }
 
-
 .profile-tags {
   margin-top: 35px;
 }
-.profile-feature{
+.profile-feature {
   display: inline-block;
   font-size: 14px;
   margin-bottom: 5px;
   font-weight: bold;
 }
-label.profile-definition{
+label.profile-definition {
   display: inline-block;
   font-size: 12px;
   margin: 0px 10px 5px;
@@ -119,7 +119,7 @@ span.profile-tag {
   line-height: 1.5em;
 }
 
-span.profile-tag button{
+span.profile-tag button {
   width: 20px;
   height: 20px;
   color: hsl(0, 0%, 50%);
@@ -167,8 +167,7 @@ span.profile-addTag {
   background-color: #f44336;
 }
 
-
-button.profile-submitBtn{
+button.profile-submitBtn {
   background-color: hsla(240, 100%, 35%);
   height: 2rem;
   border: none;
@@ -181,7 +180,7 @@ button.profile-submitBtn{
   padding: 10px;
   flex-grow: 1;
 }
-button.profile-submitBtn:disabled{
+button.profile-submitBtn:disabled {
   background-color: hsla(0, 0%, 45%, 0.76);
   height: 2rem;
   border: none;
@@ -195,9 +194,9 @@ button.profile-submitBtn:disabled{
   flex-grow: 1;
 }
 
-button.profile-submitBtn:hover{
+button.profile-submitBtn:hover {
   cursor: pointer;
 }
-button.profile-submitBtn:disabled:hover{
+button.profile-submitBtn:disabled:hover {
   cursor: default;
 }
