@@ -340,18 +340,19 @@ class FriendUpdateView(generics.UpdateAPIView):
         from_user = friend.from_user
         to_user = friend.to_user
 
+        user_profile = Profile.objects.get(user=to_user)
         if status == "accepted":
             # 친구 요청 수락 시 알림 생성
             Notification.objects.create(
                 user=from_user,
-                message=f"{to_user.username} has accepted your friend request.",
+                message=f"{user_profile.user_name} has accepted your friend request.",
                 notification_type='friend_accept'
             )
         elif status == "rejected":
             # 친구 요청 거절 시 알림 생성
             Notification.objects.create(
                 user=from_user,
-                message=f"{to_user.username} has rejected your friend request.",
+                message=f"{user_profile.user_name} has rejected your friend request.",
                 notification_type='friend_reject'
             )
 
