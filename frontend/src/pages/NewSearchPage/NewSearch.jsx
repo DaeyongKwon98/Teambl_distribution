@@ -282,12 +282,18 @@ function NewSearch() {
         </>
       )}
       {isMajorPopupOpen && (
-        <MajorPopUp
-          filters={filters}
-          handleMajorChange={handleMajorChange}
-          setIsMajorPopupOpen={setIsMajorPopupOpen}
-          doSearchUsers={doSearchUsers}
-        />
+        <>
+          <div
+            className="overlay"
+            onClick={() => setIsMajorPopupOpen(false)}
+          ></div>
+          <MajorPopUp
+            filters={filters}
+            handleMajorChange={handleMajorChange}
+            setIsMajorPopupOpen={setIsMajorPopupOpen}
+            doSearchUsers={doSearchUsers}
+          />
+        </>
       )}
     </div>
   );
