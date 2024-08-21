@@ -36,9 +36,9 @@ function Friend() {
       .catch((err) => alert(err));
   };
 
-  const goToInvitePage = () => {
-    navigate("/invite");
-  };
+  // const goToInvitePage = () => {
+  //   navigate("/invite");
+  // };
 
   const addFriend = (e) => {
     e.preventDefault();
@@ -90,7 +90,7 @@ function Friend() {
   return (
     <div className="friend-container">
       <h1>This is friends page.</h1>
-      <button onClick={goToInvitePage}>Go to Invite Page</button>
+      {/* <button onClick={goToInvitePage}>Go to Invite Page</button> */}
 
       <input
         type="text"
