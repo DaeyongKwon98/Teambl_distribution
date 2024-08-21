@@ -19,6 +19,10 @@ function Home() {
     navigate("/search");
   };
 
+  const goToInvite = () => {
+    navigate("/invite");
+  };
+  
   const goToProfile = () => {
     navigate("/profile", {
       state: {
@@ -81,10 +85,13 @@ function Home() {
       <button onClick={goToSearch} className="button3">
         Search
       </button>
-      <button onClick={goToProfile} className="button4">
+      <button onClick={goToInvite} className="button4">
+        Invite
+      </button>
+      <button onClick={goToProfile} className="button5">
         Profile
       </button>
-      <button onClick={goToNotification} className="button5">
+      <button onClick={goToNotification} className="button6">
         Notification
       </button>
       <div className="password-change-container">
