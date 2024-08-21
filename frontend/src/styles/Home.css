@@ -33,6 +33,7 @@
   margin: 10px; /* Spacing between buttons */
   transition: background-color 0.3s; /* Smooth transition for background color */
   width: 8em; /* Width adjusted to be consistent */
+  font-weight: bold; /* 글씨 굵게 */
 }
 
 /* Individual button colors */
