@@ -36,7 +36,6 @@ const Notification = () => {
   };
 
   // 알림 수정하기
-  /*
   const updateNotification = async ({ id, isReadButtonClicked = false }) => {
     try {
       const newData = isReadButtonClicked
@@ -62,7 +61,6 @@ const Notification = () => {
       console.error("Failed to update notification", error);
     }
   };
-  */
 
   // 알림 삭제하기
   const deleteNotification = async (id) => {
@@ -108,6 +106,7 @@ const Notification = () => {
                     placeholder="Edit notification message"
                   />
                   <div className="edit-buttons">
+                    {/* 주석 처리된 부분 - 수정 관련 버튼들 */}
                     {/* <button
                       className="save"
                       onClick={() =>
@@ -134,7 +133,8 @@ const Notification = () => {
                   </div>
 
                   <div className="notification-buttons">
-                    {/* {!notification.is_read && (
+                    {/* 읽음 표시 버튼은 그대로 남겨둠 */}
+                    {!notification.is_read && (
                       <button
                         className="mark-read"
                         onClick={() =>
@@ -147,7 +147,8 @@ const Notification = () => {
                         읽음 표시
                       </button>
                     )}
-                    <button
+                    {/* 주석 처리된 부분 - 수정 버튼 */}
+                    {/* <button
                       className="edit"
                       onClick={() => {
                         setSelectedNotification(notification.id);
