@@ -249,7 +249,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     is_read = models.BooleanField(default=False)
     notification_type = models.CharField(
-        max_length=20, choices=NOTIFICATION_TYPE_CHOICES
+        max_length=30, choices=NOTIFICATION_TYPE_CHOICES
     )
 
     def __str__(self):
