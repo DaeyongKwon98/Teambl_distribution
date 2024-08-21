@@ -65,19 +65,19 @@ const MajorPopUp = ({
 
   return (
     <>
-      <div className="major-popup">
-        <div className="major-popup-content">
-          <div className="major-popup-header">
+      <div className="newSearch-major-popup">
+        <div className="newSearch-major-popup-content">
+          <div className="newSearch-major-popup-header">
             <h3>전공</h3>
             <input
               type="text"
               placeholder="전공을 검색해보세요"
               value={majorSearchTerm}
               onChange={(e) => setMajorSearchTerm(e.target.value)}
-              className="major-search-input"
+              className="newSearch-major-search-input"
             />
           </div>
-          <div className="major-popup-body">
+          <div className="newSearch-major-popup-body">
             <ul>
               {majorSearchTerm === ""
                 ? filteredMajors
@@ -89,7 +89,7 @@ const MajorPopUp = ({
                     .map((major, index) => (
                       <li
                         key={index}
-                        className={`major-item ${
+                        className={`newSearch-major-item ${
                           filters.major.includes(major) ? "selected" : ""
                         }`}
                         onClick={() => handleMajorChange(major)}
@@ -100,7 +100,7 @@ const MajorPopUp = ({
                 : filteredMajors.map((major, index) => (
                     <li
                       key={index}
-                      className={`major-item ${
+                      className={`newSearch-major-item ${
                         filters.major.includes(major) ? "selected" : ""
                       }`}
                       onClick={() => handleMajorChange(major)}
@@ -111,9 +111,9 @@ const MajorPopUp = ({
             </ul>
           </div>
 
-          <div className="major-popup-footer">
+          <div className="newSearch-major-popup-footer">
             <button
-              className={`result-button ${
+              className={`newSearch-result-button ${
                 filters.major.length === 0 ? "zero" : ""
               }`}
               disabled={filters.major.length === 0}

@@ -140,10 +140,17 @@ function NewSearch() {
   };
 
   return (
-    <div className="container">
-      <div className="top-bar">
-        <button className="back-button" onClick={() => window.history.back()}>
-          <img src={BackIcon} alt="뒤로가기 아이콘" className="back-icon" />
+    <div className="newSearch-container">
+      <div className="newSearch-top-bar">
+        <button
+          className="newSearch-back-button"
+          onClick={() => window.history.back()}
+        >
+          <img
+            src={BackIcon}
+            alt="뒤로가기 아이콘"
+            className="newSearch-back-icon"
+          />
         </button>
         <input
           type="text"
@@ -154,17 +161,21 @@ function NewSearch() {
           onClick={() => {
             setIsSearched(false);
           }}
-          className="search-input"
+          className="newSearch-search-input"
         />
       </div>
       {searchTerm && !isSearched ? (
-        <div className="search-results">
+        <div className="newSearch-search-results">
           <ul>
             {searchSuggestions.map((result, index) => (
               <li key={index} onClick={() => handleSelect(result)}>
-                <div className="list-item-left">
+                <div className="newSearch-list-item-left">
                   <span role="img" aria-label="magnifying-glass">
-                    <img src={SearchIcon} alt="검색" className="search-icon" />
+                    <img
+                      src={SearchIcon}
+                      alt="검색"
+                      className="newSearch-search-icon"
+                    />
                   </span>
                   <span
                     dangerouslySetInnerHTML={{
@@ -181,28 +192,28 @@ function NewSearch() {
         </div>
       ) : !isSearched ? (
         <>
-          <div className="second-bar">
+          <div className="newSearch-second-bar">
             <h3>최근 검색어</h3>
             <button className="clear-button" onClick={handleClear}>
               지우기
             </button>
           </div>
-          <div className="search-results">
+          <div className="newSearch-search-results">
             <ul>
               {recentSearches.map((term, index) => (
                 <li key={index} onClick={() => handleSelect(term)}>
-                  <div className="list-item-left">
+                  <div className="newSearch-list-item-left">
                     <span role="img" aria-label="clock">
                       <img
                         src={RecentIcon}
                         alt="최근검색 아이콘"
-                        className="recent-icon"
+                        className="newSearch-recent-icon"
                       />
                     </span>
                     {term}
                   </div>
                   <button
-                    className="delete-button"
+                    className="newSearch-delete-button"
                     onClick={(e) => {
                       e.stopPropagation();
                       handleDelete(term);
@@ -217,9 +228,9 @@ function NewSearch() {
         </>
       ) : (
         <>
-          <div className="filter-bar">
+          <div className="newSearch-filter-bar">
             <button
-              className={`filter-button ${
+              className={`newSearch-filter-button ${
                 filters.relationshipDegree.includes(1) ? "active" : ""
               }`}
               onClick={() => {
@@ -229,7 +240,7 @@ function NewSearch() {
               1촌
             </button>
             <button
-              className={`filter-button ${
+              className={`newSearch-filter-button ${
                 filters.relationshipDegree.includes(2) ? "active" : ""
               }`}
               onClick={() => {
@@ -239,7 +250,7 @@ function NewSearch() {
               2촌
             </button>
             <button
-              className={`filter-button ${
+              className={`newSearch-filter-button ${
                 filters.relationshipDegree.includes(3) ? "active" : ""
               }`}
               onClick={() => {
@@ -249,7 +260,7 @@ function NewSearch() {
               3촌
             </button>
             <button
-              className={`filter-button ${
+              className={`newSearch-filter-button ${
                 isMajorPopupOpen || filters.major.length > 0 ? "active" : ""
               }`}
               onClick={() => setIsMajorPopupOpen(true)}
@@ -260,17 +271,21 @@ function NewSearch() {
                   : filters.major[0] + " "
                 : "전공 "}
               {filters.major.length > 0 || isMajorPopupOpen ? (
-                <img src={MajorIcon} alt="전공 아이콘" className="major-icon" />
+                <img
+                  src={MajorIcon}
+                  alt="전공 아이콘"
+                  className="newSearch-major-icon"
+                />
               ) : (
                 <img
                   src={NoMajorIcon}
                   alt="0전공 아이콘"
-                  className="nomajor-icon"
+                  className="newSearch-nomajor-icon"
                 />
               )}
             </button>
           </div>
-          <div className="team-member-results">
+          <div className="newSearch-team-member-results">
             {users.map((user, index) => (
               <NewUserSearchItem
                 user={user}
@@ -284,7 +299,7 @@ function NewSearch() {
       {isMajorPopupOpen && (
         <>
           <div
-            className="overlay"
+            className="newSearch-overlay"
             onClick={() => setIsMajorPopupOpen(false)}
           ></div>
           <MajorPopUp
