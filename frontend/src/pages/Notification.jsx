@@ -36,6 +36,7 @@ const Notification = () => {
   };
 
   // 알림 수정하기
+  /*
   const updateNotification = async ({ id, isReadButtonClicked = false }) => {
     try {
       const newData = isReadButtonClicked
@@ -61,6 +62,7 @@ const Notification = () => {
       console.error("Failed to update notification", error);
     }
   };
+  */
 
   // 알림 삭제하기
   const deleteNotification = async (id) => {
@@ -106,7 +108,7 @@ const Notification = () => {
                     placeholder="Edit notification message"
                   />
                   <div className="edit-buttons">
-                    <button
+                    {/* <button
                       className="save"
                       onClick={() =>
                         updateNotification({ id: notification.id })
@@ -119,7 +121,7 @@ const Notification = () => {
                       onClick={() => setSelectedNotification(null)}
                     >
                       취소
-                    </button>
+                    </button> */}
                   </div>
                 </>
               ) : (
@@ -132,7 +134,7 @@ const Notification = () => {
                   </div>
 
                   <div className="notification-buttons">
-                    {!notification.is_read && (
+                    {/* {!notification.is_read && (
                       <button
                         className="mark-read"
                         onClick={() =>
@@ -153,7 +155,7 @@ const Notification = () => {
                       }}
                     >
                       수정
-                    </button>
+                    </button> */}
                     <button
                       className="delete"
                       onClick={() => deleteNotification(notification.id)}
