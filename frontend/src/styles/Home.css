@@ -104,3 +104,20 @@
 .home-container .button5:hover {
   background-color: hsl(20, 100%, 80%); /* Lighter color on hover */
 }
+
+.home-container .button6 {
+  background-color: #8a2be2; /* Purple background */
+  color: white; /* White text */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Rounded corners */
+  padding: 10px 20px; /* Padding */
+  font-size: 16px; /* Font size */
+  cursor: pointer; /* Pointer cursor on hover */
+  margin: 10px; /* Spacing between buttons */
+  transition: background-color 0.3s; /* Smooth transition for background color */
+  width: 6em;
+}
+
+.home-container .button6:hover {
+  background-color: #551a8b; /* Darker purple on hover */
+}
