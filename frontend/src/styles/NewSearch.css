@@ -22,9 +22,6 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
-  height: 100%; /* .top-bar의 높이에 맞춤 */
-  display: flex;
-  align-items: center; /* 버튼 내부에서 아이콘을 수직으로 중앙 정렬 */
 }
 
 .back-icon {
