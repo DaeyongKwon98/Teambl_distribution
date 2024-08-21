@@ -303,10 +303,11 @@ function NewSearch() {
             onClick={() => setIsMajorPopupOpen(false)}
           ></div>
           <MajorPopUp
-            filters={filters}
+            userSelectedMajors={filters.major}
             handleMajorChange={handleMajorChange}
             setIsMajorPopupOpen={setIsMajorPopupOpen}
             doSearchUsers={doSearchUsers}
+            buttonText="결과보기"
           />
         </>
       )}

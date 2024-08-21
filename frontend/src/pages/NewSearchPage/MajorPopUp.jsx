@@ -51,10 +51,11 @@ const majors = [
 ];
 
 const MajorPopUp = ({
-  filters,
+  userSelectedMajors, // 유저가 검색 필터로 선택한 전공들
   handleMajorChange,
   setIsMajorPopupOpen,
   doSearchUsers,
+  buttonText,
 }) => {
   const [majorSearchTerm, setMajorSearchTerm] = useState("");
 
@@ -83,14 +84,14 @@ const MajorPopUp = ({
                 ? filteredMajors
                     .filter(
                       (major) =>
-                        filters.major.includes(major) ||
+                        userSelectedMajors.includes(major) ||
                         ["전산학부", "전기및전자공학부"].includes(major)
                     )
                     .map((major, index) => (
                       <li
                         key={index}
                         className={`newSearch-major-item ${
-                          filters.major.includes(major) ? "selected" : ""
+                          userSelectedMajors.includes(major) ? "selected" : ""
                         }`}
                         onClick={() => handleMajorChange(major)}
                       >
@@ -101,7 +102,7 @@ const MajorPopUp = ({
                     <li
                       key={index}
                       className={`newSearch-major-item ${
-                        filters.major.includes(major) ? "selected" : ""
+                        userSelectedMajors.includes(major) ? "selected" : ""
                       }`}
                       onClick={() => handleMajorChange(major)}
                     >
@@ -114,15 +115,15 @@ const MajorPopUp = ({
           <div className="newSearch-major-popup-footer">
             <button
               className={`newSearch-result-button ${
-                filters.major.length === 0 ? "zero" : ""
+                userSelectedMajors.length === 0 ? "zero" : ""
               }`}
-              disabled={filters.major.length === 0}
+              disabled={userSelectedMajors.length === 0}
               onClick={() => {
                 setIsMajorPopupOpen(false);
                 doSearchUsers();
               }}
             >
-              결과 보기
+              {buttonText}
             </button>
           </div>
         </div>

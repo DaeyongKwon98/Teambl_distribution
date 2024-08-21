@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import api from "../api";
-import { useNavigate , useLocation} from "react-router-dom";
-import '../styles/Register.css'
+import { useNavigate, useLocation } from "react-router-dom";
+import "../styles/Register.css";
+import MajorPopUp from "./NewSearchPage/MajorPopUp";
 
 function Register() {
   const navigate = useNavigate();
   const location = useLocation();
-  const userInfo = {...location.state};
+  const userInfo = { ...location.state };
 
   const current_year = new Date().getFullYear();
   const [email, setEmail] = useState(userInfo.email);
@@ -22,70 +23,68 @@ function Register() {
   // const [isVerified, setIsVerified] = useState(false);
   const [inviteCode, setInviteCode] = useState(null);
   const [nextBtnActive, setNextBtnActive] = useState(false);
-
   const majors = [
-      "물리학과",
-      "수리과학과",
-      "화학과",
-      "나노과학기술대학원",
-      "양자대학원",
-      "생명과학과",
-      "뇌인지과학과",
-      "의과학대학원",
-      "공학생물학대학원",
-      "줄기세포및재생생물학대학원",
-      "기계공학과",
-      "항공우주공학과",
-      "전기및전자공학부",
-      "전산학부",
-      "건설및환경공학과",
-      "바이오및뇌공학과",
-      "산업디자인학과",
-      "산업시스템공학과",
-      "생명화학공학과",
-      "신소재공학과",
-      "원자력및양자공학과",
-      "반도체시스템공학과",
-      "조천식모빌리티대학원",
-      "김재철AI대학원",
-      "녹색성장지속가능대학원",
-      "반도체공학대학원",
-      "인공지능반도체대학원",
-      "메타버스대학원",
-      "시스템아키텍트대학원",
-      "디지털인문사회과학부",
-      "문화기술대학원",
-      "문술미래전략대학원",
-      "과학기술정책대학원",
-      "경영공학부",
-      "기술경영학부",
-      "KAIST경영전문대학원",
-      "금융전문대학원",
-      "경영자과정",
-      "기술경영전문대학원",
-      "글로벌디지털혁신대학원",
-      "바이오혁신경영전문대학원",
-      "융합인재학부",
-      "안보과학기술대학원",
-      "사이버안보기술대학원",
-      "새내기과정학부",
-    ];
+    "물리학과",
+    "수리과학과",
+    "화학과",
+    "나노과학기술대학원",
+    "양자대학원",
+    "생명과학과",
+    "뇌인지과학과",
+    "의과학대학원",
+    "공학생물학대학원",
+    "줄기세포및재생생물학대학원",
+    "기계공학과",
+    "항공우주공학과",
+    "전기및전자공학부",
+    "전산학부",
+    "건설및환경공학과",
+    "바이오및뇌공학과",
+    "산업디자인학과",
+    "산업시스템공학과",
+    "생명화학공학과",
+    "신소재공학과",
+    "원자력및양자공학과",
+    "반도체시스템공학과",
+    "조천식모빌리티대학원",
+    "김재철AI대학원",
+    "녹색성장지속가능대학원",
+    "반도체공학대학원",
+    "인공지능반도체대학원",
+    "메타버스대학원",
+    "시스템아키텍트대학원",
+    "디지털인문사회과학부",
+    "문화기술대학원",
+    "문술미래전략대학원",
+    "과학기술정책대학원",
+    "경영공학부",
+    "기술경영학부",
+    "KAIST경영전문대학원",
+    "금융전문대학원",
+    "경영자과정",
+    "기술경영전문대학원",
+    "글로벌디지털혁신대학원",
+    "바이오혁신경영전문대학원",
+    "융합인재학부",
+    "안보과학기술대학원",
+    "사이버안보기술대학원",
+    "새내기과정학부",
+  ];
 
-  
   // setEmail(userInfo.email);
   // setPassword(userInfo.password);
 
-  function handleBack(){
-    navigate('/certify');
+  function handleBack() {
+    navigate("/certify");
   }
 
   // function handleNext(){
   //   navigate('/end',{state:{username: name}});
   // }
 
-  function handleDegree(){
-    var degreeList = document.getElementById('list');
-    var value = (degreeList.options[degreeList.selectedIndex].text);
+  function handleDegree() {
+    var degreeList = document.getElementById("list");
+    var value = degreeList.options[degreeList.selectedIndex].text;
     setCurrentAcademicDegree(value);
   }
 
@@ -102,16 +101,16 @@ function Register() {
           year,
           major,
         },
-        code: inviteCode,  // 초대 코드를 서버로 전달
+        code: inviteCode, // 초대 코드를 서버로 전달
       });
       const newUser = response.data;
       console.log("User registered successfully:", newUser);
 
       // 회원가입에 성공한 경우, end 화면으로 가기
       navigate("/end", {
-        state : {
-          user_name : user_name
-        }
+        state: {
+          user_name: user_name,
+        },
       });
     } catch (error) {
       alert("회원가입 실패");
@@ -144,166 +143,130 @@ function Register() {
   //   }
   // };
 
-  
-  useEffect(()=>{
-    if((user_name!=='') && (school!=='') && (current_academic_degree!=='') && (year!=='') && (major!=='')) setNextBtnActive(true);
+  useEffect(() => {
+    if (
+      user_name !== "" &&
+      school !== "" &&
+      current_academic_degree !== "" &&
+      year !== "" &&
+      major !== ""
+    )
+      setNextBtnActive(true);
     else setNextBtnActive(false);
-  },[user_name,school,current_academic_degree,year,major])
+  }, [user_name, school, current_academic_degree, year, major]);
 
   useEffect(() => {
-    const invite_code = localStorage.getItem('invite_code');
+    const invite_code = localStorage.getItem("invite_code");
     console.log("Invite Code from localStorage:", invite_code);
     setInviteCode(invite_code);
 
-    const invited = localStorage.getItem('invited');
+    const invited = localStorage.getItem("invited");
     console.log("Invited status in Register component:", invited);
-    if (invited !== 'true') {
+    if (invited !== "true") {
       console.log("Redirecting to /login because invited is not true");
-      navigate('/login');
+      navigate("/login");
     }
   }, [navigate]);
 
+  const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
+
   return (
-    <form className='register' onSubmit={handleRegister}>  
-      <div className='register-back'>
-        <button type="button" onClick={handleBack}></button>
+    <>
+      <form className="register" onSubmit={handleRegister}>
+        <div className="register-back">
+          <button type="button" onClick={handleBack}></button>
+        </div>
+        <h4>프로필 작성하기</h4>
+        <div className="register-container">
+          <label className="register-label">
+            이름
+            <br />
+          </label>
+          <input
+            type="text"
+            placeholder=" 이름 입력"
+            className="register-input"
+            onChange={(e) => setUserName(e.target.value)}
+            value={user_name}
+            required
+          />
+          <label className="register-label">
+            학교
+            <br />
+          </label>
+          <input
+            type="text"
+            placeholder=" 학교 입력"
+            className="register-input"
+            onChange={(e) => setSchool(e.target.value)}
+            value={school}
+            required
+          />
+          <label className="register-label">
+            학력
+            <br />
+          </label>
+          <select onChange={handleDegree} id="list">
+            <option>학사</option>
+            <option>석사</option>
+            <option>박사</option>
+          </select>
+          <label className="register-label">
+            입학년도
+            <br />
+          </label>
+          <input
+            type="number"
+            placeholder=" 입학년도 입력(4자리)"
+            className="register-input"
+            onChange={(e) => setYear(e.target.value)}
+            value={year}
+            required
+            min="1900"
+            max={new Date().getFullYear()} // 현재 연도까지 입력 가능
+          />
+          <label className="register-label">
+            전공
+            <br />
+          </label>
+          <input
+            type="text"
+            placeholder=" 전공을 선택해주세요."
+            value={major}
+            readOnly
+            className="register-input"
+            onClick={() => {
+              setIsMajorPopupOpen(true);
+            }}
+            required
+          />
+          <button
+            type="submit"
+            className="register-nextBtn"
+            disabled={!nextBtnActive}
+          >
+            완료
+          </button>
+        </div>
+      </form>
+      <div>
+        {isMajorPopupOpen && (
+          <>
+            <div
+              className="newSearch-overlay"
+              onClick={() => setIsMajorPopupOpen(false)}
+            ></div>
+            <MajorPopUp
+              userSelectedMajors={[major]}
+              handleMajorChange={setMajor}
+              setIsMajorPopupOpen={setIsMajorPopupOpen}
+              doSearchUsers={() => {}}
+              buttonText="확인"
+            />
+          </>
+        )}
       </div>
-      <h4>프로필 작성하기</h4>
-      <div className="register-container">
-        <label className='register-label'>이름<br/></label>
-        <input 
-          type='text' 
-          placeholder=' 이름 입력' 
-          className='register-input'
-          onChange={(e)=>(setUserName(e.target.value))} 
-          value={user_name}
-          required
-        />
-        <label className='register-label'>학교<br/></label>
-        <input 
-          type='text' 
-          placeholder=' 학교 입력' 
-          className='register-input' 
-          onChange={(e)=>(setSchool(e.target.value))} 
-          value={school}
-          required
-        />
-        <label className='register-label'>학력<br/></label>
-        <select onChange={handleDegree} id='list'>
-          <option>학사</option>
-          <option>석사</option>
-          <option>박사</option>
-        </select >
-        <label className='register-label'>입학년도<br/></label>
-        <input 
-          type='number' 
-          placeholder=' 입학년도 입력(4자리)' 
-          className='register-input' 
-          onChange={(e)=>(setYear(e.target.value))} 
-          value={year}
-          required
-          min='1900'
-          max={new Date().getFullYear()} // 현재 연도까지 입력 가능
-        />
-        <label className='register-label'>전공<br/></label>
-        {/* <input 
-          type='search' 
-          placeholder='전공 입력' 
-          className='register-input' 
-          onChange={(e)=>(setMajor(e.target.value))} 
-          value={major}
-          required
-        /> */}
-
-        <select onChange={(e) => setMajor(e.target.value)} id="list">
-          {majors.map((major, index) => (
-            <option key={index} value={major}>
-              {major}
-            </option>
-          ))}
-        </select>
-        
-        <button 
-          type='submit' 
-          className='register-nextBtn'
-          disabled={!nextBtnActive}
-        >완료</button>
-      </div>
-    </form>
-
-    // <form onSubmit={handleRegister}>
-    //   <input
-    //     type="email"
-    //     placeholder="이메일"
-    //     value={email}
-    //     onChange={(e) => setEmail(e.target.value)}
-    //     required
-    //   />
-    //   <button type="button" onClick={handleSendCode}>
-    //     인증 코드 전송
-    //   </button>
-    //   {codeSent && (
-    //     <>
-    //       <input
-    //         type="text"
-    //         placeholder="인증 코드"
-    //         value={verificationCode}
-    //         onChange={(e) => setVerificationCode(e.target.value)}
-    //         required
-    //       />
-    //       <button type="button" onClick={handleVerifyCode}>
-    //         인증 코드 확인
-    //       </button>
-    //     </>
-    //   )}
-    //   <input
-    //     type="password"
-    //     placeholder="비밀번호"
-    //     value={password}
-    //     onChange={(e) => setPassword(e.target.value)}
-    //     required
-    //   />
-    //   <input
-    //     type="text"
-    //     placeholder="이름"
-    //     value={user_name}
-    //     onChange={(e) => setUserName(e.target.value)}
-    //     required
-    //   />
-    //   <input
-    //     type="text"
-    //     placeholder="대학교"
-    //     value={school}
-    //     onChange={(e) => setSchool(e.target.value)}
-    //     required
-    //   />
-    //   <input
-    //     type="text"
-    //     placeholder="현재 학력"
-    //     value={current_academic_degree}
-    //     onChange={(e) => setCurrentAcademicDegree(e.target.value)}
-    //     required
-    //   />
-    //   <input
-    //     type="text"
-    //     placeholder="전공"
-    //     value={major}
-    //     onChange={(e) => setMajor(e.target.value)}
-    //     required
-    //   />
-    //   <input
-    //     type="number"
-    //     placeholder="입학 연도"
-    //     value={year}
-    //     onChange={(e) => setYear(e.target.value)}
-    //     required
-    //     min="1900"
-    //     max={new Date().getFullYear()} // 현재 연도까지 입력 가능
-    //   />
-    //   <button type="submit" disabled={!isVerified}>
-    //     회원가입
-    //   </button>
-    // </form>
+    </>
   );
 }
 
