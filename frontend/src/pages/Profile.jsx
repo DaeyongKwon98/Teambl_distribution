@@ -81,7 +81,7 @@ function Profile() {
       const response = await api.get(`/api/profile/${userId}/`); // userId에 해당하는 프로필 가져오기
       
       const currentUserResponse = await api.get("/api/current-user/");
-      const currentUserId = currentUserRresponse.data.id;
+      const currentUserId = currentUserResponse.data.id;
       
       if (currentUserId === parseInt(userId, 10)) {
         setIsOwner(true); // 본인 프로필이면 true로 설정
