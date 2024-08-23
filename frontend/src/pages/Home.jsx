@@ -8,6 +8,7 @@ function Home() {
   const [newPassword, setNewPassword] = useState("");
 
   const userId = localStorage.getItem("userId");
+  console.log("Fetched userId:", userId);
   
   const goToProjects = () => {
     navigate("/projects");
