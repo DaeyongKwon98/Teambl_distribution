@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useDropzone } from "react-dropzone";
 import profileImg from "../assets/Profile/student.png";
 import friendIcon from "../assets/Profile/friend.png";
