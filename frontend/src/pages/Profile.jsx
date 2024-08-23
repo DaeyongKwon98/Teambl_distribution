@@ -14,6 +14,7 @@ function Profile() {
   const navigate = useNavigate();
   const location = useLocation();
   const userInfo = { ...location.state };
+  const { userId } = userParams(); // userId를 URL에서 가져오기
 
   const [user_name, setUserName] = useState("");
   const [school, setSchool] = useState("");
@@ -73,16 +74,16 @@ function Profile() {
 
   useEffect(() => {
     fetchProfile();
-  }, []);
+  }, [userId]);
 
   const fetchProfile = async () => {
     try {
-      const response = await api.get("/api/current-user/");
-
-      const currentUserId = response.data.id;
-      const profileOwnerId = userInfo.id;
+      const response = await api.get(`/api/profile/${userId}/`); // userId에 해당하는 프로필 가져오기
       
-      if (currentUserId === profileOwnerId) {
+      const currentUserResponse = await api.get("/api/current-user/");
+      const currentUserId = currentUserRresponse.data.id;
+      
+      if (currentUserId === parseInt(userId, 10)) {
         setIsOwner(true); // 본인 프로필이면 true로 설정
       } else {
         setIsOwner(false); // 다른 사용자의 프로필이면 false로 설정
