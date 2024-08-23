@@ -96,11 +96,11 @@ function Profile() {
         setYear(userInfo.year);
         setMajor(userInfo.major);
       } else {
-        setUserName(response.data.user_name);
-        setSchool(response.data.school);
-        setCurrentAcademicDegree(response.data.current_academic_degree);
-        setYear(response.data.year);
-        setMajor(response.data.major);
+        setUserName(response.data.user_name || "");
+        setSchool(response.data.school || "");
+        setCurrentAcademicDegree(response.data.current_academic_degree || "");
+        setYear(response.data.year || "");
+        setMajor(response.data.major || "");
       }
 
       const oneDegreeCount = await fetchFriendCount();
