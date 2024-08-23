@@ -10,6 +10,7 @@ urlpatterns = [
 # Profile
 urlpatterns += [
     path("profile/update/", views.ProfileUpdateView.as_view(), name="update-profile"),
+    path("profile/<int:userid>/", views.UserProfileView.as_view(), name="user-profile"),
 ]
 
 # Keyword
