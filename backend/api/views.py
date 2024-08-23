@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import CustomUser, Profile, Keyword, Project, InvitationLink, Friend, Notification
 from .serializers import (
     CustomUserSerializer,
@@ -12,6 +13,7 @@ from .serializers import (
     FriendUpdateSerializer,
     SearchSerializer,
     NotificationSerializer,
+    MyTokenObtainPairSerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -30,6 +32,9 @@ from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 
 logger = logging.getLogger(__name__)
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
 
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
