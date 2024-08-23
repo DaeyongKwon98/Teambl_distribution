@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Notification.css";
 
 const Notification = () => {
+  const navigate = useNavigate();
+  
   const [notifications, setNotifications] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [editMessage, setEditMessage] = useState("");
