@@ -226,7 +226,7 @@ function Invite() {
                 <button
                   className="view-profile-button"
                   onClick={() =>
-                    (window.location.href = `/profile/${linkObj.invitee_name}`)
+                    (window.location.href = `/profile/${linkObj.invitee_id}`)
                   }
                 >
                   프로필 확인
