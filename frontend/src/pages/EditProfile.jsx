@@ -45,11 +45,11 @@ function EditProfile() {
   function handleBack(){
     navigate(`/profile/${userId}`, {
       state: {
-        user_name,
-        school,
-        current_academic_degree,
-        year,
-        major,
+        user_name: initialUserName,
+        school: initialSchool,
+        current_academic_degree: initialDegree,
+        year: initialYear,
+        major: initialMajor,
         prevPage: 'editprofile'
       }
     });
