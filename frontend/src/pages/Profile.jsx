@@ -14,7 +14,7 @@ function Profile() {
   const navigate = useNavigate();
   const location = useLocation();
   const userInfo = { ...location.state };
-  const { userId } = userParams(); // userId를 URL에서 가져오기
+  const { userId } = useParams(); // userId를 URL에서 가져오기
 
   const [user_name, setUserName] = useState("");
   const [school, setSchool] = useState("");
