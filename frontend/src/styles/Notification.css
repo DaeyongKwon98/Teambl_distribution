@@ -17,6 +17,15 @@
   margin-bottom: 20px;
 }
 
+.notification-back button {
+  border: none;
+  background-image: url("../assets/Profile/left-arrow.png");
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  margin: 10px 0px;
+}
+
 .notification-input {
   display: flex;
   justify-content: space-between;
