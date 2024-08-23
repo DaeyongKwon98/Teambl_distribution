@@ -221,14 +221,17 @@ function Invite() {
           </div>
           <div className="expiration-container">
             {linkObj.status === "accepted" ? (
-              <button
-                className="view-profile-button"
-                onClick={() =>
-                  (window.location.href = `/profile/${linkObj.invitee_name}`)
-                }
-              >
-                프로필 확인
-              </button>
+              <>
+                <p className="invite-accepted">가입완료</p>
+                <button
+                  className="view-profile-button"
+                  onClick={() =>
+                    (window.location.href = `/profile/${linkObj.invitee_name}`)
+                  }
+                >
+                  프로필 확인
+                </button>
+              </>
             ) : (
               <>
                 <div className="expiration-info">
