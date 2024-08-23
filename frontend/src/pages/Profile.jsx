@@ -251,7 +251,7 @@ function Profile() {
       });
       const newUser = response.data;
       console.log("Profile update successfully:", newUser);
-      navigate("/profile");
+      navigate(`/profile/${userId}`);
     } catch (error) {
       alert("프로필 업데이트 실패");
       console.error("Registration error:", error);
