@@ -47,6 +47,8 @@ function Profile() {
 
   const [prevPage, setPrevPage] = useState(userInfo.prevPage);
 
+  const [isOwner, setIsOwner] = useState(false); // 본인 프로필인지 확인
+
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     const reader = new FileReader();
@@ -76,7 +78,16 @@ function Profile() {
   const fetchProfile = async () => {
     try {
       const response = await api.get("/api/current-user/");
-      // console.log(response.data.profile)
+
+      const currentUserId = response.data.id;
+      const profileOwnerId = userInfo.id;
+      
+      if (currentUserId === profileOwnerId) {
+        setIsOwner(true); // 본인 프로필이면 true로 설정
+      } else {
+        setIsOwner(false); // 다른 사용자의 프로필이면 false로 설정
+      }
+      
       if (prevPage === "editprofile") {
         setUserName(userInfo.user_name);
         setSchool(userInfo.school);
@@ -254,7 +265,7 @@ function Profile() {
       <div className="profile-back">
         <button type="button" onClick={handleBack}></button>
       </div>
-      <h4>내 프로필</h4>
+      <h4>{isOwner ? "내 프로필" : "프로필"}</h4>
       <div className="profile-card">
         <div className="profile-header">
           <div className="profile-imageContainer" {...getRootProps()}>
@@ -269,7 +280,7 @@ function Profile() {
           <div className="profile-info">
             <div className="profile-name">
               <h2>{user_name}</h2>
-              <button className="profile-editBtn" onClick={handleEdit}></button>
+              {isOwner && (<button className="profile-editBtn" onClick={handleEdit}></button>)}
             </div>
             <div className="profile-line"></div>
             <pre>{school + " | " + year + " | " + current_academic_degree}</pre>
@@ -283,18 +294,18 @@ function Profile() {
         <div className="profile-tags">
           <div className="profile-feature">
             키워드
-            <label className="profile-definition">
+            {isOwner && (<label className="profile-definition">
               본인을 나타내는 키워드를 입력해보세요. (최대5개)
-            </label>
+            </label>)}
           </div>
           {tags.map((tag, index) => (
             <span key={index} className="profile-tag">
               {tag}
-              <button
+              {isOwner && (<button
                 className="profile-deleteBtn"
                 type="button"
                 onClick={() => handleTagDelete(index)}
-              >X</button>
+              >X</button>)}
             </span>
           ))}
           {tagVisible && (
@@ -309,7 +320,7 @@ function Profile() {
               <button onClick={handleCancel}>삭제</button>
             </div>
           )}
-          {!tagFull && !tagVisible && (
+          {isOwner && !tagFull && !tagVisible && (
             <span
               className="profile-addTag"
               onClick={() => setTagVisible(true)}
@@ -330,26 +341,30 @@ function Profile() {
             <div key={index} className="ex-item">
               <span className="ex-description">{exp.experience}</span>
               {/* <span className="ex-period">{exp.period}</span> */}
-              <button
+              {isOwner && (<button
                 className="profile-deleteBtn"
                 onClick={() => handleExperienceDelete(index)}
-              >X</button>
+              >X</button>)}
             </div>
           ))}
-          <input
-            maxLength="20"
-            type="text"
-            placeholder="본인의 경험을 추가해보세요."
-            className="profile-input"
-            value={newExperience}
-            onChange={(e) => setNewExperience(e.target.value)}
-          />
-          <div
-            className="ex-addExperience"
-            onClick={() => handleAddExperience()}
-          >
-            + 추가하기
-          </div>
+          {isOwner && (
+            <>
+              <input
+                maxLength="20"
+                type="text"
+                placeholder="본인의 경험을 추가해보세요."
+                className="profile-input"
+                value={newExperience}
+                onChange={(e) => setNewExperience(e.target.value)}
+              />
+              <div
+                className="ex-addExperience"
+                onClick={() => handleAddExperience()}
+              >
+                + 추가하기
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -363,23 +378,30 @@ function Profile() {
             <div key={index} className="tool-item">
               <span className="tool-description">{t.tool}</span>
               {/* <span className="tool-period">{exp.period}</span> */}
-              <button
+              {isOwner && (<button
                 className="profile-deleteBtn"
                 onClick={() => handleToolDelete(index)}
-              >X</button>
+              >X</button>)}
             </div>
           ))}
-          <input
-            maxLength="20"
-            type="text"
-            placeholder="본인이 다룰 수 있는 툴을 추가해보세요."
-            className="profile-input"
-            value={newTool}
-            onChange={(e) => setNewTool(e.target.value)}
-          />
-          <div className="tool-addTool" onClick={() => handleAddTool(true)}>
-            + 추가하기
-          </div>
+          {isOwner && (
+            <>
+              <input
+                maxLength="20"
+                type="text"
+                placeholder="본인이 다룰 수 있는 툴을 추가해보세요."
+                className="profile-input"
+                value={newTool}
+                onChange={(e) => setNewTool(e.target.value)}
+              />
+              <div
+                className="tool-addTool"
+                onClick={() => handleAddTool(true)}
+              >
+                + 추가하기
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -400,6 +422,7 @@ function Profile() {
             className="profile-input intro-input"
             value={introduction}
             onChange={(e) => setIntroduction(e.target.value)}
+            disabled={!isOwner}
           />
         </div>
       </div>
@@ -418,32 +441,36 @@ function Profile() {
                 </a>
               </span>
               {/* <span className="portf-period">{exp.period}</span> */}
-              <button
+              {isOwner && (<button
                 className="profile-deleteBtn"
                 onClick={() => handlePortfolioDelete(index)}
-              >X</button>
+              >X</button>)}
             </div>
           ))}
 
-          <input
-            type="text"
-            placeholder="포트폴리오 링크를 추가해보세요."
-            className="profile-input"
-            value={newPortfolio}
-            onChange={(e) => setNewPortfolio(e.target.value)}
-          />
-          <div
-            className="portf-addPortfolio"
-            onClick={() => handleAddPortfolio(true)}
-          >
-            + 추가하기
-          </div>
+          {isOwner && (
+            <>
+              <input
+                type="text"
+                placeholder="포트폴리오 링크를 추가해보세요."
+                className="profile-input"
+                value={newPortfolio}
+                onChange={(e) => setNewPortfolio(e.target.value)}
+              />
+              <div
+                className="portf-addPortfolio"
+                onClick={() => handleAddPortfolio(true)}
+              >
+                + 추가하기
+              </div>
+            </>
+          )}
         </div>
       </div>
 
-      <button type="submit" className="profile-submitBtn">
+      {isOwner && (<button type="submit" className="profile-submitBtn">
         저장
-      </button>
+      </button>)}
     </form>
   );
 }
