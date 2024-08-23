@@ -165,6 +165,7 @@ function Profile() {
   function handleEdit() {
     navigate("/editprofile", {
       state: {
+        userId: userId,
         user_name: user_name,
         school: school,
         current_academic_degree: current_academic_degree,
