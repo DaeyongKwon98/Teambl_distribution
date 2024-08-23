@@ -21,7 +21,7 @@ function EditProfile() {
   const [major, setMajor] = useState(savedMajor);
 
   function handleBack(){
-    navigate('/profile', {
+    navigate(`/profile/${userInfo.id}`, {
       state: {
         user_name : savedUser_name,
         school : savedSchool,
@@ -40,21 +40,23 @@ function EditProfile() {
   }
 
   function handleSave(){
-    setSavedUserName(user_name)
-    setSavedSchool(school)
-    setSavedCurrentAcademicDegree(current_academic_degree)
-    setSavedYear(year)
-    setSavedMajor(major)
-    // navigate('/profile', {
-    //   state: {
-    //     user_name : savedUser_name,
-    //     school : savedSchool,
-    //     current_academic_degree : savedCurrent_academic_degree,
-    //     year : savedYear,
-    //     major : savedMajor,
-    //     prevPage : 'editprofile'
-    //   }
-    // });
+    setSavedUserName(user_name);
+    setSavedSchool(school);
+    setSavedCurrentAcademicDegree(current_academic_degree);
+    setSavedYear(year);
+    setSavedMajor(major);
+    
+    // 수정된 정보를 저장하고 프로필 페이지로 돌아갑니다.
+    navigate(`/profile/${userInfo.id}`, {
+      state: {
+        user_name: user_name,
+        school: school,
+        current_academic_degree: current_academic_degree,
+        year: year,
+        major: major,
+        prevPage: 'editprofile'
+      }
+    });
   }
 
   return (
