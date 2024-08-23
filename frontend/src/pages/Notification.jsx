@@ -88,7 +88,7 @@ const Notification = () => {
   return (
     <div className="notification-container">
       <h1>Notifications</h1>
-
+  
       {/* 알림 추가 기능 주석처리 */}
       {/* <div className="notification-input">
         <input
@@ -99,7 +99,7 @@ const Notification = () => {
         />
         <button onClick={addNotification}>추가</button>
       </div> */}
-
+  
       <div>
         <h2>Notification List</h2>
         <ul className="notification-list">
@@ -115,7 +115,8 @@ const Notification = () => {
                 })
               }
             >
-                {/* {selectedNotification === notification.id ? (
+              {/* 
+              {selectedNotification === notification.id ? (
                 <>
                   <input
                     type="text"
@@ -149,9 +150,8 @@ const Notification = () => {
                       {notification.is_read ? "읽음" : "읽지 않음"}
                     </span>
                   </div>
-
+  
                   <div className="notification-buttons">
-                    {/* 읽음 표시 버튼은 그대로 남겨둠 */}
                     {!notification.is_read && (
                       <button
                         className="mark-read"
@@ -165,8 +165,7 @@ const Notification = () => {
                         읽음 표시
                       </button>
                     )}
-                    {/* 주석 처리된 부분 - 수정 버튼 */}
-                    {/* <button
+                    <button
                       className="edit"
                       onClick={() => {
                         setSelectedNotification(notification.id);
@@ -174,7 +173,7 @@ const Notification = () => {
                       }}
                     >
                       수정
-                    </button> */}
+                    </button>
                     <button
                       className="delete"
                       onClick={() => deleteNotification(notification.id)}
@@ -182,12 +181,14 @@ const Notification = () => {
                       삭제
                     </button>
                   </div>
-
+  
                   <div className="created-at">
                     {new Date(notification.created_at).toLocaleString()}
                   </div>
                 </>
-              )} */}
+              )} 
+              */}
+  
               <div className="notification-header">
                 <span className="message">{notification.message}</span>
                 <button
