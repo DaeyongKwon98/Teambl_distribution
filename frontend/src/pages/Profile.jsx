@@ -348,7 +348,7 @@ function Profile() {
                 onClick={() => handleExperienceDelete(index)}
               >X</button>)}
             </div>
-          ))) : (<div className="ex-item">-</div>)} // 경험이 empty인 경우
+          ))) : (<div className="ex-item">-</div>)}
           {isOwner && (
             <>
               <input
@@ -385,7 +385,7 @@ function Profile() {
                 onClick={() => handleToolDelete(index)}
               >X</button>)}
             </div>
-          ))) : (<div className="tool-item">-</div>)} // 툴이 empty인 경우
+          ))) : (<div className="tool-item">-</div>)}
           {isOwner && (
             <>
               <input
@@ -415,7 +415,7 @@ function Profile() {
             type="text"
             placeholder="관심 있는 분야, 이루고자 하는 목표, 전문성을 쌓기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요."
             className="profile-input intro-input"
-            value={introduction || (isOwner ? "" : "-")} // 소개가 empty인 경우 -로 표시
+            value={introduction || (isOwner ? "" : "-")}
             onChange={(e) => setIntroduction(e.target.value)}
             disabled={!isOwner}
           />
@@ -441,7 +441,7 @@ function Profile() {
                 onClick={() => handlePortfolioDelete(index)}
               >X</button>)}
             </div>
-          ))) : (<div className="portf-item">-</div>)} // 포트폴리오가 empty인 경우
+          ))) : (<div className="portf-item">-</div>)}
 
           {isOwner && (
             <>
