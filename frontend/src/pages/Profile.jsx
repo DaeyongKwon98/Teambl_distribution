@@ -339,7 +339,7 @@ function Profile() {
           {/* <label className='ex-definition'>본인의 경험을 추가해보세요.</label> */}
         </div>
         <div className="ex-lists">
-          {experiences.map((exp, index) => (
+          {experiences.length > 0 ? (experiences.map((exp, index) => (
             <div key={index} className="ex-item">
               <span className="ex-description">{exp.experience}</span>
               {/* <span className="ex-period">{exp.period}</span> */}
@@ -348,7 +348,7 @@ function Profile() {
                 onClick={() => handleExperienceDelete(index)}
               >X</button>)}
             </div>
-          ))}
+          ))) : (<div className="ex-item">-</div>)} // 경험이 empty인 경우
           {isOwner && (
             <>
               <input
@@ -376,7 +376,7 @@ function Profile() {
           {/* <label className='tool-definition'>본인이 다룰 수 있는 툴을 추가해보세요.</label> */}
         </div>
         <div className="tool-lists">
-          {tools.map((t, index) => (
+          {tools.length > 0 ? (tools.map((t, index) => (
             <div key={index} className="tool-item">
               <span className="tool-description">{t.tool}</span>
               {/* <span className="tool-period">{exp.period}</span> */}
@@ -385,7 +385,7 @@ function Profile() {
                 onClick={() => handleToolDelete(index)}
               >X</button>)}
             </div>
-          ))}
+          ))) : (<div className="tool-item">-</div>)} // 툴이 empty인 경우
           {isOwner && (
             <>
               <input
@@ -410,19 +410,12 @@ function Profile() {
       <div className="introduction-form">
         <div className="intro-feature">소개</div>
         <div className="saved-introduction">
-          {/* <input 
-            type="text"
-            placeholder="관심 있는 분야, 이루고자 하는 목표, 전문성을 쌓기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요."
-            className='profile-input intro-input'
-            value={introduction}
-            onChange={(e)=>setIntroduction(e.target.value)}
-          /> */}
           <textarea
             maxLength="100"
             type="text"
             placeholder="관심 있는 분야, 이루고자 하는 목표, 전문성을 쌓기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요."
             className="profile-input intro-input"
-            value={introduction}
+            value={introduction || (isOwner ? "" : "-")} // 소개가 empty인 경우 -로 표시
             onChange={(e) => setIntroduction(e.target.value)}
             disabled={!isOwner}
           />
@@ -435,7 +428,7 @@ function Profile() {
           {/* <label className='portf-definition'>포트폴리오 링크를 추가해보세요.</label> */}
         </div>
         <div className="portf-lists">
-          {portfolios.map((p, index) => (
+          {portfolios.length > 0 ? (portfolios.map((p, index) => (
             <div key={index} className="portf-item">
               <span className="portf-description">
                 <a href={p.portfolioLink} target="_blank">
@@ -448,7 +441,7 @@ function Profile() {
                 onClick={() => handlePortfolioDelete(index)}
               >X</button>)}
             </div>
-          ))}
+          ))) : (<div className="portf-item">-</div>)} // 포트폴리오가 empty인 경우
 
           {isOwner && (
             <>
