@@ -79,7 +79,7 @@ function Profile() {
   const fetchProfile = async () => {
     try {
       const response = await api.get(`/api/profile/${userId}/`); // userId에 해당하는 프로필 가져오기
-      
+      console.log(response.data); 
       const currentUserResponse = await api.get("/api/current-user/");
       const currentUserId = currentUserResponse.data.id;
       
