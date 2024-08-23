@@ -82,11 +82,20 @@ const Notification = () => {
     const now = new Date();
     const notificationTime = new Date(timestamp);
     const diffInMinutes = Math.floor((now - notificationTime) / 60000);
-
+  
     if (diffInMinutes < 1) return "방금 전";
     if (diffInMinutes === 1) return "1분 전";
-    return `${diffInMinutes}분 전`;
+    if (diffInMinutes < 60) return `${diffInMinutes}분 전`;
+  
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    if (diffInHours === 1) return "1시간 전";
+    if (diffInHours < 24) return `${diffInHours}시간 전`;
+  
+    const diffInDays = Math.floor(diffInHours / 24);
+    if (diffInDays === 1) return "1일 전";
+    return `${diffInDays}일 전`;
   };
+
 
   const handleBack = () => {
     navigate("/");
