@@ -96,27 +96,27 @@ function Profile() {
         setYear(userInfo.year);
         setMajor(userInfo.major);
       } else {
-        setUserName(response.data.profile.user_name);
-        setSchool(response.data.profile.school);
-        setCurrentAcademicDegree(response.data.profile.current_academic_degree);
-        setYear(response.data.profile.year);
-        setMajor(response.data.profile.major);
+        setUserName(response.data.user_name);
+        setSchool(response.data.school);
+        setCurrentAcademicDegree(response.data.current_academic_degree);
+        setYear(response.data.year);
+        setMajor(response.data.major);
       }
 
       const oneDegreeCount = await fetchFriendCount();
       setOneDegreeCount(oneDegreeCount);
 
       if (response.data.profile.keywords.length != 0) {
-        setTags([...response.data.profile.keywords]);
+        setTags([...response.data.keywords]);
       }
       if (response.data.profile.experiences.length != 0)
-        setExperiences(response.data.profile.experiences);
-      if (response.data.profile.tools.length != 0)
-        setTools(response.data.profile.tools);
-      if (response.data.profile.introduction)
-        setIntroduction(response.data.profile.introduction);
-      if (response.data.profile.portfolio_links.length != 0)
-        setPortfolios(response.data.profile.portfolio_links);
+        setExperiences(response.data.experiences);
+      if (response.data.tools.length != 0)
+        setTools(response.data.tools);
+      if (response.data.introduction)
+        setIntroduction(response.data.introduction);
+      if (response.data.portfolio_links.length != 0)
+        setPortfolios(response.data.portfolio_links);
     } catch (error) {
       console.error("Failed to fetch current user profile:", error);
     }
