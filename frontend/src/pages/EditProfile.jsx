@@ -61,24 +61,35 @@ function EditProfile() {
     setCurrentAcademicDegree(value);
   }
 
-  function handleSave(){
-    // setSavedUserName(user_name);
-    // setSavedSchool(school);
-    // setSavedCurrentAcademicDegree(current_academic_degree);
-    // setSavedYear(year);
-    // setSavedMajor(major);
-    
-    // 수정된 정보를 저장하고 프로필 페이지로 돌아갑니다.
-    navigate(`/profile/${userId}`, {
-      state: {
-        user_name: user_name,
-        school: school,
-        current_academic_degree: current_academic_degree,
-        year: year,
-        major: major,
-        prevPage: 'editprofile'
-      }
-    });
+  async function handleSave() {
+    try {
+      // 백엔드에 변경된 데이터를 전송하는 PUT 요청
+      const response = await api.put(`/api/profile/${userId}/update/`, {
+        user_name,
+        school,
+        current_academic_degree,
+        year,
+        major
+      });
+
+      console.log("Profile updated successfully:", response.data);
+
+      // 저장 후 프로필 페이지로 이동
+      navigate(`/profile/${userId}`, {  
+        state: {
+          user_name,
+          school,
+          current_academic_degree,
+          year,
+          major,
+          prevPage: 'editprofile'
+        }
+      });
+
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      alert("프로필 업데이트 실패");
+    }
   }
 
   return (
