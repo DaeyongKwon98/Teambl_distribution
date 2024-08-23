@@ -106,10 +106,10 @@ function Profile() {
       const oneDegreeCount = await fetchFriendCount();
       setOneDegreeCount(oneDegreeCount);
 
-      if (response.data.profile.keywords.length != 0) {
+      if (response.data.keywords.length != 0) {
         setTags([...response.data.keywords]);
       }
-      if (response.data.profile.experiences.length != 0)
+      if (response.data.experiences.length != 0)
         setExperiences(response.data.experiences);
       if (response.data.tools.length != 0)
         setTools(response.data.tools);
