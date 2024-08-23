@@ -84,10 +84,17 @@ const Notification = () => {
     if (diffInMinutes === 1) return "1분 전";
     return `${diffInMinutes}분 전`;
   };
+
+  const handleBack = () => {
+    navigate("/");
+  };
   
   return (
     <div className="notification-container">
-      <h1>Notifications</h1>
+      <div className="notification-back">
+        <button type="button" onClick={handleBack}></button>
+      </div>
+      <h1>알림</h1>
   
       {/* 알림 추가 기능 주석처리 */}
       {/* <div className="notification-input">
@@ -101,7 +108,7 @@ const Notification = () => {
       </div> */}
   
       <div>
-        <h2>Notification List</h2>
+        {/* <h2>Notification List</h2> */}
         <ul className="notification-list">
           {notifications.map((notification) => (
             <li
