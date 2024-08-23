@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate , useLocation} from "react-router-dom";
+import { useNavigate , useLocation } from "react-router-dom";
 import '../styles/EditProfile.css'
 
 function EditProfile() {
@@ -7,18 +7,27 @@ function EditProfile() {
   const location = useLocation();
   const userInfo = {...location.state};
 
-  const [savedUser_name, setSavedUserName] = useState(userInfo.user_name);
-  const [savedSchool, setSavedSchool] = useState(userInfo.school);
-  const [savedCurrent_academic_degree, setSavedCurrentAcademicDegree] = useState(userInfo.current_academic_degree);
-  const [savedYear, setSavedYear] = useState(userInfo.year);
-  const [savedMajor, setSavedMajor] = useState(userInfo.major);
+  // const [savedUser_name, setSavedUserName] = useState(userInfo.user_name);
+  // const [savedSchool, setSavedSchool] = useState(userInfo.school);
+  // const [savedCurrent_academic_degree, setSavedCurrentAcademicDegree] = useState(userInfo.current_academic_degree);
+  // const [savedYear, setSavedYear] = useState(userInfo.year);
+  // const [savedMajor, setSavedMajor] = useState(userInfo.major);
 
+  // const [user_name, setUserName] = useState(savedUser_name);
+  // const [school, setSchool] = useState(savedSchool);
+  // const [current_academic_degree, setCurrentAcademicDegree] = useState(savedCurrent_academic_degree);
+  // const [year, setYear] = useState(savedYear);
+  // const [major, setMajor] = useState(savedMajor);
 
-  const [user_name, setUserName] = useState(savedUser_name);
-  const [school, setSchool] = useState(savedSchool);
-  const [current_academic_degree, setCurrentAcademicDegree] = useState(savedCurrent_academic_degree);
-  const [year, setYear] = useState(savedYear);
-  const [major, setMajor] = useState(savedMajor);
+  // location.state에서 userId 및 초기 프로필 데이터를 가져옴
+  const { userId, user_name: initialUserName, school: initialSchool, current_academic_degree: initialDegree, year: initialYear, major: initialMajor } = location.state || {};
+
+  // 가져온 값을 상태로 관리
+  const [user_name, setUserName] = useState(initialUserName || '');
+  const [school, setSchool] = useState(initialSchool || '');
+  const [current_academic_degree, setCurrentAcademicDegree] = useState(initialDegree || '');
+  const [year, setYear] = useState(initialYear || '');
+  const [major, setMajor] = useState(initialMajor || '');
 
   function handleBack(){
     navigate(`/profile/${userInfo.id}`, {
@@ -40,11 +49,11 @@ function EditProfile() {
   }
 
   function handleSave(){
-    setSavedUserName(user_name);
-    setSavedSchool(school);
-    setSavedCurrentAcademicDegree(current_academic_degree);
-    setSavedYear(year);
-    setSavedMajor(major);
+    // setSavedUserName(user_name);
+    // setSavedSchool(school);
+    // setSavedCurrentAcademicDegree(current_academic_degree);
+    // setSavedYear(year);
+    // setSavedMajor(major);
     
     // 수정된 정보를 저장하고 프로필 페이지로 돌아갑니다.
     navigate(`/profile/${userInfo.id}`, {
