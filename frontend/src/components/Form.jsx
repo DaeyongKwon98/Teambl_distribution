@@ -32,6 +32,7 @@ function Form({ route, method }) {
         // access, refresh token 얻어서 저장하기
         localStorage.setItem(ACCESS_TOKEN, res.data.access);
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
+        localStorage.setItem("userId", res.data.userId);
         navigate("/");
       } else {
         navigate("/login");
