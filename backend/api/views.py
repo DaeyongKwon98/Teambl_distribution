@@ -117,13 +117,32 @@ class DeleteUserView(generics.DestroyAPIView):
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
 
+# class CurrentProfileView(generics.RetrieveAPIView):
+#     serializer_class = ProfileCreateSerializer
+#     permission_classes = [IsAuthenticated]
+
+#     def get_object(self):
+#         return Profile.objects.get(user=self.request.user)
+
 class CurrentProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return Profile.objects.get(user=self.request.user)
+        userid = self.kwargs['userid']
+        user = get_object_or_404(CustomUser, id=userid)
 
+        # 본인의 프로필을 조회하는 경우
+        if self.request.user.id == user.id:
+            print(f"User {self.request.user.id} is viewing their own profile.")
+            return get_object_or_404(Profile, user=user)
+
+        # 다른 사용자의 프로필을 조회하는 경우
+        else:
+            profile = get_object_or_404(Profile, user=user)
+            print(f"User {self.request.user.id} is viewing the profile of user {userid}.")
+            # 추가 권한 검사나 제한된 정보만 반환할 수 있음
+            return profile
 
 class ProfileUpdateView(generics.UpdateAPIView):
     queryset = Profile.objects.all()
@@ -131,17 +150,7 @@ class ProfileUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return Profile.objects.get(user=self.request.user)
-
-class UserProfileView(generics.RetrieveAPIView):
-    serializer_class = ProfileCreateSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_object(self):
-        userid = self.kwargs['userid']
-        user = get_object_or_404(CustomUser, username=userid)
-        return get_object_or_404(Profile, user=user)
-
+        return Profile.objects.get(user=self.request.user)            
 
 class ProjectListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
