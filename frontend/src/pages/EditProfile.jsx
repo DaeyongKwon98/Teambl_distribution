@@ -64,7 +64,7 @@ function EditProfile() {
   async function handleSave() {
     try {
       // 백엔드에 변경된 데이터를 전송하는 PUT 요청
-      const response = await api.put(`/api/profile/${userId}/update/`, {
+      const response = await api.put(`/api/profile/update/`, {
         user_name,
         school,
         current_academic_degree,
