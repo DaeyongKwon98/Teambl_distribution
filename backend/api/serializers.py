@@ -1,4 +1,5 @@
 from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import (
     CustomUser,
     Project,
@@ -12,6 +13,23 @@ from .models import (
     Notification,
 )
 
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # JWT 토큰에 userId를 추가
+        token['userId'] = user.id
+
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # 로그인 응답에 userId 추가
+        data.update({'userId': self.user.id})
+
+        return data
 
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
