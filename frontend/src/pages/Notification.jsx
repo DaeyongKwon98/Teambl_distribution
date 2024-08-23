@@ -74,6 +74,17 @@ const Notification = () => {
     }
   };
 
+  // 알림 시간 계산 함수
+  const timeAgo = (timestamp) => {
+    const now = new Date();
+    const notificationTime = new Date(timestamp);
+    const diffInMinutes = Math.floor((now - notificationTime) / 60000);
+
+    if (diffInMinutes < 1) return "방금 전";
+    if (diffInMinutes === 1) return "1분 전";
+    return `${diffInMinutes}분 전`;
+  };
+  
   return (
     <div className="notification-container">
       <h1>Notifications</h1>
@@ -96,8 +107,15 @@ const Notification = () => {
             <li
               key={notification.id}
               className={notification.is_read ? "read" : "unread"}
+              onClick={() =>
+                !notification.is_read &&
+                updateNotification({
+                  id: notification.id,
+                  isReadButtonClicked: true,
+                })
+              }
             >
-              {selectedNotification === notification.id ? (
+                {/* {selectedNotification === notification.id ? (
                 <>
                   <input
                     type="text"
@@ -107,8 +125,7 @@ const Notification = () => {
                     placeholder="Edit notification message"
                   />
                   <div className="edit-buttons">
-                    {/* 주석 처리된 부분 - 수정 관련 버튼들 */}
-                    {/* <button
+                    <button
                       className="save"
                       onClick={() =>
                         updateNotification({ id: notification.id })
@@ -121,7 +138,7 @@ const Notification = () => {
                       onClick={() => setSelectedNotification(null)}
                     >
                       취소
-                    </button> */}
+                    </button>
                   </div>
                 </>
               ) : (
@@ -170,7 +187,20 @@ const Notification = () => {
                     {new Date(notification.created_at).toLocaleString()}
                   </div>
                 </>
-              )}
+              )} */}
+              <div className="notification-header">
+                <span className="message">{notification.message}</span>
+                <button
+                  className="delete"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 클릭이 상위 요소로 전파되지 않도록 막음
+                    deleteNotification(notification.id);
+                  }}
+                >
+                  X
+                </button>
+              </div>
+              <div className="created-at">{timeAgo(notification.created_at)}</div>
             </li>
           ))}
         </ul>
