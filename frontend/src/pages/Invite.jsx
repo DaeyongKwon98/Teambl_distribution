@@ -216,11 +216,6 @@ function Invite() {
               </>
             ) : (
               // console.log("Status is accepted, hiding revoke button.")
-              null
-            )}
-          </div>
-          <div className="expiration-container">
-            {linkObj.status === "accepted" ? (
               <>
                 <p className="invite-accepted">가입완료</p>
                 <button
@@ -232,6 +227,11 @@ function Invite() {
                   프로필 확인
                 </button>
               </>
+            )}
+          </div>
+          <div className="expiration-container">
+            {linkObj.status === "accepted" ? (
+              null
             ) : (
               <>
                 <div className="expiration-info">
