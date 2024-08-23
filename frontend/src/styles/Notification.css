@@ -61,11 +61,11 @@
 }
 
 .notification-list li.read {
-  background-color: #e6ffe6;
+  background-color: #f5f5f5;
 }
 
 .notification-list li.unread {
-  background-color: #ffe6e6;
+  background-color: #eef4ff;
 }
 
 .notification-list li .notification-header {
