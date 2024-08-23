@@ -133,6 +133,15 @@ class ProfileUpdateView(generics.UpdateAPIView):
     def get_object(self):
         return Profile.objects.get(user=self.request.user)
 
+class UserProfileView(generics.RetrieveAPIView):
+    serializer_class = ProfileCreateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        userid = self.kwargs['userid']
+        user = get_object_or_404(CustomUser, username=userid)
+        return get_object_or_404(Profile, user=user)
+
 
 class ProjectListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
