@@ -201,7 +201,7 @@ function Invite() {
     
     return (
       <div className="invite-status" key={index}>
-        <div className="invite-card">
+        <div className={`invite-card ${linkObj.status !== "accepted" ? '' : 'accepted'}`}>
           <div className="invite-card-header">
             <p className="invitee-name">{linkObj.invitee_name}</p>
             {linkObj.status !== "accepted" ? (
@@ -227,14 +227,14 @@ function Invite() {
                   (window.location.href = `/profile/${linkObj.invitee_name}`)
                 }
               >
-                프로필 확인하기
+                프로필 확인
               </button>
             ) : (
               <>
                 <div className="expiration-info">
                   <p className="expiration-title">링크 유효 기간</p>
                   <p className="expiration-date">
-                    {isExpired ? "기간 만료" : `${formatDate(expiredDate)}까지`}
+                    {isExpired ? "미가입 기간 만료" : `${formatDate(expiredDate)}까지`}
                   </p>
                 </div>
                 <button
