@@ -29,15 +29,28 @@ function EditProfile() {
   const [year, setYear] = useState(initialYear || '');
   const [major, setMajor] = useState(initialMajor || '');
 
+  // function handleBack(){
+  //   navigate(`/profile/${userInfo.id}`, {
+  //     state: {
+  //       user_name : savedUser_name,
+  //       school : savedSchool,
+  //       current_academic_degree : savedCurrent_academic_degree,
+  //       year : savedYear,
+  //       major : savedMajor,
+  //       prevPage : 'editprofile'
+  //     }
+  //   });
+  // }
+
   function handleBack(){
-    navigate(`/profile/${userInfo.id}`, {
+    navigate(`/profile/${userId}`, {
       state: {
-        user_name : savedUser_name,
-        school : savedSchool,
-        current_academic_degree : savedCurrent_academic_degree,
-        year : savedYear,
-        major : savedMajor,
-        prevPage : 'editprofile'
+        user_name,
+        school,
+        current_academic_degree,
+        year,
+        major,
+        prevPage: 'editprofile'
       }
     });
   }
@@ -56,7 +69,7 @@ function EditProfile() {
     // setSavedMajor(major);
     
     // 수정된 정보를 저장하고 프로필 페이지로 돌아갑니다.
-    navigate(`/profile/${userInfo.id}`, {
+    navigate(`/profile/${userId}`, {
       state: {
         user_name: user_name,
         school: school,
@@ -94,7 +107,7 @@ function EditProfile() {
           required
         />
         <label className='edit-label'>학력<br/></label>
-        <select onChange={handleDegree} id='list' defaultValue={savedCurrent_academic_degree}>
+        <select onChange={handleDegree} id='list' defaultValue={current_academic_degree}>
           <option value='학사'>학사</option>
           <option value='석사'>석사</option>
           <option value='박사'>박사</option>
