@@ -226,11 +226,21 @@ class CreateInvitationLinkView(generics.CreateAPIView):
     def create(self, request):
         unique_code = str(uuid4())
         name = request.data.get("name", "")
+        invitee_email = request.data.get("invitee_email", None)
+
+        invitee_id = None
+        if invitee_email:
+            try:
+                # 초대받을 사용자의 ID를 이메일을 통해 조회
+                invitee = CustomUser.objects.get(email=invitee_email)
+                invitee_id = invitee.id
+            except CustomUser.DoesNotExist:
+                return Response({"error": "Invitee email does not exist."}, status=400)
 
         invitation_link = InvitationLink.objects.create(
             inviter=request.user,
             invitee_name=name,
-            #link=f"http://localhost:5173/welcome?code={unique_code}",
+            invitee_id=invitee_id,  # invitee_id 설정
             link=f"https://teambl-distribution.vercel.app/welcome?code={unique_code}",
         )
 
