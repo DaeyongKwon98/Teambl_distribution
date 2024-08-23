@@ -194,6 +194,7 @@ class InvitationLink(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="invitation_links"
     )
     invitee_name = models.CharField(max_length=255)
+    invitee_id = models.IntegerField(unique=True)
     link = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
