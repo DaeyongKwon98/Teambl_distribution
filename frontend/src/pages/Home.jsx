@@ -7,6 +7,8 @@ function Home() {
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
 
+  const userId = localStorage.getItem("userId");
+  
   const goToProjects = () => {
     navigate("/projects");
   };
@@ -24,7 +26,7 @@ function Home() {
   };
   
   const goToProfile = () => {
-    navigate("/profile", {
+    navigate(`/profile/${userId}`, {
       state: {
         prevPage: "home",
       },
