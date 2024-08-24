@@ -18,7 +18,7 @@ body {
   line-height: 28px; /* Set line height */
   letter-spacing: -0.019em; /* Set letter spacing */
   text-align: left;
-  color: #333;
+  color: #121212;
   margin-bottom: 20px;
 }
 
@@ -104,7 +104,7 @@ body {
   font-weight: 400; /* Set font weight */
   line-height: 16.71px; /* Set line height */
   text-align: left; /* Align text to the left */
-  color: #333;
+  color: #D9D9D9;
   margin-bottom: 10px; /* Space between the message and other elements */
 }
 
@@ -149,7 +149,7 @@ body {
 
 .notification-list li .notification-buttons button.delete {
   background: none; /* Remove the background color */
-  color: #333; /* Set the color to dark gray */
+  color: #A8A8A8; /* Set the color to dark gray */
   width: 15px; /* Make the X button small */
   height: 15px;
   position: absolute; /* Position it absolutely within the notification */
@@ -171,7 +171,7 @@ body {
 
 .notification-list li .created-at {
   font-size: 12px;
-  color: #888;
+  color: #595959;
   margin-top: auto;
   align-self: flex-end; /* Position the time at the right */
   display: flex;
