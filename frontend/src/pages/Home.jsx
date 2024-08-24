@@ -103,7 +103,10 @@ function Home() {
         // 연결된 1촌들을 다루기 위해 세부 정보 매핑
         const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
             const connectionsForFriend = connections.filter(conn => conn.secondDegreeId === friend.id);
+            console.log(`Connections for friend ${friend.user_name} (ID: ${friend.id}):`, connectionsForFriend);
+
             const friendOfNames = connectionsForFriend.map(conn => conn.firstDegreeName).join(", ");
+            console.log(`Friend of names for friend ${friend.user_name}:`, friendOfNames);
 
             return {
                 ...friend,
@@ -111,6 +114,7 @@ function Home() {
             };
         });
 
+        console.log('Detailed Second Degree Friends:', detailedSecondDegreeFriends);
         setSecondDegreeDetails(detailedSecondDegreeFriends);
     } catch (error) {
         console.error("Failed to fetch second degree details", error);
