@@ -109,7 +109,6 @@ function Certify(){
   // }
   
   const handleSendCode = async () => {
-    
     const isEmailExists = await checkEmailExists(); // 이메일 중복 체크
 
     if (isEmailExists) {
@@ -198,6 +197,7 @@ function Certify(){
         placeholder=' 비밀번호 입력'  
         onChange={(e)=>(setPassword(e.target.value))} 
         value={password}
+        disabled={!isVerified}
       />
       <input 
         type='password' 
@@ -205,6 +205,7 @@ function Certify(){
         placeholder=' 비밀번호 확인' 
         onChange={(e)=>(setPwCheck(e.target.value))} 
         value={pwCheck}
+        disabled={!isVerified}
       />
       <label ref={labelRef2} ></label>
       <button 
