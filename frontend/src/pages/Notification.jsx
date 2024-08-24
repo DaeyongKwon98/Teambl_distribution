@@ -130,6 +130,15 @@ const Notification = () => {
       }
   };
 
+  // 줄바꿈 처리해주는 함수
+  const formatMessage = (message) => {
+    return message.split('\n').map((line, index) => (
+      <span key={index}>
+        {line}
+        <br />
+      </span>
+    ));
+  };
   
   return (
     <div className="notification-container">
@@ -155,7 +164,7 @@ const Notification = () => {
             }}
             > 
             <div className="notification-header">
-              <span className="message">{notification.message}</span>
+              <span className="message">{formatMessage(notification.message)}</span>
                 <button
                   className="delete"
                   onClick={(e) => {
