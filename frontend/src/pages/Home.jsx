@@ -2,97 +2,51 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Home.css";
-//규원's 뉴 홈페이지
 import GoSearchIcon from "../assets/gosearchIcon.svg";
 import NotiIcon from "../assets/notiIcon.svg";
 import TeamblIcon from "../assets/teamblIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import FriendCard from '../components/FriendCard';
-//규원's 뉴 홈페이지
 
 function Home() {
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
-
   const userId = localStorage.getItem("userId");
-  console.log("Fetched userId:", userId);
   
-  const goToProjects = () => {
-    navigate("/projects");
-  };
-
-  const goToFriends = () => {
-    navigate("/friends");
-  };
-
-  const goToSearch = () => {
-    navigate("/search");
-  };
-
-  const goToInvite = () => {
-    navigate("/invite");
-  };
-  
+  const goToProjects = () => {navigate("/projects")};
+  const goToFriends = () => {navigate("/friends")};
+  const goToSearch = () => {navigate("/search")};
+  const goToInvite = () => {navigate("/invite")};
   const goToProfile = () => {
     navigate(`/profile/${userId}`, {
-      state: {
-        prevPage: "home",
-      },
+      state: { prevPage: "home" },
     });
   };
-
-  const goToNotification = () => {
-    navigate("/notification");
-  };
-
-  const goToSetting = () => {
-    navigate("/setting");
-  }
+  const goToNotification = () => {navigate("/notification")};
+  const goToSetting = () => {navigate("/setting")};
   
-  // const handleChangePassword = async () => {
-  //   try {
-  //     const response = await api.patch("/api/change-password/", {
-  //       new_password: newPassword,
-  //     });
-  //     setNewPassword(""); // 비밀번호 변경 후 입력 필드 초기화
-
-  //     // 로그아웃 처리
-  //     localStorage.removeItem("token"); // 토큰 제거
-  //     alert("Password changed successfully. You will be logged out.");
-  //     navigate("/login"); // 로그인 페이지로 이동
-  //   } catch (error) {
-  //     console.error("Password change failed:", error);
-  //     alert("Password change failed");
-  //   }
-  // };
-
-  // const handleDeleteAccount = async () => {
-  //   if (
-  //     window.confirm(
-  //       "Are you sure you want to delete your account? This action cannot be undone."
-  //     )
-  //   ) {
-  //     try {
-  //       const response = await api.delete("/api/delete-user/");
-  //       if (response && response.data && response.data.detail) {
-  //         alert(response.data.detail);
-  //       } else {
-  //         alert("Account deleted successfully.");
-  //       }
-  //       navigate("/login"); // 계정 삭제 후 로그인 페이지로 이동
-  //     } catch (error) {
-  //       console.error("Account deletion failed:", error);
-  //       alert("Account deletion failed");
-  //     }
-  //   }
-  // };
-
-
-//규원's 뉴 홈페이지
   const [activeNav, setActiveNav] = useState('홈');
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [bottomSheetFriends, setBottomSheetFriends] = useState([]);
 
+  const [firstDegreeCount, setFirstDegreeCount] = useState(0);
+  const [secondDegreeCount, setSecondDegreeCount] = useState(0);
+
+  // 1촌 및 2촌 수를 가져오는 함수
+  const fetchFriendCounts = async () => {
+    try {
+      const response = await api.get("/api/current-user/");
+      setFirstDegreeCount(response.data.first_degree_count);
+      setSecondDegreeCount(response.data.second_degree_count);
+    } catch (error) {
+      console.error("Failed to fetch friend counts", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchFriendCounts();
+  }, []);
+  
   const friendOfFriends = [
     { id: 1, user_name: '최지수', school: 'KAIST', current_academic_degree: '석사', year: '23학번', major: '산업디자인학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
     { id: 2, user_name: '김종현', school: 'KAIST', current_academic_degree: '학사', year: '19학번', major: '기계공학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
@@ -124,7 +78,6 @@ function Home() {
       goToSetting();
     }
   };
-  //규원's 뉴 홈페이지
 
   return (
     <div className="home-container">
@@ -179,7 +132,7 @@ function Home() {
         </div>
         <div className="home-sub-header">
           <span className='home-sub-header-text'>2촌이 </span>
-          <span className='home-sub-header-num'>{friendOfFriends.length}명 </span>
+          <span className='home-sub-header-num'>{secondDegreeCount}명 </span>
           <span className='home-sub-header-text'>증가했어요!</span>
         </div>
         <div className="home-friends-list">
@@ -221,6 +174,8 @@ function Home() {
       )}
       
       <h1>Home Page</h1>
+      <p>1촌 친구 수: {firstDegreeCount}</p>
+      <p>2촌 친구 수: {secondDegreeCount}</p>
       <button onClick={goToProjects} className="button1">
         프로젝트
       </button>
