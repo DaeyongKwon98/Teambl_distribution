@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 from django.contrib.auth.models import (
     AbstractBaseUser,
     BaseUserManager,
@@ -39,6 +40,34 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+    def get_friend_counts(self):
+        # 1촌
+        first_degree_friends = Friend.objects.filter(
+            (Q(from_user=self) | Q(to_user=self)) & Q(status="accepted")
+        )
+        
+        first_degree_ids = set()
+        for friend in first_degree_friends:
+            if friend.from_user == self:
+                first_degree_ids.add(friend.to_user.id)
+            else:
+                first_degree_ids.add(friend.from_user.id)
+
+        # 2촌
+        second_degree_ids = set()
+        for friend_id in first_degree_ids:
+            second_degree_friends = Friend.objects.filter(
+                (Q(from_user_id=friend_id) | Q(to_user_id=friend_id)) & Q(status="accepted")
+            ).exclude(Q(from_user=self) | Q(to_user=self))
+
+            for friend in second_degree_friends:
+                if friend.from_user_id not in first_degree_ids:
+                    second_degree_ids.add(friend.from_user_id)
+                if friend.to_user_id not in first_degree_ids:
+                    second_degree_ids.add(friend.to_user_id)
+
+        return first_degree_ids, second_degree_ids # 1촌 수, 2촌 수 반환 (3촌도 필요하면 추가 가능)
 
 
 class Keyword(models.Model):
