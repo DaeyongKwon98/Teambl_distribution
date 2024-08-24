@@ -45,6 +45,10 @@ function Home() {
     navigate("/notification");
   };
 
+  const goToSetting = () => {
+    navigate("/setting");
+  }
+  
   const handleChangePassword = async () => {
     try {
       const response = await api.patch("/api/change-password/", {
@@ -116,15 +120,14 @@ function Home() {
       goToFriends();
     } else if (item === '초대') {
       goToInvite();
+    } else if (item === '설정') {
+      goToSetting();
     }
   };
-//규원's 뉴 홈페이지
+  //규원's 뉴 홈페이지
 
   return (
     <div className="home-container">
-
-
-
       <header className="home-header">
         <div className="home-search">
           <img
