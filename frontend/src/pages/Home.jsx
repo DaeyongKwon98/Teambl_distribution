@@ -91,50 +91,47 @@ function Home() {
       }
   };
   
-  const fetchSecondDegreeFriends = async () => {
+  const fetchSecondDegreeDetails = async (connections) => {
       try {
           const response = await api.get("/api/current-user/");
           const secondDegreeIds = response.data.second_degree_ids;
-          console.log('response.data.second_degree_ids', secondDegreeIds);
   
-          const secondDegreeConnections = await Promise.all(
-              secondDegreeIds.map(async (secondDegreeId) => {
-                  const invitationResponse = await api.get(`/api/invitation-links/?invitee_id=${secondDegreeId}`);
-                  console.log(`Invitation Response for ID ${secondDegreeId}:`, invitationResponse.data);
+          const secondDegreeDetails = await Promise.all(
+              secondDegreeIds.map(async (id) => {
+                  const userResponse = await api.get(`/api/profile/${id}/`);
+                  const userData = userResponse.data;
+                  return {
+                      ...userData,
+                      id: id  // id 필드를 명시적으로 추가
+                  };
+              })
+          );
   
-                  // `invitee_id`가 `null`이 아닌 항목만 사용하도록 필터링
-                  const validInvitations = invitationResponse.data.filter(invitation => invitation.invitee_id !== null);
+          // connections를 활용하여 friendOf 정보를 추가
+          const detailedSecondDegreeFriends = await Promise.all(
+              secondDegreeDetails.map(async friend => {
+                  const connection = connections.find(conn => conn.secondDegreeId === friend.id);
   
-                  if (validInvitations.length > 0) {
-                      const connectionDetails = await Promise.all(
-                          validInvitations.map(async (invitation) => {
-                              const inviterProfileResponse = await api.get(`/api/profile/${invitation.inviter}/`);
-                              const inviterName = inviterProfileResponse.data.user_name;
-                              return {
-                                  secondDegreeId,
-                                  firstDegreeId: invitation.inviter,
-                                  firstDegreeName: inviterName
-                              };
-                          })
-                      );
-                      return connectionDetails;
+                  if (connection) {
+                      const firstDegreeUserResponse = await api.get(`/api/profile/${connection.firstDegreeId}/`);
+                      const firstDegreeUserName = firstDegreeUserResponse.data.user_name;
+  
+                      return {
+                          ...friend,
+                          friendOf: firstDegreeUserName  // 1촌의 user_name을 설정
+                      };
                   } else {
-                      return [{
-                          secondDegreeId,
-                          firstDegreeId: null,
-                          firstDegreeName: 'Unknown'
-                      }];
+                      return {
+                          ...friend,
+                          friendOf: 'Unknown'
+                      };
                   }
               })
           );
-          // Flatten the array since Promise.all will return an array of arrays
-          const flattenedConnections = secondDegreeConnections.flat();
-          console.log('Second Degree Connections:', flattenedConnections);
-          setSecondDegreeConnections(flattenedConnections);  // 상태 업데이트
-          return flattenedConnections;  // 결과 반환
+  
+          setSecondDegreeDetails(detailedSecondDegreeFriends);
       } catch (error) {
-          console.error("Failed to fetch second degree friends", error);
-          return [];
+          console.error("Failed to fetch second degree details", error);
       }
   };
   
