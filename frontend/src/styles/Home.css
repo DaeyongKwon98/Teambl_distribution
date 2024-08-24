@@ -124,7 +124,7 @@ body {
 }
 
 .home-friend-card {
-  background-image: url('./recofriIcon.svg');
+  background-image: url('../assets/recofriIcon.svg');
   background-size: cover;
   border-radius: 8px;
   padding: 10px;
