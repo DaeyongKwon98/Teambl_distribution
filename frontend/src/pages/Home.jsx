@@ -70,6 +70,7 @@ function Home() {
           }
         })
       );
+      console.log('Second Degree Connections:', secondDegreeConnections);
       setSecondDegreeConnections(secondDegreeConnections);  // 상태 업데이트
       return secondDegreeConnections;  // 결과 반환
     } catch (error) {
