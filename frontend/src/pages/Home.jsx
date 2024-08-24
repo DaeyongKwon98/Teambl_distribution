@@ -70,14 +70,22 @@ function Home() {
     try {
       const response = await api.get("/api/current-user/");
       const secondDegreeIds = response.data.second_degree_ids;
-  
       const secondDegreeDetails = await Promise.all(
         secondDegreeIds.map(async (id) => {
           const userResponse = await api.get(`/api/profile/${id}/`);
           return userResponse.data;
         })
       );
-      setSecondDegreeDetails(secondDegreeDetails);
+
+      // secondDegreeDetails에 friendOf 정보 추가
+      const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
+        const connection = secondDegreeConnections.find(conn => conn.secondDegreeId === friend.id);
+        return {
+          ...friend,
+          friendOf: connection ? connection.firstDegreeName : 'Unknown',
+        };
+      });
+      setSecondDegreeDetails(detailedSecondDegreeFriends);
     } catch (error) {
       console.error("Failed to fetch second degree details", error);
     }
