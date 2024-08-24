@@ -56,6 +56,7 @@ class PortfolioLinkSerializer(serializers.ModelSerializer):
 
 
 class ProfileCreateSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()  # id 필드를 추가하여 읽기 전용으로 설정
     keywords = serializers.SerializerMethodField()
     tools = ToolSerializer(many=True, required=False)
     experiences = ExperienceSerializer(many=True, required=False)
@@ -64,6 +65,7 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
+            "id",
             "user_name",
             "school",
             "current_academic_degree",
@@ -86,6 +88,7 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
 
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
+    id = serializers.ReadOnlyField()  # id 필드를 추가하여 읽기 전용으로 설정
     user_name = serializers.CharField(required=False)
     school = serializers.CharField(required=False)
     current_academic_degree = serializers.CharField(required=False)
@@ -100,6 +103,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = [
+            "id",
             "user_name",
             "school",
             "current_academic_degree",
