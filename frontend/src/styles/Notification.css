@@ -158,7 +158,10 @@ body {
   font-size: 12px;
   color: #888;
   margin-top: auto;
-  align-self: center; /* 변경: 세로 가운데 정렬 */
+  align-self: flex-end; /* Position the time at the right */
+  display: flex;
+  align-items: center; /* Center the time vertically */
+  height: 100%; /* Ensure the height takes up the full notification */
 }
 
 /* New Styles for edit-input-text, save, and cancel buttons */
