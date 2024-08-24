@@ -159,6 +159,7 @@ body {
   border: none; /* Remove border */
   cursor: pointer;
   opacity: 1; /* Ensure visibility */
+  z-index: 10;
 }
 
 .notification-list li .notification-buttons button.delete::before {
