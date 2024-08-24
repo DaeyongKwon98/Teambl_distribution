@@ -139,14 +139,17 @@ body {
 }
 
 .notification-list li .notification-buttons button.delete {
-  background-color: transparent;
-  color: #333;
-  border: none;
+  background: none; /* Remove the background color */
+  color: #333; /* Set the color to dark gray */
+  width: 15px; /* Make the X button small */
+  height: 15px;
+  position: absolute; /* Position it absolutely within the notification */
+  top: 10px; /* Align it near the top */
+  right: 10px; /* Align it to the right */
+  padding: 0; /* Remove padding */
+  border: none; /* Remove border */
   cursor: pointer;
-  font-size: 16px;
-  padding: 0;
-  margin: 0;
-  line-height: 1;
+  opacity: 1; /* Ensure visibility */
 }
 
 .notification-list li .notification-buttons button.delete::before {
@@ -154,7 +157,7 @@ body {
 }
 
 .notification-list li .notification-buttons button.delete:hover {
-  background-color: #c82333;
+  background-color: none;
 }
 
 .notification-list li .created-at {
