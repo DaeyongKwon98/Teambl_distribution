@@ -61,6 +61,11 @@ function Home() {
                   if (validInvitations.length > 0) {
                       const connectionDetails = await Promise.all(
                           validInvitations.map(async (invitation) => {
+                              if (secondDegreeId === invitation.invitee_id) {
+                                  console.warn(`Skipping connection where secondDegreeId and invitee_id are the same: ${secondDegreeId}`);
+                                  return null;
+                              }  
+                            
                               const inviterProfileResponse = await api.get(`/api/profile/${invitation.invitee_id}/`);
                               const inviterName = inviterProfileResponse.data.user_name;
                               return {
