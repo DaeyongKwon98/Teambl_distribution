@@ -50,9 +50,8 @@ body {
   justify-content: space-between;
   gap: 0px;
   position: relative;
-  align-items: center; /* 모든 항목을 수직 중앙에 정렬 */
+  align-items: center;
 } */
-
 .notification-list li {
   display: flex;
   padding: 15px;
@@ -70,7 +69,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  flex: 1; /* 메시지 부분이 최대한의 가로 공간을 차지하도록 함 */
+  flex: 1;
 } */
 .notification-list li .notification-header {
   display: flex;
