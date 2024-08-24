@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Setting.css';
 import api from "../api";
@@ -47,15 +47,15 @@ const Setting = () => {
 
   return (
     <div className="setting-container">
-        <h2>Change Password</h2>
-        <input
-          type="password"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <button onClick={handleChangePassword}>Change Password</button>
-      </div>
+      <h2>Change Password</h2>
+      <input
+        type="password"
+        placeholder="New Password"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+      />
+      <button onClick={handleChangePassword}>Change Password</button>
+
       <div className="account-delete-container">
         <h2>Delete Account</h2>
         <button onClick={handleDeleteAccount}>Delete Account</button>
