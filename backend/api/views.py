@@ -75,6 +75,7 @@ class CreateUserView(generics.CreateAPIView):
                 user=from_user,
                 message=f"{user_profile.user_name} has joined using your invitation link.",
                 notification_type='invitation_register'
+                related_user_id=invitation.invitee_id
             )
 
 class CurrentUserView(generics.RetrieveAPIView):
