@@ -252,6 +252,7 @@ class Notification(models.Model):
     notification_type = models.CharField(
         max_length=30, choices=NOTIFICATION_TYPE_CHOICES
     )
+    related_user_id = models.IntegerField(null=True, blank=True)
 
     def __str__(self):
         return f"Notification for {self.user.email} - {self.message}"
