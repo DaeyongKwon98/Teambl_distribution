@@ -10,7 +10,6 @@ import FriendCard from '../components/FriendCard';
 
 function Home() {
   const navigate = useNavigate();
-  const [newPassword, setNewPassword] = useState("");
   const userId = localStorage.getItem("userId");
   
   const goToProjects = () => {navigate("/projects")};
@@ -32,6 +31,7 @@ function Home() {
   const [firstDegreeCount, setFirstDegreeCount] = useState(0);
   const [secondDegreeCount, setSecondDegreeCount] = useState(0);
   const [secondDegreeConnections, setSecondDegreeConnections] = useState([]);
+  const [secondDegreeDetails, setSecondDegreeDetails] = useState([]);
 
   // 1촌 및 2촌 수를 가져오는 함수
   const fetchFriendCounts = async () => {
@@ -64,18 +64,37 @@ function Home() {
       console.error("Failed to fetch second degree friends", error);
     }
   };
+
+  // 2촌의 유저 프로필 정보를 얻는 함수
+  const fetchSecondDegreeDetails = async () => {
+    try {
+      const response = await api.get("/api/current-user/");
+      const secondDegreeIds = response.data.second_degree_ids;
+  
+      const secondDegreeDetails = await Promise.all(
+        secondDegreeIds.map(async (id) => {
+          const userResponse = await api.get(`/api/profile/${id}/`);
+          return userResponse.data;
+        })
+      );
+      setSecondDegreeDetails(secondDegreeDetails);
+    } catch (error) {
+      console.error("Failed to fetch second degree details", error);
+    }
+  };
   
   useEffect(() => {
     fetchFriendCounts();
     fetchSecondDegreeFriends();
+    fetchSecondDegreeDetails();
   }, []);
   
-  const friendOfFriends = [
-    { id: 1, user_name: '최지수', school: 'KAIST', current_academic_degree: '석사', year: '23학번', major: '산업디자인학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-    { id: 2, user_name: '김종현', school: 'KAIST', current_academic_degree: '학사', year: '19학번', major: '기계공학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-    { id: 3, user_name: '권대용', school: 'KAIST', current_academic_degree: '석사', year: '20학번', major: '전산학부', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-    { id: 4, user_name: '성대규', school: 'KAIST', current_academic_degree: '학사', year: '21학번', major: '전기및전자공학부', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-  ];
+  // const friendOfFriends = [
+  //   { id: 1, user_name: '최지수', school: 'KAIST', current_academic_degree: '석사', year: '23학번', major: '산업디자인학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
+  //   { id: 2, user_name: '김종현', school: 'KAIST', current_academic_degree: '학사', year: '19학번', major: '기계공학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
+  //   { id: 3, user_name: '권대용', school: 'KAIST', current_academic_degree: '석사', year: '20학번', major: '전산학부', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
+  //   { id: 4, user_name: '성대규', school: 'KAIST', current_academic_degree: '학사', year: '21학번', major: '전기및전자공학부', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
+  // ];
 
   const keywordFriends = [
     { id: 1, user_name: '최미나', school: 'KAIST', current_academic_degree: '학사', year: '22학번', major: '산업디자인학과', sametag: '축구', profilePic: 'https://via.placeholder.com/70' },
@@ -151,7 +170,7 @@ function Home() {
       <section className="home-friend-recommendation">
         <div className="home-section-header">
           <h2>이번주 새로운 2촌</h2>
-          <span className="home-view-all" onClick={() => openBottomSheet(friendOfFriends)}>모두 보기</span>
+          <span className="home-view-all" onClick={() => openBottomSheet(SecondDegreeDetails)}>모두 보기</span>
         </div>
         <div className="home-sub-header">
           <span className='home-sub-header-text'>2촌이 </span>
@@ -159,7 +178,7 @@ function Home() {
           <span className='home-sub-header-text'>증가했어요!</span>
         </div>
         <div className="home-friends-list">
-          {friendOfFriends.map(friend => (
+          {secondDegreeDetails.map(friend => (
             <FriendCard key={friend.id} friend={friend} />
           ))}
         </div>
