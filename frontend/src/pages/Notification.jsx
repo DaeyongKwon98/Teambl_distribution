@@ -130,14 +130,54 @@ const Notification = () => {
       }
   };
 
-  // 줄바꿈 처리해주는 함수
+  // 메시지 줄바꿈 처리, 유저이름 굵게 표시하는 함수 (하드코딩)
   const formatMessage = (message) => {
-    return message.split('\n').map((line, index) => (
-      <span key={index}>
-        {line}
-        <br />
-      </span>
-    ));
+    if (message.includes("팀블에 가입")) {
+      const parts = message.split("님이 팀블에 가입했습니다.\n");
+      return (
+        <>
+          <strong>{parts[0]}</strong>님이 팀블에 가입했습니다.
+          <br />
+          <span><strong>{parts[0]}</strong>님의 프로필을 지금 확인해보세요!</span>
+        </>
+      );
+    } else if (message.includes("일촌 신청을 수락")) {
+      const parts = message.split("님이 일촌 신청을 수락했습니다.\n");
+      return (
+        <>
+          <strong>{parts[0]}</strong>님이 일촌 신청을 수락했습니다.
+          <br />
+          <span><strong>{parts[0]}</strong>님의 프로필을 확인해보세요!</span>
+        </>
+      );
+    } else if (message.includes("일촌 신청이 도착")) {
+      const parts = message.split("님의 일촌 신청이 도착했습니다.\n");
+      return (
+        <>
+          <strong>{parts[0]}</strong>님의 일촌 신청이 도착했습니다.
+          <br />
+          <span><strong>{parts[0]}</strong>님의 일촌 리스트에서 확인해보세요!</span>
+        </>
+      );
+    } else if (message.includes("초대 링크가 만료")) {
+      const parts = message.split("님의 초대 링크가 만료됐습니다.\n");
+      return (
+        <>
+          <strong>{parts[0]}</strong>님의 초대 링크가 만료됐습니다.
+          <br />
+          <span>초대 링크를 다시 생성해주세요!</span>
+        </>
+      );
+    } else if (message.includes("일촌 신청을 거절")) {
+      const parts = message.split("님이 일촌 신청을 거절했습니다.");
+      return (
+        <>
+          <strong>{parts[0]}</strong>님이 일촌 신청을 거절했습니다.
+        </>
+      );
+    } else {
+      return <>{message}</>;
+    }
   };
   
   return (
