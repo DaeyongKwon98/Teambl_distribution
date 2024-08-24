@@ -112,31 +112,22 @@ function Home() {
               })
           );
   
-          // Filter out any null connections before processing
-          const filteredConnections = connections.filter(connection => connection !== null);
+          // Safeguard against null or undefined connections
+          const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
+              const connection = connections.find(conn => conn?.secondDegreeId === friend.id);
   
-          // connections를 활용하여 friendOf 정보를 추가
-          const detailedSecondDegreeFriends = await Promise.all(
-              secondDegreeDetails.map(async (friend) => {
-                  // Find the connection for the current friend, handle case where connection might be null
-                  const connection = filteredConnections.find(conn => conn.secondDegreeId === friend.id);
-                  
-                  if (connection) {
-                      const firstDegreeUserResponse = await api.get(`/api/profile/${connection.firstDegreeId}/`);
-                      const firstDegreeUserName = firstDegreeUserResponse.data.user_name;
-  
-                      return {
-                          ...friend,
-                          friendOf: firstDegreeUserName  // 1촌의 user_name을 설정
-                      };
-                  } else {
-                      return {
-                          ...friend,
-                          friendOf: 'Unknown'
-                      };
-                  }
-              })
-          );
+              if (connection) {
+                  return {
+                      ...friend,
+                      friendOf: connection.firstDegreeName || 'Unknown'  // Use the name if available, otherwise 'Unknown'
+                  };
+              } else {
+                  return {
+                      ...friend,
+                      friendOf: 'Unknown'
+                  };
+              }
+          });
   
           setSecondDegreeDetails(detailedSecondDegreeFriends);
       } catch (error) {
