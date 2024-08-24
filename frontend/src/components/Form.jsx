@@ -53,12 +53,14 @@ function Form({ route, method }) {
 
   return (
     <div className="login-container">
-    <img
-      src={LoginTeamblIcon}
-      alt="팀블로고"
-      className="login-teambl-icon"
-    />
-    <p className="login-subheader">팀원 찾기의 새로운 기준, 팀블!</p>
+      <div className="login-header">
+        <img
+          src={LoginTeamblIcon}
+          alt="팀블로고"
+          className="login-teambl-icon"
+        />
+        <p className="login-subheader">팀원 찾기의 새로운 기준, 팀블!</p>
+      </div>
       <div className="login-form">
         <input
           type="text"
