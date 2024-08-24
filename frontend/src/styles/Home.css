@@ -1,15 +1,238 @@
-/* GPT로 만든 임시 css 파일 */
+/*규원's 뉴 홈페이지*/
+/*규원's 뉴 홈페이지*/
+/*규원's 뉴 홈페이지*/
+body {
+  margin: 0;
+  font-family: "Arial", sans-serif;
+  background-color: #ffffff;
+}
 
-/* Center the container and apply basic styling */
 .home-container {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.home-header {
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+}
+
+.home-search {
+  display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Full height of the viewport */
-  text-align: center;
-  background-color: #f5f5f5; /* Light grey background */
+  width: 75px;
 }
+
+.home-gosearch-icon {
+  width: 60px;
+  height: 22px;
+}
+
+.home-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+}
+
+.home-teambl-icon {
+  width: 100px;
+  height: 24px;
+}
+
+.home-profile-and-notifications {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 75px;
+}
+
+.home-noti-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.home-profile-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.home-navbar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.home-nav-item {
+  flex: 1;
+  text-align: center;
+  font-size: 14px;
+  font-weight: bold;
+  color: black;
+  cursor: pointer;
+  padding: 10px 0;
+}
+
+.home-nav-item.home-active {
+  color: #0923A9;
+  border-bottom: 2px solid #0923A9;
+}
+
+.home-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.home-section-header h2 {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.home-sub-header {
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  white-space: pre-wrap;
+}
+
+.home-sub-header-text {
+  font-size: 12px;
+  color: #595959;
+}
+
+.home-view-all, .home-sub-header-num {
+  font-size: 12px;
+  color: #2546f3;
+}
+
+.home-friends-list {
+  display: flex;
+  overflow-x: scroll;
+  padding: 10px 0;
+}
+
+.home-friends-list::-webkit-scrollbar {
+  display: none;
+}
+
+.home-friend-card {
+  background-image: url('./recofriIcon.svg');
+  background-size: cover;
+  border-radius: 8px;
+  padding: 10px;
+  margin-right: 10px;
+  min-width: 120px;
+  text-align: center;
+}
+
+.home-profile-pic {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-bottom: 10px;
+}
+
+.home-friend-info p {
+  margin: 5px 0;
+  font-size: 12px;
+  color: black;
+}
+.home-friend-info p:first-child {
+  margin: 5px 0;
+  font-size: 13px;
+  font-weight: bold;
+  color: black;
+}
+
+.home-friend-of, .home-same-tag {
+  background-color: white;
+  border-radius: 15px;
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+.home-friend-of span, .home-same-tag span {
+  font-size: 10px;
+  color: black;
+}
+
+.home-same-and-befri {
+  display: flex;
+  justify-content: space-between;
+  align-items:center;
+  margin-bottom: 10px;
+}
+
+.home-befri-icon {
+  width: 22px;
+  height: 22px;
+}
+
+.home-bottom-sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 999;
+}
+
+.home-bottom-sheet {
+  background-color: white;
+  width: 100%;
+  max-width: 300px;
+  border-radius: 15px 15px 0 0;
+  padding: 20px;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.home-bottom-sheet h3 {
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.home-bottom-sheet-content {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.home-bottom-sheet-content::-webkit-scrollbar {
+  display: none;
+}
+
+.home-close-icon {
+  width: 15px;
+  height: 15px;
+  cursor: pointer;
+}
+
+.home-bottom-sheet-content .home-friend-card {
+  width: 42%;
+  margin: 0px 0px 10px 0px;
+}
+/*규원's 뉴 홈페이지*/
+/*규원's 뉴 홈페이지*/
+/*규원's 뉴 홈페이지*/
+
+
+
+/* GPT로 만든 임시 css 파일 */
 
 .home-container h1 {
   color: #333;
