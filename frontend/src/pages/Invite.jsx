@@ -56,6 +56,7 @@ function Invite() {
         const newLink = {
           invitee_name: name,
           inviter_name: response.data.inviter_name,
+          invitee_id: response.data.invitee_id,
           link: response.data.link,
           id: response.data.id,
           created_at: response.data.created_at,
