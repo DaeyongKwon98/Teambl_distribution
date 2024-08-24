@@ -112,11 +112,15 @@ function Home() {
               })
           );
   
+          // Filter out any null connections before processing
+          const filteredConnections = connections.filter(connection => connection !== null);
+  
           // connections를 활용하여 friendOf 정보를 추가
           const detailedSecondDegreeFriends = await Promise.all(
-              secondDegreeDetails.map(async friend => {
-                  const connection = connections.find(conn => conn.secondDegreeId === friend.id);
-  
+              secondDegreeDetails.map(async (friend) => {
+                  // Find the connection for the current friend, handle case where connection might be null
+                  const connection = filteredConnections.find(conn => conn.secondDegreeId === friend.id);
+                  
                   if (connection) {
                       const firstDegreeUserResponse = await api.get(`/api/profile/${connection.firstDegreeId}/`);
                       const firstDegreeUserName = firstDegreeUserResponse.data.user_name;
