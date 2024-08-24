@@ -105,15 +105,26 @@ function Home() {
           );
   
           // connections를 활용하여 friendOf 정보를 추가
-          const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
-              const connection = connections.find(conn => conn.secondDegreeId === friend.id);
-              const friendOfNames = connection ? connection.firstDegreeId : 'Unknown'; // firstDegreeId를 사용
+          const detailedSecondDegreeFriends = await Promise.all(
+              secondDegreeDetails.map(async friend => {
+                  const connection = connections.find(conn => conn.secondDegreeId === friend.id);
   
-              return {
-                  ...friend,
-                  friendOf: friendOfNames
-              };
-          });
+                  if (connection) {
+                      const firstDegreeUserResponse = await api.get(`/api/profile/${connection.firstDegreeId}/`);
+                      const firstDegreeUserName = firstDegreeUserResponse.data.user_name;
+  
+                      return {
+                          ...friend,
+                          friendOf: firstDegreeUserName  // 1촌의 user_name을 설정
+                      };
+                  } else {
+                      return {
+                          ...friend,
+                          friendOf: 'Unknown'
+                      };
+                  }
+              })
+          );
   
           setSecondDegreeDetails(detailedSecondDegreeFriends);
       } catch (error) {
