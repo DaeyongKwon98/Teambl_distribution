@@ -89,7 +89,7 @@ body {
   color: #121212;
   max-width: 220px; /* 메시지의 최대 가로 길이를 제한 */
   word-wrap: break-word; /* 줄바꿈이 발생하도록 설정 */
-  padding-left: 10px;
+  padding-left: 0;
 }
 
 .notification-list li .delete {
