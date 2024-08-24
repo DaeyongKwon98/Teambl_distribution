@@ -12,8 +12,9 @@ body {
 }
 
 .notification-container h1 {
-  text-align: center;
+  text-align: left;
   color: #333;
+  margin-bottom: 20px;
 }
 
 .notification-container h2 {
@@ -74,6 +75,8 @@ body {
   background-color: white;
   margin-bottom: 0;
   justify-content: space-between;
+  gap: 0px;
+  position: relative;
 }
 
 .notification-list li.read {
@@ -162,6 +165,8 @@ body {
   display: flex;
   align-items: center; /* Center the time vertically */
   height: 100%; /* Ensure the height takes up the full notification */
+  position: absolute;
+  right: 10px;
 }
 
 /* New Styles for edit-input-text, save, and cancel buttons */
