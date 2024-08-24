@@ -12,18 +12,13 @@ body {
 }
 
 .notification-container h1 {
-  font-family: "Pretendard", Arial, sans-serif; /* Use Pretendard font */
-  font-size: 20px; /* Set font size */
-  font-weight: 600; /* Set font weight */
-  line-height: 28px; /* Set line height */
-  letter-spacing: -0.019em; /* Set letter spacing */
+  font-family: "Pretendard", Arial, sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 28px;
+  letter-spacing: -0.019em;
   text-align: left;
   color: #121212;
-  margin-bottom: 20px;
-}
-
-.notification-container h2 {
-  color: #555;
   margin-bottom: 20px;
 }
 
@@ -38,33 +33,6 @@ body {
 
 .notification-back button:hover {
   cursor: pointer;
-}
-
-.notification-input {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.notification-input input {
-  width: 75%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
-}
-
-.notification-input button {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.notification-input button:hover {
-  background-color: #0056b3;
 }
 
 .notification-list {
@@ -95,136 +63,50 @@ body {
 .notification-list li .notification-header {
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; /* Aligns the X button with the text */
+  align-items: flex-start;
 }
 
 .notification-list li .message {
-  font-family: "Pretendard", Arial, sans-serif; /* Use Pretendard font */
-  font-size: 14px; /* Set font size */
-  font-weight: 400; /* Set font weight */
-  line-height: 16.71px; /* Set line height */
-  text-align: left; /* Align text to the left */
-  color: #121212;
-  margin-bottom: 10px; /* Space between the message and other elements */
-}
-
-.notification-list li .status {
+  font-family: "Pretendard", Arial, sans-serif;
   font-size: 14px;
-  font-weight: bold;
-  color: #888;
-}
-
-.notification-list li .notification-buttons {
-  display: flex;
-  justify-content: flex-start;
-  gap: 10px;
+  font-weight: 400;
+  line-height: 16.71px;
+  text-align: left;
+  color: #121212;
   margin-bottom: 10px;
 }
 
-.notification-list li .notification-buttons button {
-  padding: 8px 12px;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.notification-list li .notification-buttons button.mark-read {
-  background-color: #28a745;
-  color: white;
-}
-
-.notification-list li .notification-buttons button.mark-read:hover {
-  background-color: #218838;
-}
-
-.notification-list li .notification-buttons button.edit {
-  background-color: #007bff;
-  color: white;
-}
-
-.notification-list li .notification-buttons button.edit:hover {
-  background-color: #0056b3;
-}
-
-.notification-list li .notification-buttons button.delete {
-  background: none; /* Remove the background color */
-  color: #A8A8A8; /* Set the color to dark gray */
-  width: 15px; /* Make the X button small */
+.notification-list li .delete {
+  background: none;
+  color: #A8A8A8;
+  width: 15px;
   height: 15px;
-  position: absolute; /* Position it absolutely within the notification */
-  top: 10px; /* Align it near the top */
-  right: 10px; /* Align it to the right */
-  padding: 0; /* Remove padding */
-  border: none; /* Remove border */
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 0;
+  border: none;
   cursor: pointer;
-  opacity: 1; /* Ensure visibility */
   z-index: 10;
 }
 
-.notification-list li .notification-buttons button.delete::before {
+.notification-list li .delete::before {
   content: "×";
 }
 
-.notification-list li .notification-buttons button.delete,
-.notification-list li .notification-buttons button.delete:hover,
-.notification-list li .notification-buttons button.delete:active {
-  background: none !important;
-  border: none !important;
-  color: #A8A8A8 !important;
+.notification-list li .delete:hover,
+.notification-list li .delete:active {
+  background: none;
+  border: none;
+  color: #A8A8A8;
 }
 
 .notification-list li .created-at {
   font-size: 12px;
   color: #595959;
-  margin-top: auto;
-  align-self: flex-end; /* Position the time at the right */
+  align-self: flex-end;
   display: flex;
-  align-items: center; /* Center the time vertically */
-  height: 100%; /* Ensure the height takes up the full notification */
+  align-items: center;
   position: absolute;
   right: 10px;
-}
-
-/* New Styles for edit-input-text, save, and cancel buttons */
-.notification-list li .edit-input-text {
-  width: 95%;
-  padding: 8px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 14px;
-}
-
-.notification-list li .edit-buttons {
-  display: flex;
-}
-
-.notification-list li .save {
-  background-color: #28a745;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.notification-list li .save:hover {
-  background-color: #218838;
-}
-
-.notification-list li .cancel {
-  background-color: #dc3545;
-  color: white;
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  margin-left: 10px;
-}
-
-.notification-list li .cancel:hover {
-  background-color: #c82333;
 }
