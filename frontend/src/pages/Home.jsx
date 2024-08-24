@@ -31,6 +31,7 @@ function Home() {
 
   const [firstDegreeCount, setFirstDegreeCount] = useState(0);
   const [secondDegreeCount, setSecondDegreeCount] = useState(0);
+  const [secondDegreeConnections, setSecondDegreeConnections] = useState([]);
 
   // 1촌 및 2촌 수를 가져오는 함수
   const fetchFriendCounts = async () => {
@@ -43,8 +44,30 @@ function Home() {
     }
   };
 
+  // 2촌이 어떤 1촌과 연결되었는지 확인하는 함수
+  const fetchSecondDegreeFriends = async () => {
+    try {
+      const response = await api.get("/api/current-user/");
+      const secondDegreeIds = response.data.second_degree_ids;
+      const secondDegreeConnections = await Promise.all(
+        secondDegreeIds.map(async (secondDegreeId) => {
+          const invitationResponse = await api.get(`/api/invitation-links/?invitee_id=${secondDegreeId}`);
+          const invitation = invitationResponse.data.find(link => link.invitee_id === secondDegreeId);
+          return {
+            secondDegreeId,
+            firstDegreeId: invitation ? invitation.inviter : null,  // 연결된 1촌의 ID
+          };
+        })
+      );
+      setSecondDegreeConnections(secondDegreeConnections);
+    } catch (error) {
+      console.error("Failed to fetch second degree friends", error);
+    }
+  };
+  
   useEffect(() => {
     fetchFriendCounts();
+    fetchSecondDegreeFriends();
   }, []);
   
   const friendOfFriends = [
@@ -176,6 +199,14 @@ function Home() {
       <h1>Home Page</h1>
       <p>1촌 친구 수: {firstDegreeCount}</p>
       <p>2촌 친구 수: {secondDegreeCount}</p>
+      <h2>2촌 리스트</h2>
+      <ul>
+        {secondDegreeConnections.map((connection) => (
+          <li key={connection.secondDegreeId}>
+            2촌 ID: {connection.secondDegreeId} - 1촌 ID: {connection.firstDegreeId}
+          </li>
+        ))}
+      </ul>
       <button onClick={goToProjects} className="button1">
         프로젝트
       </button>
