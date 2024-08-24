@@ -74,8 +74,8 @@ class CreateUserView(generics.CreateAPIView):
             Notification.objects.create(
                 user=from_user,
                 message=f"{user_profile.user_name} has joined using your invitation link.",
-                notification_type='invitation_register'
-                related_user_id=invitation.invitee_id
+                notification_type='invitation_register',
+                related_user_id=invitation.invitee_id,
             )
 
 class CurrentUserView(generics.RetrieveAPIView):
@@ -379,8 +379,8 @@ class FriendUpdateView(generics.UpdateAPIView):
             Notification.objects.create(
                 user=from_user,
                 message=f"{user_profile.user_name} has accepted your friend request.",
-                notification_type='friend_accept'
-                related_user_id=to_user.id
+                notification_type='friend_accept',
+                related_user_id=to_user.id,
             )
         elif status == "rejected":
             # 친구 요청 거절 시 알림 생성
