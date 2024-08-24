@@ -67,17 +67,13 @@ body {
 }
 
 .notification-list li {
-  width: 300px;
-  height: 73px;
-  padding: 15px;
-  border: 0px solid #ddd; /* 변경: 테두리 왼쪽과 오른쪽을 없앰 */
-  border-bottom-width: 0.7px;
-  background-color: white;
-  margin-bottom: 0; /* 변경: 알림 간 간격 없앰 */
   display: flex;
   flex-direction: column;
+  padding: 15px;
+  border-bottom: 0.7px solid #ddd;
+  background-color: white;
+  margin-bottom: 0;
   justify-content: space-between;
-  gap: 0px; /* 변경: gap을 0으로 설정 */
 }
 
 .notification-list li.read {
@@ -91,8 +87,7 @@ body {
 .notification-list li .notification-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
+  align-items: flex-start; /* Aligns the X button with the text */
 }
 
 .notification-list li .message {
@@ -141,17 +136,18 @@ body {
 }
 
 .notification-list li .notification-buttons button.delete {
-  background-color: #dc3545;
-  color: white;
-  border: none; /* 변경: 삭제 버튼의 테두리를 없앰 */
-  width: 7px; /* 변경: X 버튼의 크기 */
-  height: 7px; /* 변경: X 버튼의 크기 */
-  top: 8px; /* 변경: X 버튼의 위치 */
-  left: 335px; /* 변경: X 버튼의 위치 */
-  border: 1.2px solid transparent;
-  border-top-color: #333; /* 변경: 위쪽 테두리 색상 */
+  background-color: transparent;
+  color: #333;
+  border: none;
   cursor: pointer;
-  opacity: 0; /* 변경: 초기 opacity 설정 */
+  font-size: 16px;
+  padding: 0;
+  margin: 0;
+  line-height: 1;
+}
+
+.notification-list li .notification-buttons button.delete::before {
+  content: "×";
 }
 
 .notification-list li .notification-buttons button.delete:hover {
@@ -161,7 +157,6 @@ body {
 .notification-list li .created-at {
   font-size: 12px;
   color: #888;
-  text-align: right; /* 변경: 오른쪽 끝으로 위치 */
   margin-top: auto;
   align-self: center; /* 변경: 세로 가운데 정렬 */
 }
