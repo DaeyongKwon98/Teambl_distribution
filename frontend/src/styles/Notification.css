@@ -93,7 +93,7 @@ body {
   font-size: 22px; /* X 표시와 버튼의 크기를 동일하게 설정 */
   line-height: 22px; /* X 표시를 버튼 내에서 중앙에 배치 */
   text-align: center; /* X 표시를 가운데 정렬 */
-  font-weight: 300; /* 글씨 굵기 조절 */
+  font-weight: 150; /* 글씨 굵기 조절 */
 }
 
 .notification-list li .delete::before {
