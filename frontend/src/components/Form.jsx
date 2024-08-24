@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css";
 import LoadingIndicator from "./LoadingIndicator";
+import LoginTeamblIcon from "../assets/loginteamblIcon.svg";
 
 function Form({ route, method }) {
   const [email, setEmail] = useState("");
@@ -52,7 +53,12 @@ function Form({ route, method }) {
 
   return (
     <div className="login-container">
-      <h1>TEAMBL</h1>
+    <img
+      src={LoginTeamblIcon}
+      alt="팀블로고"
+      className="login-teambl-icon"
+    />
+    <p className="login-subheader">팀원 찾기의 새로운 기준, 팀블!</p>
       <div className="login-form">
         <input
           type="text"
@@ -66,16 +72,11 @@ function Form({ route, method }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div className="checkbox-container">
-          <input type="checkbox" id="keep-login" />
-          <label htmlFor="keep-login">로그인 상태 유지</label>
-        </div>
         {error && <p className="error">{error}</p>}
         {/* {loading && <LoadingIndicator />} */}
         <button className="login-button" onClick={handleSubmit}>로그인</button>
         <div className="links">
-          <span onClick={() => navigate('/password-reset')}>비밀번호 찾기</span>
-          <span onClick={() => navigate('/start')}>회원가입</span>
+          <span onClick={() => navigate('/password-reset')}>비밀번호 재설정</span>
         </div>
       </div>
     </div>
