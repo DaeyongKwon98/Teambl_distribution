@@ -25,18 +25,18 @@ const Notification = () => {
     }
   };
 
-  // 알림 추가하기
-  const addNotification = async () => {
-    try {
-      const response = await api.post("/api/notifications/", {
-        message: newMessage,
-      });
-      setNotifications([response.data, ...notifications]);
-      setNewMessage("");
-    } catch (error) {
-      console.error("Failed to add notification", error);
-    }
-  };
+  // // 알림 추가하기
+  // const addNotification = async () => {
+  //   try {
+  //     const response = await api.post("/api/notifications/", {
+  //       message: newMessage,
+  //     });
+  //     setNotifications([response.data, ...notifications]);
+  //     setNewMessage("");
+  //   } catch (error) {
+  //     console.error("Failed to add notification", error);
+  //   }
+  // };
 
   // 알림 수정하기
   const updateNotification = async ({ id, isReadButtonClicked = false }) => {
@@ -96,9 +96,35 @@ const Notification = () => {
     return `${diffInDays}일 전`;
   };
 
-
   const handleBack = () => {
     navigate("/");
+  };
+
+  const handleNotificationClick = (notification) => {
+    switch (notification.notification_type) {
+        case 'invitation_register':
+            if (notification.related_user_id) {
+                navigate(`/profile/${notification.related_user_id}`);
+            } else {
+                console.error("No related_user_id found for this notification");
+            }
+            break;
+        case 'invitation_expired':
+            navigate("/invite");
+            break;
+        case 'friend_accept':
+            if (notification.related_user_id) {
+                navigate(`/profile/${notification.related_user_id}`);
+            } else {
+                console.error("No related_user_id found for this notification");
+            }
+            break;
+        case 'friend_request':
+            navigate("/friends");
+            break;
+        default:
+            break;
+      }
   };
   
   return (
@@ -106,19 +132,7 @@ const Notification = () => {
       <div className="notification-back">
         <button type="button" onClick={handleBack}></button>
       </div>
-      <h1>알림</h1>
-  
-      {/* 알림 추가 기능 주석처리 */}
-      {/* <div className="notification-input">
-        <input
-          type="text"
-          value={newMessage}
-          onChange={(e) => setNewMessage(e.target.value)}
-          placeholder="Enter notification message"
-        />
-        <button onClick={addNotification}>추가</button>
-      </div> */}
-  
+      <h1>알림</h1>  
       <div>
         {/* <h2>Notification List</h2> */}
         <ul className="notification-list">
@@ -126,90 +140,18 @@ const Notification = () => {
             <li
               key={notification.id}
               className={notification.is_read ? "read" : "unread"}
-              onClick={() =>
-                !notification.is_read &&
-                updateNotification({
-                  id: notification.id,
-                  isReadButtonClicked: true,
-                })
-              }
-            >
-              {/* 
-              {selectedNotification === notification.id ? (
-                <>
-                  <input
-                    type="text"
-                    className="edit-input-text"
-                    value={editMessage}
-                    onChange={(e) => setEditMessage(e.target.value)}
-                    placeholder="Edit notification message"
-                  />
-                  <div className="edit-buttons">
-                    <button
-                      className="save"
-                      onClick={() =>
-                        updateNotification({ id: notification.id })
-                      }
-                    >
-                      저장
-                    </button>
-                    <button
-                      className="cancel"
-                      onClick={() => setSelectedNotification(null)}
-                    >
-                      취소
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
-                  <div className="notification-header">
-                    <span className="message">{notification.message}</span>
-                    <span className="status">
-                      {notification.is_read ? "읽음" : "읽지 않음"}
-                    </span>
-                  </div>
-  
-                  <div className="notification-buttons">
-                    {!notification.is_read && (
-                      <button
-                        className="mark-read"
-                        onClick={() =>
-                          updateNotification({
-                            id: notification.id,
-                            isReadButtonClicked: true,
-                          })
-                        }
-                      >
-                        읽음 표시
-                      </button>
-                    )}
-                    <button
-                      className="edit"
-                      onClick={() => {
-                        setSelectedNotification(notification.id);
-                        setEditMessage(notification.message);
-                      }}
-                    >
-                      수정
-                    </button>
-                    <button
-                      className="delete"
-                      onClick={() => deleteNotification(notification.id)}
-                    >
-                      삭제
-                    </button>
-                  </div>
-  
-                  <div className="created-at">
-                    {new Date(notification.created_at).toLocaleString()}
-                  </div>
-                </>
-              )} 
-              */}
-  
-              <div className="notification-header">
-                <span className="message">{notification.message}</span>
+              onClick={() => {
+                if (!notification.is_read) {
+                    updateNotification({
+                        id: notification.id,
+                        isReadButtonClicked: true,
+                    });
+                }
+                handleNotificationClick(notification);
+            }}
+            > 
+            <div className="notification-header">
+              <span className="message">{notification.message}</span>
                 <button
                   className="delete"
                   onClick={(e) => {
