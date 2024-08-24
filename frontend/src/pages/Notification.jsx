@@ -101,9 +101,11 @@ const Notification = () => {
   };
 
   const handleNotificationClick = (notification) => {
+    console.log("Notification Clicked: ", notification); // 로그 추가
     switch (notification.notification_type) {
         case 'invitation_register':
             if (notification.related_user_id) {
+                console.log("Navigating to profile with ID: ", notification.related_user_id);
                 navigate(`/profile/${notification.related_user_id}`);
             } else {
                 console.error("No related_user_id found for this notification");
@@ -114,6 +116,7 @@ const Notification = () => {
             break;
         case 'friend_accept':
             if (notification.related_user_id) {
+                console.log("Navigating to profile with ID: ", notification.related_user_id);
                 navigate(`/profile/${notification.related_user_id}`);
             } else {
                 console.error("No related_user_id found for this notification");
@@ -126,6 +129,7 @@ const Notification = () => {
             break;
       }
   };
+
   
   return (
     <div className="notification-container">
