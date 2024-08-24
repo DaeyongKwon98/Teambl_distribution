@@ -165,8 +165,12 @@ body {
   content: "×";
 }
 
-.notification-list li .notification-buttons button.delete:hover {
-  background-color: none;
+.notification-list li .notification-buttons button.delete,
+.notification-list li .notification-buttons button.delete:hover,
+.notification-list li .notification-buttons button.delete:active {
+  background: none !important;
+  border: none !important;
+  color: #A8A8A8 !important;
 }
 
 .notification-list li .created-at {
