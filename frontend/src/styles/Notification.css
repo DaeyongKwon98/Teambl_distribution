@@ -54,12 +54,14 @@ body {
 } */
 .notification-list li {
   display: flex;
+  flex-direction: column;
   padding: 15px;
   border-bottom: 0.7px solid #ddd;
   background-color: white;
   margin-bottom: 0;
+  justify-content: center;
+  gap: 0px;
   position: relative;
-  align-items: center; /* 모든 항목을 수직 중앙에 정렬 */
 }
 
 .notification-list li.read {background-color: #f5f5f5;}
