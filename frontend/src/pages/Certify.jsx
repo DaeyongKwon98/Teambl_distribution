@@ -72,7 +72,7 @@ function Certify(){
   
   useEffect(()=>{
     if(password===pwCheck && password!==''){
-      labelRef2.current.innerHTML='인증코드가 일치합니다.';
+      labelRef2.current.innerHTML='비밀번호가 일치합니다.';
       labelRef2.current.style.fontSize='10px';
       labelRef2.current.style.color='green'
       setIsChecked(true);
