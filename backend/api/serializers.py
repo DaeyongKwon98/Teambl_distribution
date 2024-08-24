@@ -173,6 +173,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     code = serializers.CharField(write_only=True, required=False)
     first_degree_count = serializers.SerializerMethodField()
     second_degree_count = serializers.SerializerMethodField()
+    second_degree_ids = serializers.SerializerMethodField()
     
     class Meta:
         model = CustomUser
@@ -189,6 +190,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "code",
             "first_degree_count",
             "second_degree_count",
+            "second_degree_ids",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -231,6 +233,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def get_second_degree_count(self, obj):
         _, second_degree_ids = obj.get_friend_counts()
         return len(second_degree_ids)
+
+    def get_second_degree_ids(self, obj):
+        _, second_degree_ids = obj.get_friend_counts()
+        return list(second_degree_ids)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
