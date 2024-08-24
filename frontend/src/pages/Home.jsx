@@ -89,37 +89,42 @@ function Home() {
   };
   
   const fetchSecondDegreeDetails = async (connections) => {
-    try {
-        const response = await api.get("/api/current-user/");
-        const secondDegreeIds = response.data.second_degree_ids;
-
-        const secondDegreeDetails = await Promise.all(
-            secondDegreeIds.map(async (id) => {
-                const userResponse = await api.get(`/api/profile/${id}/`);
-                return userResponse.data;
-            })
-        );
-
-        // 연결된 1촌들을 다루기 위해 세부 정보 매핑
-        const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
-            const connectionsForFriend = connections.filter(conn => conn.secondDegreeId === friend.id);
-            console.log(`Connections for friend ${friend.user_name} (ID: ${friend.id}):`, connectionsForFriend);
-
-            const friendOfNames = connectionsForFriend.map(conn => conn.firstDegreeName).join(", ");
-            console.log(`Friend of names for friend ${friend.user_name}:`, friendOfNames);
-
-            return {
-                ...friend,
-                friendOf: friendOfNames || 'Unknown',  // 여러 1촌 이름을 쉼표로 구분해 표시
-            };
-        });
-
-        console.log('Detailed Second Degree Friends:', detailedSecondDegreeFriends);
-        setSecondDegreeDetails(detailedSecondDegreeFriends);
-    } catch (error) {
-        console.error("Failed to fetch second degree details", error);
-    }
+      try {
+          const response = await api.get("/api/current-user/");
+          const secondDegreeIds = response.data.second_degree_ids;
+  
+          const secondDegreeDetails = await Promise.all(
+              secondDegreeIds.map(async (id) => {
+                  const userResponse = await api.get(`/api/profile/${id}/`);
+                  const userData = userResponse.data;
+                  console.log(`User data for second degree ID ${id}:`, userData); // 디버깅 추가
+                  return userData;
+              })
+          );
+  
+          // 연결된 1촌들을 다루기 위해 세부 정보 매핑
+          const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
+              console.log('Friend data:', friend);  // 디버깅 추가
+  
+              const connectionsForFriend = connections.filter(conn => conn.secondDegreeId === friend.id);
+              console.log(`Connections for friend ${friend.user_name} (ID: ${friend.id}):`, connectionsForFriend);
+  
+              const friendOfNames = connectionsForFriend.map(conn => conn.firstDegreeName).join(", ");
+              console.log(`Friend of names for friend ${friend.user_name}:`, friendOfNames);
+  
+              return {
+                  ...friend,
+                  friendOf: friendOfNames || 'Unknown',  // 여러 1촌 이름을 쉼표로 구분해 표시
+              };
+          });
+  
+          console.log('Detailed Second Degree Friends:', detailedSecondDegreeFriends);
+          setSecondDegreeDetails(detailedSecondDegreeFriends);
+      } catch (error) {
+          console.error("Failed to fetch second degree details", error);
+      }
   };
+
   
   useEffect(() => {
     const fetchData = async () => {
