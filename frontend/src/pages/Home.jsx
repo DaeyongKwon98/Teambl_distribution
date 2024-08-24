@@ -58,11 +58,11 @@ function Home() {
                 if (invitationResponse.data.length > 0) {
                     const connectionDetails = await Promise.all(
                         invitationResponse.data.map(async (invitation) => {
-                            const inviterProfileResponse = await api.get(`/api/profile/${invitation.inviter}/`);
+                            const inviterProfileResponse = await api.get(`/api/profile/${invitation.invitee_id}/`);
                             const inviterName = inviterProfileResponse.data.user_name;
                             return {
                                 secondDegreeId,
-                                firstDegreeId: invitation.inviter,
+                                firstDegreeId: invitation.invitee_id,
                                 firstDegreeName: inviterName
                             };
                         })
