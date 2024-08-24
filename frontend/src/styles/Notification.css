@@ -87,8 +87,7 @@ body {
   line-height: 16.71px;
   text-align: left;
   color: #121212;
-  margin-bottom: 10px;
-  max-width: 200px; /* 메시지의 최대 가로 길이를 제한 */
+  max-width: 250px; /* 메시지의 최대 가로 길이를 제한 */
   word-wrap: break-word; /* 줄바꿈이 발생하도록 설정 */
 }
 
