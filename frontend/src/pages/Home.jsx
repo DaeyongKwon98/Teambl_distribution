@@ -107,10 +107,9 @@ function Home() {
       await fetchFriendCounts();
       await fetchSecondDegreeFriends();
       await fetchSecondDegreeDetails();
-  };
-
-  fetchData();
-}, []);
+    };
+    fetchData();
+  }, []);
   
   // const friendOfFriends = [
   //   { id: 1, user_name: '최지수', school: 'KAIST', current_academic_degree: '석사', year: '23학번', major: '산업디자인학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
