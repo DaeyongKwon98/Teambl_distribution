@@ -48,6 +48,7 @@ function Home() {
     try {
       const response = await api.get("/api/current-user/");
       const secondDegreeIds = response.data.second_degree_ids;
+      console.log('response.data.second_degree_ids', secondDegreeIds);
       const secondDegreeConnections = await Promise.all(
         secondDegreeIds.map(async (secondDegreeId) => {
           const invitationResponse = await api.get(`/api/invitation-links/?invitee_id=${secondDegreeId}`);
