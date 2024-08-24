@@ -95,7 +95,7 @@ function Home() {
           return [];
       }
   };
-  
+    
   const fetchSecondDegreeDetails = async (connections) => {
       try {
           const response = await api.get("/api/current-user/");
@@ -112,9 +112,11 @@ function Home() {
               })
           );
   
-          // Safeguard against null or undefined connections
+          // Null이나 undefined 값을 가지는 connection을 제거
+          const validConnections = connections.filter(conn => conn !== null);
+  
           const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
-              const connection = connections.find(conn => conn?.secondDegreeId === friend.id);
+              const connection = validConnections.find(conn => conn?.secondDegreeId === friend.id);
   
               if (connection) {
                   return {
