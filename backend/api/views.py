@@ -63,8 +63,9 @@ class CreateUserView(generics.CreateAPIView):
                 from_user=from_user, to_user=to_user, status="accepted"
             )
 
-        # 회원가입에 성공한 경우 초대 링크 상태를 accepted로 변경 / 알림 생성
+        # 회원가입에 성공한 경우 InvitationLink의 invitee_id 변경 / 초대 링크 상태를 accepted로 변경 / 알림 생성
         if invitation:
+            invitation.invitee_id = user.id
             invitation.status = "accepted"
             invitation.save()
 
