@@ -185,6 +185,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "data_joined",
             "profile",
             "code",
+            "first_degree_count",
+            "second_degree_count",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -219,6 +221,14 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data["password"])
             validated_data.pop("password")
         return super().update(instance, validated_data)
+
+    def get_first_degree_count(self, obj):
+        first_degree_ids, _ = obj.get_friend_counts()
+        return len(first_degree_ids)
+
+    def get_second_degree_count(self, obj):
+        _, second_degree_ids = obj.get_friend_counts()
+        return len(second_degree_ids)
 
 
 class ProjectSerializer(serializers.ModelSerializer):
