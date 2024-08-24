@@ -73,7 +73,7 @@ class CreateUserView(generics.CreateAPIView):
             user_profile = Profile.objects.get(user=user)
             Notification.objects.create(
                 user=from_user,
-                message=f"{user_profile.user_name} has joined using your invitation link.",
+                message=f"내가 초대한 {user_profile.user_name}님이 팀블에 가입했습니다.\n{user_profile.user_name}님의 프로필을 지금 확인해보세요!",
                 notification_type='invitation_register',
                 related_user_id=invitation.invitee_id,
             )
@@ -277,7 +277,7 @@ class WelcomeView(generics.GenericAPIView):
                     # 초대 링크 만료 알림 생성
                     Notification.objects.create(
                         user=invite_link.inviter,
-                        message=f"{invitee_name} tried to register with expired invitation link.",
+                        message=f"내가 초대한 {invitee_name}님의 초대 링크가 만료됐습니다.\n초대 링크를 다시 생성해주세요!",
                         notification_type='invitation_expired'
                     )
                     return Response({"message": "Invitation link is expired", "error_type": "expired"}, status=400)
@@ -346,7 +346,7 @@ class ListCreateFriendView(generics.ListCreateAPIView):
             user_profile = Profile.objects.get(user=from_user)
             Notification.objects.create(
                 user=to_user,
-                message=f"{user_profile.user_name} has sent you a friend request.",
+                message=f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n일촌 리스트에서 확인해보세요!",
                 notification_type='friend_request'
             )
             
@@ -378,7 +378,7 @@ class FriendUpdateView(generics.UpdateAPIView):
             # 친구 요청 수락 시 알림 생성
             Notification.objects.create(
                 user=from_user,
-                message=f"{user_profile.user_name} has accepted your friend request.",
+                message=f"{user_profile.user_name}님이 일촌 신청을 수락했습니다.\n{user_profile.user_name}님의 프로필을 확인해보세요!",
                 notification_type='friend_accept',
                 related_user_id=to_user.id,
             )
@@ -386,7 +386,7 @@ class FriendUpdateView(generics.UpdateAPIView):
             # 친구 요청 거절 시 알림 생성
             Notification.objects.create(
                 user=from_user,
-                message=f"{user_profile.user_name} has rejected your friend request.",
+                message=f"{user_profile.user_name}님이 일촌 신청을 거절했습니다.",
                 notification_type='friend_reject'
             )
 
