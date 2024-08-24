@@ -237,6 +237,8 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             except CustomUser.DoesNotExist:
                 return Response({"error": "Invitee email does not exist."}, status=400)
 
+        print(f"invitee_id: {invitee_id}")
+        
         invitation_link = InvitationLink.objects.create(
             inviter=request.user,
             invitee_name=name,
