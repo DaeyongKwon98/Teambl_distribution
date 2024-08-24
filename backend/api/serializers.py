@@ -200,7 +200,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop("profile", {})
         keywords_data = profile_data.pop("keywords", [])
-
+        first_degree_count = serializers.SerializerMethodField()
+        second_degree_count = serializers.SerializerMethodField()
+        
         # CustomUser 인스턴스 생성
         user = CustomUser.objects.create_user(
             email=validated_data["email"], password=validated_data["password"]
