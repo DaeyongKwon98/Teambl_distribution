@@ -16,6 +16,7 @@ import NewSearch from "./pages/NewSearchPage/NewSearch";
 import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import Notification from './pages/Notification';
+import Setting from './pages/Setting';
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -138,6 +139,14 @@ function App() {
           element={
             <ProtectedRoute>
               <Notification />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/setting"
+          element={
+            <ProtectedRoute>
+              <Setting />
             </ProtectedRoute>
           }
         />
