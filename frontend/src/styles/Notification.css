@@ -81,17 +81,17 @@ body {
 .notification-list li .delete {
   background: none;
   color: #A8A8A8;
-  width: 25px;
-  height: 25px;
+  width: 22px;
+  height: 22px;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: 5px;
+  right: 5px;
   padding: 0;
   border: none;
   cursor: pointer;
   z-index: 10;
-  font-size: 25px; /* X 표시와 버튼의 크기를 동일하게 설정 */
-  line-height: 25px; /* X 표시를 버튼 내에서 중앙에 배치 */
+  font-size: 22px; /* X 표시와 버튼의 크기를 동일하게 설정 */
+  line-height: 22px; /* X 표시를 버튼 내에서 중앙에 배치 */
   text-align: center; /* X 표시를 가운데 정렬 */
 }
 
