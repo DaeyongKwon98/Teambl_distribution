@@ -216,9 +216,7 @@ const Notification = () => {
                     e.stopPropagation(); // 클릭이 상위 요소로 전파되지 않도록 막음
                     deleteNotification(notification.id);
                   }}
-                >
-                  X
-                </button>
+                ></button>
               </div>
               <div className="created-at">{timeAgo(notification.created_at)}</div>
             </li>
