@@ -380,6 +380,7 @@ class FriendUpdateView(generics.UpdateAPIView):
                 user=from_user,
                 message=f"{user_profile.user_name} has accepted your friend request.",
                 notification_type='friend_accept'
+                related_user_id=to_user.id
             )
         elif status == "rejected":
             # 친구 요청 거절 시 알림 생성
