@@ -171,7 +171,9 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
-
+    first_degree_count = serializers.SerializerMethodField()
+    second_degree_count = serializers.SerializerMethodField()
+    
     class Meta:
         model = CustomUser
         fields = [
@@ -200,8 +202,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop("profile", {})
         keywords_data = profile_data.pop("keywords", [])
-        first_degree_count = serializers.SerializerMethodField()
-        second_degree_count = serializers.SerializerMethodField()
         
         # CustomUser 인스턴스 생성
         user = CustomUser.objects.create_user(
