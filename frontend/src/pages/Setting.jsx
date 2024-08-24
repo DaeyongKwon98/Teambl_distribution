@@ -55,7 +55,7 @@ const Setting = () => {
         onChange={(e) => setNewPassword(e.target.value)}
       />
       <button onClick={handleChangePassword}>Change Password</button>
-
+    </div>
       <div className="account-delete-container">
         <h2>Delete Account</h2>
         <button onClick={handleDeleteAccount}>Delete Account</button>
