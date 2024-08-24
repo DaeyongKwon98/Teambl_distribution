@@ -67,7 +67,7 @@ body {
 }
 
 .notification-list li {
-  width: 350px;
+  width: 300px;
   height: 73px;
   padding: 15px;
   border: 0px solid #ddd; /* 변경: 테두리 왼쪽과 오른쪽을 없앰 */
