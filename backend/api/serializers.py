@@ -169,6 +169,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         representation["keywords"] = [
             keyword.keyword for keyword in instance.keywords.all()
         ]
+        representation["id"] = instance.id
         return representation
 
 
