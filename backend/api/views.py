@@ -245,8 +245,15 @@ class CreateInvitationLinkView(generics.CreateAPIView):
         )
 
         return Response(
-            {"link": invitation_link.link, "id": invitation_link.id}, status=201
-        )
+            {
+                "id": invitation_link.id,
+                "inviter": invitation_link.inviter.id,
+                "invitee_name": invitation_link.invitee_name,
+                "invitee_id": invitation_link.invitee_id,
+                "link": invitation_link.link,
+                "created_at": invitation_link.created_at,
+                "status": invitation_link.status,
+            }, status=201)
 
 class WelcomeView(generics.GenericAPIView):
     permission_classes = [AllowAny]
