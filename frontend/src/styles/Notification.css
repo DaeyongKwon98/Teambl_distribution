@@ -39,6 +39,10 @@ body {
   margin: 10px 0px;
 }
 
+.notification-back button:hover {
+  cursor: pointer;
+}
+
 .notification-input {
   display: flex;
   justify-content: space-between;
