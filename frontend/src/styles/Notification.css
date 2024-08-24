@@ -78,7 +78,6 @@ body {
   flex-direction: column;
   justify-content: space-between;
   gap: 0px; /* 변경: gap을 0으로 설정 */
-  opacity: 0; /* 변경: 초기 opacity 설정 */
 }
 
 .notification-list li.read {
