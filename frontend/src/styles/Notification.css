@@ -1,6 +1,6 @@
 body {
   margin: 0;
-  font-family: "Arial", sans-serif;
+  font-family: "Pretendard", Arial, sans-serif;
   background-color: #ffffff;
 }
 
@@ -12,6 +12,11 @@ body {
 }
 
 .notification-container h1 {
+  font-family: "Pretendard", Arial, sans-serif; /* Use Pretendard font */
+  font-size: 20px; /* Set font size */
+  font-weight: 600; /* Set font weight */
+  line-height: 28px; /* Set line height */
+  letter-spacing: -0.019em; /* Set letter spacing */
   text-align: left;
   color: #333;
   margin-bottom: 20px;
@@ -94,9 +99,13 @@ body {
 }
 
 .notification-list li .message {
-  font-size: 16px;
-  font-weight: bold;
+  font-family: "Pretendard", Arial, sans-serif; /* Use Pretendard font */
+  font-size: 14px; /* Set font size */
+  font-weight: 400; /* Set font weight */
+  line-height: 16.71px; /* Set line height */
+  text-align: left; /* Align text to the left */
   color: #333;
+  margin-bottom: 10px; /* Space between the message and other elements */
 }
 
 .notification-list li .status {
