@@ -151,7 +151,12 @@ function Home() {
             className="home-noti-icon"
             onClick={goToNotification}
           />
-          <img src={'https://via.placeholder.com/50'} alt={`내 프로필`} className="home-profile-icon" onClick={goToProfile}/>
+          <img
+            src={'https://via.placeholder.com/50'}
+            alt="내 프로필"
+            className="home-profile-icon"
+            onClick={goToProfile}
+          />
         </div>
       </header>
 
@@ -234,21 +239,7 @@ function Home() {
       <button onClick={goToNotification} className="button6">
         알림
       </button>
-      {/* <div className="password-change-container">
-        <h2>Change Password</h2>
-        <input
-          type="password"
-          placeholder="New Password"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-        />
-        <button onClick={handleChangePassword}>Change Password</button>
-      </div>
-      <div className="account-delete-container">
-        <h2>Delete Account</h2>
-        <button onClick={handleDeleteAccount}>Delete Account</button>
-      </div>
-    </div> */}
+    </div>
   );
 }
 
