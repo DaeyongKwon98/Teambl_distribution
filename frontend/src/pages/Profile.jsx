@@ -78,7 +78,7 @@ function Profile() {
 
   const fetchProfile = async () => {
     try {
-      const response = await api.get(`/api/profile/${userId}/`); // userId에 해당하는 프로필 가져오기
+      const response = await api.get(/api/profile/${userId}/); // userId에 해당하는 프로필 가져오기
       console.log(response.data); 
       const currentUserResponse = await api.get("/api/current-user/");
       const currentUserId = currentUserResponse.data.id;
@@ -235,39 +235,31 @@ function Profile() {
   };
 
   const handleSave = async (e) => {
-      e.preventDefault();
-      try {
-          const updatedData = {
-              user_name,
-              school,
-              current_academic_degree,
-              year,
-              major,
-              one_degree_count,
-              experiences,
-              tools,
-              portfolio_links: portfolios,
-              keywords: tags,
-          };
-  
-          // introduction이 빈 값일 경우 기본 메시지로 설정
-          if (introduction !== null && introduction.trim() !== "") {
-              updatedData.introduction = introduction;
-          } else {
-              updatedData.introduction = "소개 글을 작성해보세요."; // 기본 메시지 설정
-          }
-  
-          const response = await api.put("/api/profile/update/", updatedData);
-          const newUser = response.data;
-          console.log("Profile update successfully:", newUser);
-          navigate(`/profile/${userId}`);
-      } catch (error) {
-          alert("프로필 업데이트 실패");
-          console.error("Registration error:", error);
-          if (error.response) {
-              console.error("Error response data:", error.response.data);
-          }
+    e.preventDefault();
+    try {
+      const response = await api.put("/api/profile/update/", {
+        user_name,
+        school,
+        current_academic_degree,
+        year,
+        major,
+        one_degree_count: one_degree_count,
+        introduction: introduction,
+        experiences,
+        tools,
+        portfolio_links: portfolios,
+        keywords: tags,
+      });
+      const newUser = response.data;
+      console.log("Profile update successfully:", newUser);
+      navigate(/profile/${userId});
+    } catch (error) {
+      alert("프로필 업데이트 실패");
+      console.error("Registration error:", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
       }
+    }
   };
 
   return (
@@ -297,7 +289,7 @@ function Profile() {
             <pre>{major}</pre>
             <div className="profile-friend">
               <img src={friendIcon} alt="friend-icon" />
-              <span className="profile-oneDegree">{`1촌 ${one_degree_count}명`}</span>
+              <span className="profile-oneDegree">{1촌 ${one_degree_count}명}</span>
             </div>
           </div>
         </div>
