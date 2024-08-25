@@ -364,12 +364,13 @@ class NotificationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid notification type")
         return value
 
-# 사용자와 공통 키워드를 반환
-class RelatedUserSerializer(serializers.ModelSerializer):
-    common_keywords = serializers.ListField(child=serializers.CharField())
-    similarity = serializers.IntegerField()
-
+class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'profile', 'common_keywords', 'similarity']
-        depth = 1
+        fields = ['id', 'email', 'profile']
+
+# 사용자와 공통 키워드를 반환
+class RelatedUserSerializer(serializers.Serializer):
+    user = UserDetailSerializer()
+    common_keywords = serializers.ListField(child=serializers.CharField())
+    similarity = serializers.IntegerField()
