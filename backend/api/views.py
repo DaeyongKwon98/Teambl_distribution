@@ -532,6 +532,16 @@ class NotificationDeleteView(generics.DestroyAPIView):
         )
         return notification
 
+
+class UnreadNotificationCountView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        unread_count = Notification.objects.filter(user=user, is_read=False).count()
+        return Response({"unread_count": unread_count})
+
+
 # 이미 존재하는 이메일인지 확인
 class CheckEmailExistsView(generics.GenericAPIView):
     permission_classes = [AllowAny]
