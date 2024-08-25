@@ -37,6 +37,7 @@ function Home() {
   const fetchFriendCounts = async () => {
     try {
       const response = await api.get("/api/current-user/");
+      console.log("API Response:", response.data);
       setFirstDegreeCount(response.data.first_degree_count);
       setSecondDegreeCount(response.data.second_degree_count);
       setSecondDegreeConnections(response.data.second_degree_connections);
