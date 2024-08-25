@@ -161,7 +161,7 @@ function Home() {
   return (
     <div className="home-container">
       <Header />
-      <Navbar activeNav={activeNav} setActiveNav={setActiveNav} />
+      <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
       <section className="home-friend-recommendation">
         <div className="home-section-header">
