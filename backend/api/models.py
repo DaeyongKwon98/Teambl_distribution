@@ -54,8 +54,10 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             else:
                 first_degree_ids.add(friend.from_user.id)
 
+        # 2촌과 그들을 연결해주는 1촌의 ID 쌍을 저장할 리스트
+        second_degree_connections = []
+
         # 2촌
-        second_degree_ids = set()
         for friend_id in first_degree_ids:
             second_degree_friends = Friend.objects.filter(
                 (Q(from_user_id=friend_id) | Q(to_user_id=friend_id)) & Q(status="accepted")
@@ -63,12 +65,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
             for friend in second_degree_friends:
                 if friend.from_user_id not in first_degree_ids:
-                    second_degree_ids.add(friend.from_user_id)
+                    second_degree_connections.append((friend.from_user_id, friend_id))
                 if friend.to_user_id not in first_degree_ids:
-                    second_degree_ids.add(friend.to_user_id)
+                    second_degree_connections.append((friend.to_user_id, friend_id))
+                    
+        # 각 2촌 ID는 고유해야 하므로, 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
+        second_degree_ids = set([conn[0] for conn in second_degree_connections])
 
-        return first_degree_ids, second_degree_ids # 1촌 수, 2촌 수 반환 (3촌도 필요하면 추가 가능)
-
+        return first_degree_ids, second_degree_ids, second_degree_connections
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
