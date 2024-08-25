@@ -32,6 +32,7 @@ function Home() {
   const [secondDegreeCount, setSecondDegreeCount] = useState(0);
   const [secondDegreeConnections, setSecondDegreeConnections] = useState([]);
   const [secondDegreeDetails, setSecondDegreeDetails] = useState([]);
+  const [keywordFriends, setKeywordFriends] = useState([]);
 
   // 1촌 및 2촌 수를 가져오는 함수
   const fetchFriendCounts = async () => {
@@ -140,18 +141,30 @@ function Home() {
           console.error("Failed to fetch second degree details", error);
       }
   };
+
+  // 키워드와 연관된 사용자들을 가져오는 함수
+  const fetchKeywordFriends = async () => {
+    try {
+      const response = await api.get("/api/user-similarity/");
+      console.log("Keyword Friends Response:", response.data);
+      setKeywordFriends(response.data); // 받아온 데이터를 keywordFriends 상태에 저장
+    } catch (error) {
+      console.error("Failed to fetch keyword friends", error);
+    }
+  };
   
   useEffect(() => {
     const fetchData = async () => {
         await fetchFriendCounts();
+        await fetchKeywordFriends();
     };
     fetchData();
   }, []);
 
-  const keywordFriends = [
-    { id: 1, user_name: '최미나', school: 'KAIST', current_academic_degree: '학사', year: '22학번', major: '산업디자인학과', sametag: '축구', profilePic: 'https://via.placeholder.com/70' },
-    { id: 2, user_name: '강승현', school: 'KAIST', current_academic_degree: '석사', year: '24학번', major: '산업시스템공학과', sametag: '파이썬', profilePic: 'https://via.placeholder.com/70' },
-  ];
+  // const keywordFriends = [
+  //   { id: 1, user_name: '최미나', school: 'KAIST', current_academic_degree: '학사', year: '22학번', major: '산업디자인학과', sametag: '축구', profilePic: 'https://via.placeholder.com/70' },
+  //   { id: 2, user_name: '강승현', school: 'KAIST', current_academic_degree: '석사', year: '24학번', major: '산업시스템공학과', sametag: '파이썬', profilePic: 'https://via.placeholder.com/70' },
+  // ];
 
   const openBottomSheet = (friends) => {
     setBottomSheetFriends(friends);
