@@ -4,6 +4,7 @@ import api from "../api";
 import "../styles/Home.css";
 import GoSearchIcon from "../assets/gosearchIcon.svg";
 import NotiIcon from "../assets/notiIcon.svg";
+import NotiIconActive from "../assets/notiIconActive.svg";
 import TeamblIcon from "../assets/teamblIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import FriendCard from '../components/FriendCard';
@@ -180,7 +181,7 @@ function Home() {
         </div>
         <div className="home-profile-and-notifications">
           <img
-            src={NotiIcon}
+            src={unreadNotifications > 0 ? NotiIconActive : NotiIcon}
             alt="알림"
             className="home-noti-icon"
             onClick={goToNotification}
