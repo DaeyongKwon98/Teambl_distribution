@@ -160,14 +160,14 @@ function Invite() {
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
-      case '초대':
-        navigate("/invite");
-        break;
       case '1촌':
         navigate("/friends");
         break;
       case '홈':
         navigate("/");
+        break;
+      case '설정':
+        navigate("/setting");
         break;
       default:
         break;
