@@ -117,6 +117,25 @@ const Notification = ({ updateUnreadCount }) => {
 
   const handleNotificationClick = (notification) => {
     console.log("Notification Clicked: ", notification); // 로그 추가
+    
+    // 알림을 읽음 상태로 업데이트
+    if (!notification.is_read) {
+      try {
+        await updateNotification({
+          id: notification.id,
+          isReadButtonClicked: true,
+        });
+  
+        // 여기서 unreadCount를 다시 계산하여 업데이트
+        const unreadCount = notifications.filter(n => !n.is_read).length - 1;
+        updateUnreadCount(unreadCount);
+        
+      } catch (error) {
+        console.error("Failed to mark notification as read", error);
+        return; // 실패했을 경우 페이지 이동을 막습니다.
+      }
+    }
+    
     switch (notification.notification_type) {
         case 'invitation_register':
             if (notification.related_user_id) {
