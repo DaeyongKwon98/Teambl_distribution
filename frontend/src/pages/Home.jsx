@@ -94,6 +94,7 @@ function Home() {
   // };
     
 const fetchSecondDegreeDetails = async () => {
+    console.log('fetchSecondDegreeDetails called');
     try {
         // 2촌의 프로필 정보를 가져오기 위한 요청
         const secondDegreeDetails = await Promise.all(
@@ -128,6 +129,7 @@ const fetchSecondDegreeDetails = async () => {
 };
   
   useEffect(() => {
+    console.log('useEffect called, fetching data...');
     const fetchData = async () => {
       await fetchFriendCounts();
       await fetchSecondDegreeDetails();
