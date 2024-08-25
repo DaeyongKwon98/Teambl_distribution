@@ -4,6 +4,8 @@ import "../styles/Invite.css";
 import BackIcon from "../assets/backIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import CopyIcon from "../assets/copyIcon.svg";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 
 function Invite() {
   const [name, setName] = useState("");
@@ -15,6 +17,7 @@ function Invite() {
   const [inviteGenerated, setInviteGenerated] = useState(false);
   const [showRevokeModal, setShowRevokeModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
+  const [activeNav, setActiveNav] = useState("초대");
 
   // 백엔드에서 유저의 link를 가져오는 메소드
   const fetchLinks = async () => {
@@ -152,8 +155,16 @@ function Invite() {
     return date.toLocaleString("ko-KR", options);
   };
 
+  const handleNavClick = (item) => {
+    setActiveNav(item);
+    // 필요한 경우 네비게이션 항목 클릭 시 추가 동작 구현 가능
+  };
+  
   return (
     <div className="container">
+      <Header />
+      <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
+      
       <header className="header">
         <button className="back-button">
           <img src={BackIcon} alt="뒤로가기 아이콘" className="back-icon" onClick={() => window.history.back()} />
