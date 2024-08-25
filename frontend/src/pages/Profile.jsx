@@ -250,11 +250,11 @@ function Profile() {
               keywords: tags,
           };
   
-          // introduction이 빈 값이면 제외하지 않고 빈 문자열로 처리
+          // introduction이 빈 값일 경우 기본 메시지로 설정
           if (introduction !== null && introduction.trim() !== "") {
               updatedData.introduction = introduction;
           } else {
-              updatedData.introduction = ""; // 빈 문자열로 설정
+              updatedData.introduction = "소개 글을 작성해보세요."; // 기본 메시지 설정
           }
   
           const response = await api.put("/api/profile/update/", updatedData);
