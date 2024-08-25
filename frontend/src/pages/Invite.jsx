@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Invite.css";
 import BackIcon from "../assets/backIcon.svg";
@@ -8,6 +9,7 @@ import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 
 function Invite() {
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [links, setLinks] = useState([]);
   const [linkToRemove, setLinkToRemove] = useState(null);
