@@ -124,13 +124,6 @@ class DeleteUserView(generics.DestroyAPIView):
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
 
-# class CurrentProfileView(generics.RetrieveAPIView):
-#     serializer_class = ProfileCreateSerializer
-#     permission_classes = [IsAuthenticated]
-
-#     def get_object(self):
-#         return Profile.objects.get(user=self.request.user)
-
 class CurrentProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileCreateSerializer
     permission_classes = [IsAuthenticated]
@@ -218,7 +211,12 @@ class InvitationLinkList(generics.ListAPIView):
 
     def get_queryset(self):
         user = self.request.user
-        return InvitationLink.objects.filter(inviter=user)
+        invitee_id = self.request.query_params.get('invitee_id', None)
+        
+        if invitee_id: # 로그인한 사용자가 초대한 특정 사용자의 초대 정보를 반환
+            return InvitationLink.objects.filter(inviter=user, invitee_id=invitee_id)
+        else: # 로그인한 사용자의 모든 초대링크 리스트를 반환
+            return InvitationLink.objects.filter(inviter=user)
 
 
 class CreateInvitationLinkView(generics.CreateAPIView):
