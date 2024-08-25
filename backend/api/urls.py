@@ -77,6 +77,11 @@ urlpatterns += [
         views.NotificationDeleteView.as_view(),
         name="notification-delete",
     ),
+    path(
+        "notifications-unread-count/",
+        views.UnreadNotificationCountView.as_view(),
+        name="notification-unread-count",
+    ),
 ]
 
 # User Similarity
