@@ -17,6 +17,7 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import Notification from './pages/Notification';
 import Setting from './pages/Setting';
+import Header from './components/Header';
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -41,8 +42,15 @@ function ProtectedRegisterRoute({ children }) {
 }
 
 function App() {
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
+
+  const updateUnreadCount = (newCount) => {
+    setUnreadNotifications(newCount);
+  };
+  
   return (
     <BrowserRouter>
+      <Header unreadNotifications={unreadNotifications} />
       <Routes>
         <Route
           path="/"
@@ -138,7 +146,7 @@ function App() {
           path="/notification"
           element={
             <ProtectedRoute>
-              <Notification />
+              <Notification updateUnreadCount={updateUnreadCount} />
             </ProtectedRoute>
           }
         />
