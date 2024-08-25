@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../styles/Setting.css';
 import api from "../api";
+import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 
 const Setting = () => {
   const navigate = useNavigate();
   const [newPassword, setNewPassword] = useState("");
+  const [activeNav, setActiveNav] = useState("설정");
 
   const handleChangePassword = async () => {
     try {
@@ -45,8 +48,28 @@ const Setting = () => {
     }
   };
 
+  const handleNavClick = (item) => {
+    setActiveNav(item);
+    switch (item) {
+      case '초대':
+        navigate("/invite");
+        break;
+      case '1촌':
+        navigate("/friends");
+        break;
+      case '홈':
+        navigate("/");
+        break;
+      default:
+        break;
+    }
+  };
+  
   return (
     <div className="setting-container">
+      <Header />
+      <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
+      
       <h2>Change Password</h2>
       <input
         type="password"
