@@ -14,6 +14,7 @@ from .serializers import (
     SearchSerializer,
     NotificationSerializer,
     MyTokenObtainPairSerializer,
+    RelatedUserSerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -544,3 +545,15 @@ class CheckEmailExistsView(generics.GenericAPIView):
             return Response({"message": "이미 사용중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
         
         return Response({"message": "사용 가능한 이메일입니다."}, status=status.HTTP_200_OK)
+
+class KeywordBasedUserSimilarityView(generics.GenericAPIView):
+    serializer_class = RelatedUserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        related_users_data = user.get_related_users_by_keywords()  # 유사한 사용자 목록을 가져옴
+
+        # 데이터를 직렬화합니다.
+        serializer = self.get_serializer(related_users_data, many=True)
+        return Response(serializer.data)
