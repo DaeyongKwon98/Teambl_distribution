@@ -24,6 +24,7 @@ const Header = () => {
     try {
       const response = await api.get("/api/notifications-unread-count/"); // 백엔드 API 호출
       setUnreadNotifications(response.data.unread_count); // 읽지 않은 알림 개수 상태 업데이트
+      console.log("Unread notificatoin count", response.data.unread_count);
     } catch (error) {
       console.error("Failed to fetch unread notifications", error);
     }
