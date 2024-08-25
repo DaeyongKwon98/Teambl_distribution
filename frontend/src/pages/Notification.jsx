@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Notification.css";
 
-const Notification = () => {
+const Notification = ({ updateUnreadCount }) => {
   const navigate = useNavigate();
   
   const [notifications, setNotifications] = useState([]);
@@ -60,6 +60,11 @@ const Notification = () => {
         setEditMessage("");
         setSelectedNotification(null);
       }
+      
+      // 읽음 상태가 업데이트된 후 읽지 않은 알림 개수를 다시 계산하여 부모에게 전달
+      const unreadCount = notifications.filter(notification => !notification.is_read).length - 1;
+      updateUnreadCount(unreadCount);
+      
     } catch (error) {
       console.error("Failed to update notification", error);
     }
