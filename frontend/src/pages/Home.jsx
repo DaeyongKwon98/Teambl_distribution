@@ -255,16 +255,6 @@ function Home() {
       )}
       
       <h1>Home Page</h1>
-      <p>1촌 친구 수: {firstDegreeCount}</p>
-      <p>2촌 친구 수: {secondDegreeCount}</p>
-      <h2>2촌 리스트</h2>
-      <ul>
-        {secondDegreeConnections.map((connection) => (
-          <li key={connection.secondDegreeId}>
-            2촌 ID: {connection.secondDegreeId} - 1촌 ID: {connection.firstDegreeId}
-          </li>
-        ))}
-      </ul>
       <button onClick={goToProjects} className="button1">
         프로젝트
       </button>
