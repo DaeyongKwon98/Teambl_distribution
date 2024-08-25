@@ -24,7 +24,7 @@ function Profile() {
   const [one_degree_count, setOneDegreeCount] = useState("");
 
   const [image, setImage] = useState(profileImg);
-  const [tags, setTags] = useState(["Java", "Python"]);
+  const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState("");
   const [tagFull, setTagFull] = useState(false);
 
