@@ -41,7 +41,7 @@ function Home() {
   const fetchFriendCounts = async () => {
     try {
       const response = await api.get("/api/current-user/");
-      console.log("API Response:", response.data);
+      // console.log("API Response:", response.data);
       setFirstDegreeCount(response.data.first_degree_count);
       setSecondDegreeCount(response.data.second_degree_count);
       setSecondDegreeConnections(response.data.second_degree_connections);
@@ -57,8 +57,8 @@ function Home() {
     
   const fetchSecondDegreeDetails = async (connections) => {
       try {
-          console.log("fetchSecondDegreeDetails called");
-          console.log("secondDegreeConnections:", connections);
+          // console.log("fetchSecondDegreeDetails called");
+          // console.log("secondDegreeConnections:", connections);
   
           if (connections.length === 0) {
               console.log("No second-degree connections found.");
@@ -71,11 +71,11 @@ function Home() {
                       const secondDegreeId = connection[0]; // 2촌 ID
                       const firstDegreeId = connection[1];  // 1촌 ID
   
-                      console.log(`Fetching profile for second degree ID: ${secondDegreeId}`);
+                      // console.log(`Fetching profile for second degree ID: ${secondDegreeId}`);
                       const userResponse = await api.get(`/api/profile/${secondDegreeId}/`);
                       const userData = userResponse.data;
   
-                      console.log(`Fetching profile for first degree ID: ${firstDegreeId}`);
+                      // console.log(`Fetching profile for first degree ID: ${firstDegreeId}`);
                       const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
                       const firstDegreeName = firstDegreeResponse.data.user_name;
   
