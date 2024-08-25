@@ -61,8 +61,18 @@ const Notification = ({ updateUnreadCount }) => {
         setSelectedNotification(null);
       }
       
-      // 읽음 상태가 업데이트된 후 읽지 않은 알림 개수를 다시 계산하여 부모에게 전달
-      const unreadCount = notifications.filter(notification => !notification.is_read).length - 1;
+      // // 읽음 상태가 업데이트된 후 읽지 않은 알림 개수를 다시 계산하여 부모에게 전달
+      // const unreadCount = notifications.filter(notification => !notification.is_read).length - 1;
+
+      // 알림을 읽음으로 표시한 이후, 직접 읽지 않은 알림 개수를 다시 계산하여 부모에게 전달
+      const unreadCount = notifications.reduce((count, notification) => {
+        if (notification.id === id) {
+          // 방금 읽은 알림은 읽음 처리로 가정
+          return count;
+        }
+        return count + (notification.is_read ? 0 : 1);
+      }, 0);
+      
       updateUnreadCount(unreadCount);
       
     } catch (error) {
