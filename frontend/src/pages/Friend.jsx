@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Friend.css";
 import api from "../api";
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
 
 function Friend() {
   const [friendList, setFriendList] = useState([]);
   const [friendEmail, setFriendEmail] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
+  const [activeNav, setActiveNav] = useState("1촌");
 
   const navigate = useNavigate();
 
@@ -42,7 +45,6 @@ function Friend() {
 
   const addFriend = (e) => {
     e.preventDefault();
-
     api
       .post("/api/friends/", {
         to_user_email: friendEmail,
@@ -87,11 +89,29 @@ function Friend() {
       .catch((error) => alert(error));
   };
 
+  const handleNavClick = (item) => {
+    setActiveNav(item);
+    switch (item) {
+      case '초대':
+        navigate("/invite");
+        break;
+      case '설정':
+        navigate("/setting");
+        break;
+      case '홈':
+        navigate("/");
+        break;
+      default:
+        break;
+    }
+  };
+  
   return (
     <div className="friend-container">
-      <h1>This is friends page.</h1>
-      {/* <button onClick={goToInvitePage}>Go to Invite Page</button> */}
-
+      <Header />
+      <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
+      
+      <h1>일촌 페이지.</h1>
       <input
         type="text"
         id="email"
