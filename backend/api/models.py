@@ -71,12 +71,29 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                     
         # 각 2촌 ID는 고유해야 하므로, 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
         second_degree_ids = set([conn[0] for conn in second_degree_connections])
-
-        print("First Degree IDs:", first_degree_ids)
-        print("Second Degree IDs:", second_degree_ids)
-        print("Second Degree Connections:", second_degree_connections)
         
         return first_degree_ids, second_degree_ids, second_degree_connections
+
+    def get_related_users_by_keywords(self):
+        user_keywords = set(self.profile.keywords.values_list('keyword', flat=True))
+        related_profiles = Profile.objects.exclude(user=self)
+
+        user_similarity_list = []
+
+        for profile in related_profiles:
+            other_user_keywords = set(profile.keywords.values_list('keyword', flat=True))
+            common_keywords = user_keywords.intersection(other_user_keywords)
+            
+            if len(common_keywords) > 0:  # 공통 키워드가 있는 경우에만 리스트에 추가
+                user_similarity_list.append({
+                    "user": profile.user,
+                    "common_keywords": list(common_keywords),
+                    "similarity": len(common_keywords)  # 공통 키워드 수를 유사도로 사용
+                })
+        # 유사도(공통 키워드 수) 기준으로 정렬
+        user_similarity_list.sort(key=lambda x: x["similarity"], reverse=True)
+        
+        return user_similarity_list
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
