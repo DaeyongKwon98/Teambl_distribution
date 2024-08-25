@@ -115,7 +115,7 @@ const Notification = ({ updateUnreadCount }) => {
     navigate("/");
   };
 
-  const handleNotificationClick = (notification) => {
+  const handleNotificationClick = async (notification) => {
     console.log("Notification Clicked: ", notification); // 로그 추가
     
     // 알림을 읽음 상태로 업데이트
