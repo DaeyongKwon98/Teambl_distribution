@@ -214,7 +214,7 @@ class InvitationLinkList(generics.ListAPIView):
         if invitee_id: # invitee_id가 unique하므로, inviter 조건 없이 invitee_id로만 필터링
             queryset = InvitationLink.objects.filter(invitee_id=invitee_id)
         else:
-            queryset = InvitationLink.objects.filter(inviter=user)  # invitee_id가 없는 경우 로그인한 user가 초대한 링크들 반환
+            queryset = InvitationLink.objects.filter(inviter=self.request.user)  # invitee_id가 없는 경우 로그인한 user가 초대한 링크들 반환
             
         print(f"Fetching InvitationLinks for invitee_id: {invitee_id}")
         print(f"Queryset: {queryset}")
