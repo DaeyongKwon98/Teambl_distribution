@@ -144,13 +144,35 @@ function Home() {
 
   // 키워드와 연관된 사용자들을 가져오는 함수
   const fetchKeywordFriends = async () => {
-    try {
-      const response = await api.get("/api/user-similarity/");
-      console.log("Keyword Friends Response:", response.data);
-      setKeywordFriends(response.data); // 받아온 데이터를 keywordFriends 상태에 저장
-    } catch (error) {
-      console.error("Failed to fetch keyword friends", error);
-    }
+      try {
+          const response = await api.get("/api/user-similarity/");
+          console.log("Keyword Friends Response:", response.data);
+  
+          // 각 사용자에 대해 프로필 정보를 추가로 가져오기
+          const processedKeywordFriends = await Promise.all(
+              response.data.map(async (friendData) => {
+                  try {
+                      const profileResponse = await api.get(`/api/profile/${friendData.user.id}/`);
+                      const userData = profileResponse.data;
+  
+                      return {
+                          ...userData, // userData의 모든 필드를 포함
+                          common_keywords: friendData.common_keywords, // 공통 키워드
+                          similarity: friendData.similarity, // 유사도
+                      };
+                  } catch (error) {
+                      console.error(`Failed to fetch profile for user ID ${friendData.user.id}`, error);
+                      return null; // 프로필 정보를 가져오는 데 실패한 경우
+                  }
+              })
+          );
+  
+          // 유효한 프로필 정보만 상태에 저장
+          const validKeywordFriends = processedKeywordFriends.filter(friend => friend !== null);
+          setKeywordFriends(validKeywordFriends);
+      } catch (error) {
+          console.error("Failed to fetch keyword friends", error);
+      }
   };
   
   useEffect(() => {
