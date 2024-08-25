@@ -95,7 +95,13 @@ function Home() {
     
 const fetchSecondDegreeDetails = async () => {
     console.log('fetchSecondDegreeDetails called');
+    console.log('secondDegreeConnections:', secondDegreeConnections);
     try {
+        if (secondDegreeConnections.length === 0) {
+            console.warn('No second-degree connections found.');
+            return;
+        }
+      
         // 2촌의 프로필 정보를 가져오기 위한 요청
         const secondDegreeDetails = await Promise.all(
             secondDegreeConnections.map(async (connection, index) => {
