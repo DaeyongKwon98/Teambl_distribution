@@ -60,13 +60,7 @@ function Home() {
   
                   if (validInvitations.length > 0) {
                       const connectionDetails = await Promise.all(
-                          validInvitations.map(async (invitation) => {
-                              // Check if secondDegreeId and invitee_id are the same and skip if true
-                              if (secondDegreeId === invitation.invitee_id) {
-                                  console.warn(`Skipping connection where secondDegreeId and invitee_id are the same: ${secondDegreeId}`);
-                                  return null; // Return null for invalid connections
-                              }
-  
+                          validInvitations.map(async (invitation) => { 
                               const inviterProfileResponse = await api.get(`/api/profile/${invitation.invitee_id}/`);
                               const inviterName = inviterProfileResponse.data.user_name;
                               return {
@@ -76,7 +70,7 @@ function Home() {
                               };
                           })
                       );
-                      return connectionDetails.filter(conn => conn !== null); // Filter out null values
+                      return connectionDetails;
                   } else {
                       return [{
                           secondDegreeId,
