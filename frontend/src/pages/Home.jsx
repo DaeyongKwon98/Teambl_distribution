@@ -51,54 +51,6 @@ function Home() {
       console.error("Failed to fetch friend counts", error);
     }
   };
-
-  // const fetchSecondDegreeFriends = async () => {
-  //     try {
-  //         const response = await api.get("/api/current-user/");
-  //         const secondDegreeIds = response.data.second_degree_ids;
-  //         console.log('response.data.second_degree_ids', secondDegreeIds);
-  
-  //         const secondDegreeConnections = await Promise.all(
-  //             secondDegreeIds.map(async (secondDegreeId) => {
-  //                 const invitationResponse = await api.get(`/api/invitation-links/?invitee_id=${secondDegreeId}`);
-  //                 console.log(`Invitation Response for ID ${secondDegreeId}:`, invitationResponse.data);
-  
-  //                 // Filter out entries where invitee_id is null
-  //                 const validInvitations = invitationResponse.data.filter(invitation => invitation.invitee_id !== null);
-  
-  //                 if (validInvitations.length > 0) {
-  //                     const connectionDetails = await Promise.all(
-  //                         validInvitations.map(async (invitation) => { 
-  //                             const inviterProfileResponse = await api.get(`/api/profile/${invitation.inviter}/`);
-  //                             const inviterName = inviterProfileResponse.data.user_name;
-  //                             return {
-  //                                 secondDegreeId,
-  //                                 firstDegreeId: invitation.inviter,
-  //                                 firstDegreeName: inviterName
-  //                             };
-  //                         })
-  //                     );
-  //                     return connectionDetails;
-  //                 } else {
-  //                     return [{
-  //                         secondDegreeId,
-  //                         firstDegreeId: null,
-  //                         firstDegreeName: 'Unknown'
-  //                     }];
-  //                 }
-  //             })
-  //         );
-  
-  //         // Flatten the array since Promise.all will return an array of arrays
-  //         const flattenedConnections = secondDegreeConnections.flat().filter(conn => conn !== null);
-  //         console.log('Second Degree Connections:', flattenedConnections);
-  //         setSecondDegreeConnections(flattenedConnections);  // 상태 업데이트
-  //         return flattenedConnections;  // 결과 반환
-  //     } catch (error) {
-  //         console.error("Failed to fetch second degree friends", error);
-  //         return [];
-  //     }
-  // };
     
   const fetchSecondDegreeDetails = async (connections) => {
       try {
@@ -157,7 +109,7 @@ function Home() {
   
                       return {
                           ...userData, // userData의 모든 필드를 포함
-                          common_keywords: friendData.common_keywords, // 공통 키워드
+                          sametag: friendData.common_keywords[0] || '', // 공통 키워드 중 첫 번째를 sametag로 사용 (추후 수정 필요)
                           similarity: friendData.similarity, // 유사도
                       };
                   } catch (error) {
