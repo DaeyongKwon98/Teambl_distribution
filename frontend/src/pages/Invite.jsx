@@ -157,7 +157,19 @@ function Invite() {
 
   const handleNavClick = (item) => {
     setActiveNav(item);
-    // 필요한 경우 네비게이션 항목 클릭 시 추가 동작 구현 가능
+    switch (item) {
+      case '초대':
+        navigate("/invite");
+        break;
+      case '1촌':
+        navigate("/friends");
+        break;
+      case '홈':
+        navigate("/");
+        break;
+      default:
+        break;
+    }
   };
   
   return (
