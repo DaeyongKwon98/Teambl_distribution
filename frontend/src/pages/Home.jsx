@@ -8,6 +8,8 @@ import NotiIconActive from "../assets/notiIconActive.svg";
 import TeamblIcon from "../assets/teamblIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import FriendCard from '../components/FriendCard';
+import Header from '../components/Header';
+import Navbar from '../components/Navbar';
 
 function Home() {
   const navigate = useNavigate();
@@ -136,11 +138,6 @@ function Home() {
     fetchData();
   }, []);
 
-  // const keywordFriends = [
-  //   { id: 1, user_name: '최미나', school: 'KAIST', current_academic_degree: '학사', year: '22학번', major: '산업디자인학과', sametag: '축구', profilePic: 'https://via.placeholder.com/70' },
-  //   { id: 2, user_name: '강승현', school: 'KAIST', current_academic_degree: '석사', year: '24학번', major: '산업시스템공학과', sametag: '파이썬', profilePic: 'https://via.placeholder.com/70' },
-  // ];
-
   const openBottomSheet = (friends) => {
     setBottomSheetFriends(friends);
     setIsBottomSheetOpen(true);
@@ -163,49 +160,8 @@ function Home() {
 
   return (
     <div className="home-container">
-      <header className="home-header">
-        <div className="home-search">
-          <img
-            src={GoSearchIcon}
-            alt="검색화면이동"
-            className="home-gosearch-icon"
-            onClick={goToSearch}
-          />
-        </div>
-        <div className="home-logo">
-          <img
-            src={TeamblIcon}
-            alt="팀블로고"
-            className="home-teambl-icon"
-          />
-        </div>
-        <div className="home-profile-and-notifications">
-          <img
-            src={unreadNotifications > 0 ? NotiIconActive : NotiIcon}
-            alt="알림"
-            className="home-noti-icon"
-            onClick={goToNotification}
-          />
-          <img
-            src={'https://via.placeholder.com/50'}
-            alt="내 프로필"
-            className="home-profile-icon"
-            onClick={goToProfile}
-          />
-        </div>
-      </header>
-
-      <nav className="home-navbar">
-        {['홈', '1촌', '초대', '설정'].map((item) => (
-          <span
-            key={item}
-            className={`home-nav-item ${activeNav === item ? 'home-active' : ''}`}
-            onClick={() => handleNavClick(item)}
-          >
-            {item}
-          </span>
-        ))}
-      </nav>
+      <Header />
+      <Navbar activeNav={activeNav} setActiveNav={setActiveNav} />
 
       <section className="home-friend-recommendation">
         <div className="home-section-header">
