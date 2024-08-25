@@ -180,6 +180,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     second_degree_count = serializers.SerializerMethodField()
     second_degree_ids = serializers.SerializerMethodField()
     second_degree_connections = serializers.SerializerMethodField()
+    related_users = serializers.SerializerMethodField()
     
     class Meta:
         model = CustomUser
@@ -198,6 +199,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "second_degree_count",
             "second_degree_ids",
             "second_degree_connections",
+            "related_users",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -249,6 +251,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         _, _, second_degree_connections = obj.get_friend_counts()
         return second_degree_connections
 
+    def get_related_users(self, obj):
+        related_users_data = obj.get_related_users_by_keywords()
+        serializer = RelatedUserSerializer(related_users_data, many=True)
+        return serializer.data
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
@@ -362,3 +368,13 @@ class NotificationSerializer(serializers.ModelSerializer):
         if value not in dict(Notification.NOTIFICATION_TYPE_CHOICES).keys():
             raise serializers.ValidationError("Invalid notification type")
         return value
+
+# 사용자와 공통 키워드를 반환
+class RelatedUserSerializer(serializers.ModelSerializer):
+    common_keywords = serializers.ListField(child=serializers.CharField())
+    similarity = serializers.IntegerField()
+
+    class Meta:
+        model = CustomUser
+        fields = ['id', 'email', 'profile', 'common_keywords', 'similarity']
+        depth = 1
