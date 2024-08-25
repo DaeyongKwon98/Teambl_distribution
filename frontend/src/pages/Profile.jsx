@@ -78,7 +78,7 @@ function Profile() {
 
   const fetchProfile = async () => {
     try {
-      const response = await api.get(/api/profile/${userId}/); // userId에 해당하는 프로필 가져오기
+      const response = await api.get(`/api/profile/${userId}/`); // userId에 해당하는 프로필 가져오기
       console.log(response.data); 
       const currentUserResponse = await api.get("/api/current-user/");
       const currentUserId = currentUserResponse.data.id;
@@ -252,7 +252,7 @@ function Profile() {
       });
       const newUser = response.data;
       console.log("Profile update successfully:", newUser);
-      navigate(/profile/${userId});
+      navigate(`/profile/${userId}`);
     } catch (error) {
       alert("프로필 업데이트 실패");
       console.error("Registration error:", error);
@@ -289,7 +289,7 @@ function Profile() {
             <pre>{major}</pre>
             <div className="profile-friend">
               <img src={friendIcon} alt="friend-icon" />
-              <span className="profile-oneDegree">{1촌 ${one_degree_count}명}</span>
+              <span className="profile-oneDegree">{`1촌 ${one_degree_count}명`}</span>
             </div>
           </div>
         </div>
