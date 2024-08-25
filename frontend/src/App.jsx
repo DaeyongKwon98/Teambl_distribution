@@ -17,7 +17,6 @@ import Profile from './pages/Profile';
 import EditProfile from './pages/EditProfile';
 import Notification from './pages/Notification';
 import Setting from './pages/Setting';
-import Header from './components/Header';
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -50,7 +49,6 @@ function App() {
   
   return (
     <BrowserRouter>
-      <Header unreadNotifications={unreadNotifications} />
       <Routes>
         <Route
           path="/"
