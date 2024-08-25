@@ -113,7 +113,6 @@ function Home() {
       } catch (error) {
         console.error("Failed to fetch second degree details", error);
       }
-    };
   };
   
   useEffect(() => {
