@@ -209,7 +209,7 @@ function Home() {
       <section className="home-friend-recommendation">
         <div className="home-section-header">
           <h2>이번주 새로운 2촌</h2>
-          <span className="home-view-all" onClick={() => openBottomSheet(SecondDegreeDetails)}>모두 보기</span>
+          <span className="home-view-all" onClick={() => openBottomSheet(secondDegreeDetails)}>모두 보기</span>
         </div>
         <div className="home-sub-header">
           <span className='home-sub-header-text'>2촌이 </span>
