@@ -39,115 +39,90 @@ function Home() {
       const response = await api.get("/api/current-user/");
       setFirstDegreeCount(response.data.first_degree_count);
       setSecondDegreeCount(response.data.second_degree_count);
+      setSecondDegreeConnections(response.data.second_degree_connections);
     } catch (error) {
       console.error("Failed to fetch friend counts", error);
     }
   };
 
-  const fetchSecondDegreeFriends = async () => {
-      try {
-          const response = await api.get("/api/current-user/");
-          const secondDegreeIds = response.data.second_degree_ids;
-          console.log('response.data.second_degree_ids', secondDegreeIds);
+  // const fetchSecondDegreeFriends = async () => {
+  //     try {
+  //         const response = await api.get("/api/current-user/");
+  //         const secondDegreeIds = response.data.second_degree_ids;
+  //         console.log('response.data.second_degree_ids', secondDegreeIds);
   
-          const secondDegreeConnections = await Promise.all(
-              secondDegreeIds.map(async (secondDegreeId) => {
-                  const invitationResponse = await api.get(`/api/invitation-links/?invitee_id=${secondDegreeId}`);
-                  console.log(`Invitation Response for ID ${secondDegreeId}:`, invitationResponse.data);
+  //         const secondDegreeConnections = await Promise.all(
+  //             secondDegreeIds.map(async (secondDegreeId) => {
+  //                 const invitationResponse = await api.get(`/api/invitation-links/?invitee_id=${secondDegreeId}`);
+  //                 console.log(`Invitation Response for ID ${secondDegreeId}:`, invitationResponse.data);
   
-                  // Filter out entries where invitee_id is null
-                  const validInvitations = invitationResponse.data.filter(invitation => invitation.invitee_id !== null);
+  //                 // Filter out entries where invitee_id is null
+  //                 const validInvitations = invitationResponse.data.filter(invitation => invitation.invitee_id !== null);
   
-                  if (validInvitations.length > 0) {
-                      const connectionDetails = await Promise.all(
-                          validInvitations.map(async (invitation) => { 
-                              const inviterProfileResponse = await api.get(`/api/profile/${invitation.inviter}/`);
-                              const inviterName = inviterProfileResponse.data.user_name;
-                              return {
-                                  secondDegreeId,
-                                  firstDegreeId: invitation.inviter,
-                                  firstDegreeName: inviterName
-                              };
-                          })
-                      );
-                      return connectionDetails;
-                  } else {
-                      return [{
-                          secondDegreeId,
-                          firstDegreeId: null,
-                          firstDegreeName: 'Unknown'
-                      }];
-                  }
-              })
-          );
+  //                 if (validInvitations.length > 0) {
+  //                     const connectionDetails = await Promise.all(
+  //                         validInvitations.map(async (invitation) => { 
+  //                             const inviterProfileResponse = await api.get(`/api/profile/${invitation.inviter}/`);
+  //                             const inviterName = inviterProfileResponse.data.user_name;
+  //                             return {
+  //                                 secondDegreeId,
+  //                                 firstDegreeId: invitation.inviter,
+  //                                 firstDegreeName: inviterName
+  //                             };
+  //                         })
+  //                     );
+  //                     return connectionDetails;
+  //                 } else {
+  //                     return [{
+  //                         secondDegreeId,
+  //                         firstDegreeId: null,
+  //                         firstDegreeName: 'Unknown'
+  //                     }];
+  //                 }
+  //             })
+  //         );
   
-          // Flatten the array since Promise.all will return an array of arrays
-          const flattenedConnections = secondDegreeConnections.flat().filter(conn => conn !== null);
-          console.log('Second Degree Connections:', flattenedConnections);
-          setSecondDegreeConnections(flattenedConnections);  // 상태 업데이트
-          return flattenedConnections;  // 결과 반환
-      } catch (error) {
-          console.error("Failed to fetch second degree friends", error);
-          return [];
-      }
-  };
+  //         // Flatten the array since Promise.all will return an array of arrays
+  //         const flattenedConnections = secondDegreeConnections.flat().filter(conn => conn !== null);
+  //         console.log('Second Degree Connections:', flattenedConnections);
+  //         setSecondDegreeConnections(flattenedConnections);  // 상태 업데이트
+  //         return flattenedConnections;  // 결과 반환
+  //     } catch (error) {
+  //         console.error("Failed to fetch second degree friends", error);
+  //         return [];
+  //     }
+  // };
     
-  const fetchSecondDegreeDetails = async (connections) => {
+  const fetchSecondDegreeDetails = async () => {
       try {
-          const response = await api.get("/api/current-user/");
-          const secondDegreeIds = response.data.second_degree_ids;
+        // 2촌의 프로필 정보를 가져오기 위한 요청
+        const secondDegreeDetails = await Promise.all(
+          secondDegreeConnections.map(async (connection) => {
+            const userResponse = await api.get(`/api/profile/${connection[0]}/`);  // 2촌의 프로필 가져오기
+            const userData = userResponse.data;
+            const firstDegreeResponse = await api.get(`/api/profile/${connection[1]}/`);  // 1촌의 프로필 가져오기
+            const firstDegreeName = firstDegreeResponse.data.user_name;
   
-          const secondDegreeDetails = await Promise.all(
-              secondDegreeIds.map(async (id) => {
-                  const userResponse = await api.get(`/api/profile/${id}/`);
-                  const userData = userResponse.data;
-                  return {
-                      ...userData,
-                      id: id  // id 필드를 명시적으로 추가
-                  };
-              })
-          );
-  
-          // Null이나 undefined 값을 가지는 connection을 제거
-          const validConnections = connections.filter(conn => conn !== null);
-  
-          const detailedSecondDegreeFriends = secondDegreeDetails.map(friend => {
-              const connection = validConnections.find(conn => conn?.secondDegreeId === friend.id);
-  
-              if (connection) {
-                  return {
-                      ...friend,
-                      friendOf: connection.firstDegreeName || 'Unknown'  // Use the name if available, otherwise 'Unknown'
-                  };
-              } else {
-                  return {
-                      ...friend,
-                      friendOf: 'Unknown'
-                  };
-              }
-          });
-  
-          setSecondDegreeDetails(detailedSecondDegreeFriends);
+            return {
+              ...userData,
+              friendOf: firstDegreeName  // 1촌의 이름을 포함
+            };
+          })
+        );
+        setSecondDegreeDetails(secondDegreeDetails);
       } catch (error) {
-          console.error("Failed to fetch second degree details", error);
+        console.error("Failed to fetch second degree details", error);
       }
+    };
   };
   
   useEffect(() => {
     const fetchData = async () => {
       await fetchFriendCounts();
-      const connections = await fetchSecondDegreeFriends();  // 결과를 받아옴
-      await fetchSecondDegreeDetails(connections);  // connections을 전달
+      await fetchSecondDegreeDetails();
     };
     fetchData();
   }, []);
-  
-  // const friendOfFriends = [
-  //   { id: 1, user_name: '최지수', school: 'KAIST', current_academic_degree: '석사', year: '23학번', major: '산업디자인학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-  //   { id: 2, user_name: '김종현', school: 'KAIST', current_academic_degree: '학사', year: '19학번', major: '기계공학과', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-  //   { id: 3, user_name: '권대용', school: 'KAIST', current_academic_degree: '석사', year: '20학번', major: '전산학부', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-  //   { id: 4, user_name: '성대규', school: 'KAIST', current_academic_degree: '학사', year: '21학번', major: '전기및전자공학부', friendOf: '이규원', profilePic: 'https://via.placeholder.com/70' },
-  // ];
 
   const keywordFriends = [
     { id: 1, user_name: '최미나', school: 'KAIST', current_academic_degree: '학사', year: '22학번', major: '산업디자인학과', sametag: '축구', profilePic: 'https://via.placeholder.com/70' },
