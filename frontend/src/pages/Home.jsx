@@ -93,27 +93,39 @@ function Home() {
   //     }
   // };
     
-  const fetchSecondDegreeDetails = async () => {
-      try {
+const fetchSecondDegreeDetails = async () => {
+    try {
         // 2촌의 프로필 정보를 가져오기 위한 요청
         const secondDegreeDetails = await Promise.all(
-          secondDegreeConnections.map(async (connection) => {
-            const userResponse = await api.get(`/api/profile/${connection[0]}/`);  // 2촌의 프로필 가져오기
-            const userData = userResponse.data;
-            const firstDegreeResponse = await api.get(`/api/profile/${connection[1]}/`);  // 1촌의 프로필 가져오기
-            const firstDegreeName = firstDegreeResponse.data.user_name;
-  
-            return {
-              ...userData,
-              friendOf: firstDegreeName  // 1촌의 이름을 포함
-            };
-          })
+            secondDegreeConnections.map(async (connection, index) => {
+                try {
+                    const secondDegreeId = connection[0]; // 2촌 ID
+                    const firstDegreeId = connection[1];  // 1촌 ID
+
+                    console.log(`Fetching profile for second degree ID: ${secondDegreeId}`);
+                    const userResponse = await api.get(`/api/profile/${secondDegreeId}/`);  // 2촌의 프로필 가져오기
+                    const userData = userResponse.data;
+
+                    console.log(`Fetching profile for first degree ID: ${firstDegreeId}`);
+                    const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);  // 1촌의 프로필 가져오기
+                    const firstDegreeName = firstDegreeResponse.data.user_name;
+
+                    return {
+                        ...userData,
+                        friendOf: firstDegreeName  // 1촌의 이름을 포함
+                    };
+                } catch (innerError) {
+                    console.error(`Failed to fetch data for connection index ${index}:`, innerError);
+                    return null; // 실패한 경우 null 반환
+                }
+            })
         );
-        setSecondDegreeDetails(secondDegreeDetails);
-      } catch (error) {
+        const validDetails = secondDegreeDetails.filter(detail => detail !== null);
+        setSecondDegreeDetails(validDetails);
+    } catch (error) {
         console.error("Failed to fetch second degree details", error);
-      }
-  };
+    }
+};
   
   useEffect(() => {
     const fetchData = async () => {
