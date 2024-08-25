@@ -79,6 +79,11 @@ urlpatterns += [
     ),
 ]
 
+# User Similarity
+urlpatterns += [
+    path('user-similarity/', views.KeywordBasedUserSimilarityView.as_view(), name='user-similarity'),
+]
+
 # Others
 urlpatterns += [
     path("check-email/", views.CheckEmailExistsView.as_view(), name="check-email"),
