@@ -235,31 +235,39 @@ function Profile() {
   };
 
   const handleSave = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await api.put("/api/profile/update/", {
-        user_name,
-        school,
-        current_academic_degree,
-        year,
-        major,
-        one_degree_count: one_degree_count,
-        introduction: introduction,
-        experiences,
-        tools,
-        portfolio_links: portfolios,
-        keywords: tags,
-      });
-      const newUser = response.data;
-      console.log("Profile update successfully:", newUser);
-      navigate(`/profile/${userId}`);
-    } catch (error) {
-      alert("프로필 업데이트 실패");
-      console.error("Registration error:", error);
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
+      e.preventDefault();
+      try {
+          const updatedData = {
+              user_name,
+              school,
+              current_academic_degree,
+              year,
+              major,
+              one_degree_count,
+              experiences,
+              tools,
+              portfolio_links: portfolios,
+              keywords: tags,
+          };
+  
+          // introduction이 빈 값이면 제외하지 않고 빈 문자열로 처리
+          if (introduction !== null && introduction.trim() !== "") {
+              updatedData.introduction = introduction;
+          } else {
+              updatedData.introduction = ""; // 빈 문자열로 설정
+          }
+  
+          const response = await api.put("/api/profile/update/", updatedData);
+          const newUser = response.data;
+          console.log("Profile update successfully:", newUser);
+          navigate(`/profile/${userId}`);
+      } catch (error) {
+          alert("프로필 업데이트 실패");
+          console.error("Registration error:", error);
+          if (error.response) {
+              console.error("Error response data:", error.response.data);
+          }
       }
-    }
   };
 
   return (
