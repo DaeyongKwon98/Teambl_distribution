@@ -204,24 +204,18 @@ class SendCodeView(View):
 
         return JsonResponse({"message": "Verification code sent"}, status=200)
 
-
-class InvitationLinkList(generics.ListAPIView):
-    serializer_class = InvitationLinkSerializer
-    permission_classes = [IsAuthenticated]
-
-    def get_queryset(self):
-        user = self.request.user
-        invitee_id = self.request.query_params.get('invitee_id', None)
-        print(f"Fetching InvitationLinks for inviter: {user}, invitee_id: {invitee_id}")  # Debugging log 추가
-
-        if invitee_id:
-            queryset = InvitationLink.objects.filter(inviter=user, invitee_id=invitee_id)
-        else:
-            queryset = InvitationLink.objects.filter(inviter=user)
+def get_queryset(self):
+    invitee_id = self.request.query_params.get('invitee_id', None)
+    
+    if invitee_id: # invitee_id가 unique하므로, inviter 조건 없이 invitee_id로만 필터링
+        queryset = InvitationLink.objects.filter(invitee_id=invitee_id)
+    else:
+        queryset = InvitationLink.objects.none()  # invitee_id가 없는 경우 빈 Queryset 반환
         
-        print(f"Queryset: {queryset}")  # 반환된 Queryset을 로그로 확인
-        return queryset
+    print(f"Fetching InvitationLinks for invitee_id: {invitee_id}")
+    print(f"Queryset: {queryset}")
 
+    return queryset
 
 class CreateInvitationLinkView(generics.CreateAPIView):
     serializer_class = InvitationLinkSerializer
