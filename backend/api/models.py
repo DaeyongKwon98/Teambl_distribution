@@ -200,7 +200,7 @@ class Profile(models.Model):
     )  # 전공
     keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
     one_degree_count = models.IntegerField(default=0)  # 1촌 수
-    introduction = models.TextField(default="", max_length=1000)  # 소개
+    introduction = models.TextField(default="", blank=True, max_length=1000)  # 소개
 
     def __str__(self):
         return self.user_name
