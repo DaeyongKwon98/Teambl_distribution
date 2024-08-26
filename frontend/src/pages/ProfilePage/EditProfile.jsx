@@ -4,6 +4,7 @@ import "../../styles/ProfilePage/EditProfile.css";
 import CurrentAcademicDegreePopUp from "./CurrentAcademicDegreePopUp";
 import MajorPopUp from "../NewSearchPage/MajorPopUp";
 import api from "../../api";
+import backIcon from "../../assets/Profile/left-arrow.svg";
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -59,7 +60,9 @@ function EditProfile() {
   return (
     <div className="edit">
       <div className="edit-back">
-        <button type="button" onClick={handleBack}></button>
+        <button type="button" onClick={handleBack}>
+          <img src={backIcon}></img>
+        </button>
       </div>
       <h4>프로필 수정</h4>
       <div className="edit-container">
