@@ -1,0 +1,57 @@
+/* Popup 스타일 */
+.cad-popup-overlay {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 284.62px;
+  height: auto;
+  max-height: 80%;
+  background: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -3.85px 7.69px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 0px 27.4px 27.4px 27.4px;
+  z-index: 101;
+}
+
+.cad-popup-top {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.cad-popup-top img {
+  margin: 16px 0px 17px;
+}
+
+.cad-popup-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.cad-popup-discription {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.cad-popup-discription h3 {
+  font-size: 15.428px;
+  font-weight: 500;
+  margin: 0px;
+}
+
+.cad-popup-discription p {
+  font-size: 10.28px;
+  margin: 0px;
+}
+
+.cad-popup-radio-container {
+}

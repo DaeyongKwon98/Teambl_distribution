@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Certify from './pages/Certify';
-import End from './pages/End';
+import Certify from "./pages/Certify";
+import End from "./pages/End";
 import Project from "./pages/Project";
 import NotFound from "./pages/NotFound";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -13,10 +13,10 @@ import Invite from "./pages/Invite";
 import Search from "./pages/Search";
 import Welcome from "./pages/Welcome";
 import NewSearch from "./pages/NewSearchPage/NewSearch";
-import Profile from './pages/Profile';
-import EditProfile from './pages/EditProfile';
-import Notification from './pages/Notification';
-import Setting from './pages/Setting';
+import ProfileRouter from "./pages/ProfilePage/ProfileRouter";
+import EditProfile from "./pages/EditProfile";
+import Notification from "./pages/Notification";
+import Setting from "./pages/Setting";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -46,7 +46,7 @@ function App() {
   const updateUnreadCount = (newCount) => {
     setUnreadNotifications(newCount);
   };
-  
+
   return (
     <BrowserRouter>
       <Routes>
@@ -65,7 +65,7 @@ function App() {
           path="/welcome"
           element={
             // <ProtectedRegisterRoute>
-              <Welcome />
+            <Welcome />
             // </ProtectedRegisterRoute>
           }
         />
@@ -84,14 +84,15 @@ function App() {
               <Register />
             </ProtectedRegisterRoute>
           }
-        /><Route
-        path="/end"
-        element={
-          <ProtectedRegisterRoute>
-            <End />
-          </ProtectedRegisterRoute>
-        }
-      />
+        />
+        <Route
+          path="/end"
+          element={
+            <ProtectedRegisterRoute>
+              <End />
+            </ProtectedRegisterRoute>
+          }
+        />
         <Route
           path="/projects"
           element={
@@ -125,10 +126,10 @@ function App() {
           }
         />
         <Route
-          path="/profile/:userId"
+          path="/profile/:id"
           element={
             <ProtectedRoute>
-              <Profile />
+              <ProfileRouter />
             </ProtectedRoute>
           }
         />

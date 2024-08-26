@@ -1,0 +1,238 @@
+.profile {
+  /* border: 1px solid black; */
+  width: 300px;
+  margin: 0 auto;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-backbutton {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  background-color: transparent;
+  width: 20px;
+}
+
+.profile-backbutton:hover {
+  cursor: pointer;
+}
+
+.profile-backbutton img {
+  width: 20px;
+  height: 16px;
+}
+
+.profile h4 {
+  margin: 20px 0px 16px;
+}
+
+.profile-card {
+  width: 300px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+}
+
+.profile-imageContainer {
+  width: 90px;
+  height: 120px;
+  margin-right: 20px;
+  cursor: pointer;
+}
+
+.profile-imageContainer img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 7px;
+}
+
+.profile-name,
+.profile-friend {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+
+button.profile-editBtn {
+  padding: 0px;
+  margin-left: 5px;
+  width: 15px;
+  height: 15px;
+  background-image: url("../assets/Profile/pencil.png");
+  background-size: cover;
+  border: none;
+}
+button.profile-editBtn:hover {
+  cursor: pointer;
+}
+
+.profile-info h2 {
+  margin: 0;
+  font-size: 16px;
+  color: black;
+  display: inline-block;
+}
+
+.profile-row1 {
+  display: flex;
+  gap: 8px;
+  font-size: 13.714px;
+  margin-top: 12px;
+}
+
+.profile-row2 {
+  display: flex;
+  gap: 8px;
+  font-size: 13.714px;
+  margin-top: 8px;
+}
+
+.profile-row3 {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13.714px;
+  margin-top: 12px;
+}
+
+.profile-row1 p,
+.profile-row2 p,
+.profile-row3 p {
+  margin: 0px;
+}
+
+span.profile-oneDegree {
+  color: #0923a9;
+}
+
+.profile-friend img {
+  width: 20px;
+  height: 20px;
+  margin-right: 5px;
+}
+
+.profile-tags {
+  margin-top: 32px;
+}
+
+.profile-tags-title {
+  display: inline-block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+label.profile-tags-definition {
+  display: inline-block;
+  font-size: 12px;
+  margin: 0px 10px 5px;
+  color: hsl(0, 0%, 50%);
+}
+
+.profile-tag-container {
+  background-color: #f5f5f5;
+  width: 100%;
+  border-radius: 5px;
+  padding: 6px 8px;
+  box-sizing: border-box; /* 패딩이 포함된 전체 너비 계산 */
+}
+
+.profile-tags-list {
+  display: flex; /* 키워드를 가로로 정렬 */
+  flex-wrap: wrap; /* 줄 바꿈을 허용하여 박스들이 다음 줄로 내려가게 함 */
+  gap: 8px; /* 키워드 박스들 사이의 간격 설정 */
+}
+
+span.profile-tag {
+  background-color: #ffffff;
+  color: #121212;
+  padding: 4px 8px; /* 박스 내부 패딩 */
+  border-radius: 5px; /* 모서리를 둥글게 */
+  font-size: 13.714px; /* 텍스트 크기 */
+  display: flex; /* 내용물이 수평으로 중앙 정렬되도록 함 */
+  align-items: center; /* 내용물이 수직으로 중앙 정렬되도록 함 */
+}
+
+.profile-deleteBtn {
+  background-color: transparent;
+  color: #a8a8a8;
+  border: none;
+  cursor: pointer;
+}
+
+span.profile-addTag {
+  background-color: #ffffff;
+  color: #121212;
+  padding: 8px 12px; /* 박스 내부 패딩 */
+  border-radius: 5px; /* 모서리를 둥글게 */
+  font-size: 13.714px; /* 텍스트 크기 */
+  display: flex; /* 내용물이 수평으로 중앙 정렬되도록 함 */
+  align-items: center; /* 내용물이 수직으로 중앙 정렬되도록 함 */
+}
+
+.profile-tagInput {
+  display: flex;
+  align-items: center;
+}
+
+.profile-tagInput input {
+  margin: 5px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.profile-tagInput button {
+  margin: 5px;
+  padding: 5px;
+  border: none;
+  border-radius: 3px;
+  background-color: #3b5998;
+  color: white;
+  cursor: pointer;
+}
+
+.profile-tagInput button:last-child {
+  background-color: #f44336;
+}
+
+button.profile-submitBtn {
+  background-color: hsla(240, 100%, 35%);
+  height: 2rem;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 0.8rem;
+  margin-top: 20px;
+  padding: 10px;
+  flex-grow: 1;
+}
+button.profile-submitBtn:disabled {
+  background-color: hsla(0, 0%, 45%, 0.76);
+  height: 2rem;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 0.8rem;
+  margin-top: 20px;
+  padding: 10px;
+  flex-grow: 1;
+}
+
+button.profile-submitBtn:hover {
+  cursor: pointer;
+}
+button.profile-submitBtn:disabled:hover {
+  cursor: default;
+}
