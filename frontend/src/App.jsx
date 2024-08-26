@@ -14,7 +14,7 @@ import Search from "./pages/Search";
 import Welcome from "./pages/Welcome";
 import NewSearch from "./pages/NewSearchPage/NewSearch";
 import ProfileRouter from "./pages/ProfilePage/ProfileRouter";
-import EditProfile from "./pages/EditProfile";
+import EditProfile from "./pages/ProfilePage/EditProfile";
 import Notification from "./pages/Notification";
 import Setting from "./pages/Setting";
 
