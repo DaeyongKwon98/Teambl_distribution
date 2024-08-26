@@ -4,7 +4,6 @@ import { useDropzone } from "react-dropzone";
 import profileDefaultImg from "../../assets/Profile/defaultProfile.svg";
 import friendIcon from "../../assets/Profile/friend.svg";
 import backIcon from "../../assets/Profile/left-arrow.svg";
-import pencilIcon from "../../assets/Profile/pencilIcon.svg";
 import "../../styles/ProfilePage/ProfileSelf.css";
 import "../../styles/ExperienceList.css";
 import "../../styles/IntroductionForm.css";
@@ -36,8 +35,8 @@ function ProfileSelf() {
     }
   );
 
-  const [imagePreview, setImagePreview] = useState(profileDefaultImg);
   const [newImage, setNewImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(profileDefaultImg);
   const [newKeyword, setNewKeyword] = useState("");
   const [KeywordFull, setKeywordFull] = useState(false);
   const [newExperience, setNewExperience] = useState("");
@@ -57,8 +56,10 @@ function ProfileSelf() {
       setImagePreview(e.target.result);
     };
     reader.readAsDataURL(file);
-  };
 
+    // 저장 버튼 활성화
+    setIsSaveButtonActivate(true);
+  };
   useEffect(() => {
     if (receivedProfile) {
       // receivedProfile을 사용하여 초기 상태를 설정
@@ -282,10 +283,10 @@ function ProfileSelf() {
         "/api/profile/update/",
         profileDataWithoutImage
       ); // 이미지 이외 데이터 업로드
+      console.log("프로필 이미지 이외의 데이터 업로드 완료:", response1.data);
       const response2 = await api.put("/api/profile/update/", imageData); // 이미지 업로드
-      const updatedProfile = response2.data.profile;
-      console.log("Profile update successfully:", updatedProfile);
-      navigate("/profile");
+      const updatedProfile = response2.data;
+      console.log("프로필 이미지 데이터 업로드 완료:", updatedProfile);
     } catch (error) {
       alert("프로필 업데이트 실패");
       console.error("Registration error:", error);
@@ -297,7 +298,11 @@ function ProfileSelf() {
 
   return (
     <form onSubmit={handleSave} className="profile">
-      <button className="profile-backbutton" onClick={handleBackButton}>
+      <button
+        type="button"
+        className="profile-backbutton"
+        onClick={handleBackButton}
+      >
         <img src={backIcon}></img>
       </button>
       <h4>내 프로필</h4>
@@ -315,9 +320,11 @@ function ProfileSelf() {
           <div className="profile-info">
             <div className="profile-name">
               <h2>{profile.user_name}</h2>
-              <button className="profile-editBtn" onClick={handleEdit}>
-                <img src={pencilIcon}></img>
-              </button>
+              <button
+                type="button"
+                className="profile-editBtn"
+                onClick={handleEdit}
+              ></button>
             </div>
             <div className="profile-row1">
               <p> {profile.school}</p>
@@ -375,8 +382,12 @@ function ProfileSelf() {
                 value={newKeyword}
                 onChange={(e) => setNewKeyword(e.target.value)}
               />
-              <button onClick={handleAddKeyword}>추가</button>
-              <button onClick={handleCancelKeyword}>삭제</button>
+              <button type="button" onClick={handleAddKeyword}>
+                추가
+              </button>
+              <button type="button" onClick={handleCancelKeyword}>
+                삭제
+              </button>
             </div>
           )}
         </div>
@@ -389,6 +400,7 @@ function ProfileSelf() {
             <div key={index} className="ex-item">
               <span className="ex-description">{exp.experience}</span>
               <button
+                type="button"
                 className="profile-deleteBtn"
                 onClick={() => handleRemoveExperience(exp.experience)}
               >
@@ -420,6 +432,7 @@ function ProfileSelf() {
             <div key={index} className="tool-item">
               <span className="tool-description">{t.tool}</span>
               <button
+                type="button"
                 className="profile-deleteBtn"
                 onClick={() => handleRemoveTool(t.tool)}
               >
@@ -466,6 +479,7 @@ function ProfileSelf() {
                 </a>
               </span>
               <button
+                type="button"
                 className="profile-deleteBtn"
                 onClick={() => handleRemovePortfolio(p.portfolioLink)}
               >

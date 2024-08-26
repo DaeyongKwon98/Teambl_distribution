@@ -3,13 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "../../styles/ProfilePage/EditProfile.css";
 import CurrentAcademicDegreePopUp from "./CurrentAcademicDegreePopUp";
 import MajorPopUp from "../NewSearchPage/MajorPopUp";
-function EditProfile() {
-  //
+import api from "../../api";
 
+function EditProfile() {
   const navigate = useNavigate();
   const location = useLocation();
   const { profile } = location.state; // profile 컴포넌트에서 전달된 profile 데이터를 받아옴
 
+  const [currentUser, setCurrentUser] = useState(null);
   const [newProfile, setNewProfile] = useState(profile);
   const [newUser_name, setNewUser_name] = useState(profile.user_name);
   const [newSchool, setNewSchool] = useState(profile.school);
@@ -21,13 +22,26 @@ function EditProfile() {
   const [isCADPopUp, setIsCADPopUp] = useState(false);
   const [isMajorPopUp, setIsMajorPopUp] = useState(false);
 
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
   function handleBack() {
-    navigate("/profile", {
+    navigate(`/profile/${currentUser.id}`, {
       state: {
         profile: newProfile,
       },
     });
   }
+
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await api.get("/api/current-user/");
+      setCurrentUser(response.data);
+    } catch (error) {
+      console.error("Failed to fetch current user:", error);
+    }
+  };
 
   function handleSaveNewProfile() {
     setNewProfile((prevProfile) => ({
