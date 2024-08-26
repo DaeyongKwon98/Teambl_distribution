@@ -63,14 +63,17 @@
 button.profile-editBtn {
   padding: 0px;
   margin-left: 5px;
-  width: 15px;
-  height: 15px;
-  background-image: url("../assets/Profile/pencil.png");
-  background-size: cover;
+  background: transparent;
   border: none;
 }
+
 button.profile-editBtn:hover {
   cursor: pointer;
+}
+
+button.profile-editBtn img {
+  width: 15px;
+  height: 15px;
 }
 
 .profile-info h2 {
