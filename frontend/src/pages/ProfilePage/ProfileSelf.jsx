@@ -4,6 +4,7 @@ import { useDropzone } from "react-dropzone";
 import profileDefaultImg from "../../assets/Profile/defaultProfile.svg";
 import friendIcon from "../../assets/Profile/friend.svg";
 import backIcon from "../../assets/Profile/left-arrow.svg";
+import pencilIcon from "../../assets/Profile/pencilIcon.svg";
 import "../../styles/ProfilePage/ProfileSelf.css";
 import "../../styles/ExperienceList.css";
 import "../../styles/IntroductionForm.css";
@@ -324,7 +325,9 @@ function ProfileSelf() {
                 type="button"
                 className="profile-editBtn"
                 onClick={handleEdit}
-              ></button>
+              >
+                <img src={pencilIcon} />
+              </button>
             </div>
             <div className="profile-row1">
               <p> {profile.school}</p>
