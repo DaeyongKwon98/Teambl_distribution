@@ -5,12 +5,15 @@ from . import views
 urlpatterns = [
     path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
     path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
+    path("user/<int:id>/", views.OtherUserView.as_view(), name="other-user"),
 ]
 
 # Profile
 urlpatterns += [
     path("profile/update/", views.ProfileUpdateView.as_view(), name="update-profile"),
-    path("profile/<int:userid>/", views.CurrentProfileView.as_view(), name="user-profile"),
+    path(
+        "profile/<int:userid>/", views.CurrentProfileView.as_view(), name="user-profile"
+    ),
 ]
 
 # Keyword
@@ -86,7 +89,11 @@ urlpatterns += [
 
 # User Similarity
 urlpatterns += [
-    path('user-similarity/', views.KeywordBasedUserSimilarityView.as_view(), name='user-similarity'),
+    path(
+        "user-similarity/",
+        views.KeywordBasedUserSimilarityView.as_view(),
+        name="user-similarity",
+    ),
 ]
 
 # Others

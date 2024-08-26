@@ -17,10 +17,10 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-#BASE_DIR = Path(__file__).resolve().parent
+# BASE_DIR = Path(__file__).resolve().parent
 
-#load_dotenv()
-load_dotenv(os.path.join(BASE_DIR, '../frontend/.env'))
+# load_dotenv()
+load_dotenv(os.path.join(BASE_DIR, "../frontend/.env"))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    #"backend.api",
+    # "backend.api",
     "api",
     "rest_framework",
     "corsheaders",
@@ -75,7 +75,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
-#ROOT_URLCONF = "backend.backend.urls"
+# ROOT_URLCONF = "backend.backend.urls"
 ROOT_URLCONF = "backend.urls"
 
 TEMPLATES = [
@@ -110,19 +110,19 @@ WSGI_APPLICATION = "backend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv('DB_NAME'),
-        "USER": os.getenv('DB_USER'),
-        "PASSWORD": os.getenv('DB_PASSWORD'),
-        "HOST": os.getenv('DB_HOST'),
-        "PORT": os.getenv('DB_PORT', '5432'),  # 기본값으로 5432 사용
+        "NAME": os.getenv("DB_NAME"),
+        "USER": os.getenv("DB_USER"),
+        "PASSWORD": os.getenv("DB_PASSWORD"),
+        "HOST": os.getenv("DB_HOST"),
+        "PORT": os.getenv("DB_PORT", "5432"),  # 기본값으로 5432 사용
     }
 }
 
-print("DB_NAME:", os.getenv('DB_NAME'))
-print("DB_USER:", os.getenv('DB_USER'))
-print("DB_PASSWORD:", os.getenv('DB_PASSWORD'))
-print("DB_HOST:", os.getenv('DB_HOST'))
-print("DB_PORT:", os.getenv('DB_PORT'))
+print("DB_NAME:", os.getenv("DB_NAME"))
+print("DB_USER:", os.getenv("DB_USER"))
+print("DB_PASSWORD:", os.getenv("DB_PASSWORD"))
+print("DB_HOST:", os.getenv("DB_HOST"))
+print("DB_PORT:", os.getenv("DB_PORT"))
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -158,8 +158,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
@@ -169,7 +169,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWS_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
-    'https://teambl-distribution.vercel.app', # 다른 허용할 도메인이 있으면 추가
+    "https://teambl-distribution.vercel.app",  # 다른 허용할 도메인이 있으면 추가
 ]
 
 # 이메일 서버
@@ -179,3 +179,10 @@ EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "teambltest@gmail.com"
 EMAIL_HOST_PASSWORD = "mbhb qzxz yinq xyyy"
+
+# 프로필 이미지를 위한 Media
+# MEDIA_URL은 미디어 파일에 접근할 URL 경로를 지정합니다.
+MEDIA_URL = "/media/"
+
+# MEDIA_ROOT는 실제 파일이 저장될 서버의 디렉토리 경로를 지정합니다.
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")

@@ -1,7 +1,15 @@
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .models import CustomUser, Profile, Keyword, Project, InvitationLink, Friend, Notification
+from .models import (
+    CustomUser,
+    Profile,
+    Keyword,
+    Project,
+    InvitationLink,
+    Friend,
+    Notification,
+)
 from .serializers import (
     CustomUserSerializer,
     ProfileCreateSerializer,
@@ -34,8 +42,10 @@ from django.contrib.auth import get_user_model
 
 logger = logging.getLogger(__name__)
 
+
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+
 
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -75,9 +85,10 @@ class CreateUserView(generics.CreateAPIView):
             Notification.objects.create(
                 user=from_user,
                 message=f"내가 초대한 {user_profile.user_name}님이 팀블에 가입했습니다.\n{user_profile.user_name}님의 프로필을 지금 확인해보세요!",
-                notification_type='invitation_register',
+                notification_type="invitation_register",
                 related_user_id=invitation.invitee_id,
             )
+
 
 class CurrentUserView(generics.RetrieveAPIView):
     serializer_class = CustomUserSerializer
@@ -86,7 +97,20 @@ class CurrentUserView(generics.RetrieveAPIView):
     def get_object(self):
         return self.request.user
 
+
+class OtherUserView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()  # 전체 유저 쿼리셋
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]  # 인증된 사용자만 접근 가능
+
+    def get_object(self):
+        # URL로부터 id를 가져와 해당 유저를 반환
+        user_id = self.kwargs.get("id")
+        return generics.get_object_or_404(User, id=user_id)
+
+
 User = get_user_model()
+
 
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -111,6 +135,7 @@ class ChangePasswordView(generics.UpdateAPIView):
             {"detail": "Password changed successfully."}, status=status.HTTP_200_OK
         )
 
+
 class DeleteUserView(generics.DestroyAPIView):
     queryset = User.objects.all()
     permission_classes = [permissions.IsAuthenticated]
@@ -125,12 +150,13 @@ class DeleteUserView(generics.DestroyAPIView):
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
 
+
 class CurrentProfileView(generics.RetrieveAPIView):
     serializer_class = ProfileCreateSerializer
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        userid = self.kwargs['userid']
+        userid = self.kwargs["userid"]
         user = get_object_or_404(CustomUser, id=userid)
 
         # 본인의 프로필을 조회하는 경우
@@ -141,9 +167,12 @@ class CurrentProfileView(generics.RetrieveAPIView):
         # 다른 사용자의 프로필을 조회하는 경우
         else:
             profile = get_object_or_404(Profile, user=user)
-            print(f"User {self.request.user.id} is viewing the profile of user {userid}.")
+            print(
+                f"User {self.request.user.id} is viewing the profile of user {userid}."
+            )
             # 추가 권한 검사나 제한된 정보만 반환할 수 있음
             return profile
+
 
 class ProfileUpdateView(generics.UpdateAPIView):
     queryset = Profile.objects.all()
@@ -151,14 +180,18 @@ class ProfileUpdateView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self):
-        return Profile.objects.get(user=self.request.user)            
+        return Profile.objects.get(user=self.request.user)
+
 
 class ProjectListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
-    #queryset = Project.objects.all()
+
+    # queryset = Project.objects.all()
     def get_queryset(self):
-        return Project.objects.filter(user=self.request.user) # 현재 로그인된 사용자의 프로젝트만 반환
+        return Project.objects.filter(
+            user=self.request.user
+        )  # 현재 로그인된 사용자의 프로젝트만 반환
 
     def perform_create(self, serializer):
         if serializer.is_valid():
@@ -177,10 +210,12 @@ class ProjectDelete(generics.DestroyAPIView):
         user = self.request.user
         return Project.objects.filter(user=user)  # user가 user인 project만 필터
 
+
 class KeywordListView(generics.ListAPIView):
     serializer_class = KeywordSerializer
     permission_classes = [IsAuthenticated]
     queryset = Keyword.objects.all()
+
 
 @method_decorator(csrf_exempt, name="dispatch")
 class SendCodeView(View):
@@ -205,22 +240,28 @@ class SendCodeView(View):
 
         return JsonResponse({"message": "Verification code sent"}, status=200)
 
+
 class InvitationLinkList(generics.ListAPIView):
     serializer_class = InvitationLinkSerializer
     permission_classes = [IsAuthenticated]
-    
+
     def get_queryset(self):
-        invitee_id = self.request.query_params.get('invitee_id', None)
-        
-        if invitee_id: # invitee_id가 unique하므로, inviter 조건 없이 invitee_id로만 필터링
+        invitee_id = self.request.query_params.get("invitee_id", None)
+
+        if (
+            invitee_id
+        ):  # invitee_id가 unique하므로, inviter 조건 없이 invitee_id로만 필터링
             queryset = InvitationLink.objects.filter(invitee_id=invitee_id)
         else:
-            queryset = InvitationLink.objects.filter(inviter=self.request.user)  # invitee_id가 없는 경우 로그인한 user가 초대한 링크들 반환
-            
+            queryset = InvitationLink.objects.filter(
+                inviter=self.request.user
+            )  # invitee_id가 없는 경우 로그인한 user가 초대한 링크들 반환
+
         print(f"Fetching InvitationLinks for invitee_id: {invitee_id}")
         print(f"Queryset: {queryset}")
-    
+
         return queryset
+
 
 class CreateInvitationLinkView(generics.CreateAPIView):
     serializer_class = InvitationLinkSerializer
@@ -230,7 +271,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
         unique_code = str(uuid4())
         name = request.data.get("name", "")
         invitee_email = request.data.get("invitee_email", None)
-        
+
         invitation_link = InvitationLink.objects.create(
             inviter=request.user,
             invitee_name=name,
@@ -247,7 +288,10 @@ class CreateInvitationLinkView(generics.CreateAPIView):
                 "link": invitation_link.link,
                 "created_at": invitation_link.created_at,
                 "status": invitation_link.status,
-            }, status=201)
+            },
+            status=201,
+        )
+
 
 class WelcomeView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -263,7 +307,9 @@ class WelcomeView(generics.GenericAPIView):
                 inviter_name = invite_link.inviter.profile.user_name
                 invitee_name = invite_link.invitee_name
 
-                logger.debug(f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}")  # 로그 추가
+                logger.debug(
+                    f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}"
+                )  # 로그 추가
 
                 # 만료 날짜 계산 (생성 후 1분)
                 expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
@@ -279,17 +325,29 @@ class WelcomeView(generics.GenericAPIView):
                     Notification.objects.create(
                         user=invite_link.inviter,
                         message=f"내가 초대한 {invitee_name}님의 초대 링크가 만료됐습니다.\n초대 링크를 다시 생성해주세요!",
-                        notification_type='invitation_expired'
+                        notification_type="invitation_expired",
                     )
-                    return Response({"message": "Invitation link is expired", "error_type": "expired"}, status=400)
+                    return Response(
+                        {
+                            "message": "Invitation link is expired",
+                            "error_type": "expired",
+                        },
+                        status=400,
+                    )
 
                 # 초대 링크가 이미 사용되었는지 확인
                 if invite_link.status == "accepted":
-                    logger.warning(f"Invitation link already used: code={code}")  # 로그 추가
-                    return Response({"message": "Invitation link already used"}, status=400)
+                    logger.warning(
+                        f"Invitation link already used: code={code}"
+                    )  # 로그 추가
+                    return Response(
+                        {"message": "Invitation link already used"}, status=400
+                    )
 
                 # 성공적으로 초대 링크 반환
-                logger.info(f"Invitation link valid: code={code}, inviter={inviter_name}, invitee={invitee_name}")  # 로그 추가
+                logger.info(
+                    f"Invitation link valid: code={code}, inviter={inviter_name}, invitee={invitee_name}"
+                )  # 로그 추가
                 return Response(
                     {
                         "inviter_name": inviter_name,
@@ -298,13 +356,27 @@ class WelcomeView(generics.GenericAPIView):
                 )
             except InvitationLink.DoesNotExist:
                 logger.warning(f"Invalid invitation code: {code}")  # 로그 추가
-                return Response({"message": "Invalid invitation code.", "error_type": "invalid"}, status=400)
+                return Response(
+                    {"message": "Invalid invitation code.", "error_type": "invalid"},
+                    status=400,
+                )
             except Exception as e:
-                logger.error(f"Error processing invitation link: {str(e)}")  # 오류 로그 추가
-                return Response({"message": "An error occurred while processing the invitation link.", "error_type": "unknown"}, status=500)
+                logger.error(
+                    f"Error processing invitation link: {str(e)}"
+                )  # 오류 로그 추가
+                return Response(
+                    {
+                        "message": "An error occurred while processing the invitation link.",
+                        "error_type": "unknown",
+                    },
+                    status=500,
+                )
         else:
             logger.warning("Invalid invitation code provided")  # 로그 추가
-            return Response({"message": "Invalid invitation code.", "error_type": "invalid"}, status=400)
+            return Response(
+                {"message": "Invalid invitation code.", "error_type": "invalid"},
+                status=400,
+            )
 
 
 class InvitationLinkDelete(generics.DestroyAPIView):
@@ -315,6 +387,7 @@ class InvitationLinkDelete(generics.DestroyAPIView):
         user = self.request.user
         return InvitationLink.objects.filter(inviter=user)
 
+
 # Friend가 변경될 때 (create, update, delete) Profile 모델의 1촌 수도 같이 업데이트 해주는 함수.
 def update_profile_one_degree_count(user):
     profile = user.profile  # User를 통해 Profile에 접근
@@ -322,6 +395,7 @@ def update_profile_one_degree_count(user):
         Q(from_user=user) | Q(to_user=user), status="accepted"
     ).count()
     profile.save()
+
 
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer
@@ -348,13 +422,13 @@ class ListCreateFriendView(generics.ListCreateAPIView):
             Notification.objects.create(
                 user=to_user,
                 message=f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n일촌 리스트에서 확인해보세요!",
-                notification_type='friend_request'
+                notification_type="friend_request",
             )
-            
+
             # Profile의 one_degree_count도 같이 업데이트
             update_profile_one_degree_count(from_user)
             update_profile_one_degree_count(to_user)
-            
+
         except CustomUser.DoesNotExist:
             logger.error(f"User with id {to_user_id} does not exist")
             raise ValidationError("User with this ID does not exist.")
@@ -370,7 +444,7 @@ class FriendUpdateView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         friend = serializer.save()
-        status = serializer.validated_data.get('status')
+        status = serializer.validated_data.get("status")
         from_user = friend.from_user
         to_user = friend.to_user
 
@@ -380,7 +454,7 @@ class FriendUpdateView(generics.UpdateAPIView):
             Notification.objects.create(
                 user=from_user,
                 message=f"{user_profile.user_name}님이 일촌 신청을 수락했습니다.\n{user_profile.user_name}님의 프로필을 확인해보세요!",
-                notification_type='friend_accept',
+                notification_type="friend_accept",
                 related_user_id=to_user.id,
             )
         elif status == "rejected":
@@ -388,12 +462,13 @@ class FriendUpdateView(generics.UpdateAPIView):
             Notification.objects.create(
                 user=from_user,
                 message=f"{user_profile.user_name}님이 일촌 신청을 거절했습니다.",
-                notification_type='friend_reject'
+                notification_type="friend_reject",
             )
 
         # Profile의 one_degree_count 업데이트
         update_profile_one_degree_count(from_user)
         update_profile_one_degree_count(to_user)
+
 
 class FriendDeleteView(generics.DestroyAPIView):
     serializer_class = FriendCreateSerializer
@@ -404,12 +479,13 @@ class FriendDeleteView(generics.DestroyAPIView):
         return Friend.objects.filter(
             Q(from_user=user) | Q(to_user=user)
         )  # user가 포함된 친구 필터
-        
+
     # 1촌 삭제 시에 from_user, to_user의 profile에 1촌 수를 빼주기
     def perform_destroy(self, instance):
         super().perform_destroy(instance)
         update_profile_one_degree_count(instance.from_user)
         update_profile_one_degree_count(instance.to_user)
+
 
 class GetUserDistanceAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
@@ -492,6 +568,7 @@ class SearchUsersAPIView(generics.ListAPIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class NotificationListCreateView(generics.ListCreateAPIView):
     serializer_class = NotificationSerializer
     permission_classes = [IsAuthenticated]
@@ -549,12 +626,20 @@ class CheckEmailExistsView(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         email = request.data.get("email")
         if not email:
-            return Response({"message": "Email is required."}, status=status.HTTP_400_BAD_REQUEST)
-            
+            return Response(
+                {"message": "Email is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
         if CustomUser.objects.filter(email=email).exists():
-            return Response({"message": "이미 사용중인 이메일입니다."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        return Response({"message": "사용 가능한 이메일입니다."}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "이미 사용중인 이메일입니다."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        return Response(
+            {"message": "사용 가능한 이메일입니다."}, status=status.HTTP_200_OK
+        )
+
 
 class KeywordBasedUserSimilarityView(generics.GenericAPIView):
     serializer_class = RelatedUserSerializer
@@ -562,7 +647,9 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        related_users_data = user.get_related_users_by_keywords()  # 유사한 사용자 목록을 가져옴
+        related_users_data = (
+            user.get_related_users_by_keywords()
+        )  # 유사한 사용자 목록을 가져옴
 
         # 데이터를 직렬화합니다.
         serializer = self.get_serializer(related_users_data, many=True)

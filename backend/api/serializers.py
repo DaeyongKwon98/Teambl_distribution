@@ -12,6 +12,8 @@ from .models import (
     PortfolioLink,
     Notification,
 )
+import os
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
@@ -19,7 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token = super().get_token(user)
 
         # JWT 토큰에 userId를 추가
-        token['userId'] = user.id
+        token["userId"] = user.id
 
         return token
 
@@ -27,9 +29,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         data = super().validate(attrs)
 
         # 로그인 응답에 userId 추가
-        data.update({'userId': self.user.id})
+        data.update({"userId": self.user.id})
 
         return data
+
 
 class KeywordSerializer(serializers.ModelSerializer):
     class Meta:
@@ -60,6 +63,7 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
     tools = ToolSerializer(many=True, required=False)
     experiences = ExperienceSerializer(many=True, required=False)
     portfolio_links = PortfolioLinkSerializer(many=True, required=False)
+    image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Profile
@@ -75,6 +79,7 @@ class ProfileCreateSerializer(serializers.ModelSerializer):
             "tools",
             "experiences",
             "portfolio_links",
+            "image",
         ]
 
     def get_keywords(self, obj):
@@ -96,6 +101,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     experiences = ExperienceSerializer(many=True, required=False)
     portfolio_links = PortfolioLinkSerializer(many=True, required=False)
     keywords = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=False, allow_null=True)
 
     class Meta:
         model = Profile
@@ -110,17 +116,28 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             "experiences",
             "portfolio_links",
             "keywords",
+            "image",
         ]
 
     def get_keywords(self, obj):
         return [keyword.keyword for keyword in obj.keywords.all()]
 
     def update(self, instance, validated_data):
+        # 이미지 추출 (new_image, old_image )
+        new_image = validated_data.get("image", None)
+        old_image = instance.image
+
+        # tools 추출
         tools_data = validated_data.pop("tools", None)
+
+        # experiences 추출
         experiences_data = validated_data.pop("experiences", None)
+
+        # portfolio_links 추출
         portfolio_links_data = validated_data.pop("portfolio_links", None)
+
         # 키워드를 initial_data에서 추출
-        keywords_data = self.initial_data.get("keywords", [])
+        keywords_data = self.initial_data.get("keywords", None)
         # keywords 필드를 validated_data에서 제거
         validated_data.pop("keywords", None)
 
@@ -128,6 +145,16 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
+
+        # Update basic fields only if they are provided in the validated_data
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # 기존 이미지 삭제 (새 이미지가 업로드된 경우)
+        if new_image and old_image and old_image != new_image:
+            if os.path.isfile(old_image.path):
+                os.remove(old_image.path)
 
         # Update tools
         if tools_data is not None:
@@ -176,7 +203,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     second_degree_ids = serializers.SerializerMethodField()
     second_degree_connections = serializers.SerializerMethodField()
     related_users = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = CustomUser
         fields = [
@@ -208,7 +235,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         profile_data = validated_data.pop("profile", {})
         keywords_data = profile_data.pop("keywords", [])
-        
+
         # CustomUser 인스턴스 생성
         user = CustomUser.objects.create_user(
             email=validated_data["email"], password=validated_data["password"]
@@ -251,6 +278,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         serializer = RelatedUserSerializer(related_users_data, many=True)
         return serializer.data
 
+
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
     keywords = serializers.SerializerMethodField()
@@ -288,7 +316,15 @@ class ProjectSerializer(serializers.ModelSerializer):
 class InvitationLinkSerializer(serializers.ModelSerializer):
     class Meta:
         model = InvitationLink
-        fields = ["id", "inviter", "invitee_name", "invitee_id", "link", "created_at", "status"]
+        fields = [
+            "id",
+            "inviter",
+            "invitee_name",
+            "invitee_id",
+            "link",
+            "created_at",
+            "status",
+        ]
         read_only_fields = ["id", "inviter", "created_at"]
 
 
@@ -356,7 +392,15 @@ class SearchSerializer(serializers.Serializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ["id", "user", "message", "created_at", "is_read", "notification_type", "related_user_id"]
+        fields = [
+            "id",
+            "user",
+            "message",
+            "created_at",
+            "is_read",
+            "notification_type",
+            "related_user_id",
+        ]
         read_only_fields = ["id", "user", "created_at"]
 
     def validate_notification_type(self, value):
@@ -364,10 +408,12 @@ class NotificationSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Invalid notification type")
         return value
 
+
 class UserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['id', 'email', 'profile']
+        fields = ["id", "email", "profile"]
+
 
 # 사용자와 공통 키워드를 반환
 class RelatedUserSerializer(serializers.Serializer):

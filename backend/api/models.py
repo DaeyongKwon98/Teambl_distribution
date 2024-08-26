@@ -46,7 +46,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         first_degree_friends = Friend.objects.filter(
             (Q(from_user=self) | Q(to_user=self)) & Q(status="accepted")
         )
-        
+
         first_degree_ids = set()
         for friend in first_degree_friends:
             if friend.from_user == self:
@@ -60,7 +60,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         # 2촌
         for friend_id in first_degree_ids:
             second_degree_friends = Friend.objects.filter(
-                (Q(from_user_id=friend_id) | Q(to_user_id=friend_id)) & Q(status="accepted")
+                (Q(from_user_id=friend_id) | Q(to_user_id=friend_id))
+                & Q(status="accepted")
             ).exclude(Q(from_user=self) | Q(to_user=self))
 
             for friend in second_degree_friends:
@@ -68,32 +69,39 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                     second_degree_connections.append((friend.from_user_id, friend_id))
                 if friend.to_user_id not in first_degree_ids:
                     second_degree_connections.append((friend.to_user_id, friend_id))
-                    
+
         # 각 2촌 ID는 고유해야 하므로, 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
         second_degree_ids = set([conn[0] for conn in second_degree_connections])
-        
+
         return first_degree_ids, second_degree_ids, second_degree_connections
 
     def get_related_users_by_keywords(self):
-        user_keywords = set(self.profile.keywords.values_list('keyword', flat=True))
+        user_keywords = set(self.profile.keywords.values_list("keyword", flat=True))
         related_profiles = Profile.objects.exclude(user=self)
 
         user_similarity_list = []
 
         for profile in related_profiles:
-            other_user_keywords = set(profile.keywords.values_list('keyword', flat=True))
+            other_user_keywords = set(
+                profile.keywords.values_list("keyword", flat=True)
+            )
             common_keywords = user_keywords.intersection(other_user_keywords)
-            
+
             if len(common_keywords) > 0:  # 공통 키워드가 있는 경우에만 리스트에 추가
-                user_similarity_list.append({
-                    "user": profile.user,
-                    "common_keywords": list(common_keywords),
-                    "similarity": len(common_keywords)  # 공통 키워드 수를 유사도로 사용
-                })
+                user_similarity_list.append(
+                    {
+                        "user": profile.user,
+                        "common_keywords": list(common_keywords),
+                        "similarity": len(
+                            common_keywords
+                        ),  # 공통 키워드 수를 유사도로 사용
+                    }
+                )
         # 유사도(공통 키워드 수) 기준으로 정렬
         user_similarity_list.sort(key=lambda x: x["similarity"], reverse=True)
-        
+
         return user_similarity_list
+
 
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
@@ -201,6 +209,9 @@ class Profile(models.Model):
     keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
     one_degree_count = models.IntegerField(default=0)  # 1촌 수
     introduction = models.TextField(default="", blank=True, max_length=1000)  # 소개
+    image = models.ImageField(
+        upload_to="profile_images/", blank=True, null=True
+    )  # 프로필 이미지
 
     def __str__(self):
         return self.user_name
@@ -248,7 +259,9 @@ class InvitationLink(models.Model):
         CustomUser, on_delete=models.CASCADE, related_name="invitation_links"
     )
     invitee_name = models.CharField(max_length=255)
-    invitee_id = models.IntegerField(null=True, blank=True) # 나중에 다시 unique=True 해야됨
+    invitee_id = models.IntegerField(
+        null=True, blank=True
+    )  # 나중에 다시 unique=True 해야됨
     link = models.CharField(max_length=255, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(
@@ -290,11 +303,11 @@ class Friend(models.Model):
 
 class Notification(models.Model):
     NOTIFICATION_TYPE_CHOICES = [
-        ('invitation_register', 'Invitation Register'),
-        ('invitation_expired', 'Invitation Expired'),
-        ('friend_accept', 'Friend Accept'),
-        ('friend_reject', 'Friend Reject'),
-        ('friend_request', 'Friend Request'),
+        ("invitation_register", "Invitation Register"),
+        ("invitation_expired", "Invitation Expired"),
+        ("friend_accept", "Friend Accept"),
+        ("friend_reject", "Friend Reject"),
+        ("friend_request", "Friend Request"),
     ]
 
     user = models.ForeignKey(
