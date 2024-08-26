@@ -66,11 +66,9 @@ button.profile-editBtn {
   background: transparent;
   border: none;
 }
-
 button.profile-editBtn:hover {
   cursor: pointer;
 }
-
 button.profile-editBtn img {
   width: 15px;
   height: 15px;

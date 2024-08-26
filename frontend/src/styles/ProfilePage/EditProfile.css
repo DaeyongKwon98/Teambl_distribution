@@ -4,7 +4,7 @@
   margin: 0 auto;
   width: 300px;
   min-width: 300px;
-  padding: 0;
+  padding: 20px;
   box-shadow: none;
   font-family: "Pretendard Variable", Pretendard, -apple-system,
     BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
@@ -15,16 +15,19 @@
 
 .edit-back button {
   border: none;
-  background-image: url("../assets/left-arrow.png");
-  background-size: cover;
-  width: 20px;
-  height: 20px;
-  background-color: transparent;
-  margin: 10px 0px;
+  background: transparent;
+  margin: 0px;
+  padding: 0px;
 }
 .edit-back button:hover {
   cursor: pointer;
 }
+
+.edit-back button img {
+  width: 20px;
+  height: 20px;
+}
+
 .edit-label {
   display: flex;
   gap: 12px;
