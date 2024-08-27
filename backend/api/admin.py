@@ -18,4 +18,4 @@ def setup_periodic_tasks():
     )
 
 # 앱이 로드될 때 주기적 작업을 설정
-setup_periodic_tasks()
+# setup_periodic_tasks()
