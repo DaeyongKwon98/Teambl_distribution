@@ -1,68 +1,169 @@
+body {
+  margin: 0;
+  font-family: 'Pretendard';
+  font-style: normal;
+  background-color: #ffffff;
+}
+
 .setting-container {
   width: 100%;
-  max-width: 400px;
+  max-width: 300px;
   margin: 0 auto;
   padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.setting-container h2 {
-  font-size: 24px;
+.setting-section-title {
+  font-size: 16px;
+  margin-bottom: 10px;
+  font-weight: 600;
+  line-height: 19px;
+  color: #121212;
+}
+
+.setting-password-change-section,
+.setting-withdraw-section {
   margin-bottom: 20px;
-  color: #333;
+}
+
+.setting-input-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.setting-input-group label {
+  width: 120px;
+  font-size: 14px;
+  margin-right: 10px;
+  font-weight: 400;
+  line-height: 160%;
+  letter-spacing: -0.019em;
+  color: #121212;
+}
+
+.setting-input-group input[type="password"] {
+  flex: 1;
+  padding: 7px;
+  border: 0;
+  border-radius: 5px;
+  background: #F5F5F5;
+}
+
+.setting-change-password-button,
+.setting-logout-button,
+.setting-withdraw-button {
+  font-family: 'Pretendard';
+  font-style: normal;
+  width: 100%;
+  padding: 7px;
+  font-size: 14px;
+  background-color: #0923A9;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.setting-change-password-button:disabled,
+.setting-withdraw-button:disabled {
+  background-color: #A8A8A8;
+  cursor: not-allowed;
+}
+
+.setting-error {
+  color: red;
+  font-size: 12px;
+  margin: 5px 0;
+}
+
+.setting-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.setting-withdraw-modal-content {
+  background: #fff;
+  border-radius: 6px;
+  padding: 18px;
+  max-width: 250px;
+  width: 100%;
   text-align: center;
 }
 
-.setting-container input[type="password"] {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 16px;
+.setting-withdraw-modal-content .setting-modal-title {
+  font-size: 12px;
+  color: #0923A9;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.setting-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #007bff;
-  color: white;
+.setting-withdraw-modal-content .setting-withdraw-icon {
+  height: 12px;
+  width: 12px;
+  margin-right: 5px;
+}
+
+.setting-withdraw-modal-content .setting-modal-description {
+  font-size: 9px;
+  color: #595959;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+
+.setting-withdraw-modal-content .setting-modal-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.setting-withdraw-modal-content .setting-modal-button {
+  font-size: 12px;
+  padding: 6px 12px;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-weight: bold;
 }
 
-.setting-container button:hover {
-  background-color: #0056b3;
+.setting-withdraw-modal-content .setting-cancel-button {
+  background-color: #fff;
+  color: #121212;
 }
 
-.account-delete-container {
-  margin-top: 40px;
+.setting-withdraw-modal-content .setting-confirm-button {
+  background-color: #fff;
+  color: #2546f3;
 }
 
-.account-delete-container h2 {
-  font-size: 24px;
-  margin-bottom: 20px;
-  color: #c9302c;
-  text-align: center;
+.setting-final-modal-title {
+  font-size: 12px;
+  color: #0923A9;
+  font-weight: bold;
 }
 
-.account-delete-container button {
-  width: 100%;
-  padding: 10px;
-  background-color: #c9302c;
-  color: white;
+.setting-final-modal-description {
+  font-size: 9px;
+  color: #595959;
+  margin-top: 0;
+  margin-bottom: 18px;  
+}
+
+.setting-final-confirm-button {
+  font-size: 12px;
+  padding: 6px 12px;
   border: none;
-  border-radius: 4px;
-  font-size: 16px;
+  border-radius: 3px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.account-delete-container button:hover {
-  background-color: #a02624;
+  font-weight: bold;
+  background-color: #fff;
+  color: #121212;
 }
