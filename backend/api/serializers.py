@@ -97,7 +97,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     year = serializers.IntegerField(required=False)
     major = serializers.CharField(required=False)
     tools = ToolSerializer(many=True, required=False)
-    introduction = serializers.CharField(required=False)
+    introduction = serializers.CharField(required=False, allow_blank=True)
     experiences = ExperienceSerializer(many=True, required=False)
     portfolio_links = PortfolioLinkSerializer(many=True, required=False)
     keywords = serializers.SerializerMethodField()
