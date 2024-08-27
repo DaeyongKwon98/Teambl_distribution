@@ -58,7 +58,8 @@ const Setting = () => {
 
   const handleLogout = () => {
     // 로그아웃 처리
-    localStorage.removeItem("token"); // 토큰 제거
+    // localStorage.removeItem("token"); // 토큰 제거
+    localStorage.clear();
     navigate("/login"); // 로그인 페이지로 이동
   };
 
