@@ -96,6 +96,21 @@ urlpatterns += [
     ),
 ]
 
+# Password
+urlpatterns += [
+    path(
+        "change-password/",
+        views.ChangePasswordView.as_view(),
+        name="change-password",
+    ),
+    path(
+        "check-password/",
+        views.CheckPasswordView.as_view(),
+        name="check-password",
+    ),
+]
+
+
 # Others
 urlpatterns += [
     path("check-email/", views.CheckEmailExistsView.as_view(), name="check-email"),
@@ -106,8 +121,5 @@ urlpatterns += [
         "get-user-distance/<int:pk>/",
         views.GetUserDistanceAPIView.as_view(),
         name="get-user-distance",
-    ),
-    path(
-        "change-password/", views.ChangePasswordView.as_view(), name="change-password"
     ),
 ]

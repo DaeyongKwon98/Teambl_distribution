@@ -1,4 +1,4 @@
-from rest_framework import generics, permissions, status
+from rest_framework import generics, permissions, status, serializers
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import (
@@ -134,6 +134,32 @@ class ChangePasswordView(generics.UpdateAPIView):
         return Response(
             {"detail": "Password changed successfully."}, status=status.HTTP_200_OK
         )
+
+
+# 유저의 비밀번호를 실제로 받은 비밀번호와 대조해서 비교.
+class CheckPasswordView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    # CharField를 사용하여 비밀번호 입력을 받음
+    password = serializers.CharField(write_only=True)
+
+    def post(self, request, *args, **kwargs):
+        password = request.data.get("password")
+        user = self.request.user
+
+        if not password:
+            return Response(
+                {"detail": "Password is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # 비밀번호가 실제 비밀번호와 일치하는지 확인
+        if user.check_password(password):
+            return Response(
+                {"detail": "Password is correct."}, status=status.HTTP_200_OK
+            )
+        else:
+            return Response(
+                {"detail": "Incorrect password."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
 
 class DeleteUserView(generics.DestroyAPIView):

@@ -1,50 +1,67 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import '../styles/Setting.css';
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/Setting.css";
 import api from "../api";
-import Header from '../components/Header';
-import Navbar from '../components/Navbar';
-import WithdrawIcon from '../assets/withdrawIcon.svg';
+import Header from "../components/Header";
+import Navbar from "../components/Navbar";
+import WithdrawIcon from "../assets/withdrawIcon.svg";
 
 const Setting = () => {
   const navigate = useNavigate();
   const [activeNav, setActiveNav] = useState("설정");
-  const [currentPassword, setCurrentPassword] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const [withdrawPassword, setWithdrawPassword] = useState('');
-  const [changePasswordError, setChangePasswordError] = useState('');
-  const [withdrawError, setWithdrawError] = useState('');
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [withdrawPassword, setWithdrawPassword] = useState("");
+  const [changePasswordError, setChangePasswordError] = useState("");
+  const [withdrawError, setWithdrawError] = useState("");
   const [changeBtnActive, setChangeBtnActive] = useState(false);
   const [withdrawBtnActive, setWithdrawBtnActive] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
 
-  const DbPassword = '1234';
-
   useEffect(() => {
     setChangeBtnActive(
-      currentPassword !== '' &&
-      newPassword !== '' &&
-      confirmNewPassword !== ''
+      currentPassword !== "" && newPassword !== "" && confirmNewPassword !== ""
     );
 
-    setWithdrawBtnActive(withdrawPassword !== '');
+    setWithdrawBtnActive(withdrawPassword !== "");
   }, [currentPassword, newPassword, confirmNewPassword, withdrawPassword]);
 
+  const isPasswordCorrect = async (userInputPassword) => {
+    try {
+      const response = await api.post("/api/check-password/", {
+        password: userInputPassword,
+      }); // 유저의 실제 비밀번호와 입력한 현재 비밀번호가 일치하는지 확인하는 코드
+
+      if (response.status === 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (error) {
+      console.error("비밀번호를 확인하는데 오류가 발생했습니다.", error);
+      if (error.response) {
+        console.error("Error response data:", error.response.data);
+      }
+      return false;
+    }
+  };
+
   const handleChangePassword = async () => {
-    if (currentPassword !== DbPassword) {
-      setChangePasswordError('현 비밀번호가 일치하지 않습니다');
+    const isCorrect = await isPasswordCorrect(currentPassword);
+    if (!isCorrect) {
+      setChangePasswordError("현 비밀번호가 일치하지 않습니다");
     } else if (newPassword !== confirmNewPassword) {
-      setChangePasswordError('새 비밀번호가 일치하지 않습니다');
+      setChangePasswordError("새 비밀번호가 일치하지 않습니다");
     } else {
-      setChangePasswordError('');
+      setChangePasswordError("");
       try {
         const response = await api.patch("/api/change-password/", {
           new_password: newPassword,
         });
         setNewPassword(""); // 비밀번호 변경 후 입력 필드 초기화
-  
+
         // 로그아웃 처리
         // localStorage.removeItem("token"); // 토큰 제거
         localStorage.clear();
@@ -64,9 +81,10 @@ const Setting = () => {
     navigate("/login"); // 로그인 페이지로 이동
   };
 
-  const handleWithdraw = () => {
-    if (withdrawPassword !== DbPassword) {
-      setWithdrawError('현 비밀번호가 일치하지 않습니다');
+  const handleWithdraw = async () => {
+    const isCorrect = await isPasswordCorrect(withdrawPassword);
+    if (!isCorrect) {
+      setWithdrawError("현 비밀번호가 일치하지 않습니다");
     } else {
       setShowWithdrawModal(true);
     }
@@ -106,25 +124,24 @@ const Setting = () => {
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
-      case '초대':
+      case "초대":
         navigate("/invite");
         break;
-      case '1촌':
+      case "1촌":
         navigate("/friends");
         break;
-      case '홈':
+      case "홈":
         navigate("/");
         break;
       default:
         break;
     }
   };
-  
+
   return (
     <div className="setting-container">
       <Header />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
-      
 
       <h2 className="setting-section-title">비밀번호 변경</h2>
       <div className="setting-password-change-section">
@@ -152,7 +169,9 @@ const Setting = () => {
             onChange={(e) => setConfirmNewPassword(e.target.value)}
           />
         </div>
-        {changePasswordError && <p className="setting-error">{changePasswordError}</p>}
+        {changePasswordError && (
+          <p className="setting-error">{changePasswordError}</p>
+        )}
         <button
           className="setting-change-password-button"
           onClick={handleChangePassword}
@@ -163,7 +182,9 @@ const Setting = () => {
       </div>
 
       <h2 className="setting-section-title">로그 아웃</h2>
-      <button className="setting-logout-button" onClick={handleLogout}>로그 아웃</button>
+      <button className="setting-logout-button" onClick={handleLogout}>
+        로그 아웃
+      </button>
 
       <h2 className="setting-section-title">회원 탈퇴</h2>
       <div className="setting-withdraw-section">
@@ -191,13 +212,14 @@ const Setting = () => {
             <div className="setting-modal-title">
               <img
                 src={WithdrawIcon}
-                alt='탈퇴 아이콘'
-                className='setting-withdraw-icon'
+                alt="탈퇴 아이콘"
+                className="setting-withdraw-icon"
               />
               <p>정말 탈퇴하시겠어요?</p>
             </div>
             <p className="setting-modal-description">
-              탈퇴 버튼 선택 시, 계정은<br />
+              탈퇴 버튼 선택 시, 계정은
+              <br />
               삭제되며 복구되지 않습니다.
             </p>
             <div className="setting-modal-buttons">
@@ -221,9 +243,12 @@ const Setting = () => {
       {showFinalModal && (
         <div className="setting-modal-overlay">
           <div className="setting-withdraw-modal-content">
-            <p className="setting-final-modal-title">탈퇴 처리가 완료되었습니다.</p>
+            <p className="setting-final-modal-title">
+              탈퇴 처리가 완료되었습니다.
+            </p>
             <p className="setting-final-modal-description">
-              이용해 주셔서 감사합니다.<br />
+              이용해 주셔서 감사합니다.
+              <br />
               앞으로 더 좋은 모습으로 만나뵐 수<br />
               있도록 노력하겠습니다.
             </p>
