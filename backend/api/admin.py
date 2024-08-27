@@ -6,8 +6,8 @@ from .tasks import update_user_statistics
 # 이를 통해 10분마다 update_user_statistics 작업이 실행됩니다.
 def setup_periodic_tasks():
     schedule, created = IntervalSchedule.objects.get_or_create(
-        every=10,
-        period=IntervalSchedule.MINUTES,  # 일주일마다 실행
+        every=3,
+        period=IntervalSchedule.MINUTES,
     )
 
     # PeriodicTask를 생성하여 매 10분마다 실행되도록 설정
