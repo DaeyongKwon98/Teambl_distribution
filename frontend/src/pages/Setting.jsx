@@ -46,7 +46,8 @@ const Setting = () => {
         setNewPassword(""); // 비밀번호 변경 후 입력 필드 초기화
   
         // 로그아웃 처리
-        localStorage.removeItem("token"); // 토큰 제거
+        // localStorage.removeItem("token"); // 토큰 제거
+        localStorage.clear();
         alert("Password changed successfully. You will be logged out.");
         navigate("/login"); // 로그인 페이지로 이동
       } catch (error) {
