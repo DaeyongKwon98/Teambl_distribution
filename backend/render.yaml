@@ -2,7 +2,7 @@ services:
   - type: web
     name: django
     env: python
-    buildCommand: pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py makemigrations && python manage.py migrate
     startCommand: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
 
   - type: worker
