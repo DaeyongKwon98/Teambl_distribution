@@ -10,3 +10,6 @@ psycopg2-binary
 python-dotenv
 gunicorn
 Pillow
+celery==5.3.4
+django-celery-beat==2.5.0
+redis==5.0.0

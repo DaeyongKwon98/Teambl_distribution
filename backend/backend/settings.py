@@ -58,10 +58,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    # "backend.api",
     "api",
     "rest_framework",
     "corsheaders",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
@@ -96,6 +96,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "backend.wsgi.application"
 
+
+# Celery 설정
+CELERY_BROKER_URL = 'redis://red-cr6oi9q3esus73cjpak0:6379'
+CELERY_RESULT_BACKEND = 'redis://red-cr6oi9q3esus73cjpak0:6379'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases

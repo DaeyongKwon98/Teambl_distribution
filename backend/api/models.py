@@ -103,6 +103,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return user_similarity_list
 
 
+class UserStatistics(models.Model):# 유저의 2촌 수, 같은 키워드를 쓰는 사용자 수 저장
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='statistics')
+    two_degree_count_prev = models.IntegerField(default=0)
+    two_degree_count_now = models.IntegerField(default=0)
+    same_keyword_count_prev = models.IntegerField(default=0)
+    same_keyword_count_now = models.IntegerField(default=0)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"Statistics for {self.user.email}"
+
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
 
