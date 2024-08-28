@@ -454,11 +454,10 @@ class RelatedUserSerializer(serializers.Serializer):
 #     def get_keyword_difference(self, obj):
 #         return obj.same_keyword_count_now - obj.same_keyword_count_prev
 
-class UserStatisticsDifferenceSerializer(serializers.Serializer):
-    new_second_degree_profiles = serializers.ListField(
-        child=serializers.IntegerField(),
-        help_text="새로운 2촌 사용자의 ID 목록"
+class SecondDegreeProfileSerializer(serializers.Serializer):
+    second_degree_profile_id = serializers.IntegerField(
+        help_text="2촌 사용자의 ID"
     )
-    new_second_degree_count = serializers.IntegerField(
-        help_text="새로운 2촌 사용자 수"
+    connector_friend_id = serializers.IntegerField(
+        help_text="2촌과 연결된 1촌 사용자의 ID"
     )
