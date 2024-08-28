@@ -173,6 +173,10 @@ class DeleteUserView(generics.DestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()
+        
+        # 탈퇴하는 사용자의 ID와 일치하는 invitee_id를 가진 InvitationLink 삭제 (추후에는 status를 exited 등으로 바꿀 수 있음)
+        InvitationLink.objects.filter(invitee_id=user.id).delete()
+        
         user.delete()
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
