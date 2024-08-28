@@ -5,14 +5,14 @@ services:
     buildCommand: pip install -r requirements.txt && python manage.py collectstatic --noinput && python manage.py makemigrations && python manage.py migrate
     startCommand: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
 
-  - type: worker
-    name: celery-worker
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: celery -A backend worker --loglevel=info
+  # - type: worker
+  #   name: celery-worker
+  #   env: python
+  #   buildCommand: pip install -r requirements.txt
+  #   startCommand: celery -A backend worker --loglevel=info
 
-  - type: worker
-    name: celery-beat
-    env: python
-    buildCommand: pip install -r requirements.txt
-    startCommand: celery -A backend beat --loglevel=info
+  # - type: worker
+  #   name: celery-beat
+  #   env: python
+  #   buildCommand: pip install -r requirements.txt
+  #   startCommand: celery -A backend beat --loglevel=info
