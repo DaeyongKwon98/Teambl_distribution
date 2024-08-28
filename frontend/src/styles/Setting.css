@@ -1,7 +1,6 @@
 body {
   margin: 0;
-  font-family: 'Pretendard';
-  font-style: normal;
+  font-family: Arial, sans-serif;
   background-color: #ffffff;
 }
 
@@ -52,8 +51,6 @@ body {
 .setting-change-password-button,
 .setting-logout-button,
 .setting-withdraw-button {
-  font-family: 'Pretendard';
-  font-style: normal;
   width: 100%;
   padding: 7px;
   font-size: 14px;
