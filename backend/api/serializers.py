@@ -259,6 +259,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     def get_first_degree_count(self, obj):
         user_data = self.context.get('user_data', {})
+        print("user_data from serializer:", user_data)
         return user_data.get('first_degree_count', 0)
 
     def get_second_degree_count(self, obj):
