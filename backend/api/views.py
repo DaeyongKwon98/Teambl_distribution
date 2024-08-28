@@ -699,10 +699,10 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
         # 유사한 사용자 목록을 가져옴
         related_users_data = user.get_related_users_by_keywords()
         
-        # 최근 가입자만 필터링
+        # 최근 가입한 유저들로 필터링
         recent_related_users = [
             user_data for user_data in related_users_data
-            if user_data.date_joined >= recent_times
+            if user_data.get('date_joined') >= recent_times
         ]
         
         # 데이터를 직렬화합니다.
