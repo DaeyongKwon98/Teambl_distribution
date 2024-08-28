@@ -690,15 +690,3 @@ class UserStatisticsDifferenceView(generics.RetrieveAPIView):
     def get_object(self):
         user = self.request.user
         return UserStatistics.objects.get(user=user)
-
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
-        # 2촌 수 차이 계산
-        second_degree_diff = instance.two_degree_count_now - instance.two_degree_count_prev
-        # 같은 키워드 수 차이 계산
-        keyword_diff = instance.same_keyword_count_now - instance.same_keyword_count_prev
-
-        return Response({
-            'second_degree_difference': second_degree_diff,
-            'keyword_difference': keyword_diff
-        })
