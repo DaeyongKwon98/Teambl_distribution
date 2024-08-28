@@ -696,6 +696,11 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         recent_times = timezone.now() - timezone.timedelta(minutes=15)
         
         first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
+        second_degree_connections_serialized = [
+            {'second_degree_user_id': conn[0], 'first_degree_user_id': conn[1]}
+            for conn in second_degree_connections
+        ]
+
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
             data_joined__gte=recent_times
