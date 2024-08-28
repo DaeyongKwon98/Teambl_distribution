@@ -694,6 +694,8 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         three_minutes_ago = timezone.now() - timezone.timedelta(minutes=10)
         
         # 현재 유저의 2촌 관계 가져오기
+        print("view get friend counts")
+        print(request.user)
         _, second_degree_ids, _ = request.user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
