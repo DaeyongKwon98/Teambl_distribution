@@ -56,15 +56,21 @@ function Home() {
   const fetchStatisticsDifference = async () => {
     try {
       const response = await api.get("/api/user-statistics-difference/");
-      setSecondDegreeDiff(response.data.second_degree_difference);
-      setKeywordDiff(response.data.keyword_difference);
-      setRecentSecondDegreeProfiles(response.data.new_second_degree_profiles);
-      setRecentKeywordProfiles(response.data.new_keyword_profiles);
-
+      if (response.data.new_second_degree_profiles) {
+        setRecentSecondDegreeProfiles(response.data.new_second_degree_profiles);
+      } else {
+        setRecentSecondDegreeProfiles([]); // 데이터가 없을 경우 빈 배열로 설정
+      }
+      
+      setSecondDegreeDiff(response.data.second_degree_difference || 0);
+      setKeywordDiff(response.data.keyword_difference || 0);
+      setRecentKeywordProfiles(response.data.new_keyword_profiles || []);
+      
       console.log("RecentSecondDegreeProfiles", response.data.new_second_degree_profiles);
       console.log("RecentKeywordProfiles", response.data.new_keyword_profiles);
     } catch (error) {
       console.error("Failed to fetch user statistics difference", error);
+      setRecentSecondDegreeProfiles([]); // 에러 발생 시 빈 배열로 설정
     }
   };
 
