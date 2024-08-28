@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ("is_superuser", models.BooleanField(default=False)),
                 ("is_staff", models.BooleanField(default=False)),
                 ("is_active", models.BooleanField(default=True)),
-                ("data_joined", models.DateTimeField(auto_now_add=True)),
+                ("date_joined", models.DateTimeField(auto_now_add=True)),
                 (
                     "groups",
                     models.ManyToManyField(
