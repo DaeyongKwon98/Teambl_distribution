@@ -258,20 +258,20 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     
     def get_first_degree_count(self, obj):
-        print("serializer get first degree count")
-        first_degree_ids, _, _ = obj.get_friend_counts()
+        print("In Serializer - obj id:", obj.id)
+        first_degree_ids, _, _ = obj.get_friend_counts(obj.id)
         return len(first_degree_ids)
-
+    
     def get_second_degree_count(self, obj):
-        _, second_degree_ids, _ = obj.get_friend_counts()
+        _, second_degree_ids, _ = obj.get_friend_counts(obj.id)
         return len(second_degree_ids)
-
+    
     def get_second_degree_ids(self, obj):
-        _, second_degree_ids, _ = obj.get_friend_counts()
+        _, second_degree_ids, _ = obj.get_friend_counts(obj.id)
         return list(second_degree_ids)
-
+    
     def get_second_degree_connections(self, obj):
-        _, _, second_degree_connections = obj.get_friend_counts()
+        _, _, second_degree_connections = obj.get_friend_counts(obj.id)
         return second_degree_connections
 
     def get_related_users(self, obj):
@@ -280,7 +280,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return serializer.data
 
     def to_representation(self, instance):
-        first_degree_ids, second_degree_ids, second_degree_connections = instance.get_friend_counts()
+        first_degree_ids, second_degree_ids, second_degree_connections = instance.get_friend_counts(instance.id)
 
         # 이미 계산된 데이터를 사용하여 필드를 채움
         representation = super().to_representation(instance)
