@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Invite.css";
-import BackIcon from "../assets/backIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import CopyIcon from "../assets/copyIcon.svg";
 import Header from "../components/Header";
@@ -180,9 +179,6 @@ function Invite() {
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
       
       <header className="header">
-        <button className="back-button">
-          <img src={BackIcon} alt="뒤로가기 아이콘" className="back-icon" onClick={() => window.history.back()} />
-        </button>
         <div className="header-content">
           <div className="title-container">
             <h1 className="title">초대하기</h1>
