@@ -198,11 +198,11 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
-    first_degree_count = serializers.SerializerMethodField()
-    second_degree_count = serializers.SerializerMethodField()
-    second_degree_ids = serializers.SerializerMethodField()
-    second_degree_connections = serializers.SerializerMethodField()
-    related_users = serializers.SerializerMethodField()
+    # first_degree_count = serializers.SerializerMethodField()
+    # second_degree_count = serializers.SerializerMethodField()
+    # second_degree_ids = serializers.SerializerMethodField()
+    # second_degree_connections = serializers.SerializerMethodField()
+    # related_users = serializers.SerializerMethodField()
     
     class Meta:
         model = CustomUser
@@ -232,11 +232,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "data_joined": {"read_only": True},
         }
 
-    def __init__(self, *args, **kwargs):
-        # user_data를 시리얼라이저 인스턴스에 저장
-        self.user_data = kwargs.pop('user_data', {})
-        print(f"Initializing CustomUserSerializer with user_data: {self.user_data}")
-        super().__init__(*args, **kwargs)
+    # def __init__(self, *args, **kwargs):
+    #     # user_data를 시리얼라이저 인스턴스에 저장
+    #     self.user_data = kwargs.pop('user_data', {})
+    #     print(f"Initializing CustomUserSerializer with user_data: {self.user_data}")
+    #     super().__init__(*args, **kwargs)
     
     def create(self, validated_data):
         profile_data = validated_data.pop("profile", {})
@@ -263,35 +263,35 @@ class CustomUserSerializer(serializers.ModelSerializer):
             validated_data.pop("password")
         return super().update(instance, validated_data)
 
-    def get_first_degree_count(self, obj):
-        return self.user_data.get('first_degree_count', 0)
+    # def get_first_degree_count(self, obj):
+    #     return self.user_data.get('first_degree_count', 0)
 
-    def get_second_degree_count(self, obj):
-        return self.user_data.get('second_degree_count', 0)
+    # def get_second_degree_count(self, obj):
+    #     return self.user_data.get('second_degree_count', 0)
 
-    def get_second_degree_ids(self, obj):
-        return self.user_data.get('second_degree_ids', [])
+    # def get_second_degree_ids(self, obj):
+    #     return self.user_data.get('second_degree_ids', [])
 
-    def get_second_degree_connections(self, obj):
-        return self.user_data.get('second_degree_connections', [])
+    # def get_second_degree_connections(self, obj):
+    #     return self.user_data.get('second_degree_connections', [])
 
-    def get_related_users(self, obj):
-        return self.user_data.get('related_users', [])
+    # def get_related_users(self, obj):
+    #     return self.user_data.get('related_users', [])
 
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
+    # def to_representation(self, instance):
+    #     representation = super().to_representation(instance)
 
-        # user_data를 이용해 추가적인 처리나 데이터 추가 가능
-        representation['first_degree_count'] = self.user_data.get('first_degree_count', 0)
-        representation['second_degree_count'] = self.user_data.get('second_degree_count', 0)
-        representation['second_degree_ids'] = self.user_data.get('second_degree_ids', [])
-        representation['second_degree_connections'] = self.user_data.get('second_degree_connections', [])
-        representation['related_users'] = self.user_data.get('related_users', [])
+    #     # user_data를 이용해 추가적인 처리나 데이터 추가 가능
+    #     representation['first_degree_count'] = self.user_data.get('first_degree_count', 0)
+    #     representation['second_degree_count'] = self.user_data.get('second_degree_count', 0)
+    #     representation['second_degree_ids'] = self.user_data.get('second_degree_ids', [])
+    #     representation['second_degree_connections'] = self.user_data.get('second_degree_connections', [])
+    #     representation['related_users'] = self.user_data.get('related_users', [])
         
-        # data_joined를 원하는 형식으로 변환
-        representation['data_joined'] = instance.data_joined.strftime('%Y-%m-%d %H:%M:%S')
+    #     # data_joined를 원하는 형식으로 변환
+    #     representation['data_joined'] = instance.data_joined.strftime('%Y-%m-%d %H:%M:%S')
 
-        return representation
+    #     return representation
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -453,3 +453,12 @@ class RelatedUserSerializer(serializers.Serializer):
 
 #     def get_keyword_difference(self, obj):
 #         return obj.same_keyword_count_now - obj.same_keyword_count_prev
+
+class UserStatisticsDifferenceSerializer(serializers.Serializer):
+    new_second_degree_profiles = serializers.ListField(
+        child=serializers.IntegerField(),
+        help_text="새로운 2촌 사용자의 ID 목록"
+    )
+    new_second_degree_count = serializers.IntegerField(
+        help_text="새로운 2촌 사용자 수"
+    )
