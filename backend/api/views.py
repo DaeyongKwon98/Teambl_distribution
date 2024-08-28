@@ -690,21 +690,17 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        # 현재 로그인한 사용자 정보 가져오기
         user = request.user
-        user_id = user.id
         
         # 최근 시간 기준으로 필터링
         recent_times = timezone.now() - timezone.timedelta(minutes=15)
         
-        # 현재 유저의 2촌 관계 가져오기
         first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
             data_joined__gte=recent_times
         )
         
-        # 현재 유저와 같은 키워드를 가진 사용자 가져오기
         related_users_data = user.get_related_users_by_keywords()
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
@@ -712,11 +708,9 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         ]
         new_keyword_profiles = CustomUser.objects.filter(id__in=new_keyword_profiles_ids)
         
-        # 증가량을 최근 가입한 사용자 수로 설정
         second_degree_diff = new_second_degree_profiles.count()
         keyword_diff = new_keyword_profiles.count()
         
-        # Serialize the data
         user_data = {
             "first_degree_count": len(first_degree_ids),
             "second_degree_count": len(second_degree_ids),
@@ -725,10 +719,10 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "related_users": related_users_data,
         }
 
+        # context를 올바르게 전달
         user_serialized = CustomUserSerializer(user, context={'request': request, 'user_data': user_data}).data
-
-        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request}).data
-        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request}).data
+        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request, 'user_data': user_data}).data
+        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request, 'user_data': user_data}).data
 
         return Response({
             'second_degree_difference': second_degree_diff,
@@ -737,4 +731,3 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             'new_keyword_profiles': keyword_profiles_serialized,
             'user_data': user_serialized,
         })
-
