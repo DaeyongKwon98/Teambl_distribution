@@ -122,5 +122,5 @@ urlpatterns += [
         views.GetUserDistanceAPIView.as_view(),
         name="get-user-distance",
     ),
-    path('api/user-statistics-difference/', views.UserStatisticsDifferenceView.as_view(), name='user-statistics-difference'),
+    path('user-statistics-difference/', views.UserStatisticsDifferenceView.as_view(), name='user-statistics-difference'),
 ]
