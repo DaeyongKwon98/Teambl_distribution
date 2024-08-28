@@ -232,6 +232,31 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "data_joined": {"read_only": True},
         }
 
+    def create(self, validated_data):
+        profile_data = validated_data.pop("profile", {})
+        keywords_data = profile_data.pop("keywords", [])
+
+        # CustomUser 인스턴스 생성
+        user = CustomUser.objects.create_user(
+            email=validated_data["email"], password=validated_data["password"]
+        )
+
+        # Profile 인스턴스 생성 및 CustomUser와 연결
+        profile = Profile.objects.create(user=user, **profile_data)
+
+        # Keywords 추가
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            profile.keywords.add(keyword_obj)
+
+        return user
+
+    def update(self, instance, validated_data):
+        if "password" in validated_data:
+            instance.set_password(validated_data["password"])
+            validated_data.pop("password")
+        return super().update(instance, validated_data)
+    
     def get_first_degree_count(self, obj):
         first_degree_ids, _, _ = obj.get_friend_counts()
         return len(first_degree_ids)
