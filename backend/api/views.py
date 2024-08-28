@@ -701,6 +701,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             id__in=second_degree_ids, 
             data_joined__gte=recent_times
         )
+        print("new second degree profiles:", new_second_degree_profiles)
         
         # 현재 유저와 같은 키워드를 가진 사용자 가져오기
         related_users_data = request.user.get_related_users_by_keywords()
@@ -722,6 +723,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "second_degree_connections": second_degree_connections,
             "related_users": related_users_data,
         }
+        print("user data:", user_data)
         user_serialized = CustomUserSerializer(request.user, context={'user_data': user_data}).data
 
         second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True).data
