@@ -61,6 +61,10 @@ function Home() {
       setKeywordDiff(response.data.keyword_difference);
       setRecentSecondDegreeProfiles(response.data.new_second_degree_profiles);
       setRecentKeywordProfiles(response.data.new_keyword_profiles);
+
+      console.log("RecentSecondDegreeProfiles", response.data.new_second_degree_profiles);
+      console.log("RecentKeywordProfiles", response.data.new_keyword_profiles);
+      
     } catch (error) {
       console.error("Failed to fetch user statistics difference", error);
     }
