@@ -725,7 +725,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "related_users": related_users_data,
         }
 
-        user_serialized = CustomUserSerializer(user, context={'user_data': user_data}).data
+        user_serialized = CustomUserSerializer(user, context={'request': request, 'user_data': user_data}).data
 
         second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True).data
         keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True).data
