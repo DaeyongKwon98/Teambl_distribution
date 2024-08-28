@@ -696,10 +696,6 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         recent_times = timezone.now() - timezone.timedelta(minutes=15)
         
         first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
-        second_degree_connections_serialized = [
-            {'second_degree_user_id': conn[0], 'first_degree_user_id': conn[1]}
-            for conn in second_degree_connections
-        ]
 
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
@@ -716,19 +712,26 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         second_degree_diff = new_second_degree_profiles.count()
         keyword_diff = new_keyword_profiles.count()
         
+        # 튜플 데이터를 JSON 직렬화 가능한 형식으로 변환
+        second_degree_connections_serialized = [
+            {'second_degree_user_id': conn[0], 'first_degree_user_id': conn[1]}
+            for conn in second_degree_connections
+        ]
+
         user_data = {
             "first_degree_count": len(first_degree_ids),
             "second_degree_count": len(second_degree_ids),
             "second_degree_ids": list(second_degree_ids),
-            "second_degree_connections": second_degree_connections,
+            "second_degree_connections": second_degree_connections_serialized,
             "related_users": related_users_data,
         }
 
-        # context를 올바르게 전달
+        # 시리얼라이저를 사용하여 객체를 JSON으로 직렬화
         user_serialized = CustomUserSerializer(user, context={'request': request, 'user_data': user_data}).data
-        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request, 'user_data': user_data}).data
-        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request, 'user_data': user_data}).data
+        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request}).data
+        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request}).data
 
+        # JSON 직렬화된 데이터를 응답으로 반환
         return Response({
             'second_degree_difference': second_degree_diff,
             'keyword_difference': keyword_diff,
