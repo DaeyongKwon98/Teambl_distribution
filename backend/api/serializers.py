@@ -11,6 +11,7 @@ from .models import (
     Experience,
     PortfolioLink,
     Notification,
+    UserStatistics,
 )
 import os
 
@@ -420,3 +421,21 @@ class RelatedUserSerializer(serializers.Serializer):
     user = UserDetailSerializer()
     common_keywords = serializers.ListField(child=serializers.CharField())
     similarity = serializers.IntegerField()
+
+# 사용자 통계 차이를 직렬화하는 클래스
+class UserStatisticsDifferenceSerializer(serializers.ModelSerializer):
+    second_degree_difference = serializers.SerializerMethodField()
+    keyword_difference = serializers.SerializerMethodField()
+
+    class Meta:
+        model = UserStatistics
+        fields = [
+            'second_degree_difference',
+            'keyword_difference'
+        ]
+
+    def get_second_degree_difference(self, obj):
+        return obj.two_degree_count_now - obj.two_degree_count_prev
+
+    def get_keyword_difference(self, obj):
+        return obj.same_keyword_count_now - obj.same_keyword_count_prev
