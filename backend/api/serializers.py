@@ -257,21 +257,19 @@ class CustomUserSerializer(serializers.ModelSerializer):
             validated_data.pop("password")
         return super().update(instance, validated_data)
 
-    def get_first_degree_count(self, obj):
-        first_degree_ids, _, _ = obj.get_friend_counts()
-        return len(first_degree_ids)
+    def to_representation(self, instance):
+        first_degree_ids, second_degree_ids, second_degree_connections = instance.get_friend_counts()
 
-    def get_second_degree_count(self, obj):
-        _, second_degree_ids, _ = obj.get_friend_counts()
-        return len(second_degree_ids)
+        representation = super().to_representation(instance)
+        representation['first_degree_count'] = len(first_degree_ids)
+        representation['second_degree_count'] = len(second_degree_ids)
+        representation['second_degree_ids'] = list(second_degree_ids)
+        representation['second_degree_connections'] = second_degree_connections
 
-    def get_second_degree_ids(self, obj):
-        _, second_degree_ids, _ = obj.get_friend_counts()
-        return list(second_degree_ids)
+        # `related_users` 필드도 추가 (필요시)
+        representation['related_users'] = self.get_related_users(instance)
 
-    def get_second_degree_connections(self, obj):
-        _, _, second_degree_connections = obj.get_friend_counts()
-        return second_degree_connections
+        return representation
 
     def get_related_users(self, obj):
         related_users_data = obj.get_related_users_by_keywords()
