@@ -198,11 +198,11 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
-    # first_degree_count = serializers.SerializerMethodField()
-    # second_degree_count = serializers.SerializerMethodField()
-    # second_degree_ids = serializers.SerializerMethodField()
-    # second_degree_connections = serializers.SerializerMethodField()
-    # related_users = serializers.SerializerMethodField()
+    first_degree_count = serializers.SerializerMethodField()
+    second_degree_count = serializers.SerializerMethodField()
+    second_degree_ids = serializers.SerializerMethodField()
+    second_degree_connections = serializers.SerializerMethodField()
+    related_users = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
@@ -256,18 +256,30 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data["password"])
             validated_data.pop("password")
         return super().update(instance, validated_data)
-    
+
+    def get_first_degree_count(self, obj):
+        user_data = self.context.get('user_data', {})
+        return user_data.get('first_degree_count', 0)
+
+    def get_second_degree_count(self, obj):
+        user_data = self.context.get('user_data', {})
+        return user_data.get('second_degree_count', 0)
+
+    def get_second_degree_ids(self, obj):
+        user_data = self.context.get('user_data', {})
+        return user_data.get('second_degree_ids', [])
+
+    def get_second_degree_connections(self, obj):
+        user_data = self.context.get('user_data', {})
+        return user_data.get('second_degree_connections', [])
+
+    def get_related_users(self, obj):
+        user_data = self.context.get('user_data', {})
+        return user_data.get('related_users', [])
+
     def to_representation(self, instance):
         # 이미 계산된 데이터를 사용하여 필드를 채움
         representation = super().to_representation(instance)
-        user_data = self.context.get('user_data', {})
-
-        representation['first_degree_count'] = user_data.get('first_degree_count', 0)
-        representation['second_degree_count'] = user_data.get('second_degree_count', 0)
-        representation['second_degree_ids'] = user_data.get('second_degree_ids', [])
-        representation['second_degree_connections'] = user_data.get('second_degree_connections', [])
-        representation['related_users'] = self.get_related_users(instance)
-
         return representation
 
 
