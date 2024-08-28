@@ -52,31 +52,96 @@ function Home() {
   const [recentSecondDegreeProfiles, setRecentSecondDegreeProfiles] = useState([]); // 증가한 2촌 프로필
   const [recentKeywordProfiles, setRecentKeywordProfiles] = useState([]); // 증가한 같은 키워드 사용자 프로필
 
-  // Fetch statistics difference and recent profiles
-  const fetchStatisticsDifference = async () => {
+  // 2촌 프로필 정보 가져오기
+  const fetchSecondDegreeProfiles = async () => {
     try {
       const response = await api.get("/api/user-statistics-difference/");
-      if (response.data.new_second_degree_profiles) {
-        setRecentSecondDegreeProfiles(response.data.new_second_degree_profiles);
-      } else {
-        setRecentSecondDegreeProfiles([]); // 데이터가 없을 경우 빈 배열로 설정
-      }
-      
       setSecondDegreeDiff(response.data.second_degree_difference || 0);
       setKeywordDiff(response.data.keyword_difference || 0);
-      setRecentKeywordProfiles(response.data.new_keyword_profiles || []);
-      
-      console.log("RecentSecondDegreeProfiles", response.data.new_second_degree_profiles);
-      console.log("RecentKeywordProfiles", response.data.new_keyword_profiles);
+
+      const connections = response.data.new_second_degree_profiles || [];
+
+      const secondDegreeDetails = await Promise.all(
+        connections.map(async (connection, index) => {
+          try {
+            const secondDegreeId = connection[0]; // 2촌 ID
+            const firstDegreeId = connection[1]; // 1촌 ID
+
+            const userResponse = await api.get(
+              `/api/profile/${secondDegreeId}/`
+            );
+            const userData = userResponse.data;
+
+            const firstDegreeResponse = await api.get(
+              `/api/profile/${firstDegreeId}/`
+            );
+            const firstDegreeName = firstDegreeResponse.data.user_name;
+
+            return {
+              ...userData,
+              friendOf: firstDegreeName, // 1촌의 이름을 포함
+            };
+          } catch (innerError) {
+            console.error(
+              `Failed to fetch data for connection index ${index}:`,
+              innerError
+            );
+            return null;
+          }
+        })
+      );
+
+      const validDetails = secondDegreeDetails.filter(
+        (detail) => detail !== null
+      );
+      setRecentSecondDegreeProfiles(validDetails);
     } catch (error) {
-      console.error("Failed to fetch user statistics difference", error);
-      setRecentSecondDegreeProfiles([]); // 에러 발생 시 빈 배열로 설정
+      console.error("Failed to fetch second degree details", error);
     }
   };
 
+  // 키워드와 연관된 사용자들을 가져오는 함수
+  const fetchKeywordFriendProfiles = async () => {
+    try {
+      const response = await api.get("/api/user-similarity/");
+      console.log("Keyword Friends Response:", response.data);
+
+      const processedKeywordFriends = await Promise.all(
+        response.data.map(async (friendData) => {
+          try {
+            const profileResponse = await api.get(
+              `/api/profile/${friendData.user.id}/`
+            );
+            const userData = profileResponse.data;
+
+            return {
+              ...userData,
+              sametag: friendData.common_keywords[0] || "",
+              similarity: friendData.similarity,
+            };
+          } catch (error) {
+            console.error(
+              `Failed to fetch profile for user ID ${friendData.user.id}`,
+              error
+            );
+            return null;
+          }
+        })
+      );
+
+      const validKeywordFriends = processedKeywordFriends.filter(
+        (friend) => friend !== null
+      );
+      setRecentKeywordProfiles(validKeywordFriends);
+    } catch (error) {
+      console.error("Failed to fetch keyword friends", error);
+    }
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
-      await fetchStatisticsDifference();
+      await fetchSecondDegreeProfiles();
+      await fetchKeywordFriendProfiles();
     };
     fetchData();
   }, []);
