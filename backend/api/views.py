@@ -715,7 +715,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         
-        recent_times = timezone.now() - timezone.timedelta(hours=1)
+        recent_times = timezone.now() - timezone.timedelta(hours=3)
 
         # 1촌 및 2촌 정보 가져오기
         first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
