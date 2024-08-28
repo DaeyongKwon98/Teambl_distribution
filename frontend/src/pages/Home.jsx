@@ -93,7 +93,7 @@ function Home() {
   
       // 유효한 2촌 사용자 정보를 상태에 저장
       const validDetails = secondDegreeDetails.filter((detail) => detail !== null);
-      setRecentSecondDegreeProfiles(validDetails);
+      setSecondDegreeProfiles(validDetails);
     } catch (error) {
       console.error("Failed to fetch second degree profiles", error);
     }
@@ -131,7 +131,7 @@ function Home() {
       const validKeywordFriends = processedKeywordFriends.filter(
         (friend) => friend !== null
       );
-      setRecentKeywordProfiles(validKeywordFriends);
+      setKeywordProfiles(validKeywordFriends);
     } catch (error) {
       console.error("Failed to fetch keyword friends", error);
     }
@@ -175,7 +175,7 @@ function Home() {
           <h2>이번주 새로운 2촌</h2>
           <span
             className="home-view-all"
-            onClick={() => openBottomSheet(recentSecondDegreeProfiles)}
+            onClick={() => openBottomSheet(SecondDegreeProfiles)}
           >
             모두 보기
           </span>
@@ -186,7 +186,7 @@ function Home() {
           <span className="home-sub-header-text">증가했어요!</span>
         </div>
         <div className="home-friends-list">
-          {recentSecondDegreeProfiles.map((friend) => (
+          {SecondDegreeProfiles.map((friend) => (
             <FriendCard key={friend.id} friend={friend} />
           ))}
         </div>
@@ -197,7 +197,7 @@ function Home() {
           <h2>내 키워드와 연관된</h2>
           <span
             className="home-view-all"
-            onClick={() => openBottomSheet(recentKeywordProfiles)}
+            onClick={() => openBottomSheet(KeywordProfiles)}
           >
             모두 보기
           </span>
@@ -210,7 +210,7 @@ function Home() {
           <span className="home-sub-header-text">증가했어요!</span>
         </div>
         <div className="home-friends-list">
-          {recentKeywordProfiles.map((friend) => (
+          {KeywordProfiles.map((friend) => (
             <FriendCard key={friend.id} friend={friend} isKeywordFriend />
           ))}
         </div>
