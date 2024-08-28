@@ -49,54 +49,53 @@ function Home() {
 
   const [secondDegreeDiff, setSecondDegreeDiff] = useState(0); // 증가한 2촌 수
   const [keywordDiff, setKeywordDiff] = useState(0); // 증가한 같은 키워드 사용자 수
-  const [recentSecondDegreeProfiles, setRecentSecondDegreeProfiles] = useState([]); // 증가한 2촌 프로필
-  const [recentKeywordProfiles, setRecentKeywordProfiles] = useState([]); // 증가한 같은 키워드 사용자 프로필
+  const [SecondDegreeProfiles, setSecondDegreeProfiles] = useState([]); // 증가한 2촌 프로필
+  const [KeywordProfiles, setKeywordProfiles] = useState([]); // 증가한 같은 키워드 사용자 프로필
 
   // 2촌 프로필 정보 가져오기
   const fetchSecondDegreeProfiles = async () => {
     try {
+      // 2촌 사용자 정보를 가져오는 API 호출
       const response = await api.get("/api/user-statistics-difference/");
-      setSecondDegreeDiff(response.data.second_degree_difference || 0);
-      setKeywordDiff(response.data.keyword_difference || 0);
-
-      const connections = response.data.new_second_degree_profiles || [];
-
+      
+      // API로부터 받은 2촌 사용자 정보 목록
+      const connections = response.data || [];
+  
       console.log("connections", connections);
-
+  
+      // 2촌 사용자 정보를 처리하기 위해 map을 사용
       const secondDegreeDetails = await Promise.all(
-        connections.map(async (connection, index) => {
+        connections.map(async (connection) => {
           try {
-            // 모든 2촌 관계를 처리하기 위해 반복문 사용
-            const details = await Promise.all(
-              connection.second_degree_connections.map(async (secondDegreeConnection) => {
-                const secondDegreeId = secondDegreeConnection[0];
-                const firstDegreeId = secondDegreeConnection[1];
-
-                const userResponse = await api.get(`/api/profile/${secondDegreeId}/`);
-                const userData = userResponse.data;
-
-                const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
-                const firstDegreeName = firstDegreeResponse.data.user_name;
-
-                return {
-                  ...userData,
-                  friendOf: firstDegreeName,
-                };
-              })
-            );
-            return details;
+            // 2촌 사용자 ID와 연결된 1촌 사용자 ID를 가져옴
+            const secondDegreeId = connection.second_degree_profile_id;
+            const firstDegreeId = connection.connector_friend_id;
+  
+            // 2촌 사용자의 프로필 정보를 가져옴
+            const userResponse = await api.get(`/api/profile/${secondDegreeId}/`);
+            const userData = userResponse.data;
+  
+            // 1촌 사용자의 이름 정보를 가져옴
+            const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
+            const firstDegreeName = firstDegreeResponse.data.user_name;
+  
+            // 2촌 사용자의 데이터에 연결된 1촌 사용자의 이름을 추가하여 반환
+            return {
+              ...userData,
+              friendOf: firstDegreeName,
+            };
           } catch (innerError) {
-            console.error(`Failed to fetch data for connection index ${index}:`, innerError);
+            console.error("Failed to fetch data for second degree profile:", innerError);
             return null;
           }
         })
       );
-
-      // Flatten the array of arrays if needed
-      const validDetails = secondDegreeDetails.flat().filter((detail) => detail !== null);
+  
+      // 유효한 2촌 사용자 정보를 상태에 저장
+      const validDetails = secondDegreeDetails.filter((detail) => detail !== null);
       setRecentSecondDegreeProfiles(validDetails);
     } catch (error) {
-      console.error("Failed to fetch second degree details", error);
+      console.error("Failed to fetch second degree profiles", error);
     }
   };
 
