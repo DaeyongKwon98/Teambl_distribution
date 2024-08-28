@@ -726,7 +726,8 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "new_second_degree_count": new_second_degree_count,
         }
 
-        return Response(response_data, status=200)
+        serializer = UserStatisticsDifferenceSerializer(response_data)
+        return Response(serializer.data, status=200)
         
         # related_users_data = user.get_related_users_by_keywords()
 
