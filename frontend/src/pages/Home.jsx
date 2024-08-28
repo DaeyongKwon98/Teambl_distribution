@@ -52,6 +52,18 @@ function Home() {
   const [SecondDegreeProfiles, setSecondDegreeProfiles] = useState([]); // 증가한 2촌 프로필
   const [KeywordProfiles, setKeywordProfiles] = useState([]); // 증가한 같은 키워드 사용자 프로필
 
+  const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
+
+  // 프로필 이미지 가져오기
+  const fetchProfileImage = async () => {
+    try {
+      const response = await api.get(`/api/profile/${userId}/`);
+      setProfileImage(response.data.image); // Assuming the image field is 'image'
+    } catch (error) {
+      console.error("Failed to fetch profile image:", error);
+    }
+  };
+  
   // 2촌 프로필 정보 가져오기
   const fetchSecondDegreeProfiles = async () => {
     try {
@@ -141,6 +153,7 @@ function Home() {
   
   useEffect(() => {
     const fetchData = async () => {
+      await fetchProfileImage();
       await fetchSecondDegreeProfiles();
       await fetchKeywordFriendProfiles();
     };
@@ -169,7 +182,7 @@ function Home() {
 
   return (
     <div className="home-container">
-      <Header />
+      <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
       <section className="home-friend-recommendation">
