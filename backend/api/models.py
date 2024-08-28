@@ -42,47 +42,52 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         return self.email
 
     def get_friend_counts(self):
-        # 1촌
+        # 1촌 친구 목록을 찾습니다.
         first_degree_friends = Friend.objects.filter(
             (Q(from_user=self) | Q(to_user=self)) & Q(status="accepted")
         )
-
+    
         first_degree_ids = set()
         for friend in first_degree_friends:
             if friend.from_user == self:
                 first_degree_ids.add(friend.to_user.id)
             else:
                 first_degree_ids.add(friend.from_user.id)
-
-        # 2촌과 그들을 연결해주는 1촌의 ID 쌍을 저장할 리스트
-        second_degree_connections = []
-
+    
+        # 2촌과 그들을 연결해주는 1촌의 ID 쌍을 저장할 리스트 (중복 제거를 위해 set 사용)
+        second_degree_connections = set()
+    
         print("1촌 목록:", first_degree_ids)
-        
-        # 2촌
+    
+        # 2촌 찾기
         for friend_id in first_degree_ids:
             second_degree_friends = Friend.objects.filter(
                 (Q(from_user_id=friend_id) | Q(to_user_id=friend_id))
                 & Q(status="accepted")
             ).exclude(Q(from_user=self) | Q(to_user=self))
-
+    
             print("현재 1촌:", friend_id)
-            
+    
             for friend in second_degree_friends:
-                print("1촌", friend_id, "에 대한 친구", friend, "조사중..")
-                if friend.from_user_id == friend_id and friend.to_user_id not in first_degree_ids and friend.to_user_id != self.id:
-                    second_degree_connections.append((friend.to_user_id, friend_id))
-                    print((friend.to_user_id, friend_id), "추가")
-                elif friend.to_user_id == friend_id and friend.from_user_id not in first_degree_ids and friend.from_user_id != self.id:
-                    second_degree_connections.append((friend.from_user_id, friend_id))
-                    print((friend.from_user_id, friend_id), "추가")
+                print(f"1촌 {friend_id}의 친구 {friend.from_user_id} - {friend.to_user_id} 조사중..")
+    
+                # 2촌 관계에서 나 자신과 1촌들을 제외하고 추가
+                if friend.from_user_id == friend_id:
+                    target_id = friend.to_user_id
+                else:
+                    target_id = friend.from_user_id
+    
+                if target_id not in first_degree_ids and target_id != self.id:
+                    second_degree_connections.add((target_id, friend_id))
+                    print(f"({target_id}, {friend_id}) 추가")
+    
+        # 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
+        second_degree_ids = {conn[0] for conn in second_degree_connections}
+    
+        print("second degree connections:", list(second_degree_connections))
+    
+        return first_degree_ids, second_degree_ids, list(second_degree_connections)
 
-        # 각 2촌 ID는 고유해야 하므로, 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
-        second_degree_ids = set([conn[0] for conn in second_degree_connections])
-
-        print("second degree connections:", second_degree_connections)
-        
-        return first_degree_ids, second_degree_ids, second_degree_connections
 
     def get_related_users_by_keywords(self):
         user_keywords = set(self.profile.keywords.values_list("keyword", flat=True))
