@@ -114,14 +114,28 @@ User = get_user_model()
 
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
-    permission_classes = [permissions.IsAuthenticated]
-    lookup_field = "id"
+    permission_classes = [AllowAny]
 
     def get_object(self):
-        return self.request.user
+        if self.request.user.is_authenticated:
+            # If the user is logged in, return the currently authenticated user
+            return self.request.user
+        else:
+            # If the user is logged out, get the user by email from the request data
+            email = self.request.data.get("email")
+            if email:
+                return get_object_or_404(CustomUser, email=email)
+            else:
+                return None
 
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
+
+        if instance is None:
+            return Response(
+                {"detail": "User not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+
         new_password = request.data.get("new_password")
         if not new_password:
             return Response(
@@ -171,10 +185,10 @@ class DeleteUserView(generics.DestroyAPIView):
 
     def destroy(self, request, *args, **kwargs):
         user = self.get_object()
-        
+
         # 탈퇴하는 사용자의 ID와 일치하는 invitee_id를 가진 InvitationLink 삭제 (추후에는 status를 exited 등으로 바꿀 수 있음)
         InvitationLink.objects.filter(invitee_id=user.id).delete()
-        
+
         user.delete()
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
@@ -685,43 +699,48 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
         serializer = self.get_serializer(related_users_data, many=True)
         return Response(serializer.data)
 
+
 # 2촌/같은 키워드 사용자 수의 증가량을 반환
 class UserStatisticsDifferenceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        
+
         # 최근 시간 기준으로 필터링
         recent_times = timezone.now() - timezone.timedelta(minutes=15)
-        
-        first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
+
+        first_degree_ids, second_degree_ids, second_degree_connections = (
+            user.get_friend_counts()
+        )
 
         new_second_degree_profiles = CustomUser.objects.filter(
-            id__in=second_degree_ids, 
-            data_joined__gte=recent_times
+            id__in=second_degree_ids, data_joined__gte=recent_times
         )
-        
+
         related_users_data = user.get_related_users_by_keywords()
-        
+
         # related_users_data를 CustomUserSerializer로 직렬화
         related_users_serialized = [
-            CustomUserSerializer(user_data['user'], context={'request': request}).data
+            CustomUserSerializer(user_data["user"], context={"request": request}).data
             for user_data in related_users_data
         ]
-        
+
         new_keyword_profiles_ids = [
-            user_data['user'].id for user_data in related_users_data 
-            if user_data['user'].data_joined >= recent_times
+            user_data["user"].id
+            for user_data in related_users_data
+            if user_data["user"].data_joined >= recent_times
         ]
-        new_keyword_profiles = CustomUser.objects.filter(id__in=new_keyword_profiles_ids)
-        
+        new_keyword_profiles = CustomUser.objects.filter(
+            id__in=new_keyword_profiles_ids
+        )
+
         second_degree_diff = new_second_degree_profiles.count()
         keyword_diff = new_keyword_profiles.count()
-        
+
         # 튜플 데이터를 JSON 직렬화 가능한 형식으로 변환
         second_degree_connections_serialized = [
-            {'second_degree_user_id': conn[0], 'first_degree_user_id': conn[1]}
+            {"second_degree_user_id": conn[0], "first_degree_user_id": conn[1]}
             for conn in second_degree_connections
         ]
 
@@ -733,17 +752,29 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "related_users": related_users_serialized,  # 직렬화된 데이터를 사용
         }
         print(f"User data being passed to serializer: {user_data}")
-        
+
         # 시리얼라이저를 사용하여 객체를 JSON으로 직렬화
-        user_serialized = CustomUserSerializer(user, context={'request': request, 'user_data': user_data}).data
-        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request, 'user_data': user_data}).data
-        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request, 'user_data': user_data}).data
+        user_serialized = CustomUserSerializer(
+            user, context={"request": request, "user_data": user_data}
+        ).data
+        second_degree_profiles_serialized = CustomUserSerializer(
+            new_second_degree_profiles,
+            many=True,
+            context={"request": request, "user_data": user_data},
+        ).data
+        keyword_profiles_serialized = CustomUserSerializer(
+            new_keyword_profiles,
+            many=True,
+            context={"request": request, "user_data": user_data},
+        ).data
 
         # JSON 직렬화된 데이터를 응답으로 반환
-        return Response({
-            'second_degree_difference': second_degree_diff,
-            'keyword_difference': keyword_diff,
-            'new_second_degree_profiles': second_degree_profiles_serialized,
-            'new_keyword_profiles': keyword_profiles_serialized,
-            'user_data': user_serialized,
-        })
+        return Response(
+            {
+                "second_degree_difference": second_degree_diff,
+                "keyword_difference": keyword_diff,
+                "new_second_degree_profiles": second_degree_profiles_serialized,
+                "new_keyword_profiles": keyword_profiles_serialized,
+                "user_data": user_serialized,
+            }
+        )

@@ -17,6 +17,8 @@ import ProfileRouter from "./pages/ProfilePage/ProfileRouter";
 import EditProfile from "./pages/ProfilePage/EditProfile";
 import Notification from "./pages/Notification";
 import Setting from "./pages/Setting";
+import ResetPassword from "./pages/ResetPasswordPage/ResetPassword";
+import ResetPasswordConfirm from "./pages/ResetPasswordPage/ResetPasswordConfirm";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -61,6 +63,11 @@ function App() {
         />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
+        <Route path="/password-reset" element={<ResetPassword />} />
+        <Route
+          path="/password-reset-confirm"
+          element={<ResetPasswordConfirm />}
+        />
         <Route
           path="/welcome"
           element={
