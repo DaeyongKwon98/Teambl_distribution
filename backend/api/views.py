@@ -703,6 +703,13 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         )
         
         related_users_data = user.get_related_users_by_keywords()
+        
+        # related_users_data를 CustomUserSerializer로 직렬화
+        related_users_serialized = [
+            CustomUserSerializer(user_data['user'], context={'request': request}).data
+            for user_data in related_users_data
+        ]
+        
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
             if user_data['user'].data_joined >= recent_times
@@ -723,7 +730,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "second_degree_count": len(second_degree_ids),
             "second_degree_ids": list(second_degree_ids),
             "second_degree_connections": second_degree_connections_serialized,
-            "related_users": related_users_data,
+            "related_users": related_users_serialized,  # 직렬화된 데이터를 사용
         }
 
         # 시리얼라이저를 사용하여 객체를 JSON으로 직렬화
