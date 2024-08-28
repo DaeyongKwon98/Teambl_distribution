@@ -63,7 +63,14 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                 (Q(from_user_id=friend_id) | Q(to_user_id=friend_id))
                 & Q(status="accepted")
             ).exclude(Q(from_user=self) | Q(to_user=self))
+            
+            for friend in second_degree_friends:
+                if friend.from_user_id == friend_id and friend.to_user_id not in first_degree_ids and friend.to_user_id != self.id:
+                    second_degree_connections.append((friend.to_user_id, friend_id))
+                elif friend.to_user_id == friend_id and friend.from_user_id not in first_degree_ids and friend.from_user_id != self.id:
+                    second_degree_connections.append((friend.from_user_id, friend_id))
 
+            
             for friend in second_degree_friends:
                 if friend.from_user_id not in first_degree_ids:
                     second_degree_connections.append((friend.from_user_id, friend_id))
