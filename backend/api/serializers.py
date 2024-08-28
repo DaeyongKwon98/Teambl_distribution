@@ -203,11 +203,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
     second_degree_ids = serializers.SerializerMethodField()
     second_degree_connections = serializers.SerializerMethodField()
     related_users = serializers.SerializerMethodField()
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        # user_data를 인스턴스 변수로 저장
-        self.user_data = self.context.get('user_data', {})
     
     class Meta:
         model = CustomUser
@@ -284,11 +279,21 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user_data.get('related_users', [])
 
     def to_representation(self, instance):
-        # 요청한 사용자의 정보를 얻기 위해 self.context['request'].user 사용
-        user = self.context['request'].user
-        
+        # 안전하게 request와 user_data를 가져옴
+        context = self.context or {}
+        request = context.get('request', None)
+        user_data = context.get('user_data', {})
+
         # 필요한 사용자 정보 또는 추가 로직을 처리합니다.
         representation = super().to_representation(instance)
+
+        # 여기서 user_data를 이용해 추가적인 처리나 데이터 추가 가능
+        representation['first_degree_count'] = user_data.get('first_degree_count', 0)
+        representation['second_degree_count'] = user_data.get('second_degree_count', 0)
+        representation['second_degree_ids'] = user_data.get('second_degree_ids', [])
+        representation['second_degree_connections'] = user_data.get('second_degree_connections', [])
+        representation['related_users'] = user_data.get('related_users', [])
+
         return representation
 
 
