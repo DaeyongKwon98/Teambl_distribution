@@ -718,16 +718,21 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             id__in=second_degree_ids, date_joined__gte=recent_times
         )
 
+        # 결과가 비어 있는지 확인하기 위해 로그 출력
+        print("new_second_degree_profiles:", new_second_degree_profiles)
+
         # 2촌 프로필 정보와 연결된 1촌 ID를 포함하여 직렬화
         response_data = []
         for profile in new_second_degree_profiles:
-            # 2촌 프로필 ID에 매칭되는 연결된 1촌 ID를 찾아서 추가
-            for connector_id in second_degree_connections:
-                if connector_id in first_degree_ids:
+            for second_degree_id, connector_id in second_degree_connections:
+                if profile.id == second_degree_id:
                     response_data.append({
                         "second_degree_profile_id": profile.id,
                         "connector_friend_id": connector_id
                     })
+
+        # 결과가 비어 있는지 확인하기 위해 로그 출력
+        print("response_data:", response_data)
 
         serializer = SecondDegreeProfileSerializer(response_data, many=True)
         return Response(serializer.data, status=200)
