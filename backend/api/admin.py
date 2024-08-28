@@ -19,18 +19,20 @@ def setup_periodic_tasks():
     else:
         logger.info("Using existing IntervalSchedule for every 3 minutes.")
 
-    # 먼저 동일한 이름의 PeriodicTask가 존재하는지 체크
+    # 동일한 이름의 PeriodicTask가 존재하는지 체크하고, 있으면 삭제
     task_exists = PeriodicTask.objects.filter(name='Regular Update User Statistics').exists()
 
-    if not task_exists:
-        task = PeriodicTask.objects.create(
-            interval=schedule, 
-            name='Regular Update User Statistics', 
-            task='api.tasks.update_user_statistics',
-        )
-        logger.info("Created new PeriodicTask 'Regular Update User Statistics'.")
-    else:
-        logger.info("PeriodicTask 'Regular Update User Statistics' already exists. No new task was created.")
+    if task_exists:
+        PeriodicTask.objects.filter(name='Regular Update User Statistics').delete()
+        logger.info("Deleted existing PeriodicTask 'Regular Update User Statistics'.")
+
+    # 새로운 PeriodicTask 생성
+    task = PeriodicTask.objects.create(
+        interval=schedule, 
+        name='Regular Update User Statistics', 
+        task='api.tasks.update_user_statistics',
+    )
+    logger.info("Created new PeriodicTask 'Regular Update User Statistics'.")
 
     logger.info("Periodic tasks setup complete.")
 
