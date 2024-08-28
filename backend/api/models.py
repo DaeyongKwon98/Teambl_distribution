@@ -114,12 +114,12 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 #     def __str__(self):
 #         return f"Statistics for {self.user.email}"
 
-# class Keyword(models.Model):
-#     keyword = models.CharField(max_length=50, unique=True)
 
-#     def __str__(self):
-#         return self.keyword
+class Keyword(models.Model):
+    keyword = models.CharField(max_length=50, unique=True)
 
+    def __str__(self):
+        return self.keyword
 
 class Project(models.Model):
     project_id = models.AutoField(primary_key=True)
