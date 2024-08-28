@@ -732,7 +732,8 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "second_degree_connections": second_degree_connections_serialized,
             "related_users": related_users_serialized,  # 직렬화된 데이터를 사용
         }
-
+        print(f"User data being passed to serializer: {user_data}")
+        
         # 시리얼라이저를 사용하여 객체를 JSON으로 직렬화
         user_serialized = CustomUserSerializer(user, context={'request': request, 'user_data': user_data}).data
         second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request, 'user_data': user_data}).data
