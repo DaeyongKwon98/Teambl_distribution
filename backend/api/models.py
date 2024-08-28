@@ -57,25 +57,25 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         # 2촌과 그들을 연결해주는 1촌의 ID 쌍을 저장할 리스트
         second_degree_connections = []
 
+        print("1촌 목록:", first_degree_ids)
+        
         # 2촌
         for friend_id in first_degree_ids:
             second_degree_friends = Friend.objects.filter(
                 (Q(from_user_id=friend_id) | Q(to_user_id=friend_id))
                 & Q(status="accepted")
             ).exclude(Q(from_user=self) | Q(to_user=self))
+
+            print("현재 1촌:", friend_id)
             
             for friend in second_degree_friends:
+                print("1촌", friend_id, "에 대한 친구", friend, "조사중..")
                 if friend.from_user_id == friend_id and friend.to_user_id not in first_degree_ids and friend.to_user_id != self.id:
                     second_degree_connections.append((friend.to_user_id, friend_id))
+                    print((friend.to_user_id, friend_id), "추가")
                 elif friend.to_user_id == friend_id and friend.from_user_id not in first_degree_ids and friend.from_user_id != self.id:
                     second_degree_connections.append((friend.from_user_id, friend_id))
-
-            
-            for friend in second_degree_friends:
-                if friend.from_user_id not in first_degree_ids:
-                    second_degree_connections.append((friend.from_user_id, friend_id))
-                if friend.to_user_id not in first_degree_ids:
-                    second_degree_connections.append((friend.to_user_id, friend_id))
+                    print(((friend.from_user_id, friend_id), "추가")
 
         # 각 2촌 ID는 고유해야 하므로, 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
         second_degree_ids = set([conn[0] for conn in second_degree_connections])
