@@ -214,7 +214,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "is_superuser",
             "is_staff",
             "is_active",
-            "data_joined",
+            "date_joined",
             "profile",
             "code",
             "first_degree_count",
@@ -229,7 +229,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "is_superuser": {"read_only": True},
             "is_staff": {"read_only": True},
             "is_active": {"read_only": True},
-            "data_joined": {"read_only": True},
+            "date_joined": {"read_only": True},
         }
 
     # def __init__(self, *args, **kwargs):
@@ -288,8 +288,8 @@ class CustomUserSerializer(serializers.ModelSerializer):
     #     representation['second_degree_connections'] = self.user_data.get('second_degree_connections', [])
     #     representation['related_users'] = self.user_data.get('related_users', [])
         
-    #     # data_joined를 원하는 형식으로 변환
-    #     representation['data_joined'] = instance.data_joined.strftime('%Y-%m-%d %H:%M:%S')
+    #     # date_joined를 원하는 형식으로 변환
+    #     representation['date_joined'] = instance.date_joined.strftime('%Y-%m-%d %H:%M:%S')
 
     #     return representation
 
