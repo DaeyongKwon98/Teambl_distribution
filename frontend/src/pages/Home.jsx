@@ -133,6 +133,7 @@ function Home() {
         (friend) => friend !== null
       );
       setKeywordProfiles(validKeywordFriends);
+      setKeywordDiff(validKeywordFriends.length);
     } catch (error) {
       console.error("Failed to fetch keyword friends", error);
     }
