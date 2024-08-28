@@ -708,24 +708,26 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         user = request.user
         
-        recent_times = timezone.now() - timezone.timedelta(minutes=15) # 최근 시간 기준으로 필터링 (최근 15분)
+        recent_times = timezone.now() - timezone.timedelta(minutes=15)  # 최근 15분 기준으로 필터링
 
         # 1촌 및 2촌 정보 가져오기
-        first_degree_ids, second_degree_ids, second_degree_connections = (user.get_friend_counts())
+        first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
 
-        # 최근 15분 이내에 가입한 2촌 사용자 필터링 및 연결된 1촌 정보 포함
+        # 최근 15분 이내에 가입한 2촌 사용자 필터링
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, date_joined__gte=recent_times
         )
 
         # 2촌 프로필 정보와 연결된 1촌 ID를 포함하여 직렬화
-        response_data = [
-            {
-                "second_degree_profile_id": profile.id,
-                "connector_friend_id": connector_id
-            }
-            for profile, connector_id in zip(new_second_degree_profiles, second_degree_connections)
-        ]
+        response_data = []
+        for profile in new_second_degree_profiles:
+            # 2촌 프로필 ID에 매칭되는 연결된 1촌 ID를 찾아서 추가
+            for connector_id in second_degree_connections:
+                if connector_id in first_degree_ids:
+                    response_data.append({
+                        "second_degree_profile_id": profile.id,
+                        "connector_friend_id": connector_id
+                    })
 
         serializer = SecondDegreeProfileSerializer(response_data, many=True)
         return Response(serializer.data, status=200)
