@@ -258,6 +258,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
     
     def get_first_degree_count(self, obj):
+        print("serializer get first degree count")
         first_degree_ids, _, _ = obj.get_friend_counts()
         return len(first_degree_ids)
 
