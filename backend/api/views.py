@@ -691,7 +691,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         # 최근 3분을 기준으로 필터링
-        three_minutes_ago = timezone.now() - timezone.timedelta(minutes=3)
+        three_minutes_ago = timezone.now() - timezone.timedelta(minutes=10)
         
         # 현재 유저의 2촌 관계 가져오기
         _, second_degree_ids, _ = request.user.get_friend_counts()
