@@ -2,6 +2,7 @@ import React from 'react';
 import BefriIcon from "../assets/befriIcon.svg";
 
 const FriendCard = ({ friend, isKeywordFriend = false }) => {
+  console.log("friend", friend);
   return (
     <div className="home-friend-card">
       <div className='home-same-and-befri'>
