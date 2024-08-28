@@ -690,23 +690,23 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        # 최근 3분을 기준으로 필터링
-        three_minutes_ago = timezone.now() - timezone.timedelta(minutes=15)
+        # 최근 시간 기준으로 필터링
+        recent_times = timezone.now() - timezone.timedelta(minutes=15)
         
         # 현재 유저의 2촌 관계 가져오기
         print("view get friend counts")
         print(request.user)
-        _, second_degree_ids, _ = request.user.get_friend_counts()
+        first_degree_ids, second_degree_ids, second_degree_connections = request.user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
-            data_joined__gte=three_minutes_ago
+            data_joined__gte=recent_times
         )
         
         # 현재 유저와 같은 키워드를 가진 사용자 가져오기
         related_users_data = request.user.get_related_users_by_keywords()
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
-            if user_data['user'].data_joined >= three_minutes_ago
+            if user_data['user'].data_joined >= recent_times
         ]
         new_keyword_profiles = CustomUser.objects.filter(id__in=new_keyword_profiles_ids)
         
