@@ -204,6 +204,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
     second_degree_connections = serializers.SerializerMethodField()
     related_users = serializers.SerializerMethodField()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # user_data를 인스턴스 변수로 저장
+        self.user_data = self.context.get('user_data', {})
+    
     class Meta:
         model = CustomUser
         fields = [
