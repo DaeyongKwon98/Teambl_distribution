@@ -217,11 +217,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "date_joined",
             "profile",
             "code",
-            "first_degree_count",
-            "second_degree_count",
-            "second_degree_ids",
-            "second_degree_connections",
-            "related_users",
+            # "first_degree_count",
+            # "second_degree_count",
+            # "second_degree_ids",
+            # "second_degree_connections",
+            # "related_users",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
