@@ -235,6 +235,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         # user_data를 시리얼라이저 인스턴스에 저장
         self.user_data = kwargs.pop('user_data', {})
+        print(f"Initializing CustomUserSerializer with user_data: {self.user_data}")
         super().__init__(*args, **kwargs)
     
     def create(self, validated_data):
