@@ -232,34 +232,31 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "data_joined": {"read_only": True},
         }
 
-    def create(self, validated_data):
-        profile_data = validated_data.pop("profile", {})
-        keywords_data = profile_data.pop("keywords", [])
+    def get_first_degree_count(self, obj):
+        first_degree_ids, _, _ = obj.get_friend_counts()
+        return len(first_degree_ids)
 
-        # CustomUser 인스턴스 생성
-        user = CustomUser.objects.create_user(
-            email=validated_data["email"], password=validated_data["password"]
-        )
+    def get_second_degree_count(self, obj):
+        _, second_degree_ids, _ = obj.get_friend_counts()
+        return len(second_degree_ids)
 
-        # Profile 인스턴스 생성 및 CustomUser와 연결
-        profile = Profile.objects.create(user=user, **profile_data)
+    def get_second_degree_ids(self, obj):
+        _, second_degree_ids, _ = obj.get_friend_counts()
+        return list(second_degree_ids)
 
-        # Keywords 추가
-        for keyword in keywords_data:
-            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
-            profile.keywords.add(keyword_obj)
+    def get_second_degree_connections(self, obj):
+        _, _, second_degree_connections = obj.get_friend_counts()
+        return second_degree_connections
 
-        return user
-
-    def update(self, instance, validated_data):
-        if "password" in validated_data:
-            instance.set_password(validated_data["password"])
-            validated_data.pop("password")
-        return super().update(instance, validated_data)
+    def get_related_users(self, obj):
+        related_users_data = obj.get_related_users_by_keywords()
+        serializer = RelatedUserSerializer(related_users_data, many=True)
+        return serializer.data
 
     def to_representation(self, instance):
         first_degree_ids, second_degree_ids, second_degree_connections = instance.get_friend_counts()
 
+        # 이미 계산된 데이터를 사용하여 필드를 채움
         representation = super().to_representation(instance)
         representation['first_degree_count'] = len(first_degree_ids)
         representation['second_degree_count'] = len(second_degree_ids)
@@ -270,11 +267,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
         representation['related_users'] = self.get_related_users(instance)
 
         return representation
-
-    def get_related_users(self, obj):
-        related_users_data = obj.get_related_users_by_keywords()
-        serializer = RelatedUserSerializer(related_users_data, many=True)
-        return serializer.data
 
 
 class ProjectSerializer(serializers.ModelSerializer):
