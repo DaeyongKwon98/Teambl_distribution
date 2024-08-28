@@ -688,30 +688,22 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
         return Response(serializer.data)
 
 # 2촌/같은 키워드 사용자 수의 증가량을 반환
-class UserStatisticsDifferenceView(generics.RetrieveAPIView):
+class UserStatisticsDifferenceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
-    serializer_class = UserStatisticsDifferenceSerializer
 
-    def get_object(self):
-        user = self.request.user
-        return UserStatistics.objects.get(user=user)
-
-    def retrieve(self, request, *args, **kwargs):
-        # 현재 사용자 가져오기
-        instance = self.get_object()
-        
+    def get(self, request, *args, **kwargs):
         # 최근 3분을 기준으로 필터링
         three_minutes_ago = timezone.now() - timezone.timedelta(minutes=3)
         
-        # 최근에 가입한 2촌 찾기
-        _, second_degree_ids, _ = self.request.user.get_friend_counts()
+        # 현재 유저의 2촌 관계 가져오기
+        _, second_degree_ids, _ = request.user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
             data_joined__gte=three_minutes_ago
         )
         
-        # 최근에 가입한 같은 키워드 사용자 찾기
-        related_users_data = self.request.user.get_related_users_by_keywords()
+        # 현재 유저와 같은 키워드를 가진 사용자 가져오기
+        related_users_data = request.user.get_related_users_by_keywords()
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
             if user_data['user'].data_joined >= three_minutes_ago
