@@ -48,138 +48,26 @@ function Home() {
   const [bottomSheetFriends, setBottomSheetFriends] = useState([]);
 
   const [firstDegreeCount, setFirstDegreeCount] = useState(0);
-  const [secondDegreeCount, setSecondDegreeCount] = useState(0);
-  const [secondDegreeConnections, setSecondDegreeConnections] = useState([]);
-  const [secondDegreeDetails, setSecondDegreeDetails] = useState([]);
-  const [keywordFriends, setKeywordFriends] = useState([]);
-
   const [secondDegreeDiff, setSecondDegreeDiff] = useState(0);
   const [keywordDiff, setKeywordDiff] = useState(0);
-  
-  // 1촌 및 2촌 수를 가져오는 함수
-  const fetchFriendCounts = async () => {
-    try {
-      const response = await api.get("/api/current-user/");
-      // console.log("API Response:", response.data);
-      setFirstDegreeCount(response.data.first_degree_count);
-      setSecondDegreeCount(response.data.second_degree_count);
-      setSecondDegreeConnections(response.data.second_degree_connections);
+  const [recentSecondDegreeProfiles, setRecentSecondDegreeProfiles] = useState([]);
+  const [recentKeywordProfiles, setRecentKeywordProfiles] = useState([]);
 
-      // secondDegreeConnections이 설정된 후에 바로 fetchSecondDegreeDetails 호출
-      if (response.data.second_degree_connections.length > 0) {
-        await fetchSecondDegreeDetails(response.data.second_degree_connections);
-      }
-    } catch (error) {
-      console.error("Failed to fetch friend counts", error);
-    }
-  };
-
-  const fetchSecondDegreeDetails = async (connections) => {
-    try {
-      // console.log("fetchSecondDegreeDetails called");
-      // console.log("secondDegreeConnections:", connections);
-
-      if (connections.length === 0) {
-        console.log("No second-degree connections found.");
-        return;
-      }
-
-      const secondDegreeDetails = await Promise.all(
-        connections.map(async (connection, index) => {
-          try {
-            const secondDegreeId = connection[0]; // 2촌 ID
-            const firstDegreeId = connection[1]; // 1촌 ID
-
-            // console.log(`Fetching profile for second degree ID: ${secondDegreeId}`);
-            const userResponse = await api.get(
-              `/api/profile/${secondDegreeId}/`
-            );
-            const userData = userResponse.data;
-
-            // console.log(`Fetching profile for first degree ID: ${firstDegreeId}`);
-            const firstDegreeResponse = await api.get(
-              `/api/profile/${firstDegreeId}/`
-            );
-            const firstDegreeName = firstDegreeResponse.data.user_name;
-
-            return {
-              ...userData,
-              friendOf: firstDegreeName, // 1촌의 이름을 포함
-            };
-          } catch (innerError) {
-            console.error(
-              `Failed to fetch data for connection index ${index}:`,
-              innerError
-            );
-            return null;
-          }
-        })
-      );
-
-      const validDetails = secondDegreeDetails.filter(
-        (detail) => detail !== null
-      );
-      setSecondDegreeDetails(validDetails);
-    } catch (error) {
-      console.error("Failed to fetch second degree details", error);
-    }
-  };
-
-  // 키워드와 연관된 사용자들을 가져오는 함수
-  const fetchKeywordFriends = async () => {
-    try {
-      const response = await api.get("/api/user-similarity/");
-      console.log("Keyword Friends Response:", response.data);
-
-      // 각 사용자에 대해 프로필 정보를 추가로 가져오기
-      const processedKeywordFriends = await Promise.all(
-        response.data.map(async (friendData) => {
-          try {
-            const profileResponse = await api.get(
-              `/api/profile/${friendData.user.id}/`
-            );
-            const userData = profileResponse.data;
-
-            return {
-              ...userData, // userData의 모든 필드를 포함
-              sametag: friendData.common_keywords[0] || "", // 공통 키워드 중 첫 번째를 sametag로 사용 (추후 수정 필요)
-              similarity: friendData.similarity, // 유사도
-            };
-          } catch (error) {
-            console.error(
-              `Failed to fetch profile for user ID ${friendData.user.id}`,
-              error
-            );
-            return null; // 프로필 정보를 가져오는 데 실패한 경우
-          }
-        })
-      );
-
-      // 유효한 프로필 정보만 상태에 저장
-      const validKeywordFriends = processedKeywordFriends.filter(
-        (friend) => friend !== null
-      );
-      setKeywordFriends(validKeywordFriends);
-    } catch (error) {
-      console.error("Failed to fetch keyword friends", error);
-    }
-  };
-
-  // 2촌 및 키워드 수 증가량을 가져오는 함수
+  // Fetch statistics difference and recent profiles
   const fetchStatisticsDifference = async () => {
     try {
       const response = await api.get("/api/user-statistics-difference/");
       setSecondDegreeDiff(response.data.second_degree_difference);
       setKeywordDiff(response.data.keyword_difference);
+      setRecentSecondDegreeProfiles(response.data.new_second_degree_profiles);
+      setRecentKeywordProfiles(response.data.new_keyword_profiles);
     } catch (error) {
       console.error("Failed to fetch user statistics difference", error);
     }
   };
-  
+
   useEffect(() => {
     const fetchData = async () => {
-      await fetchFriendCounts();
-      await fetchKeywordFriends();
       await fetchStatisticsDifference();
     };
     fetchData();
@@ -215,7 +103,7 @@ function Home() {
           <h2>이번주 새로운 2촌</h2>
           <span
             className="home-view-all"
-            onClick={() => openBottomSheet(secondDegreeDetails)}
+            onClick={() => openBottomSheet(recentSecondDegreeProfiles)}
           >
             모두 보기
           </span>
@@ -226,7 +114,7 @@ function Home() {
           <span className="home-sub-header-text">증가했어요!</span>
         </div>
         <div className="home-friends-list">
-          {secondDegreeDetails.map((friend) => (
+          {recentSecondDegreeProfiles.map((friend) => (
             <FriendCard key={friend.id} friend={friend} />
           ))}
         </div>
@@ -237,7 +125,7 @@ function Home() {
           <h2>내 키워드와 연관된</h2>
           <span
             className="home-view-all"
-            onClick={() => openBottomSheet(keywordFriends)}
+            onClick={() => openBottomSheet(recentKeywordProfiles)}
           >
             모두 보기
           </span>
@@ -250,7 +138,7 @@ function Home() {
           <span className="home-sub-header-text">증가했어요!</span>
         </div>
         <div className="home-friends-list">
-          {keywordFriends.map((friend) => (
+          {recentKeywordProfiles.map((friend) => (
             <FriendCard key={friend.id} friend={friend} isKeywordFriend />
           ))}
         </div>
