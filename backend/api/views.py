@@ -715,7 +715,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
 
         # 최근 15분 이내에 가입한 2촌 사용자 필터링 및 연결된 1촌 정보 포함
         new_second_degree_profiles = CustomUser.objects.filter(
-            id__in=second_degree_ids, date_joined__gte=recent_times
+            id__in=second_degree_ids, data_joined__gte=recent_times
         )
 
         # 2촌 프로필 정보와 연결된 1촌 ID를 포함하여 직렬화
