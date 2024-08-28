@@ -9,7 +9,6 @@ from .models import (
     InvitationLink,
     Friend,
     Notification,
-    UserStatistics,
 )
 from .serializers import (
     CustomUserSerializer,
@@ -24,7 +23,6 @@ from .serializers import (
     NotificationSerializer,
     MyTokenObtainPairSerializer,
     RelatedUserSerializer,
-    UserStatisticsDifferenceSerializer,
 )
 import json
 from django.core.mail import send_mail
