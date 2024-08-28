@@ -94,6 +94,7 @@ function Home() {
       // 유효한 2촌 사용자 정보를 상태에 저장
       const validDetails = secondDegreeDetails.filter((detail) => detail !== null);
       setSecondDegreeProfiles(validDetails);
+      setSecondDegreeDiff(validDetails.length);
     } catch (error) {
       console.error("Failed to fetch second degree profiles", error);
     }
