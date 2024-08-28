@@ -41,15 +41,19 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-    def get_friend_counts(self):
+    def get_friend_counts(self, user_id=None):
+        # user_id가 주어지면 해당 ID 사용, 그렇지 않으면 self.id 사용
+        if user_id is None:
+            user_id = self.id
+    
         # 1촌 친구 목록을 찾습니다.
         first_degree_friends = Friend.objects.filter(
-            (Q(from_user=self) | Q(to_user=self)) & Q(status="accepted")
+            (Q(from_user_id=user_id) | Q(to_user_id=user_id)) & Q(status="accepted")
         )
     
         first_degree_ids = set()
         for friend in first_degree_friends:
-            if friend.from_user == self:
+            if friend.from_user_id == user_id:
                 first_degree_ids.add(friend.to_user.id)
             else:
                 first_degree_ids.add(friend.from_user.id)
@@ -58,16 +62,17 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         second_degree_connections = set()
     
         print("1촌 목록:", first_degree_ids)
-    
+        print("현재 사용자 ID:", user_id)  # user_id를 출력해 올바르게 설정되었는지 확인
+        
         # 2촌 찾기
         for friend_id in first_degree_ids:
             second_degree_friends = Friend.objects.filter(
                 (Q(from_user_id=friend_id) | Q(to_user_id=friend_id))
                 & Q(status="accepted")
-            ).exclude(Q(from_user=self) | Q(to_user=self))
+            ).exclude(Q(from_user_id=user_id) | Q(to_user_id=user_id))
     
             print("현재 1촌:", friend_id)
-            print("현재 사용자 ID:", self.id)
+    
             for friend in second_degree_friends:
                 print(f"1촌 {friend_id}의 친구 {friend.from_user_id} - {friend.to_user_id} 조사중..")
     
@@ -77,7 +82,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
                 else:
                     target_id = friend.from_user_id
     
-                if target_id not in first_degree_ids and target_id != self.id:
+                print(f"비교: target_id = {target_id}, user_id = {user_id}")
+    
+                if target_id not in first_degree_ids and target_id != user_id:
                     second_degree_connections.add((target_id, friend_id))
                     print(f"({target_id}, {friend_id}) 추가")
     
@@ -87,6 +94,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         print("second degree connections:", list(second_degree_connections))
     
         return first_degree_ids, second_degree_ids, list(second_degree_connections)
+
 
 
     def get_related_users_by_keywords(self):
