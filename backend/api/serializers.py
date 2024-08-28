@@ -198,11 +198,11 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
-    first_degree_count = serializers.SerializerMethodField()
-    second_degree_count = serializers.SerializerMethodField()
-    second_degree_ids = serializers.SerializerMethodField()
-    second_degree_connections = serializers.SerializerMethodField()
-    related_users = serializers.SerializerMethodField()
+    # first_degree_count = serializers.SerializerMethodField()
+    # second_degree_count = serializers.SerializerMethodField()
+    # second_degree_ids = serializers.SerializerMethodField()
+    # second_degree_connections = serializers.SerializerMethodField()
+    # related_users = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
