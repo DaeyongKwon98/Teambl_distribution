@@ -293,7 +293,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
         representation['second_degree_ids'] = user_data.get('second_degree_ids', [])
         representation['second_degree_connections'] = user_data.get('second_degree_connections', [])
         representation['related_users'] = user_data.get('related_users', [])
-
+        representation['data_joined'] = instance.data_joined.strftime('%Y-%m-%d %H:%M:%S')  # 원하는 형식으로 변환
         return representation
 
 
