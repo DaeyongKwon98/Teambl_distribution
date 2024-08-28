@@ -257,39 +257,15 @@ class CustomUserSerializer(serializers.ModelSerializer):
             validated_data.pop("password")
         return super().update(instance, validated_data)
     
-    def get_first_degree_count(self, obj):
-        print("In Serializer - obj id:", obj.id)
-        first_degree_ids, _, _ = obj.get_friend_counts(obj.id)
-        return len(first_degree_ids)
-    
-    def get_second_degree_count(self, obj):
-        _, second_degree_ids, _ = obj.get_friend_counts(obj.id)
-        return len(second_degree_ids)
-    
-    def get_second_degree_ids(self, obj):
-        _, second_degree_ids, _ = obj.get_friend_counts(obj.id)
-        return list(second_degree_ids)
-    
-    def get_second_degree_connections(self, obj):
-        _, _, second_degree_connections = obj.get_friend_counts(obj.id)
-        return second_degree_connections
-
-    def get_related_users(self, obj):
-        related_users_data = obj.get_related_users_by_keywords()
-        serializer = RelatedUserSerializer(related_users_data, many=True)
-        return serializer.data
-
     def to_representation(self, instance):
-        first_degree_ids, second_degree_ids, second_degree_connections = instance.get_friend_counts(instance.id)
-
         # 이미 계산된 데이터를 사용하여 필드를 채움
         representation = super().to_representation(instance)
-        representation['first_degree_count'] = len(first_degree_ids)
-        representation['second_degree_count'] = len(second_degree_ids)
-        representation['second_degree_ids'] = list(second_degree_ids)
-        representation['second_degree_connections'] = second_degree_connections
+        user_data = self.context.get('user_data', {})
 
-        # `related_users` 필드도 추가 (필요시)
+        representation['first_degree_count'] = user_data.get('first_degree_count', 0)
+        representation['second_degree_count'] = user_data.get('second_degree_count', 0)
+        representation['second_degree_ids'] = user_data.get('second_degree_ids', [])
+        representation['second_degree_connections'] = user_data.get('second_degree_connections', [])
         representation['related_users'] = self.get_related_users(instance)
 
         return representation
