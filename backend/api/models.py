@@ -104,7 +104,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
 
 class UserStatistics(models.Model):# 유저의 2촌 수, 같은 키워드를 쓰는 사용자 수 저장
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='statistics')
+    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='statistics', primary_key=True)
     two_degree_count_prev = models.IntegerField(default=0)
     two_degree_count_now = models.IntegerField(default=0)
     same_keyword_count_prev = models.IntegerField(default=0)
