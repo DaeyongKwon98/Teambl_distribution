@@ -735,8 +735,8 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
 
         # 시리얼라이저를 사용하여 객체를 JSON으로 직렬화
         user_serialized = CustomUserSerializer(user, context={'request': request, 'user_data': user_data}).data
-        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request}).data
-        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request}).data
+        second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True, context={'request': request, 'user_data': user_data}).data
+        keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True, context={'request': request, 'user_data': user_data}).data
 
         # JSON 직렬화된 데이터를 응답으로 반환
         return Response({
