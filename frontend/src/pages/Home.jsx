@@ -53,6 +53,9 @@ function Home() {
   const [secondDegreeDetails, setSecondDegreeDetails] = useState([]);
   const [keywordFriends, setKeywordFriends] = useState([]);
 
+  const [secondDegreeDiff, setSecondDegreeDiff] = useState(0);
+  const [keywordDiff, setKeywordDiff] = useState(0);
+  
   // 1촌 및 2촌 수를 가져오는 함수
   const fetchFriendCounts = async () => {
     try {
@@ -162,10 +165,22 @@ function Home() {
     }
   };
 
+  // 2촌 및 키워드 수 증가량을 가져오는 함수
+  const fetchStatisticsDifference = async () => {
+    try {
+      const response = await api.get("/api/user-statistics-difference/");
+      setSecondDegreeDiff(response.data.second_degree_difference);
+      setKeywordDiff(response.data.keyword_difference);
+    } catch (error) {
+      console.error("Failed to fetch user statistics difference", error);
+    }
+  };
+  
   useEffect(() => {
     const fetchData = async () => {
       await fetchFriendCounts();
       await fetchKeywordFriends();
+      await fetchStatisticsDifference();
     };
     fetchData();
   }, []);
@@ -207,7 +222,7 @@ function Home() {
         </div>
         <div className="home-sub-header">
           <span className="home-sub-header-text">2촌이 </span>
-          <span className="home-sub-header-num">{secondDegreeCount}명 </span>
+          <span className="home-sub-header-num">{secondDegreeDiff}명 </span>
           <span className="home-sub-header-text">증가했어요!</span>
         </div>
         <div className="home-friends-list">
@@ -230,7 +245,7 @@ function Home() {
         <div className="home-sub-header">
           <span className="home-sub-header-text">가입자가 </span>
           <span className="home-sub-header-num">
-            {keywordFriends.length}명{" "}
+            {keywordDiff}명{" "}
           </span>
           <span className="home-sub-header-text">증가했어요!</span>
         </div>
