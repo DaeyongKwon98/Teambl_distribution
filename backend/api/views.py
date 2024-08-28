@@ -690,21 +690,22 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
+        # 현재 로그인한 사용자 정보 가져오기
+        user = request.user
+        user_id = user.id
+        
         # 최근 시간 기준으로 필터링
         recent_times = timezone.now() - timezone.timedelta(minutes=15)
         
         # 현재 유저의 2촌 관계 가져오기
-        print("view get friend counts")
-        print(request.user)
-        first_degree_ids, second_degree_ids, second_degree_connections = request.user.get_friend_counts()
+        first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
             data_joined__gte=recent_times
         )
-        print("new second degree profiles:", new_second_degree_profiles)
         
         # 현재 유저와 같은 키워드를 가진 사용자 가져오기
-        related_users_data = request.user.get_related_users_by_keywords()
+        related_users_data = user.get_related_users_by_keywords()
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
             if user_data['user'].data_joined >= recent_times
@@ -723,8 +724,8 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             "second_degree_connections": second_degree_connections,
             "related_users": related_users_data,
         }
-        print("user data:", user_data)
-        user_serialized = CustomUserSerializer(request.user, context={'user_data': user_data}).data
+
+        user_serialized = CustomUserSerializer(user, context={'user_data': user_data}).data
 
         second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True).data
         keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True).data
@@ -736,3 +737,4 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             'new_keyword_profiles': keyword_profiles_serialized,
             'user_data': user_serialized,
         })
+
