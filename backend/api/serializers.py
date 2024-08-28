@@ -279,7 +279,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
         return user_data.get('related_users', [])
 
     def to_representation(self, instance):
-        # 이미 계산된 데이터를 사용하여 필드를 채움
+        # 요청한 사용자의 정보를 얻기 위해 self.context['request'].user 사용
+        user = self.context['request'].user
+        
+        # 필요한 사용자 정보 또는 추가 로직을 처리합니다.
         representation = super().to_representation(instance)
         return representation
 
