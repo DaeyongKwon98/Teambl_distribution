@@ -24,6 +24,7 @@ from .serializers import (
     NotificationSerializer,
     MyTokenObtainPairSerializer,
     RelatedUserSerializer,
+    UserStatisticsDifferenceSerializer,
 )
 import json
 from django.core.mail import send_mail
