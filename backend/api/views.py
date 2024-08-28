@@ -693,29 +693,30 @@ class UserStatisticsDifferenceView(generics.RetrieveAPIView):
         return UserStatistics.objects.get(user=user)
 
     def retrieve(self, request, *args, **kwargs):
+        # 현재 사용자 가져오기
         instance = self.get_object()
         
-        # 증가량 계산
-        second_degree_diff = instance.two_degree_count_now - instance.two_degree_count_prev
-        keyword_diff = instance.same_keyword_count_now - instance.same_keyword_count_prev
-        
-        # 최근 시간 정의 (ex.3분)
+        # 최근 3분을 기준으로 필터링
         three_minutes_ago = timezone.now() - timezone.timedelta(minutes=3)
         
         # 최근에 가입한 2촌 찾기
         _, second_degree_ids, _ = self.request.user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
-            data_joined__gte=three_minutes_ago
+            date_joined__gte=three_minutes_ago
         )
         
         # 최근에 가입한 같은 키워드 사용자 찾기
         related_users_data = self.request.user.get_related_users_by_keywords()
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
-            if user_data['user'].data_joined >= three_minutes_ago
+            if user_data['user'].date_joined >= three_minutes_ago
         ]
         new_keyword_profiles = CustomUser.objects.filter(id__in=new_keyword_profiles_ids)
+        
+        # 증가량을 최근 가입한 사용자 수로 설정
+        second_degree_diff = new_second_degree_profiles.count()
+        keyword_diff = new_keyword_profiles.count()
         
         # Serialize the data
         second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True).data
