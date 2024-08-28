@@ -703,14 +703,14 @@ class UserStatisticsDifferenceView(generics.RetrieveAPIView):
         _, second_degree_ids, _ = self.request.user.get_friend_counts()
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, 
-            date_joined__gte=three_minutes_ago
+            data_joined__gte=three_minutes_ago
         )
         
         # 최근에 가입한 같은 키워드 사용자 찾기
         related_users_data = self.request.user.get_related_users_by_keywords()
         new_keyword_profiles_ids = [
             user_data['user'].id for user_data in related_users_data 
-            if user_data['user'].date_joined >= three_minutes_ago
+            if user_data['user'].data_joined >= three_minutes_ago
         ]
         new_keyword_profiles = CustomUser.objects.filter(id__in=new_keyword_profiles_ids)
         
