@@ -691,7 +691,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         # 최근 3분을 기준으로 필터링
-        three_minutes_ago = timezone.now() - timezone.timedelta(minutes=10)
+        three_minutes_ago = timezone.now() - timezone.timedelta(minutes=15)
         
         # 현재 유저의 2촌 관계 가져오기
         print("view get friend counts")
@@ -715,6 +715,15 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         keyword_diff = new_keyword_profiles.count()
         
         # Serialize the data
+        user_data = {
+            "first_degree_count": len(first_degree_ids),
+            "second_degree_count": len(second_degree_ids),
+            "second_degree_ids": list(second_degree_ids),
+            "second_degree_connections": second_degree_connections,
+            "related_users": related_users_data,
+        }
+        user_serialized = CustomUserSerializer(request.user, context={'user_data': user_data}).data
+
         second_degree_profiles_serialized = CustomUserSerializer(new_second_degree_profiles, many=True).data
         keyword_profiles_serialized = CustomUserSerializer(new_keyword_profiles, many=True).data
 
@@ -723,4 +732,5 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             'keyword_difference': keyword_diff,
             'new_second_degree_profiles': second_degree_profiles_serialized,
             'new_keyword_profiles': keyword_profiles_serialized,
+            'user_data': user_serialized,
         })
