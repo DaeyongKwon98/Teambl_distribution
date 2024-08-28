@@ -61,6 +61,8 @@ function Home() {
 
       const connections = response.data.new_second_degree_profiles || [];
 
+      console.log("connections", response.data.new_second_degree_profiles);
+      
       const secondDegreeDetails = await Promise.all(
         connections.map(async (connection, index) => {
           try {
