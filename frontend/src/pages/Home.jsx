@@ -65,44 +65,36 @@ function Home() {
   
       const secondDegreeDetails = await Promise.all(
         connections.map(async (connection, index) => {
-          try {
-            // 여기서 connection 객체에서 second_degree_connections를 가져옵니다.
-            const secondDegreeConnection = connection.second_degree_connections[0]; // 첫 번째 2촌 관계를 가져옵니다.
-            const secondDegreeId = secondDegreeConnection[0]; // 2촌 ID
-            const firstDegreeId = secondDegreeConnection[1]; // 1촌 ID
-  
-            const userResponse = await api.get(
-              `/api/profile/${secondDegreeId}/`
-            );
-            const userData = userResponse.data;
-  
-            const firstDegreeResponse = await api.get(
-              `/api/profile/${firstDegreeId}/`
-            );
-            const firstDegreeName = firstDegreeResponse.data.user_name;
-  
-            return {
-              ...userData,
-              friendOf: firstDegreeName, // 1촌의 이름을 포함
-            };
-          } catch (innerError) {
-            console.error(
-              `Failed to fetch data for connection index ${index}:`,
-              innerError
-            );
-            return null;
-          }
+            try {
+                // 모든 2촌 관계를 처리하기 위해 반복문 사용
+                const details = await Promise.all(
+                    connection.second_degree_connections.map(async (secondDegreeConnection) => {
+                        const secondDegreeId = secondDegreeConnection[0];
+                        const firstDegreeId = secondDegreeConnection[1];
+    
+                        const userResponse = await api.get(`/api/profile/${secondDegreeId}/`);
+                        const userData = userResponse.data;
+    
+                        const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
+                        const firstDegreeName = firstDegreeResponse.data.user_name;
+    
+                        return {
+                            ...userData,
+                            friendOf: firstDegreeName,
+                        };
+                    })
+                );
+                return details;
+            } catch (innerError) {
+                console.error(`Failed to fetch data for connection index ${index}:`, innerError);
+                return null;
+            }
         })
-      );
+    );
   
-      const validDetails = secondDegreeDetails.filter(
-        (detail) => detail !== null
-      );
-      setRecentSecondDegreeProfiles(validDetails);
-    } catch (error) {
-      console.error("Failed to fetch second degree details", error);
-    }
-  };
+  // Flatten the array of arrays if needed
+  const validDetails = secondDegreeDetails.flat().filter(detail => detail !== null);
+  setSecondDegreeDetails(validDetails);
 
   // 키워드와 연관된 사용자들을 가져오는 함수
   const fetchKeywordFriendProfiles = async () => {
