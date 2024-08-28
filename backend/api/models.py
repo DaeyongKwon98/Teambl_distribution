@@ -80,6 +80,8 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
         # 각 2촌 ID는 고유해야 하므로, 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
         second_degree_ids = set([conn[0] for conn in second_degree_connections])
 
+        print("second degree connections:", second_degree_connections)
+        
         return first_degree_ids, second_degree_ids, second_degree_connections
 
     def get_related_users_by_keywords(self):
