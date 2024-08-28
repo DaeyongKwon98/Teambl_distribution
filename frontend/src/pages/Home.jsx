@@ -58,27 +58,29 @@ function Home() {
       const response = await api.get("/api/user-statistics-difference/");
       setSecondDegreeDiff(response.data.second_degree_difference || 0);
       setKeywordDiff(response.data.keyword_difference || 0);
-
+  
       const connections = response.data.new_second_degree_profiles || [];
-
-      console.log("connections", response.data.new_second_degree_profiles);
-      
+  
+      console.log("connections", connections);
+  
       const secondDegreeDetails = await Promise.all(
         connections.map(async (connection, index) => {
           try {
-            const secondDegreeId = connection[0]; // 2촌 ID
-            const firstDegreeId = connection[1]; // 1촌 ID
-
+            // 여기서 connection 객체에서 second_degree_connections를 가져옵니다.
+            const secondDegreeConnection = connection.second_degree_connections[0]; // 첫 번째 2촌 관계를 가져옵니다.
+            const secondDegreeId = secondDegreeConnection[0]; // 2촌 ID
+            const firstDegreeId = secondDegreeConnection[1]; // 1촌 ID
+  
             const userResponse = await api.get(
               `/api/profile/${secondDegreeId}/`
             );
             const userData = userResponse.data;
-
+  
             const firstDegreeResponse = await api.get(
               `/api/profile/${firstDegreeId}/`
             );
             const firstDegreeName = firstDegreeResponse.data.user_name;
-
+  
             return {
               ...userData,
               friendOf: firstDegreeName, // 1촌의 이름을 포함
@@ -92,7 +94,7 @@ function Home() {
           }
         })
       );
-
+  
       const validDetails = secondDegreeDetails.filter(
         (detail) => detail !== null
       );
