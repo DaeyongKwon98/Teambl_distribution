@@ -25,7 +25,7 @@ body {
 
 .notification-back button {
   border: none;
-  background-image: url("../assets/Profile/left-arrow.png");
+  background-image: url("../assets/backIcon.svg");
   background-size: cover;
   width: 20px;
   height: 20px;
