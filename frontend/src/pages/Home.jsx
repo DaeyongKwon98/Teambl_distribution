@@ -47,11 +47,10 @@ function Home() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [bottomSheetFriends, setBottomSheetFriends] = useState([]);
 
-  const [firstDegreeCount, setFirstDegreeCount] = useState(0);
-  const [secondDegreeDiff, setSecondDegreeDiff] = useState(0);
-  const [keywordDiff, setKeywordDiff] = useState(0);
-  const [recentSecondDegreeProfiles, setRecentSecondDegreeProfiles] = useState([]);
-  const [recentKeywordProfiles, setRecentKeywordProfiles] = useState([]);
+  const [secondDegreeDiff, setSecondDegreeDiff] = useState(0); // 증가한 2촌 수
+  const [keywordDiff, setKeywordDiff] = useState(0); // 증가한 같은 키워드 사용자 수
+  const [recentSecondDegreeProfiles, setRecentSecondDegreeProfiles] = useState([]); // 증가한 2촌 프로필
+  const [recentKeywordProfiles, setRecentKeywordProfiles] = useState([]); // 증가한 같은 키워드 사용자 프로필
 
   // Fetch statistics difference and recent profiles
   const fetchStatisticsDifference = async () => {
@@ -64,7 +63,6 @@ function Home() {
 
       console.log("RecentSecondDegreeProfiles", response.data.new_second_degree_profiles);
       console.log("RecentKeywordProfiles", response.data.new_keyword_profiles);
-      
     } catch (error) {
       console.error("Failed to fetch user statistics difference", error);
     }
