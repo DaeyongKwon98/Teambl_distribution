@@ -89,11 +89,7 @@ function ResetPassword() {
     <div className="resetPassword-body">
       <div className="resetPassword-container">
         <div className="resetPassword-back">
-          <button
-            type="button"
-            onClick={handleBackButtonClicked}
-            disabled={true}
-          >
+          <button type="button" onClick={handleBackButtonClicked}>
             <img src={backIcon} />
           </button>
         </div>
