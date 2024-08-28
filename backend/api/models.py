@@ -67,7 +67,7 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
             ).exclude(Q(from_user=self) | Q(to_user=self))
     
             print("현재 1촌:", friend_id)
-    
+            print("현재 사용자 ID:", self.id)
             for friend in second_degree_friends:
                 print(f"1촌 {friend_id}의 친구 {friend.from_user_id} - {friend.to_user_id} 조사중..")
     
