@@ -181,7 +181,7 @@ function NewSearch() {
                     dangerouslySetInnerHTML={{
                       __html: result.replace(
                         new RegExp(searchTerm, "gi"),
-                        (match) => `<span class="highlight">${match}</span>`
+                        (match) => `<span class="newSearch-highlight">${match}</span>`
                       ),
                     }}
                   />
@@ -194,7 +194,7 @@ function NewSearch() {
         <>
           <div className="newSearch-second-bar">
             <h3>최근 검색어</h3>
-            <button className="clear-button" onClick={handleClear}>
+            <button className="newSearch-clear-button" onClick={handleClear}>
               지우기
             </button>
           </div>
