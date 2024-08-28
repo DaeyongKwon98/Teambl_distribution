@@ -6,7 +6,7 @@ import NotiIconActive from "../assets/notiIconActive.svg";
 import TeamblIcon from "../assets/teamblIcon.svg";
 import api from "../api";
 
-const Header = () => {
+const Header = ({ profileImage }) => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [unreadNotifications, setUnreadNotifications] = useState(0); // 읽지 않은 알림 수
@@ -59,7 +59,7 @@ const Header = () => {
           onClick={goToNotification}
         />
         <img
-          src={'https://via.placeholder.com/50'}
+          src={profileImage}
           alt="내 프로필"
           className="home-profile-icon"
           onClick={goToProfile}
