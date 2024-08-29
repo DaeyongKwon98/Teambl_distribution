@@ -75,26 +75,43 @@ function Home() {
   
       console.log("connections", connections);
   
+      // 중복된 second_degree_profile_id를 그룹화하여 numFriends 값을 계산
+      const groupedConnections = connections.reduce((acc, connection) => {
+        const { second_degree_profile_id, connector_friend_id } = connection;
+        if (!acc[second_degree_profile_id]) {
+          acc[second_degree_profile_id] = {
+            second_degree_profile_id,
+            connector_friend_ids: [connector_friend_id],
+          };
+        } else {
+          acc[second_degree_profile_id].connector_friend_ids.push(connector_friend_id);
+        }
+        return acc;
+      }, {});
+  
       // 2촌 사용자 정보를 처리하기 위해 map을 사용
       const secondDegreeDetails = await Promise.all(
-        connections.map(async (connection) => {
+        Object.values(groupedConnections).map(async (group) => {
           try {
-            // 2촌 사용자 ID와 연결된 1촌 사용자 ID를 가져옴
-            const secondDegreeId = connection.second_degree_profile_id;
-            const firstDegreeId = connection.connector_friend_id;
+            const { second_degree_profile_id, connector_friend_ids } = group;
   
             // 2촌 사용자의 프로필 정보를 가져옴
-            const userResponse = await api.get(`/api/profile/${secondDegreeId}/`);
+            const userResponse = await api.get(`/api/profile/${second_degree_profile_id}/`);
             const userData = userResponse.data;
   
-            // 1촌 사용자의 이름 정보를 가져옴
-            const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
-            const firstDegreeName = firstDegreeResponse.data.user_name;
+            // 1촌 사용자의 이름 정보 가져오기
+            const firstDegreeNames = await Promise.all(
+              connector_friend_ids.map(async (firstDegreeId) => {
+                const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
+                return firstDegreeResponse.data.user_name;
+              })
+            );
   
-            // 2촌 사용자의 데이터에 연결된 1촌 사용자의 이름을 추가하여 반환
+            // 2촌 사용자의 데이터에 연결된 1촌 사용자의 이름 리스트와 친구 수를 추가하여 반환
             return {
               ...userData,
-              friendOf: firstDegreeName,
+              friendOf: firstDegreeNames, // 1촌 친구 이름 리스트
+              numFriends: firstDegreeNames.length, // 친구 수
             };
           } catch (innerError) {
             console.error("Failed to fetch data for second degree profile:", innerError);
