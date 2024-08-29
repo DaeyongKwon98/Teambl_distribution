@@ -5,6 +5,7 @@ import api from "../api";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import WithdrawIcon from "../assets/withdrawIcon.svg";
+import ArrowDownIcon from "../assets/arrowDownIcon.svg";
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ const Setting = () => {
   const [withdrawBtnActive, setWithdrawBtnActive] = useState(false);
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
+  const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
 
   useEffect(() => {
     setChangeBtnActive(
@@ -144,42 +146,55 @@ const Setting = () => {
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
       <h2 className="setting-section-title">비밀번호 변경</h2>
-      <div className="setting-password-change-section">
-        <div className="setting-input-group">
-          <label>현 비밀번호</label>
-          <input
-            type="password"
-            value={currentPassword}
-            onChange={(e) => setCurrentPassword(e.target.value)}
-          />
-        </div>
-        <div className="setting-input-group">
-          <label>새 비밀번호</label>
-          <input
-            type="password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-          />
-        </div>
-        <div className="setting-input-group">
-          <label>새 비밀번호 확인</label>
-          <input
-            type="password"
-            value={confirmNewPassword}
-            onChange={(e) => setConfirmNewPassword(e.target.value)}
-          />
-        </div>
-        {changePasswordError && (
-          <p className="setting-error">{changePasswordError}</p>
-        )}
-        <button
-          className="setting-change-password-button"
-          onClick={handleChangePassword}
-          disabled={!changeBtnActive}
-        >
-          비밀번호 변경
-        </button>
+      <div
+        className="setting-password-toggle"
+        onClick={() => setShowChangePasswordSection(!showChangePasswordSection)}
+      >
+        <span>비밀번호 변경</span>
+        <img
+          src={ArrowDownIcon}
+          alt="Toggle Password Change Section"
+          className={`setting-arrow-icon ${showChangePasswordSection ? 'rotate' : ''}`}
+        />
       </div>
+      {showChangePasswordSection && (
+        <div className="setting-password-change-section">
+          <div className="setting-input-group">
+            <label>현 비밀번호</label>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+          </div>
+          <div className="setting-input-group">
+            <label>새 비밀번호</label>
+            <input
+              type="password"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+            />
+          </div>
+          <div className="setting-input-group">
+            <label>새 비밀번호 확인</label>
+            <input
+              type="password"
+              value={confirmNewPassword}
+              onChange={(e) => setConfirmNewPassword(e.target.value)}
+            />
+          </div>
+          {changePasswordError && (
+            <p className="setting-error">{changePasswordError}</p>
+          )}
+          <button
+            className="setting-change-password-button"
+            onClick={handleChangePassword}
+            disabled={!changeBtnActive}
+          >
+            비밀번호 변경
+          </button>
+        </div>
+      )}
 
       <h2 className="setting-section-title">로그 아웃</h2>
       <button className="setting-logout-button" onClick={handleLogout}>
