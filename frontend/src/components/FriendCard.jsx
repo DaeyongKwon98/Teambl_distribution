@@ -4,7 +4,7 @@ import BefriIcon from "../assets/befriIcon.svg";
 const FriendCard = ({ friend, isKeywordFriend = false }) => {
   console.log("friend", friend);
   
-  // 1촌 정보를 표시하는 함수
+  // 공통 1촌 정보를 표시하는 함수
   const renderFriendOf = () => {
     if (friend.numFriends === 1) {
       return `${friend.friendOf}의 1촌`;
@@ -12,12 +12,21 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
       return `${friend.friendOf} 외 공통 1촌 ${friend.numFriends-1}명`;
     }
   };
+
+  // 공통 키워드를 표시하는 함수
+  const renderSametags = () => {
+    return friend.sametag.map((tag, index) => (
+      <span key={index} className="home-same-tag">
+        {tag}
+      </span>
+    ));
+  };
   
   return (
     <div className="home-friend-card">
       <div className='home-same-and-befri'>
         <div className={isKeywordFriend ? "home-same-tag" : "home-friend-of"}>
-          <span>{isKeywordFriend ? `#${friend.sametag}` : renderFriendOf()}</span>
+          <span>{isKeywordFriend ? renderSametags() : renderFriendOf()}</span>
         </div>
         {/* <img src={BefriIcon} alt="1촌신청" className="home-befri-icon" /> */}
       </div>
