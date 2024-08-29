@@ -157,7 +157,6 @@ body {
   display: flex; /* Flexbox를 사용하여 자식 요소들을 수평으로 정렬 */
   flex-wrap: wrap; /* 줄 바꿈이 가능하도록 설정 */
   gap: 8px; /* 요소 간의 간격을 설정 */
-  align-items: flex-start;
 }
 
 .home-friend-of {
@@ -185,7 +184,7 @@ body {
 .home-same-and-befri {
   display: flex;
   justify-content: space-between;
-  align-items:center;
+  align-items: flex-start;
   margin-bottom: 10px;
   height: 44px;
 }
