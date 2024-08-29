@@ -8,15 +8,11 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
   const renderFriendOf = () => {
     if (friend.numFriends === 1) {
       return (
-        <div className="home-friend-of">
           {friend.friendOf}의 1촌
-        </div>
       );
     } else if (friend.numFriends > 1) {
       return (
-        <div className="home-friend-of">
           {friend.friendOf} 외 공통 1촌 {friend.numFriends-1}명
-        </div>
       );
     }
   };
