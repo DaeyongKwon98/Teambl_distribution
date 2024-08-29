@@ -21,7 +21,8 @@ const Setting = () => {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
   const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
-
+  const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
+  
   useEffect(() => {
     setChangeBtnActive(
       currentPassword !== "" && newPassword !== "" && confirmNewPassword !== ""
@@ -196,30 +197,43 @@ const Setting = () => {
         </div>
       )}
 
-      <h2 className="setting-section-title">로그 아웃</h2>
+      <h2 className="setting-section-title">로그아웃</h2>
       <button className="setting-logout-button" onClick={handleLogout}>
-        로그 아웃
+        로그아웃
       </button>
 
-      <h2 className="setting-section-title">회원 탈퇴</h2>
-      <div className="setting-withdraw-section">
-        <div className="setting-input-group">
-          <label>현 비밀번호</label>
-          <input
-            type="password"
-            value={withdrawPassword}
-            onChange={(e) => setWithdrawPassword(e.target.value)}
-          />
-        </div>
-        {withdrawError && <p className="setting-error">{withdrawError}</p>}
-        <button
-          className="setting-withdraw-button"
-          disabled={!withdrawBtnActive}
-          onClick={handleWithdraw}
-        >
-          회원 탈퇴
-        </button>
+      <div
+        className="setting-password-toggle"
+        onClick={() => setShowWithdrawSection(!showWithdrawSection)}
+      >
+        <span className="setting-section-title">회원 탈퇴</span>
+        <img
+          src={ArrowDownIcon}
+          alt="Toggle Withdraw Section"
+          className={`setting-arrow-icon ${showWithdrawSection ? 'rotate' : ''}`}
+        />
       </div>
+      {/* <h2 className="setting-section-title">회원 탈퇴</h2> */}
+      {showWithdrawSection && (
+        <div className="setting-withdraw-section">
+          <div className="setting-input-group">
+            <label>현 비밀번호</label>
+            <input
+              type="password"
+              value={withdrawPassword}
+              onChange={(e) => setWithdrawPassword(e.target.value)}
+            />
+          </div>
+          {withdrawError && <p className="setting-error">{withdrawError}</p>}
+          <button
+            className="setting-withdraw-button"
+            disabled={!withdrawBtnActive}
+            onClick={handleWithdraw}
+          >
+            회원 탈퇴
+          </button>
+        </div>
+      )}
 
       {showWithdrawModal && (
         <div className="setting-modal-overlay">
