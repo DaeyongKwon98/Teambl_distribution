@@ -7,13 +7,9 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
   // 공통 1촌 정보를 표시하는 함수
   const renderFriendOf = () => {
     if (friend.numFriends === 1) {
-      return (
-          {friend.friendOf}의 1촌
-      );
+      return `${friend.friendOf}의 1촌`;
     } else if (friend.numFriends > 1) {
-      return (
-          {friend.friendOf} 외 공통 1촌 {friend.numFriends-1}명
-      );
+      return `${friend.friendOf} 외 공통 1촌 ${friend.numFriends - 1}명`;
     }
   };
 
