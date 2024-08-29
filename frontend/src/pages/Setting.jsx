@@ -32,8 +32,8 @@ const Setting = () => {
     );
 
     setWithdrawBtnActive(withdrawPassword !== "");
-    setInquiryBtnActive(inquiryText !== ""); // 문의하기 텍스트가 있을 때만 버튼 활성화
-  }, [currentPassword, newPassword, confirmNewPassword, withdrawPassword]);
+    setInquiryBtnActive(inquiryText.trim() !== ""); // 문의하기 텍스트가 있을 때만 버튼 활성화
+  }, [currentPassword, newPassword, confirmNewPassword, withdrawPassword, inquiryText]);
 
   // 문의하기 제출 처리 로직
   const handleInquirySubmit = () => {
@@ -226,7 +226,6 @@ const Setting = () => {
       {showInquirySection && (
         <div className="setting-inquiry-section">
           <div className="setting-input-group">
-            <label>문의 내용</label>
             <textarea
               value={inquiryText}
               onChange={(e) => setInquiryText(e.target.value)}
