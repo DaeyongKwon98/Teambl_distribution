@@ -141,7 +141,7 @@ function Home() {
 
             return {
               ...userData,
-              sametag: friendData.common_keywords[0] || "",
+              sametag: friendData.common_keywords,
               similarity: friendData.similarity,
             };
           } catch (error) {
