@@ -13,11 +13,22 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
     }
   };
 
+  //글자 수 제한
+  const truncateTag = (tag, totalTags) => {
+    if (totalTags === 5 && tag.length > 3) {
+      return `${tag.substring(0, 3)}··`;
+    } else if (totalTags < 5 && tag.length > 5) {
+      return `${tag.substring(0, 5)}··`;
+    }
+    return tag;
+  };
+
   // 공통 키워드를 표시하는 함수
   const renderSametags = () => {
+    const totalTags = friend.sametag.length;
     return friend.sametag.map((tag, index) => (
       <div key={index} className="home-same-tag">
-        {tag}
+        {truncateTag(tag, totalTags)}
       </div>
     ));
   };
