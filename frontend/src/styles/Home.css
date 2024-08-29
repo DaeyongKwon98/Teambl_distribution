@@ -152,11 +152,21 @@ body {
   color: black;
 }
 
+/* 대용 추가 */
+.home-same-tags-container {
+  display: flex; /* Flexbox를 사용하여 자식 요소들을 수평으로 정렬 */
+  flex-wrap: wrap; /* 줄 바꿈이 가능하도록 설정 */
+  gap: 8px; /* 요소 간의 간격을 설정 */
+}
+
 .home-friend-of, .home-same-tag {
   background-color: white;
   border-radius: 15px;
   padding: 4px 8px;
   font-size: 10px;
+  display: flex; /* Flexbox를 사용하여 내부 텍스트 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
+  white-space: nowrap; /* 텍스트 줄 바꿈 방지 */
 }
 
 .home-friend-of span, .home-same-tag span {
