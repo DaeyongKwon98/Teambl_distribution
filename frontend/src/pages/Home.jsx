@@ -108,6 +108,7 @@ function Home() {
               ...userData,
               friendOf: firstDegreeName, // 첫 번째 1촌 친구 이름
               numFriends: connector_friend_ids.length, // 친구 수
+              id: second_degree_profile_id,
             };
           } catch (innerError) {
             console.error("Failed to fetch data for second degree profile:", innerError);
@@ -143,6 +144,7 @@ function Home() {
               ...userData,
               sametag: friendData.common_keywords,
               similarity: friendData.similarity,
+              id: friendData.user.id,
             };
           } catch (error) {
             console.error(
