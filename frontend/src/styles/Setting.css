@@ -188,11 +188,12 @@ body {
 
 .setting-inquiry-textarea {
   width: 100%;
-  padding: 7px;
+  padding: 10px;
   border: 0;
   border-radius: 5px;
   background: #F5F5F5;
   resize: none; /* 텍스트 영역의 크기 조절 비활성화 */
-  height: 80px; /* 텍스트 영역의 높이 설정 */
+  height: 100px; /* 텍스트 영역의 높이 설정 */
   font-size: 14px;
+  box-sizing: border-box; /* 패딩과 경계를 포함한 전체 너비로 설정 */
 }
