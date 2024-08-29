@@ -36,9 +36,20 @@ const Setting = () => {
   }, [currentPassword, newPassword, confirmNewPassword, withdrawPassword, inquiryText]);
 
   // 문의하기 제출 처리 로직
-  const handleInquirySubmit = () => {
-    alert("문의가 제출되었습니다.");
-    setInquiryText(""); // 제출 후 입력 필드 초기화
+  const handleInquirySubmit = async () => {
+    try {
+      const response = await api.post("/api/create-inquiry/", {
+        text: inquiryText,
+      });
+
+      if (response.status === 201) {
+        alert("문의가 제출되었습니다.");
+        setInquiryText(""); // 제출 후 입력 필드 초기화
+      }
+    } catch (error) {
+      console.error("문의 제출 중 오류가 발생했습니다:", error);
+      alert("문의 제출에 실패했습니다. 다시 시도해주세요.");
+    }
   };
   
   const isPasswordCorrect = async (userInputPassword) => {
