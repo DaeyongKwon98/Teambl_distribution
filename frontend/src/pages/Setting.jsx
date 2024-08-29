@@ -145,12 +145,12 @@ const Setting = () => {
       <Header />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
-      <h2 className="setting-section-title">비밀번호 변경</h2>
+      {/* <h2 className="setting-section-title">비밀번호 변경</h2> */}
       <div
         className="setting-password-toggle"
         onClick={() => setShowChangePasswordSection(!showChangePasswordSection)}
       >
-        <span>비밀번호 변경</span>
+        <span className="setting-section-title">비밀번호 변경</span>
         <img
           src={ArrowDownIcon}
           alt="Toggle Password Change Section"
