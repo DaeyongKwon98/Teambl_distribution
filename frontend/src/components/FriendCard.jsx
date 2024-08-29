@@ -1,6 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 // import BefriIcon from "../assets/befriIcon.svg";
+import defaultProfileImage from '../assets/default_profile_image.jpg';
 
 const FriendCard = ({ friend, isKeywordFriend = false }) => {
   // console.log("friend", friend);
@@ -46,7 +47,11 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
         </div>
         {/* <img src={BefriIcon} alt="1촌신청" className="home-befri-icon" /> */}
       </div>
-      <img src={friend.image} alt={`${friend.user_name} 프로필`} className="home-profile-pic" />
+      <img 
+          src={friend.image ? friend.image : defaultProfileImage} 
+          alt={`${friend.user_name} 프로필`} 
+          className="home-profile-pic" 
+      />
       <div className="home-friend-info">
         <p>{friend.user_name}</p>
         <p>{friend.school} {friend.current_academic_degree} {friend.year}</p>
