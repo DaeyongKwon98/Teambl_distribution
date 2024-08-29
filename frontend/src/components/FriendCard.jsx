@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNavigate } from "react-router-dom";
 // import BefriIcon from "../assets/befriIcon.svg";
-import defaultProfileImage from '../assets/default_profile_image.jpg';
+import defaultProfileImage from '../assets/default_profile_image.JPG';
 
 const FriendCard = ({ friend, isKeywordFriend = false }) => {
   // console.log("friend", friend);
