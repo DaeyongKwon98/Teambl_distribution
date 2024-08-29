@@ -99,19 +99,15 @@ function Home() {
             const userResponse = await api.get(`/api/profile/${second_degree_profile_id}/`);
             const userData = userResponse.data;
   
-            // 1촌 사용자의 이름 정보 가져오기
-            const firstDegreeNames = await Promise.all(
-              connector_friend_ids.map(async (firstDegreeId) => {
-                const firstDegreeResponse = await api.get(`/api/profile/${firstDegreeId}/`);
-                return firstDegreeResponse.data.user_name;
-              })
-            );
+            // 첫 번째 1촌 사용자의 이름 정보 가져오기
+            const firstDegreeNameResponse = await api.get(`/api/profile/${connector_friend_ids[0]}/`);
+            const firstDegreeName = firstDegreeNameResponse.data.user_name;
   
-            // 2촌 사용자의 데이터에 연결된 1촌 사용자의 이름 리스트와 친구 수를 추가하여 반환
+            // 2촌 사용자의 데이터에 연결된 1촌 사용자의 이름과 친구 수를 추가하여 반환
             return {
               ...userData,
-              friendOf: firstDegreeNames, // 1촌 친구 이름 리스트
-              numFriends: firstDegreeNames.length, // 친구 수
+              friendOf: firstDegreeName, // 첫 번째 1촌 친구 이름
+              numFriends: connector_friend_ids.length, // 친구 수
             };
           } catch (innerError) {
             console.error("Failed to fetch data for second degree profile:", innerError);
