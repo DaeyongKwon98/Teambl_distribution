@@ -33,7 +33,7 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
   return (
     <div className="home-friend-card">
       <div className='home-same-and-befri'>
-        <div>
+        <div className={isKeywordFriend ? "home-same-tags-container" : "home-friend-of"}>
           {isKeywordFriend ? renderSametags() : renderFriendOf()}
         </div>
         {/* <img src={BefriIcon} alt="1촌신청" className="home-befri-icon" /> */}
