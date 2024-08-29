@@ -5,6 +5,7 @@ import NotiIcon from "../assets/notiIcon.svg";
 import NotiIconActive from "../assets/notiIconActive.svg";
 import TeamblIcon from "../assets/teamblIcon.svg";
 import api from "../api";
+import defaultProfileImage from "../assets/default_profile_image.svg";
 
 const Header = ({ profileImage }) => {
   const navigate = useNavigate();
@@ -59,7 +60,7 @@ const Header = ({ profileImage }) => {
           onClick={goToNotification}
         />
         <img
-          src={profileImage}
+          src={profileImage ? profileImage : defaultProfileImage}
           alt="내 프로필"
           className="home-profile-icon"
           onClick={goToProfile}
