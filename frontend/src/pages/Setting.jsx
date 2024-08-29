@@ -52,8 +52,9 @@ const Setting = () => {
         console.error("서버 응답 데이터:", error.response.data);
       }
       alert("문의 제출에 실패했습니다. 다시 시도해주세요.");
+    }
   };
-  
+
   const isPasswordCorrect = async (userInputPassword) => {
     try {
       const response = await api.post("/api/check-password/", {
