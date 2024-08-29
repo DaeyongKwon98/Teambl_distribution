@@ -1,8 +1,13 @@
 import React from 'react';
-import BefriIcon from "../assets/befriIcon.svg";
+import { useNavigate } from "react-router-dom";
+// import BefriIcon from "../assets/befriIcon.svg";
 
 const FriendCard = ({ friend, isKeywordFriend = false }) => {
-  console.log("friend", friend);
+  // console.log("friend", friend);
+  const navigate = useNavigate();
+  const goToProfile = () => {
+    navigate(`/profile/${friend.id}`);
+  };
   
   // 공통 1촌 정보를 표시하는 함수
   const renderFriendOf = () => {
@@ -34,7 +39,7 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
   };
   
   return (
-    <div className="home-friend-card">
+    <div className="home-friend-card" onClick={goToProfile} style={{ cursor: "pointer" }}>
       <div className='home-same-and-befri'>
         <div className={isKeywordFriend ? "home-same-tags-container" : "home-friend-of"}>
           {isKeywordFriend ? renderSametags() : renderFriendOf()}
