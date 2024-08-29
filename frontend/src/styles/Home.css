@@ -159,7 +159,14 @@ body {
   gap: 8px; /* 요소 간의 간격을 설정 */
 }
 
-.home-friend-of, .home-same-tag {
+.home-friend-of {
+  background-color: white;
+  border-radius: 15px;
+  padding: 4px 8px;
+  font-size: 10px;
+}
+
+.home-same-tag {
   background-color: white;
   border-radius: 15px;
   padding: 4px 8px;
