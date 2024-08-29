@@ -14,7 +14,7 @@ body {
 /* 대용 추가 */
 .setting-password-toggle {
   display: flex;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   align-items: center;
   cursor: pointer;
   margin-bottom: 10px;
