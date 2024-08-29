@@ -16,12 +16,15 @@ const Setting = () => {
   const [withdrawPassword, setWithdrawPassword] = useState("");
   const [changePasswordError, setChangePasswordError] = useState("");
   const [withdrawError, setWithdrawError] = useState("");
+  const [inquiryText, setInquiryText] = useState(""); // 문의하기 텍스트 상태
   const [changeBtnActive, setChangeBtnActive] = useState(false);
   const [withdrawBtnActive, setWithdrawBtnActive] = useState(false);
+  const [inquiryBtnActive, setInquiryBtnActive] = useState(false); // 문의하기 버튼 상태
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
   const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
+  const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
   
   useEffect(() => {
     setChangeBtnActive(
@@ -29,8 +32,15 @@ const Setting = () => {
     );
 
     setWithdrawBtnActive(withdrawPassword !== "");
+    setInquiryBtnActive(inquiryText !== ""); // 문의하기 텍스트가 있을 때만 버튼 활성화
   }, [currentPassword, newPassword, confirmNewPassword, withdrawPassword]);
 
+  // 문의하기 제출 처리 로직
+  const handleInquirySubmit = () => {
+    alert("문의가 제출되었습니다.");
+    setInquiryText(""); // 제출 후 입력 필드 초기화
+  };
+  
   const isPasswordCorrect = async (userInputPassword) => {
     try {
       const response = await api.post("/api/check-password/", {
@@ -202,6 +212,38 @@ const Setting = () => {
         로그아웃
       </button>
 
+      <div
+        className="setting-password-toggle"
+        onClick={() => setShowInquirySection(!showInquirySection)}
+      >
+        <span className="setting-section-title">문의하기</span>
+        <img
+          src={ArrowDownIcon}
+          alt="Toggle Inquiry Section"
+          className={`setting-arrow-icon ${showInquirySection ? 'rotate' : ''}`}
+        />
+      </div>
+      {showInquirySection && (
+        <div className="setting-inquiry-section">
+          <div className="setting-input-group">
+            <label>문의 내용</label>
+            <textarea
+              value={inquiryText}
+              onChange={(e) => setInquiryText(e.target.value)}
+              className="setting-inquiry-textarea"
+              placeholder="문의 내용을 입력하세요"
+            />
+          </div>
+          <button
+            className="setting-inquiry-button"
+            onClick={handleInquirySubmit}
+            disabled={!inquiryBtnActive}
+          >
+            문의하기
+          </button>
+        </div>
+      )}
+      
       <div
         className="setting-password-toggle"
         onClick={() => setShowWithdrawSection(!showWithdrawSection)}
