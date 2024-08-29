@@ -48,8 +48,10 @@ const Setting = () => {
       }
     } catch (error) {
       console.error("문의 제출 중 오류가 발생했습니다:", error);
+      if (error.response) {
+        console.error("서버 응답 데이터:", error.response.data);
+      }
       alert("문의 제출에 실패했습니다. 다시 시도해주세요.");
-    }
   };
   
   const isPasswordCorrect = async (userInputPassword) => {
