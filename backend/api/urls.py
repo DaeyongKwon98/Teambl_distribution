@@ -110,6 +110,10 @@ urlpatterns += [
     ),
 ]
 
+# Inquiry
+urlpatterns += [
+    path("create-inquiry/", views.InquiryCreateView.as_view(), name="create-inquiry"),
+]
 
 # Others
 urlpatterns += [
