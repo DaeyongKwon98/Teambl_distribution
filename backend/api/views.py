@@ -9,6 +9,7 @@ from .models import (
     InvitationLink,
     Friend,
     Notification,
+    Inquiry,
 )
 from .serializers import (
     CustomUserSerializer,
@@ -24,6 +25,7 @@ from .serializers import (
     MyTokenObtainPairSerializer,
     RelatedUserSerializer,
     SecondDegreeProfileSerializer,
+    InquirySerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -743,3 +745,12 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
 
         serializer = SecondDegreeProfileSerializer(response_data, many=True)
         return Response(serializer.data, status=200)
+
+
+class InquiryCreateView(generics.CreateAPIView):
+    queryset = Inquiry.objects.all()
+    serializer_class = InquirySerializer
+    permission_classes = [IsAuthenticated]
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
