@@ -272,7 +272,7 @@ function Home() {
         </div>
       )}
 
-      <h1>Home Page</h1>
+      {/* <h1>Home Page</h1>
       <button onClick={goToProjects} className="button1">
         프로젝트
       </button>
@@ -290,7 +290,7 @@ function Home() {
       </button>
       <button onClick={goToNotification} className="button6">
         알림
-      </button>
+      </button> */}
     </div>
   );
 }
