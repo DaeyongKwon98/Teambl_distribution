@@ -577,7 +577,9 @@ class SearchUsersAPIView(generics.ListAPIView):
 
             # 2. 전공 필터링
             if majors:
-                filtered_profiles = filtered_profiles.filter(major__in=majors)
+                filtered_profiles = filtered_profiles.filter(
+                    Q(major1__in=majors) | Q(major2__in=majors)
+                )
 
             # 3. 촌수 필터링 (비어있는 경우 1, 2, 3촌 다 포함)
             if not degrees:
