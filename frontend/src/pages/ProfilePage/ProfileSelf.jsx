@@ -25,7 +25,8 @@ function ProfileSelf() {
       school: "",
       current_academic_degree: "",
       year: 0,
-      major: "",
+      major1: "",
+      major2: "",
       one_degree_count: 0,
       introduction: "",
       experiences: [],
@@ -270,7 +271,8 @@ function ProfileSelf() {
       school: profile.school,
       current_academic_degree: profile.current_academic_degree,
       year: profile.year,
-      major: profile.major,
+      major1: profile.major1,
+      major2: profile.major2,
       one_degree_count: profile.one_degree_count,
       introduction: profile.introduction,
       experiences: profile.experiences,
@@ -337,7 +339,10 @@ function ProfileSelf() {
               <p>{profile.year % 100} 학번</p>
             </div>
             <div className="profile-row2">
-              <p>{profile.major}</p>
+              <p>
+                {profile.major}
+                {profile.major2 && `, ${profile.major2}`}
+              </p>
             </div>
             <div className="profile-row3">
               <img src={friendIcon} alt="friend-icon" />
