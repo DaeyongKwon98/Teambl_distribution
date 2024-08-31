@@ -291,7 +291,7 @@ function Profile() {
             </div>
             <div className="profile-line"></div>
             <pre>{school + " | " + year + " | " + current_academic_degree}</pre>
-            <pre>{major1, major2}</pre>
+            <pre>{major1}{major2 && `, ${major2}`}</pre>
             <div className="profile-friend">
               <img src={friendIcon} alt="friend-icon" />
               <span className="profile-oneDegree">{`1촌 ${one_degree_count}명`}</span>
