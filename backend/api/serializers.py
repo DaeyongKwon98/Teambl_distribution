@@ -97,7 +97,8 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     school = serializers.CharField(required=False)
     current_academic_degree = serializers.CharField(required=False)
     year = serializers.IntegerField(required=False)
-    major = serializers.CharField(required=False)
+    major1 = serializers.CharField(required=False)
+    major2 = serializers.CharField(required=False)
     tools = ToolSerializer(many=True, required=False)
     introduction = serializers.CharField(required=False, allow_blank=True)
     experiences = ExperienceSerializer(many=True, required=False)
@@ -112,7 +113,8 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             "school",
             "current_academic_degree",
             "year",
-            "major",
+            "major1",
+            "major2",
             "tools",
             "introduction",
             "experiences",
@@ -219,11 +221,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "date_joined",
             "profile",
             "code",
-            # "first_degree_count",
-            # "second_degree_count",
-            # "second_degree_ids",
-            # "second_degree_connections",
-            # "related_users",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -233,12 +230,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "is_active": {"read_only": True},
             "date_joined": {"read_only": True},
         }
-
-    # def __init__(self, *args, **kwargs):
-    #     # user_data를 시리얼라이저 인스턴스에 저장
-    #     self.user_data = kwargs.pop('user_data', {})
-    #     print(f"Initializing CustomUserSerializer with user_data: {self.user_data}")
-    #     super().__init__(*args, **kwargs)
     
     def create(self, validated_data):
         profile_data = validated_data.pop("profile", {})
@@ -264,36 +255,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
             instance.set_password(validated_data["password"])
             validated_data.pop("password")
         return super().update(instance, validated_data)
-
-    # def get_first_degree_count(self, obj):
-    #     return self.user_data.get('first_degree_count', 0)
-
-    # def get_second_degree_count(self, obj):
-    #     return self.user_data.get('second_degree_count', 0)
-
-    # def get_second_degree_ids(self, obj):
-    #     return self.user_data.get('second_degree_ids', [])
-
-    # def get_second_degree_connections(self, obj):
-    #     return self.user_data.get('second_degree_connections', [])
-
-    # def get_related_users(self, obj):
-    #     return self.user_data.get('related_users', [])
-
-    # def to_representation(self, instance):
-    #     representation = super().to_representation(instance)
-
-    #     # user_data를 이용해 추가적인 처리나 데이터 추가 가능
-    #     representation['first_degree_count'] = self.user_data.get('first_degree_count', 0)
-    #     representation['second_degree_count'] = self.user_data.get('second_degree_count', 0)
-    #     representation['second_degree_ids'] = self.user_data.get('second_degree_ids', [])
-    #     representation['second_degree_connections'] = self.user_data.get('second_degree_connections', [])
-    #     representation['related_users'] = self.user_data.get('related_users', [])
-        
-    #     # date_joined를 원하는 형식으로 변환
-    #     representation['date_joined'] = instance.date_joined.strftime('%Y-%m-%d %H:%M:%S')
-
-    #     return representation
 
 
 class ProjectSerializer(serializers.ModelSerializer):
