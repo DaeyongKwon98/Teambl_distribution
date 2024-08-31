@@ -12,7 +12,8 @@ const ProfileOther = ({ userId }) => {
     school: "",
     current_academic_degree: "",
     year: 0,
-    major: "",
+    major1: "",
+    major2: "",
     one_degree_count: 0,
     introduction: "",
     image: profileDefaultImg,
@@ -75,7 +76,10 @@ const ProfileOther = ({ userId }) => {
               {profile.year}
               학번
             </div>
-            <div className="profileOther-profile-row3">{profile.major}</div>
+            <div className="profileOther-profile-row3">
+              {profile.major1}
+              {profile.major2 && `, ${profile.major2}`}
+            </div>
           </div>
         </div>
 
