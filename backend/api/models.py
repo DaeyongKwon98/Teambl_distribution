@@ -231,6 +231,7 @@ class Profile(models.Model):
         choices=MAJOR_CHOICES,
         default="pending",
         blank=True,
+        null=True,
     )  # 전공 2
     keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
     one_degree_count = models.IntegerField(default=0)  # 1촌 수
