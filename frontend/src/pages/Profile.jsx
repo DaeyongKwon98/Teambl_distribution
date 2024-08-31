@@ -20,7 +20,8 @@ function Profile() {
   const [school, setSchool] = useState("");
   const [current_academic_degree, setCurrentAcademicDegree] = useState("");
   const [year, setYear] = useState("");
-  const [major, setMajor] = useState("");
+  const [major1, setMajor1] = useState("");
+  const [major2, setMajor2] = useState("");
   const [one_degree_count, setOneDegreeCount] = useState("");
 
   const [image, setImage] = useState(profileImg);
@@ -94,13 +95,15 @@ function Profile() {
         setSchool(userInfo.school);
         setCurrentAcademicDegree(userInfo.current_academic_degree);
         setYear(userInfo.year);
-        setMajor(userInfo.major);
+        setMajor1(userInfo.major1);
+        setMajor2(userInfo.major2);
       } else {
         setUserName(response.data.user_name || "");
         setSchool(response.data.school || "");
         setCurrentAcademicDegree(response.data.current_academic_degree || "");
         setYear(response.data.year || "");
-        setMajor(response.data.major || "");
+        setMajor1(response.data.major1 || "");
+        setMajor2(response.data.major2 || "");
       }
 
       const oneDegreeCount = await fetchFriendCount();
@@ -170,7 +173,8 @@ function Profile() {
         school: school,
         current_academic_degree: current_academic_degree,
         year: year,
-        major: major,
+        major1: major1,
+        major2: major2,
       },
     });
   }
@@ -242,7 +246,8 @@ function Profile() {
         school,
         current_academic_degree,
         year,
-        major,
+        major1,
+        major2,
         one_degree_count: one_degree_count,
         introduction: introduction,
         experiences,
@@ -286,7 +291,7 @@ function Profile() {
             </div>
             <div className="profile-line"></div>
             <pre>{school + " | " + year + " | " + current_academic_degree}</pre>
-            <pre>{major}</pre>
+            <pre>{major1, major2}</pre>
             <div className="profile-friend">
               <img src={friendIcon} alt="friend-icon" />
               <span className="profile-oneDegree">{`1촌 ${one_degree_count}명`}</span>
