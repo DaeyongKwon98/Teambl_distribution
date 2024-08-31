@@ -24,7 +24,7 @@ body {
 .home-search {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* 중앙에서 왼쪽으로 변경 */
   width: 100px; /* 기존 75px에서 100px로 변경 */
 }
 
