@@ -38,7 +38,8 @@ const ProfileOther = ({ userId }) => {
       const response = await api.get(`/api/user/${userId}/`);
       setProfile(response.data.profile);
 
-      console.log(response.data.profile);
+      console.log("response data profile:", response.data.profile);
+      console.log("profile:", profile);
     } catch (error) {
       console.error("Failed to fetch user profile:", error);
     }
@@ -78,7 +79,7 @@ const ProfileOther = ({ userId }) => {
             </div>
             <div className="profileOther-profile-row3">
               {profile.major1}
-              {/* {profile.major2 && profile.major2.trim() !== "" && `, ${profile.major2}`} */}
+              {profile.major2 && profile.major2.trim() !== "" && `, ${profile.major2}`}
             </div>
           </div>
         </div>
