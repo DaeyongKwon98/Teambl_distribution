@@ -25,7 +25,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: flex-start; /* 중앙에서 왼쪽으로 변경 */
-  width: 100px; /* 기존 75px에서 100px로 변경 */
+  width: 80px; /* 기존 75px에서 100px로 변경 */
   margin-right: 0; /* 오른쪽 여백을 없앰 */
 }
 
