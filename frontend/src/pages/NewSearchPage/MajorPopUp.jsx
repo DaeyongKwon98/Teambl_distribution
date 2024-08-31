@@ -58,6 +58,7 @@ const MajorPopUp = ({
   buttonText,
 }) => {
   const [selectedMajors, setSelectedMajors] = useState(userSelectedMajors || []);
+  const [majorSearchTerm, setMajorSearchTerm] = useState("");  // 전공 검색어 상태 추가
 
   // 전공 선택 및 해제 함수
   const toggleMajorSelection = (major) => {
