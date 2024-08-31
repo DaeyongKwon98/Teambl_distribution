@@ -92,7 +92,7 @@ class Migration(migrations.Migration):
                 ("current_academic_degree", models.CharField(max_length=10)),
                 ("year", models.IntegerField()),
                 ("major1", models.CharField(max_length=100)),
-                ("major2", models.CharField(max_length=100)),
+                ("major2", models.CharField(max_length=100, blank=True)),
                 ("one_degree_count", models.IntegerField(default=0)),
                 ("introduction", models.TextField(default="", max_length=1000)),
                 ("keywords", models.ManyToManyField(blank=True, to="api.keyword")),
