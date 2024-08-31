@@ -78,7 +78,7 @@ const ProfileOther = ({ userId }) => {
             </div>
             <div className="profileOther-profile-row3">
               {profile.major1}
-              {profile.major2 && profile.major2.trim() !== "" && `, ${profile.major2}`}
+              {/* {profile.major2 && profile.major2.trim() !== "" && `, ${profile.major2}`} */}
             </div>
           </div>
         </div>
