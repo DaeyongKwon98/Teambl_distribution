@@ -26,7 +26,11 @@ const ProfileOther = ({ userId }) => {
 
   useEffect(() => {
     fetchProfile(userId);
-  }, []);
+  }, [userId]);
+
+  useEffect(() => {
+    console.log("Updated profile:", profile);
+  }, [profile]); // profile이 업데이트될 때마다 로그를 출력
 
   const handleBackButton = () => {
     navigate("/");
