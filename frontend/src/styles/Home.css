@@ -25,12 +25,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 75px;
+  width: 100px; /* 기존 75px에서 100px로 변경 */
 }
 
 .home-gosearch-icon {
-  width: 60px;
-  height: 22px;
+  width: 80px; /* 기존 60px에서 80px로 변경 */
+  height: 30px; /* 기존 22px에서 30px로 변경 */
 }
 
 .home-logo {
