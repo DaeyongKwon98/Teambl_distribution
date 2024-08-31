@@ -19,7 +19,10 @@ function EditProfile() {
     profile.current_academic_degree
   );
   const [newYear, setNewYear] = useState(profile.year);
-  const [newMajor, setNewMajor] = useState(profile.major);
+  // const [newMajor, setNewMajor] = useState(profile.major);
+  const [newMajors, setNewMajors] = useState(
+    [profile.major1, profile.major2].filter(Boolean)
+  );
   const [isCADPopUp, setIsCADPopUp] = useState(false);
   const [isMajorPopUp, setIsMajorPopUp] = useState(false);
 
@@ -51,12 +54,26 @@ function EditProfile() {
       school: newSchool,
       current_academic_degree: newCurrent_academic_degree,
       year: newYear,
-      major: newMajor,
+      // major: newMajor,
+      major1: newMajors[0],
+      major2: newMajors[1] || "",
     }));
 
     console.log("Profile updated:", newProfile);
   }
 
+  const handleMajorChange = (selectedMajors) => {
+    if (selectedMajors.length <= 2) {
+      setNewMajors(selectedMajors);
+    } else {
+      alert("전공은 최대 2개까지 선택할 수 있습니다.");
+    }
+  };
+  
+  const handleRemoveMajor = (majorToRemove) => {
+    setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
+  };
+  
   return (
     <div className="edit">
       <div className="edit-back">
@@ -115,7 +132,39 @@ function EditProfile() {
           <label className="edit-label-title">전공</label>
           <label className="edit-label-detail">최대 2개까지 입력 가능</label>
         </div>
-        <input
+        <div className="major-list">
+          {newMajors.map((major, index) => (
+            <div key={index} className="major-element">
+              {major}
+              <button
+                type="button"
+                onClick={() => handleRemoveMajor(major)}
+                className="remove-major-btn"
+              >
+                &times;
+              </button>
+            </div>
+          ))}
+        </div>
+        <button
+          type="button"
+          className="edit-addMajorBtn"
+          onClick={() => setIsMajorPopUp(true)}
+        >
+          전공 선택
+        </button>
+        <button
+          type="button"
+          className="edit-nextBtn"
+          onClick={handleSaveNewProfile}
+        >
+          저장
+        </button>
+      </div>
+
+
+        
+        {/* <input
           type="text"
           placeholder="전공 입력"
           className="edit-input"
@@ -133,7 +182,7 @@ function EditProfile() {
         >
           저장
         </button>
-      </div>
+      </div> */}
 
       {isCADPopUp && (
         <>
