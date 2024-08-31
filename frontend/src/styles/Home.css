@@ -67,6 +67,7 @@ body {
 .home-navbar {
   display: flex;
   justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .home-nav-item {
