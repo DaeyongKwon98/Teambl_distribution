@@ -97,6 +97,8 @@ function Profile() {
         setYear(userInfo.year);
         setMajor1(userInfo.major1);
         setMajor2(userInfo.major2);
+        console.log("Major1:", userInfo.major1);
+        console.log("Major2:", userInfo.major2);
       } else {
         setUserName(response.data.user_name || "");
         setSchool(response.data.school || "");
@@ -104,6 +106,8 @@ function Profile() {
         setYear(response.data.year || "");
         setMajor1(response.data.major1 || "");
         setMajor2(response.data.major2 || "");
+        console.log("Major1:", userInfo.major1);
+        console.log("Major2:", userInfo.major2);
       }
 
       const oneDegreeCount = await fetchFriendCount();
