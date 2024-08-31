@@ -124,19 +124,6 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
 
         return user_similarity_list
 
-
-# class UserStatistics(models.Model):# 유저의 2촌 수, 같은 키워드를 쓰는 사용자 수 저장
-#     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='statistics', primary_key=True)
-#     two_degree_count_prev = models.IntegerField(default=0)
-#     two_degree_count_now = models.IntegerField(default=0)
-#     same_keyword_count_prev = models.IntegerField(default=0)
-#     same_keyword_count_now = models.IntegerField(default=0)
-#     updated_at = models.DateTimeField(auto_now=True)
-
-#     def __str__(self):
-#         return f"Statistics for {self.user.email}"
-
-
 class Keyword(models.Model):
     keyword = models.CharField(max_length=50, unique=True)
 
@@ -234,11 +221,16 @@ class Profile(models.Model):
     school = models.CharField(max_length=100)  # 학교
     current_academic_degree = models.CharField(max_length=10)  # 학력
     year = models.IntegerField()  # 입학연도
-    major = models.CharField(
+    major1 = models.CharField(
         max_length=100,
         choices=MAJOR_CHOICES,
         default="pending",
-    )  # 전공
+    )  # 전공 1
+    major2 = models.CharField(
+        max_length=100,
+        choices=MAJOR_CHOICES,
+        default="pending",
+    )  # 전공 2
     keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
     one_degree_count = models.IntegerField(default=0)  # 1촌 수
     introduction = models.TextField(default="", blank=True, max_length=1000)  # 소개
