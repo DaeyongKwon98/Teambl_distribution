@@ -57,7 +57,25 @@ const MajorPopUp = ({
   doSearchUsers,
   buttonText,
 }) => {
-  const [majorSearchTerm, setMajorSearchTerm] = useState("");
+  const [selectedMajors, setSelectedMajors] = useState(userSelectedMajors || []);
+
+  // 전공 선택 및 해제 함수
+  const toggleMajorSelection = (major) => {
+    if (selectedMajors.includes(major)) {
+      setSelectedMajors(selectedMajors.filter((m) => m !== major));
+    } else {
+      if (selectedMajors.length < 2) {
+        setSelectedMajors([...selectedMajors, major]);
+      } else {
+        alert("전공은 최대 2개까지 선택할 수 있습니다.");
+      }
+    }
+  };
+
+  const saveSelectedMajors = () => {
+    handleMajorChange(selectedMajors);
+    setIsMajorPopupOpen(false);
+  };
 
   // 전공 검색 필터링 함수
   const filteredMajors = majors.filter((major) =>
@@ -80,50 +98,32 @@ const MajorPopUp = ({
           </div>
           <div className="newSearch-major-popup-body">
             <ul>
-              {majorSearchTerm === ""
-                ? filteredMajors
-                    .filter(
-                      (major) =>
-                        userSelectedMajors.includes(major) ||
-                        ["전산학부", "전기및전자공학부"].includes(major)
-                    )
-                    .map((major, index) => (
-                      <li
-                        key={index}
-                        className={`newSearch-major-item ${
-                          userSelectedMajors.includes(major) ? "selected" : ""
-                        }`}
-                        onClick={() => handleMajorChange(major)}
-                      >
-                        {major}
-                      </li>
-                    ))
-                : filteredMajors.map((major, index) => (
-                    <li
-                      key={index}
-                      className={`newSearch-major-item ${
-                        userSelectedMajors.includes(major) ? "selected" : ""
-                      }`}
-                      onClick={() => handleMajorChange(major)}
-                    >
-                      {major}
-                    </li>
-                  ))}
+              {filteredMajors.map((major, index) => (
+                <li
+                  key={index}
+                  className={`newSearch-major-item ${
+                    selectedMajors.includes(major) ? "selected" : ""
+                  }`}
+                  onClick={() => toggleMajorSelection(major)}
+                >
+                  {major}
+                </li>
+              ))}
             </ul>
           </div>
 
           <div className="newSearch-major-popup-footer">
             <button
-              className={`newSearch-result-button ${
-                userSelectedMajors.length === 0 ? "zero" : ""
-              }`}
-              disabled={userSelectedMajors.length === 0}
-              onClick={() => {
-                setIsMajorPopupOpen(false);
-                doSearchUsers();
-              }}
+              className="newSearch-result-button"
+              onClick={saveSelectedMajors}
             >
               {buttonText}
+            </button>
+            <button
+              className="newSearch-cancel-button"
+              onClick={() => setIsMajorPopupOpen(false)}
+            >
+              취소
             </button>
           </div>
         </div>
