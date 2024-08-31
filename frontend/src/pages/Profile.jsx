@@ -106,8 +106,8 @@ function Profile() {
         setYear(response.data.year || "");
         setMajor1(response.data.major1 || "");
         setMajor2(response.data.major2 || "");
-        console.log("Major1:", userInfo.major1);
-        console.log("Major2:", userInfo.major2);
+        console.log("Major1:", response.data.major1);
+        console.log("Major2:", response.data.major2);
       }
 
       const oneDegreeCount = await fetchFriendCount();
