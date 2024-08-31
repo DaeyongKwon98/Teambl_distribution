@@ -32,6 +32,7 @@ body {
 .home-gosearch-icon {
   width: 80px; /* 기존 60px에서 80px로 변경 */
   height: 30px; /* 기존 22px에서 30px로 변경 */
+  margin-right: 0; /* 오른쪽 여백을 없앰 */
 }
 
 .home-logo {
