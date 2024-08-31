@@ -197,7 +197,7 @@ function EditProfile() {
         </>
       )}
 
-      {isMajorPopUp && (
+      {/* {isMajorPopUp && (
         <>
           <div
             className="editprofile-popup-overlay"
@@ -206,6 +206,22 @@ function EditProfile() {
           <MajorPopUp
             userSelectedMajors={[newMajor]}
             handleMajorChange={setNewMajor}
+            setIsMajorPopupOpen={setIsMajorPopUp}
+            doSearchUsers={() => {}}
+            buttonText={"선택"}
+          />
+        </>
+      )} */}
+      
+      {isMajorPopUp && (
+        <>
+          <div
+            className="editprofile-popup-overlay"
+            onClick={() => setIsMajorPopUp(false)}
+          ></div>
+          <MajorPopUp
+            userSelectedMajors={newMajors}
+            handleMajorChange={handleMajorChange}
             setIsMajorPopupOpen={setIsMajorPopUp}
             doSearchUsers={() => {}}
             buttonText={"선택"}
