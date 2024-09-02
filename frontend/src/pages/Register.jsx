@@ -230,7 +230,13 @@ function Register() {
               <span className="placeholder-text">전공 검색</span>
             ) : (
               majors.map((major, index) => (
-                <div key={index} className="major-element">
+                <div
+                  key={index}
+                  className="major-element"
+                  onClick={(e) => {
+                    e.stopPropagation(); // major-element 클릭 시 상위 요소의 onClick 이벤트가 발생하지 않도록 함
+                  }}
+                >
                   {major}
                   <button
                     className="newSearch-remove-major"
