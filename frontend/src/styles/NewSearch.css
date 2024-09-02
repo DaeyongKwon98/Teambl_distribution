@@ -267,11 +267,12 @@ li {
 } */
 .newSearch-major-popup-header {
   display: flex;
-  flex-direction: column; /* 요소들을 세로로 배치 */
   align-items: center;
+  justify-content: center;
   padding: 7.69px;
   width: 100%;
   position: relative;
+  box-sizing: border-box; /* padding을 포함하도록 설정 */
 }
 
 .newSearch-major-popup-header h3 {
@@ -282,7 +283,7 @@ li {
 }
 
 .newSearch-major-search-input {
-  flex: 1;
+  /* flex: 1; */
   width: 253.85px;
   padding: 7.69px;
   font-size: 12.3px;
@@ -379,8 +380,8 @@ li {
 
 .newSearch-cancel-button {
   position: absolute;
-  top: 7.69px;
-  right: 7.69px;
+  top: 10px;
+  right: 10px;
   background: none;
   border: none;
   color: #121212;
