@@ -47,8 +47,8 @@ label.edit-label-detail {
   font-weight: normal;
   margin: 0px;
   color: #a8a8a8;
-  display: inline-block;
-  float: right;
+/*   display: inline-block;
+  float: right; */
 }
 
 form.edit h4 {
