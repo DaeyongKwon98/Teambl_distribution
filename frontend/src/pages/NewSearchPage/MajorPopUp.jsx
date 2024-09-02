@@ -113,12 +113,6 @@ const MajorPopUp = ({
               {selectedMajors.map((major, index) => (
                 <div key={index} className="newSearch-selected-major-item">
                   <span>{major}</span>
-                  <button
-                    className="newSearch-remove-major"
-                    onClick={() => removeMajor(major)}
-                  >
-                    &times;
-                  </button>
                 </div>
               ))}
             </div>
