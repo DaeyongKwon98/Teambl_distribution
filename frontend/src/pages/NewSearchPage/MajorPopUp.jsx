@@ -97,6 +97,23 @@ const MajorPopUp = ({
               className="newSearch-major-search-input"
             />
           </div>
+
+          {selectedMajors.length > 0 && (
+            <div className="newSearch-selected-majors">
+              {selectedMajors.map((major, index) => (
+                <div key={index} className="newSearch-selected-major-item">
+                  <span>{major}</span>
+                  <button
+                    className="newSearch-remove-major"
+                    onClick={() => removeMajor(major)}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+          
           <div className="newSearch-major-popup-body">
             <ul>
               {majorSearchTerm && filteredMajors.length > 0 ? (
