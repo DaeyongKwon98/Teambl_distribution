@@ -149,24 +149,38 @@ function EditProfile() {
           <label className="edit-label-title">전공</label>
           <label className="edit-label-detail">최대 2개까지 입력 가능</label>
         </div>
-        <div className="major-list">
+        <div className="major-list" onClick={() => setIsMajorPopUp(true)}>
           <img
             src={majorEdit}
             alt="전공 선택"
             className="edit-addMajorImg"
             onClick={() => setIsMajorPopUp(true)}
           />
-          {newMajors.map((major, index) => (
-            <div key={index} className="major-element">
-              {major}
-              <button
-                className="newSearch-remove-major"
-                onClick={() => handleRemoveMajor(major)}
+
+          {newMajors.length === 0 ? (
+            <span className="placeholder-text">전공 검색</span>
+          ) : (          
+            newMajors.map((major, index) => (
+              <div
+                key={index}
+                className="major-element"
+                onClick={(e) => {
+                  e.stopPropagation(); // major-element 클릭 시 상위 요소의 onClick 이벤트가 발생하지 않도록 함
+                }}
               >
-                &times;
-              </button>
-            </div>
-          ))}
+                {major}
+                <button
+                  className="newSearch-remove-major"
+                  onClick={(e) => {
+                    e.stopPropagation(); // 부모의 onClick 이벤트가 발생하지 않도록 함
+                    handleRemoveMajor(major);
+                  }}
+                >
+                  &times;
+                </button>
+              </div>
+            ))
+          )}
         </div>
         <button
           type="button"
