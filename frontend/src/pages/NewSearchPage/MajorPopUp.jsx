@@ -91,6 +91,12 @@ const MajorPopUp = ({
     <>
       <div className="newSearch-major-popup">
         <div className="newSearch-major-popup-content">
+          <button
+            className="newSearch-cancel-button"
+            onClick={() => setIsMajorPopupOpen(false)}
+          >
+            &times;
+          </button>
           <div className="newSearch-major-popup-header">
             <h3>전공</h3>
             <input
@@ -144,12 +150,6 @@ const MajorPopUp = ({
               onClick={saveSelectedMajors}
             >
               {buttonText}
-            </button>
-            <button
-              className="newSearch-cancel-button"
-              onClick={() => setIsMajorPopupOpen(false)}
-            >
-              취소
             </button>
           </div>
         </div>
