@@ -258,12 +258,20 @@ li {
 }
 
 
-.newSearch-major-popup-header {
+/* .newSearch-major-popup-header {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   padding: 7.69px;
   width: 100%;
+} */
+.newSearch-major-popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7.69px;
+  width: 100%;
+  position: relative;
 }
 
 .newSearch-major-popup-header h3 {
@@ -370,14 +378,12 @@ li {
 }
 
 .newSearch-cancel-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: none;
   border: none;
   color: #121212;
   font-size: 20px;
   cursor: pointer;
+  margin-left: auto; /* 버튼을 오른쪽으로 밀기 */
 }
 
 
