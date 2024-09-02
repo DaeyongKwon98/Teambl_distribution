@@ -587,7 +587,7 @@ class SearchUsersAPIView(generics.ListAPIView):
         if serializer.is_valid():
             query = serializer.validated_data.get("q", "")
             degrees = serializer.validated_data.get("degree", [])
-            majors = serializer.validated_data.get("major", [])
+            majors = serializer.validated_data.get("majors", [])
 
             print("Received Degrees:", degrees)
             print("Majors:", majors)
