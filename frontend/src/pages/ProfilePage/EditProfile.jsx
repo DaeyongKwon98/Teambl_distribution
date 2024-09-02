@@ -47,41 +47,32 @@ function EditProfile() {
     }
   };
 
-  function handleSaveNewProfile() {
-    setNewProfile((prevProfile) => ({
-      ...prevProfile,
-      user_name: newUser_name,
-      school: newSchool,
-      current_academic_degree: newCurrent_academic_degree,
-      year: newYear,
-      // major: newMajor,
-      major1: newMajors[0],
-      major2: newMajors[1] || "",
-    }));
+  const handleSaveNewProfile = async () => {
+    const updatedProfile = {
+        ...newProfile,
+        user_name: newUser_name,
+        school: newSchool,
+        current_academic_degree: newCurrent_academic_degree,
+        year: newYear,
+        major1: newMajors[0],
+        major2: newMajors[1] || "",
+    };
 
     try {
-      const response = await api.put(`/api/profile/${currentUser.id}/`, updatedProfile);
-      console.log("Profile updated successfully:", response.data);
-      setNewProfile(updatedProfile);
-      navigate(`/profile/${currentUser.id}`, {
-        state: {
-          profile: updatedProfile,
-        },
-      });
+        const response = await api.put(`/api/profile/${currentUser.id}/`, updatedProfile);
+        console.log("Profile updated successfully:", response.data);
+        setNewProfile(updatedProfile);
+        navigate(`/profile/${currentUser.id}`, {
+            state: {
+                profile: updatedProfile,
+            },
+        });
     } catch (error) {
-      console.error("Failed to update profile:", error);
-      alert("프로필 업데이트 실패");
+        console.error("Failed to update profile:", error);
+        alert("프로필 업데이트 실패");
     }
-    console.log("Profile updated:", newProfile);
   };
 
-  const handleMajorChange = (selectedMajors) => {
-    if (selectedMajors.length <= 2) {
-      setNewMajors(selectedMajors);
-    } else {
-      alert("전공은 최대 2개까지 선택할 수 있습니다.");
-    }
-  };
   
   const handleRemoveMajor = (majorToRemove) => {
     setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
