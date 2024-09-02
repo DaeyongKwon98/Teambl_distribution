@@ -149,6 +149,7 @@ function EditProfile() {
           > */}
           <img
             src={majorEdit}
+            alt="전공 선택"
             {/* className="edit-addMajorImg" */}
             onClick={() => setIsMajorPopUp(true)}
           />
