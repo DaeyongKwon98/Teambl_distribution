@@ -135,7 +135,23 @@ function Register() {
   const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
 
   const handleRemoveMajor = (majorToRemove) => {
-    setMajors((prevMajors) => prevMajors.filter((major) => major !== majorToRemove));
+    setMajors((prevMajors) => {
+      const updatedMajors = prevMajors.filter((major) => major !== majorToRemove);
+  
+      if (
+        user_name !== "" &&
+        school !== "" &&
+        current_academic_degree !== "" &&
+        year !== "" &&
+        updatedMajors.length > 0
+      ) {
+        setNextBtnActive(true);
+      } else {
+        setNextBtnActive(false);
+      }
+  
+      return updatedMajors;
+    });
   };
   
   return (
@@ -220,6 +236,7 @@ function Register() {
                     className="newSearch-remove-major"
                     onClick={(e) => {
                       e.stopPropagation(); // 부모의 onClick 이벤트가 발생하지 않도록 함
+                      e.preventDefault(); // 이벤트의 기본 동작(예: form의 submit)을 막음
                       handleRemoveMajor(major);
                     }}
                   >
