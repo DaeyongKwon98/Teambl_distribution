@@ -125,9 +125,7 @@ const MajorPopUp = ({
                   <li
                     key={index}
                     className={`newSearch-major-item ${
-                      selectedMajors.includes(major) ? "selected" : ""
-                    }`}
-                    {/* onClick={() => toggleMajorSelection(major)} */}
+                      selectedMajors.includes(major) ? "selected" : ""}`}
                   >
                     {major}
                   </li>
