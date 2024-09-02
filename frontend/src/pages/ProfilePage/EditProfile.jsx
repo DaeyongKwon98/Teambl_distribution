@@ -59,7 +59,7 @@ function EditProfile() {
     };
 
     try {
-        const response = await api.put(`/api/profile/${currentUser.id}/`, updatedProfile);
+        const response = await api.put(`/api/profile/update/`, updatedProfile);
         console.log("Profile updated successfully:", response.data);
         setNewProfile(updatedProfile);
         navigate(`/profile/${currentUser.id}`, {
