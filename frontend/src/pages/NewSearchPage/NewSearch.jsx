@@ -143,13 +143,14 @@ function NewSearch() {
   const handleMajorChange = (major) => {
     setFilters((prev) => {
       // majors 배열을 평탄화하여 중첩 배열을 방지
+      console.log("prev", prev);
       const flatMajors = prev.majors.flat();
-      
+      console.log("flatMajors", flatMajors);
       // 선택된 major가 이미 필터에 포함되어 있는지 확인
       const newMajors = flatMajors.includes(major)
         ? flatMajors.filter((item) => item !== major) // 이미 있으면 제거
         : [...flatMajors, major]; // 없으면 추가
-      
+      console.log("newMajors", newMajors);
       // 업데이트된 필터를 반환
       return { ...prev, majors: newMajors };
     });
