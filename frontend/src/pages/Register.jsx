@@ -224,7 +224,7 @@ function Register() {
               }}
             />
             {majors.length === 0 ? (
-              <span className="placeholder-text">전공을 선택해주세요.</span>
+              <span className="placeholder-text">전공 검색</span>
             ) : (
               majors.map((major, index) => (
                 <div key={index} className="major-element">
