@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/NewSearch.css";
+import majorEdit from '../../assets/majorEdit.svg';
 
 // 필터에서 선택 가능한 전공 목록
 const majors = [
@@ -102,23 +103,20 @@ const MajorPopUp = ({
               &times;
             </button>
           </div>
-          <input
-            type="text"
-            placeholder="전공을 검색해보세요"
-            value={majorSearchTerm}
-            onChange={(e) => setMajorSearchTerm(e.target.value)}
-            className="newSearch-major-search-input"
-          />
-
-          {/* {selectedMajors.length > 0 && (
-            <div className="newSearch-selected-majors">
-              {selectedMajors.map((major, index) => (
-                <div key={index} className="newSearch-selected-major-item">
-                  <span>{major}</span>
-                </div>
-              ))}
-            </div>
-          )} */}
+          <div className="newSearch-major-search-container">
+            <img
+              src={majorEdit}
+              alt="전공 아이콘"
+              className="newSearch-major-search-icon"
+            />
+            <input
+              type="text"
+              placeholder="전공 검색"
+              value={majorSearchTerm}
+              onChange={(e) => setMajorSearchTerm(e.target.value)}
+              className="newSearch-major-search-input"
+            />
+          </div>
           
           <div className="newSearch-major-popup-body">
             <ul>
