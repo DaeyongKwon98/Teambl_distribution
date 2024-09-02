@@ -77,6 +77,14 @@ function EditProfile() {
   const handleRemoveMajor = (majorToRemove) => {
     setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
   };
+
+  const handleMajorChange = (selectedMajors) => {
+    if (selectedMajors.length <= 2) {
+      setNewMajors(selectedMajors);
+    } else {
+      alert("전공은 최대 2개까지 선택할 수 있습니다.");
+    }
+  };
   
   return (
     <div className="edit">
