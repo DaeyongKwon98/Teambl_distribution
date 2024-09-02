@@ -288,6 +288,30 @@ class SendCodeView(View):
         return JsonResponse({"message": "Verification code sent"}, status=200)
 
 
+@method_decorator(csrf_exempt, name="dispatch")
+class SendEmailView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            from_email = data.get("from_email")
+            body = data.get("body")
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+
+        if not from_email or not body:
+            return JsonResponse({"error": "Email and code are required"}, status=400)
+
+        send_mail(
+            "문의 메일",  # 이메일 제목
+            f"From: {from_email}\n\n{body}",  # 이메일 본문
+            "teambltest@gmail.com",  # 발신자 이메일 주소
+            ["teambltest@gmail.com"],  # 수신사 이메일 주소 목록
+            fail_silently=False,  # 에러 발생 시 예외 발생 여부
+        )
+
+        return JsonResponse({"message": "Verification code sent"}, status=200)
+
+
 class InvitationLinkList(generics.ListAPIView):
     serializer_class = InvitationLinkSerializer
     permission_classes = [IsAuthenticated]
@@ -703,7 +727,8 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
 
         # 최근 15분 이내에 가입한 유저들로 필터링
         recent_related_users = [
-            user_data for user_data in related_users_data
+            user_data
+            for user_data in related_users_data
             if user_data["user"].date_joined >= recent_times
         ]
 
@@ -718,11 +743,13 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        
+
         recent_times = timezone.now() - timezone.timedelta(days=3)
 
         # 1촌 및 2촌 정보 가져오기
-        first_degree_ids, second_degree_ids, second_degree_connections = user.get_friend_counts()
+        first_degree_ids, second_degree_ids, second_degree_connections = (
+            user.get_friend_counts()
+        )
 
         # 최근 15분 이내에 가입한 2촌 사용자 필터링
         new_second_degree_profiles = CustomUser.objects.filter(
@@ -737,10 +764,12 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
         for profile in new_second_degree_profiles:
             for second_degree_id, connector_id in second_degree_connections:
                 if profile.id == second_degree_id:
-                    response_data.append({
-                        "second_degree_profile_id": profile.id,
-                        "connector_friend_id": connector_id
-                    })
+                    response_data.append(
+                        {
+                            "second_degree_profile_id": profile.id,
+                            "connector_friend_id": connector_id,
+                        }
+                    )
 
         # 결과가 비어 있는지 확인하기 위해 로그 출력
         print("response_data:", response_data)

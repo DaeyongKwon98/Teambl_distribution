@@ -9,6 +9,7 @@ import ArrowDownIcon from "../assets/arrowDownIcon.svg";
 
 const Setting = () => {
   const navigate = useNavigate();
+  const [currentUser, setCurrentUser] = useState(null);
   const [activeNav, setActiveNav] = useState("설정");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
@@ -22,10 +23,11 @@ const Setting = () => {
   const [inquiryBtnActive, setInquiryBtnActive] = useState(false); // 문의하기 버튼 상태
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
-  const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
+  const [showChangePasswordSection, setShowChangePasswordSection] =
+    useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
   const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
-  
+
   useEffect(() => {
     setChangeBtnActive(
       currentPassword !== "" && newPassword !== "" && confirmNewPassword !== ""
@@ -33,16 +35,37 @@ const Setting = () => {
 
     setWithdrawBtnActive(withdrawPassword !== "");
     setInquiryBtnActive(inquiryText.trim() !== ""); // 문의하기 텍스트가 있을 때만 버튼 활성화
-  }, [currentPassword, newPassword, confirmNewPassword, withdrawPassword, inquiryText]);
+  }, [
+    currentPassword,
+    newPassword,
+    confirmNewPassword,
+    withdrawPassword,
+    inquiryText,
+  ]);
+
+  useEffect(() => {
+    fetchCurrentUser();
+  }, []);
+
+  // 현재 유저를 가져오기
+  const fetchCurrentUser = async () => {
+    try {
+      const response = await api.get("/api/current-user/");
+      setCurrentUser(response.data);
+    } catch (error) {
+      console.error("Failed to fetch current user:", error);
+    }
+  };
 
   // 문의하기 제출 처리 로직
   const handleInquirySubmit = async () => {
     try {
-      const response = await api.post("/api/create-inquiry/", {
-        text: inquiryText,
+      const response = await api.post("/api/send_email/", {
+        from_email: currentUser.email,
+        body: inquiryText,
       });
 
-      if (response.status === 201) {
+      if (response.status === 200) {
         alert("문의가 제출되었습니다.");
         setInquiryText(""); // 제출 후 입력 필드 초기화
       }
@@ -179,7 +202,9 @@ const Setting = () => {
         <img
           src={ArrowDownIcon}
           alt="Toggle Password Change Section"
-          className={`setting-arrow-icon ${showChangePasswordSection ? 'rotate' : ''}`}
+          className={`setting-arrow-icon ${
+            showChangePasswordSection ? "rotate" : ""
+          }`}
         />
       </div>
       {showChangePasswordSection && (
@@ -234,11 +259,13 @@ const Setting = () => {
         <img
           src={ArrowDownIcon}
           alt="Toggle Inquiry Section"
-          className={`setting-arrow-icon ${showInquirySection ? 'rotate' : ''}`}
+          className={`setting-arrow-icon ${showInquirySection ? "rotate" : ""}`}
         />
       </div>
       {showInquirySection && (
         <div className="setting-inquiry-section">
+          <p>받는 사람: teambltest@gmail.com</p>
+          <p>보내는 사람: {currentUser.email}</p>
           <div className="setting-input-group">
             <textarea
               value={inquiryText}
@@ -256,7 +283,7 @@ const Setting = () => {
           </button>
         </div>
       )}
-      
+
       <div
         className="setting-password-toggle"
         onClick={() => setShowWithdrawSection(!showWithdrawSection)}
@@ -265,7 +292,9 @@ const Setting = () => {
         <img
           src={ArrowDownIcon}
           alt="Toggle Withdraw Section"
-          className={`setting-arrow-icon ${showWithdrawSection ? 'rotate' : ''}`}
+          className={`setting-arrow-icon ${
+            showWithdrawSection ? "rotate" : ""
+          }`}
         />
       </div>
       {/* <h2 className="setting-section-title">회원 탈퇴</h2> */}

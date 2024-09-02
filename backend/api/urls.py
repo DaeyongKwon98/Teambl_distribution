@@ -110,15 +110,21 @@ urlpatterns += [
     ),
 ]
 
+# 이메일로 문의 보내기 기능이 구현되어서 삭제해도 되지 않을까..?
 # Inquiry
 urlpatterns += [
     path("create-inquiry/", views.InquiryCreateView.as_view(), name="create-inquiry"),
 ]
 
+# Email
+urlpatterns += [
+    path("send_code/", views.SendCodeView.as_view(), name="send_code"),
+    path("send_email/", views.SendEmailView.as_view(), name="send_email"),
+]
+
 # Others
 urlpatterns += [
     path("check-email/", views.CheckEmailExistsView.as_view(), name="check-email"),
-    path("send_code/", views.SendCodeView.as_view(), name="send_code"),
     path("welcome/", views.WelcomeView.as_view(), name="welcome-view"),
     path("search/", views.SearchUsersAPIView.as_view(), name="search-view"),
     path(
@@ -126,5 +132,9 @@ urlpatterns += [
         views.GetUserDistanceAPIView.as_view(),
         name="get-user-distance",
     ),
-    path('user-statistics-difference/', views.UserStatisticsDifferenceView.as_view(), name='user-statistics-difference'),
+    path(
+        "user-statistics-difference/",
+        views.UserStatisticsDifferenceView.as_view(),
+        name="user-statistics-difference",
+    ),
 ]
