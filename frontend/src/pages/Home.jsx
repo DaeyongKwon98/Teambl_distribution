@@ -102,7 +102,9 @@ function Home() {
             // 첫 번째 1촌 사용자의 이름 정보 가져오기
             const firstDegreeNameResponse = await api.get(`/api/profile/${connector_friend_ids[0]}/`);
             const firstDegreeName = firstDegreeNameResponse.data.user_name;
-  
+
+            console.log("2촌 데이터:", userData);
+            
             // 2촌 사용자의 데이터에 연결된 1촌 사용자의 이름과 친구 수를 추가하여 반환
             return {
               ...userData,
