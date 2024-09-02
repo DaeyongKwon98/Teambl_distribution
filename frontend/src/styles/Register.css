@@ -78,12 +78,15 @@ button.register-nextBtn:disabled:hover{
   cursor: default;
 }
 select{
-  
   background-color: hsla(0, 0%, 95%, 0.956);
   border: none;
   border-radius: 5px;
   height: 2rem;
   margin-bottom: 5px;
   flex-grow: 1;
+}
 
+.placeholder-text {
+  color: #A8A8A8;
+  /* font-size: 14px; */
 }
