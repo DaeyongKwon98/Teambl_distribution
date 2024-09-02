@@ -382,8 +382,8 @@ class WelcomeView(generics.GenericAPIView):
                     f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}"
                 )  # 로그 추가
 
-                # 만료 날짜 계산 (생성 후 1분)
-                expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
+                # 만료 날짜 계산 (생성 후 일주일)
+                expired_date = invite_link.created_at + timezone.timedelta(days=7)
                 current_date = timezone.now()
 
                 # 초대 링크가 만료된 경우
