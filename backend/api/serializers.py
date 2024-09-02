@@ -98,7 +98,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
     current_academic_degree = serializers.CharField(required=False)
     year = serializers.IntegerField(required=False)
     major1 = serializers.CharField(required=False)
-    major2 = serializers.CharField(required=False)
+    major2 = serializers.CharField(required=False, allow_blank=True)
     tools = ToolSerializer(many=True, required=False)
     introduction = serializers.CharField(required=False, allow_blank=True)
     experiences = ExperienceSerializer(many=True, required=False)
