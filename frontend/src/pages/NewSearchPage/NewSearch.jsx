@@ -129,13 +129,29 @@ function NewSearch() {
     });
   };
 
+  // // 전공 필터를 추가 및 제거하는 함수
+  // const handleMajorChange = (major) => {
+  //   setFilters((prev) => {
+  //     const newMajor = prev.majors.includes(major)
+  //       ? prev.majors.filter((item) => item !== major)
+  //       : [...prev.majors, major];
+  //     return { ...prev, majors: newMajor };
+  //   });
+  // };
+  
   // 전공 필터를 추가 및 제거하는 함수
   const handleMajorChange = (major) => {
     setFilters((prev) => {
-      const newMajor = prev.majors.includes(major)
-        ? prev.majors.filter((item) => item !== major)
-        : [...prev.majors, major];
-      return { ...prev, majors: newMajor };
+      // majors 배열을 평탄화하여 중첩 배열을 방지
+      const flatMajors = prev.majors.flat();
+      
+      // 선택된 major가 이미 필터에 포함되어 있는지 확인
+      const newMajors = flatMajors.includes(major)
+        ? flatMajors.filter((item) => item !== major) // 이미 있으면 제거
+        : [...flatMajors, major]; // 없으면 추가
+      
+      // 업데이트된 필터를 반환
+      return { ...prev, majors: newMajors };
     });
   };
 
