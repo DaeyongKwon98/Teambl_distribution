@@ -83,6 +83,10 @@ const MajorPopUp = ({
     major.includes(majorSearchTerm)
   );
 
+  const removeMajor = (major) => {
+    setSelectedMajors(selectedMajors.filter((m) => m !== major));
+  };
+
   return (
     <>
       <div className="newSearch-major-popup">
