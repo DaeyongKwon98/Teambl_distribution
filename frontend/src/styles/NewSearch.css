@@ -250,10 +250,13 @@ li {
 }
 
 .newSearch-major-popup-content {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
+  padding-top: 20px; /* 위쪽 여백 추가 */
 }
+
 
 .newSearch-major-popup-header {
   display: flex;
@@ -365,4 +368,16 @@ li {
   margin-left: 5px;
   cursor: pointer;
 }
+
+.newSearch-cancel-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: #121212;
+  font-size: 20px;
+  cursor: pointer;
+}
+
 
