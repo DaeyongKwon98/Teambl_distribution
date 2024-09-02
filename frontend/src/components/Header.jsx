@@ -50,7 +50,7 @@ const Header = ({ profileImage }) => {
           src={TeamblIcon}
           alt="팀블로고"
           className="home-teambl-icon"
-          onClick={()=>{navigate("/")}
+          onClick={() => {navigate("/")}}
         />
       </div>
       <div className="home-profile-and-notifications">
