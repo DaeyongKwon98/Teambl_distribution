@@ -141,6 +141,13 @@ function EditProfile() {
         />
         <div className="edit-label">
           <label className="edit-label-title">전공</label>
+          <button
+            type="button"
+            className="edit-addMajorBtn"
+            onClick={() => setIsMajorPopUp(true)}
+          >
+            전공 선택
+          </button>
           <label className="edit-label-detail">최대 2개까지 입력 가능</label>
         </div>
         <div className="major-list">
@@ -157,13 +164,6 @@ function EditProfile() {
             </div>
           ))}
         </div>
-        <button
-          type="button"
-          className="edit-addMajorBtn"
-          onClick={() => setIsMajorPopUp(true)}
-        >
-          전공 선택
-        </button>
         <button
           type="button"
           className="edit-nextBtn"
