@@ -402,11 +402,11 @@ li {
 .newSearch-major-search-container {
   display: flex;
   align-items: center;
-  background-color: #f0f0f0; /* 회색 배경색 설정 */
-  border: 1px solid #ccc; /* 테두리 설정 */
-  border-radius: 5px; /* 테두리 모서리 둥글게 */
+  background-color: #F6F6F6;
+  border-radius: 5px;
   padding: 5px; /* 내부 여백 설정 */
   margin: 0 15px; /* 좌우 여백 설정 */
+  max-width: 100%;
 }
 
 .newSearch-major-search-icon {
@@ -421,8 +421,9 @@ li {
   outline: none;
   padding: 5px; /* 입력 필드 내부 여백 설정 */
   font-size: 14px;
+  width: 100%;
 }
 
 .newSearch-major-search-container input::placeholder {
-  color: #ccc; /* placeholder 텍스트 색상 설정 */
+  color: #F6F6F6; /* placeholder 텍스트 색상 설정 */
 }
