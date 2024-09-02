@@ -112,29 +112,13 @@ const MajorPopUp = ({
             <div className="newSearch-selected-majors">
               {selectedMajors.map((major, index) => (
                 <div key={index} className="newSearch-selected-major-item">
-                  {Array.isArray(major) ? (
-                    major.map((m, idx) => (
-                      <div key={idx}>
-                        <span>{m}</span>
-                        <button
-                          className="newSearch-remove-major"
-                          onClick={() => removeMajor(m)}
-                        >
-                          &times;
-                        </button>
-                      </div>
-                    ))
-                  ) : (
-                    <div>
-                      <span>{major}</span>
-                      <button
-                        className="newSearch-remove-major"
-                        onClick={() => removeMajor(major)}
-                      >
-                        &times;
-                      </button>
-                    </div>
-                  )}
+                  <span>{major}</span>
+                  <button
+                    className="newSearch-remove-major"
+                    onClick={() => removeMajor(major)}
+                  >
+                    &times;
+                  </button>
                 </div>
               ))}
             </div>
