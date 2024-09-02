@@ -5,6 +5,7 @@ import CurrentAcademicDegreePopUp from "./CurrentAcademicDegreePopUp";
 import MajorPopUp from "../NewSearchPage/MajorPopUp";
 import api from "../../api";
 import backIcon from "../../assets/Profile/left-arrow.svg";
+import majorEdit from "../../assets/Profile/majorEdit.svg";
 
 function EditProfile() {
   const navigate = useNavigate();
@@ -141,11 +142,16 @@ function EditProfile() {
         />
         <div className="edit-label">
           <label className="edit-label-title">전공</label>
-          <button
+          {/* <button
             type="button"
             className="edit-addMajorBtn"
             onClick={() => setIsMajorPopUp(true)}
-          >
+          > */}
+          <img
+            src={majorEdit}
+            {/* className="edit-addMajorImg" */}
+            onClick={() => setIsMajorPopUp(true)}
+          />
             전공 선택
           </button>
           <label className="edit-label-detail">최대 2개까지 입력 가능</label>
