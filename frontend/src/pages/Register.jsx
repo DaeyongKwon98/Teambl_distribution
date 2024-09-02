@@ -134,6 +134,10 @@ function Register() {
 
   const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
 
+  const handleRemoveMajor = (majorToRemove) => {
+    setMajors((prevMajors) => prevMajors.filter((major) => major !== majorToRemove));
+  };
+  
   return (
     <>
       <form className="register" onSubmit={handleRegister}>
