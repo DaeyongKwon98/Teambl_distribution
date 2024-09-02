@@ -66,15 +66,17 @@ const MajorPopUp = ({
       setSelectedMajors(selectedMajors.filter((m) => m !== major));
     } else {
       if (selectedMajors.length < 2) {
-        setSelectedMajors([...selectedMajors, major]);
+        const updatedMajors = [...selectedMajors, major];
+        setSelectedMajors(updatedMajors);
+        saveSelectedMajors(updatedMajors); // 전공을 추가한 후 저장
       } else {
         alert("전공은 최대 2개까지 선택할 수 있습니다.");
       }
     }
   };
-
-  const saveSelectedMajors = () => {
-    handleMajorChange(selectedMajors);
+  
+  const saveSelectedMajors = (majors) => {
+    handleMajorChange(majors);
     setIsMajorPopupOpen(false);
   };
 
@@ -138,14 +140,14 @@ const MajorPopUp = ({
             </ul>
           </div>
 
-          <div className="newSearch-major-popup-footer">
+          {/* <div className="newSearch-major-popup-footer">
             <button
               className="newSearch-result-button"
               onClick={saveSelectedMajors}
             >
               {buttonText}
             </button>
-          </div>
+          </div> */}
         </div>
       </div>
     </>
