@@ -49,6 +49,11 @@ function EditProfile() {
   };
 
   const handleSaveNewProfile = async () => {
+    if (!newMajors[0]) {
+      alert("최소 1개의 전공을 선택해야 합니다.");
+      return;
+    }
+    
     const updatedProfile = {
         ...newProfile,
         user_name: newUser_name,
