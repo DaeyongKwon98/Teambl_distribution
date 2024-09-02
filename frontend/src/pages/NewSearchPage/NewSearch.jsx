@@ -15,7 +15,7 @@ function NewSearch() {
   const [recentSearches, setRecentSearches] = useState([]); // 최근 검색 기록
   const [keywords, setKeywords] = useState([]); // DB에서 가져온 키워드들
   const [searchSuggestions, setSearchSuggestions] = useState([]); // 검색시 아래에 뜨는 추천 검색어
-  const [filters, setFilters] = useState({ relationshipDegree: [], major: [] }); // 사용자가 선택한 검색 필터
+  const [filters, setFilters] = useState({ relationshipDegree: [], majors: [] }); // 사용자가 선택한 검색 필터
   const [isSearched, setIsSearched] = useState(false); // 사용자가 검색 버튼을 눌렀는지 여부 (true이면 검색 결과창이 보임)
   const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
 
@@ -61,12 +61,13 @@ function NewSearch() {
     try {
       console.log("Search Term:", searchTerm);
       console.log("Relationship Degree Filters:", filters.relationshipDegree);
-      console.log("Major Filters:", filters.major);
+      console.log("Major Filters:", filters.majors);
 
       const response = await api.post("/api/search/", {
         q: searchTerm,
         degree: filters.relationshipDegree,
-        major: filters.major,
+        major1: filters.majors[0] || "",
+        major2: filters.majors[1] || "",
       });
 
       console.log(response.data);
@@ -261,16 +262,16 @@ function NewSearch() {
             </button>
             <button
               className={`newSearch-filter-button ${
-                isMajorPopupOpen || filters.major.length > 0 ? "active" : ""
+                isMajorPopupOpen || filters.majors.length > 0 ? "active" : ""
               }`}
               onClick={() => setIsMajorPopupOpen(true)}
             >
-              {filters.major.length > 0
-                ? filters.major.length > 1
-                  ? `전공 ${filters.major.length} `
-                  : filters.major[0] + " "
+              {filters.majors.length > 0
+                ? filters.majors.length > 1
+                  ? `전공 ${filters.majors.length} `
+                  : filters.majors[0] + " "
                 : "전공 "}
-              {filters.major.length > 0 || isMajorPopupOpen ? (
+              {filters.majors.length > 0 || isMajorPopupOpen ? (
                 <img
                   src={MajorIcon}
                   alt="전공 아이콘"
@@ -303,7 +304,7 @@ function NewSearch() {
             onClick={() => setIsMajorPopupOpen(false)}
           ></div>
           <MajorPopUp
-            userSelectedMajors={filters.major}
+            userSelectedMajors={filters.majors}
             handleMajorChange={handleMajorChange}
             setIsMajorPopupOpen={setIsMajorPopupOpen}
             doSearchUsers={doSearchUsers}
