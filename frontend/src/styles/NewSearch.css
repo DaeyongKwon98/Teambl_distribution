@@ -268,11 +268,10 @@ li {
 .newSearch-major-popup-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   padding: 7.69px;
   width: 100%;
-  position: relative;
-  box-sizing: border-box; /* padding을 포함하도록 설정 */
+  box-sizing: border-box; /* padding을 포함하여 요소 크기 계산 */
 }
 
 .newSearch-major-popup-header h3 {
@@ -379,12 +378,10 @@ li {
 }
 
 .newSearch-cancel-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
   background: none;
   border: none;
   color: #121212;
   font-size: 20px;
   cursor: pointer;
+  margin-left: auto; /* 버튼을 오른쪽으로 밀어붙임 */
 }
