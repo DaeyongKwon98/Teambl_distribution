@@ -108,7 +108,7 @@ const MajorPopUp = ({
             className="newSearch-major-search-input"
           />
 
-          {selectedMajors.length > 0 && (
+          {/* {selectedMajors.length > 0 && (
             <div className="newSearch-selected-majors">
               {selectedMajors.map((major, index) => (
                 <div key={index} className="newSearch-selected-major-item">
@@ -116,7 +116,7 @@ const MajorPopUp = ({
                 </div>
               ))}
             </div>
-          )}
+          )} */}
           
           <div className="newSearch-major-popup-body">
             <ul>
