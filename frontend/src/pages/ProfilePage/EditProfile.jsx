@@ -59,8 +59,21 @@ function EditProfile() {
       major2: newMajors[1] || "",
     }));
 
+    try {
+      const response = await api.put(`/api/profile/${currentUser.id}/`, updatedProfile);
+      console.log("Profile updated successfully:", response.data);
+      setNewProfile(updatedProfile);
+      navigate(`/profile/${currentUser.id}`, {
+        state: {
+          profile: updatedProfile,
+        },
+      });
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      alert("프로필 업데이트 실패");
+    }
     console.log("Profile updated:", newProfile);
-  }
+  };
 
   const handleMajorChange = (selectedMajors) => {
     if (selectedMajors.length <= 2) {
