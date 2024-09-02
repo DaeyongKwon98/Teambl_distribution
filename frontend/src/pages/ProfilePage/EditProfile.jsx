@@ -90,7 +90,7 @@ function EditProfile() {
     <div className="edit">
       <div className="edit-back">
         <button type="button" onClick={handleBack}>
-          <img src={backIcon}></img>
+          <img src={backIcon} alt="뒤로가기"></img>
         </button>
       </div>
       <h4>프로필 수정</h4>
@@ -142,32 +142,18 @@ function EditProfile() {
         />
         <div className="edit-label">
           <label className="edit-label-title">전공</label>
-          {/* <button
-            type="button"
-            className="edit-addMajorBtn"
-            onClick={() => setIsMajorPopUp(true)}
-          > */}
           <img
             src={majorEdit}
             alt="전공 선택"
             className="edit-addMajorImg"
             onClick={() => setIsMajorPopUp(true)}
           />
-            전공 선택
-          </button>
           <label className="edit-label-detail">최대 2개까지 입력 가능</label>
         </div>
         <div className="major-list">
           {newMajors.map((major, index) => (
             <div key={index} className="major-element">
               {major}
-              {/* <button
-                type="button"
-                onClick={() => handleRemoveMajor(major)}
-                className="remove-major-btn"
-              >
-                &times;
-              </button> */}
             </div>
           ))}
         </div>
@@ -179,28 +165,6 @@ function EditProfile() {
           저장
         </button>
       </div>
-
-
-        
-        {/* <input
-          type="text"
-          placeholder="전공 입력"
-          className="edit-input"
-          onClick={() => {
-            setIsMajorPopUp(true);
-          }}
-          value={newMajor}
-          readOnly
-          required
-        />
-        <button
-          type="button"
-          className="edit-nextBtn"
-          onClick={handleSaveNewProfile}
-        >
-          저장
-        </button>
-      </div> */}
 
       {isCADPopUp && (
         <>
@@ -215,22 +179,6 @@ function EditProfile() {
         </>
       )}
 
-      {/* {isMajorPopUp && (
-        <>
-          <div
-            className="editprofile-popup-overlay"
-            onClick={() => setIsMajorPopUp(false)}
-          ></div>
-          <MajorPopUp
-            userSelectedMajors={[newMajor]}
-            handleMajorChange={setNewMajor}
-            setIsMajorPopupOpen={setIsMajorPopUp}
-            doSearchUsers={() => {}}
-            buttonText={"선택"}
-          />
-        </>
-      )} */}
-      
       {isMajorPopUp && (
         <>
           <div
