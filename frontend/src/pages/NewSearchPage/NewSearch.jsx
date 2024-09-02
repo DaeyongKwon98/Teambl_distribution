@@ -133,10 +133,10 @@ function NewSearch() {
   // 전공 필터를 추가 및 제거하는 함수
   const handleMajorChange = (major) => {
     setFilters((prev) => {
-      const newMajor = prev.major.includes(major)
-        ? prev.major.filter((item) => item !== major)
-        : [...prev.major, major];
-      return { ...prev, major: newMajor };
+      const newMajor = prev.majors.includes(major)
+        ? prev.majors.filter((item) => item !== major)
+        : [...prev.majors, major];
+      return { ...prev, majors: newMajor };
     });
   };
 
