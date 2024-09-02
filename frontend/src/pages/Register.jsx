@@ -213,10 +213,7 @@ function Register() {
             전공
             <br />
           </label>
-          <div
-            className="major-list register-input"
-            onClick={() => setIsMajorPopupOpen(true)}
-          >
+          <div className="major-list register-input">
             <img
               src={majorEdit}
               alt="전공 선택"
