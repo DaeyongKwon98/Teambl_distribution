@@ -46,9 +46,12 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
           </span>
         </p>
         <p className="newSearch-member-details">
-          {user.profile.school} | {user.profile.current_accademic_degree} |
-          {user.profile.year % 100}학번 |{user.profile.major1}
-          {user.profile.major2 && `, ${user.profile.major2}`}
+          {user.profile.school} | {user.profile.current_accademic_degree} |{" "}
+          {user.profile.year % 100}학번
+        </p>
+        <p className="newSearch-member-details">
+          {user.profile.major1}
+          {user.profile.major2 && `• ${user.profile.major2}`}
         </p>
         <p className="newSearch-member-keywords">
           {user.profile.keywords.join(" / ")}
