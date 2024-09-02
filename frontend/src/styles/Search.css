@@ -3,10 +3,10 @@
   flex-wrap: wrap;
   gap: 10px;
   margin: 10px 0;
-  padding: 0 7.69px;
+  padding: 7.69px 7.69px;
   background-color: #F5F5F5;
   border-radius: 5px;
-  min-height: 34px;
+  min-height: 18.62px;
   align-items: center;
 }
 
