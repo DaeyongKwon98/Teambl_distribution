@@ -237,7 +237,8 @@ li {
   transform: translateX(-50%);
   width: 100%;
   max-width: 284.62px;
-  height: auto;
+  /* height: auto; */
+  height: 330px;
   max-height: 80%;
   background: white;
   border-top-left-radius: 7.69px;
