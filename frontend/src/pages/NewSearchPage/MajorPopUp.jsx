@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "../../styles/NewSearch.css";
-import majorEdit from '../../assets/majorEdit.svg';
+import majorEdit from '../../assets/Profile/majorEdit.svg';
 
 // 필터에서 선택 가능한 전공 목록
 const majors = [
