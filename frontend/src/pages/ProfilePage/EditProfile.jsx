@@ -73,10 +73,9 @@ function EditProfile() {
     }
   };
 
-  
-  const handleRemoveMajor = (majorToRemove) => {
-    setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
-  };
+  // const handleRemoveMajor = (majorToRemove) => {
+  //   setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
+  // };
 
   const handleMajorChange = (selectedMajors) => {
     if (selectedMajors.length <= 2) {
@@ -148,13 +147,13 @@ function EditProfile() {
           {newMajors.map((major, index) => (
             <div key={index} className="major-element">
               {major}
-              <button
+              {/* <button
                 type="button"
                 onClick={() => handleRemoveMajor(major)}
                 className="remove-major-btn"
               >
                 &times;
-              </button>
+              </button> */}
             </div>
           ))}
         </div>
