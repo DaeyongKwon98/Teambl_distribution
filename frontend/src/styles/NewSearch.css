@@ -306,10 +306,10 @@ li {
 }
 
 .newSearch-major-popup-body p {
-  color: #ff0000; /* 텍스트 색상 */
-  font-size: 14px; /* 폰트 크기 */
-  text-align: center; /* 중앙 정렬 */
-  margin-top: 5px; /* 위쪽 여백 */
+  color: #121212;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 10px;
 }
 
 .newSearch-major-popup-footer {
