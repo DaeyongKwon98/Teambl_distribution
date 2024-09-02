@@ -302,6 +302,21 @@ function NewSearch() {
               )}
             </button>
           </div>
+
+          <div className="newSearch-selected-majors">
+            {filters.majors.map((major, index) => (
+              <span key={index} className="selected-major">
+                {major}
+                <button
+                  className="remove-major"
+                  onClick={() => handleMajorChange(filters.majors.filter(m => m !== major))}
+                >
+                  &times;
+                </button>
+              </span>
+            ))}
+          </div>
+          
           <div className="newSearch-team-member-results">
             {users.map((user, index) => (
               <NewUserSearchItem
