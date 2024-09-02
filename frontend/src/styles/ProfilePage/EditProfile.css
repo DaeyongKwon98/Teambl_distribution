@@ -43,9 +43,12 @@ label.edit-label-title {
 }
 
 label.edit-label-detail {
-  font-size: 14px;
+  font-size: 12px;
   font-weight: normal;
   margin: 0px;
+  color: #a8a8a8;
+  display: inline-block;
+  float: right;
 }
 
 form.edit h4 {
