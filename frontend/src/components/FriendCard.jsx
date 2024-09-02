@@ -55,7 +55,10 @@ const FriendCard = ({ friend, isKeywordFriend = false }) => {
       <div className="home-friend-info">
         <p>{friend.user_name}</p>
         <p>{friend.school} {friend.current_academic_degree} {friend.year}</p>
-        <p>{friend.major}</p>
+        <p>
+          {friend.major1}
+          {friend.major2 && `, ${friend.major2}`}
+        </p>
       </div>
     </div>
   );
