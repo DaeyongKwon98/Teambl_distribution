@@ -589,6 +589,7 @@ class SearchUsersAPIView(generics.ListAPIView):
             majors = serializer.validated_data.get("major", [])
 
             print("Received Degrees:", degrees)
+            print("Majors:", majors)
 
             # 전체 프로필을 가져옵니다.
             filtered_profiles = Profile.objects.all()
