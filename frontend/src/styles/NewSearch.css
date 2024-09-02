@@ -254,6 +254,7 @@ li {
   display: flex;
   flex-direction: column;
   height: 100%;
+  align-items: center; /* 중앙 정렬을 위해 추가 */
 }
 
 /* .newSearch-major-popup-header {
