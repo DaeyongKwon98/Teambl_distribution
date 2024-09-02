@@ -20,18 +20,18 @@ function NewSearch() {
   const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
 
   useEffect(() => {
-    console.log("키워드 가져오기");
+    // console.log("키워드 가져오기");
     fetchKeywords(); // 키워드 데이터를 불러오는 함수 호출
   }, []); // 빈 배열을 의존성으로 전달하여 컴포넌트 마운트 시 한 번만 실행
 
   useEffect(() => {
-    console.log("필터 변경으로 유저 검색하기");
+    // console.log("필터 변경으로 유저 검색하기");
     doSearchUsers(); // filters가 변경될 때 실행되는 함수
   }, [filters]); // filters 배열을 의존성으로 전달하여 filters가 변경될 때마다 실행
 
   useEffect(() => {
     if (isSearched) {
-      console.log("검색어 변경으로 유저 검색하기");
+      // console.log("검색어 변경으로 유저 검색하기");
       doSearchUsers();
     }
   }, [searchTerm]);
@@ -59,9 +59,9 @@ function NewSearch() {
     }
 
     try {
-      console.log("Search Term:", searchTerm);
-      console.log("Relationship Degree Filters:", filters.relationshipDegree);
-      console.log("Major Filters:", filters.majors);
+      // console.log("Search Term:", searchTerm);
+      // console.log("Relationship Degree Filters:", filters.relationshipDegree);
+      // console.log("Major Filters:", filters.majors);
 
       const response = await api.post("/api/search/", {
         q: searchTerm,
@@ -69,7 +69,7 @@ function NewSearch() {
         majors: filters.majors.flat(),
       });
 
-      console.log(response.data);
+      // console.log(response.data);
 
       setUsers(response.data);
     } catch (error) {
@@ -139,7 +139,7 @@ function NewSearch() {
   //   });
   // };
   
-  // 전공 필터를 추가 및 제거하는 함수. 새로운 것만 반영
+  // 전공 필터를 추가 및 제거하는 함수
   const handleMajorChange = (newMajors) => {
     setFilters((prev) => {
       // majors 배열을 평탄화하여 중첩 배열을 방지
