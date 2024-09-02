@@ -305,6 +305,7 @@ li {
 }
 
 .newSearch-major-popup-footer {
+  width: 100%;
   text-align: center;
   padding: 7.69px;
 }
