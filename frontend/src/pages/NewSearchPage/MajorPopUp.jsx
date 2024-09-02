@@ -99,17 +99,21 @@ const MajorPopUp = ({
           </div>
           <div className="newSearch-major-popup-body">
             <ul>
-              {filteredMajors.map((major, index) => (
-                <li
-                  key={index}
-                  className={`newSearch-major-item ${
-                    selectedMajors.includes(major) ? "selected" : ""
-                  }`}
-                  onClick={() => toggleMajorSelection(major)}
-                >
-                  {major}
-                </li>
-              ))}
+              {majorSearchTerm && filteredMajors.length > 0 ? (
+                filteredMajors.map((major, index) => (
+                  <li
+                    key={index}
+                    className={`newSearch-major-item ${
+                      selectedMajors.includes(major) ? "selected" : ""
+                    }`}
+                    onClick={() => toggleMajorSelection(major)}
+                  >
+                    {major}
+                  </li>
+                ))
+              ) : (
+                majorSearchTerm && <p>검색된 전공이 없습니다.</p>
+              )}
             </ul>
           </div>
 
