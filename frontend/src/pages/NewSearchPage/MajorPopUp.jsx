@@ -99,14 +99,14 @@ const MajorPopUp = ({
             >
               &times;
             </button>
-            <input
-              type="text"
-              placeholder="전공을 검색해보세요"
-              value={majorSearchTerm}
-              onChange={(e) => setMajorSearchTerm(e.target.value)}
-              className="newSearch-major-search-input"
-            />
           </div>
+          <input
+            type="text"
+            placeholder="전공을 검색해보세요"
+            value={majorSearchTerm}
+            onChange={(e) => setMajorSearchTerm(e.target.value)}
+            className="newSearch-major-search-input"
+          />
 
           {selectedMajors.length > 0 && (
             <div className="newSearch-selected-majors">
