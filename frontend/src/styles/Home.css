@@ -148,12 +148,14 @@ body {
   margin: 5px 0;
   font-size: 12px;
   color: black;
+  word-break: break-all; 
 }
 .home-friend-info p:first-child {
   margin: 5px 0;
   font-size: 13px;
   font-weight: bold;
   color: black;
+  word-break: break-all;
 }
 
 /* 대용 추가 */
