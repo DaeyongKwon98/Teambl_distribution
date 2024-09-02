@@ -192,17 +192,38 @@ function Register() {
             전공
             <br />
           </label>
-          <input
-            type="text"
-            placeholder=" 전공을 선택해주세요."
-            value={majors.join(", ")}
-            readOnly
-            className="register-input"
-            onClick={() => {
-              setIsMajorPopupOpen(true);
-            }}
-            required
-          />
+          <div
+            className="major-list register-input"
+            onClick={() => setIsMajorPopupOpen(true)}
+          >
+            <img
+              src={majorEdit}
+              alt="전공 선택"
+              className="edit-addMajorImg"
+              onClick={(e) => {
+                e.stopPropagation(); // 부모의 onClick 이벤트가 발생하지 않도록 함
+                setIsMajorPopupOpen(true);
+              }}
+            />
+            {majors.length === 0 ? (
+              <span className="placeholder-text">전공을 선택해주세요.</span>
+            ) : (
+              majors.map((major, index) => (
+                <div key={index} className="major-element">
+                  {major}
+                  <button
+                    className="newSearch-remove-major"
+                    onClick={(e) => {
+                      e.stopPropagation(); // 부모의 onClick 이벤트가 발생하지 않도록 함
+                      handleRemoveMajor(major);
+                    }}
+                  >
+                    &times;
+                  </button>
+                </div>
+              ))
+            )}
+          </div>
           <button
             type="submit"
             className="register-nextBtn"
