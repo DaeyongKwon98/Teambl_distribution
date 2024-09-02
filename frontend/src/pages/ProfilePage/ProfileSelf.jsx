@@ -281,6 +281,8 @@ function ProfileSelf() {
       keywords: profile.keywords,
     };
 
+    console.log("ProfileSelf.jsx: profileDataWithoutImage", profileDataWithoutImage);
+
     try {
       const response1 = await api.put(
         "/api/profile/update/",
@@ -340,7 +342,7 @@ function ProfileSelf() {
             </div>
             <div className="profile-row2">
               <p>
-                {profile.major}
+                {profile.major1}
                 {profile.major2 && `, ${profile.major2}`}
               </p>
             </div>
