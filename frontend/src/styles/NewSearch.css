@@ -357,16 +357,19 @@ li {
   gap: 10px;
   margin: 10px 0;
   padding: 0 7.69px;
+  justify-content: center; /* 가로로 중앙 정렬 */
+  text-align: center; /* 텍스트도 중앙 정렬 */
 }
 
 .newSearch-selected-major-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   background-color: #EEF4FF;
   border-radius: 15.38px;
   padding: 5px 10px;
   font-size: 12.3px;
+  text-align: center; /* 텍스트도 중앙 정렬 */
 }
 .newSearch-selected-major-item span {
   margin-right: 5px;
