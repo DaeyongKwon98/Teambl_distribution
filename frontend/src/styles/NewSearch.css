@@ -365,8 +365,11 @@ li {
   justify-content: space-between;
   background-color: #EEF4FF;
   border-radius: 15.38px;
-  padding: 5px; /* 원래는 5px 10px */
+  padding: 5px 10px;
   font-size: 12.3px;
+}
+.newSearch-selected-major-item span {
+  margin-right: 5px;
 }
 
 .newSearch-remove-major {
