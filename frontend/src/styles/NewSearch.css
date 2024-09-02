@@ -434,3 +434,22 @@ li {
 .newSearch-major-search-container input::placeholder {
   color: #F6F6F6; /* placeholder 텍스트 색상 설정 */
 }
+
+/* 검색창에서 전공 필터 표시용으로 추가 */
+.selected-major {
+  background-color: #F5F5F5;
+  padding: 5px 10px;
+  border-radius: 15px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 14px;
+}
+
+.remove-major {
+  background: none;
+  border: none;
+  color: #ff0000;
+  font-size: 20px;
+  margin-left: 8px;
+  cursor: pointer;
+}
