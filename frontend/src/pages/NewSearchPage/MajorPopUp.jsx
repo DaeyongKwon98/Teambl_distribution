@@ -91,14 +91,14 @@ const MajorPopUp = ({
     <>
       <div className="newSearch-major-popup">
         <div className="newSearch-major-popup-content">
-          <button
-            className="newSearch-cancel-button"
-            onClick={() => setIsMajorPopupOpen(false)}
-          >
-            &times;
-          </button>
           <div className="newSearch-major-popup-header">
             <h3>전공</h3>
+            <button
+              className="newSearch-cancel-button"
+              onClick={() => setIsMajorPopupOpen(false)}
+            >
+              &times;
+            </button>
             <input
               type="text"
               placeholder="전공을 검색해보세요"
