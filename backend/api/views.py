@@ -583,6 +583,7 @@ class SearchUsersAPIView(generics.ListAPIView):
     # GET 요청 시 쿼리를 포함한 url이 너무 길어져서 반려.
     def post(self, request, *args, **kwargs):
         serializer = SearchSerializer(data=request.data)
+        print("request data:", request.data)
         if serializer.is_valid():
             query = serializer.validated_data.get("q", "")
             degrees = serializer.validated_data.get("degree", [])
