@@ -357,6 +357,8 @@ li {
   gap: 10px;
   margin: 10px 0;
   padding: 0 7.69px;
+  justify-content: flex-start; /* 왼쪽 정렬을 위해 추가 */
+  align-items: flex-start; /* 수직으로도 왼쪽 정렬을 위해 추가 */
 }
 
 .newSearch-selected-major-item {
