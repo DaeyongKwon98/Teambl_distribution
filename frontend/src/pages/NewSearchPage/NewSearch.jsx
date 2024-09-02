@@ -147,6 +147,7 @@ function NewSearch() {
       const flatMajors = prev.majors.flat(Infinity);
       console.log("flatMajors", flatMajors);
       // 선택된 major가 이미 필터에 포함되어 있는지 확인
+      console.log("있는지 확인하는 major:", major);
       const newMajors = flatMajors.includes(major)
         ? flatMajors.filter((item) => item !== major) // 이미 있으면 제거
         : [...flatMajors, major]; // 없으면 추가
