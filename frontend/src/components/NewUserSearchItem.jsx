@@ -46,7 +46,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
           </span>
         </p>
         <p className="newSearch-member-details">
-          {user.profile.school} | {user.profile.current_accademic_degree} |{" "}
+          {user.profile.school} | {user.profile.current_academic_degree} |{" "}
           {user.profile.year % 100}학번
         </p>
         <p className="newSearch-member-details">
