@@ -362,9 +362,10 @@ li {
 .newSearch-selected-major-item {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   background-color: #EEF4FF;
   border-radius: 15.38px;
-  padding: 10px 5px; /* 원래는 5px 10px */
+  padding: 5px; /* 원래는 5px 10px */
   font-size: 12.3px;
 }
 
@@ -374,6 +375,8 @@ li {
   color: #A8A8A8;
   font-size: 16px;
   cursor: pointer;
+  margin: 0; /* 모든 방향의 여백 제거 */
+  padding: 0; /* 추가적으로 패딩도 제거 */
 }
 
 .newSearch-cancel-button {
