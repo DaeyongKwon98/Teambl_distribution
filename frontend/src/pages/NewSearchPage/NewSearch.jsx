@@ -144,7 +144,7 @@ function NewSearch() {
     setFilters((prev) => {
       // majors 배열을 평탄화하여 중첩 배열을 방지
       console.log("prev", prev);
-      const flatMajors = prev.majors.flat();
+      const flatMajors = prev.majors.flat(Infinity);
       console.log("flatMajors", flatMajors);
       // 선택된 major가 이미 필터에 포함되어 있는지 확인
       const newMajors = flatMajors.includes(major)
