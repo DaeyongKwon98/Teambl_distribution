@@ -16,7 +16,7 @@ function Register() {
   const [school, setSchool] = useState("카이스트");
   const [current_academic_degree, setCurrentAcademicDegree] = useState("학사");
   const [year, setYear] = useState(current_year);
-  const [major, setMajor] = useState("");
+  const [majors, setMajors] = useState([]);
   // const [verificationCode, setVerificationCode] = useState("");
   // const [generatedCode, setGeneratedCode] = useState("");
   // const [codeSent, setCodeSent] = useState(false);
@@ -99,7 +99,8 @@ function Register() {
           school,
           current_academic_degree,
           year,
-          major,
+          major1: majors[0] || "",
+          major2: majors[1] || "",
         },
         code: inviteCode, // 초대 코드를 서버로 전달
       });
@@ -121,6 +122,15 @@ function Register() {
     }
   };
 
+  const handleMajorChange = (selectedMajors) => {
+    if (selectedMajors.length <= 2) {
+      setMajors(selectedMajors);
+    } else {
+      alert("전공은 최대 2개까지 선택할 수 있습니다.");
+    }
+  };
+
+  
   // const handleSendCode = async () => {
   //   const code = Math.floor(100000 + Math.random() * 900000).toString();
   //   setGeneratedCode(code);
@@ -149,11 +159,11 @@ function Register() {
       school !== "" &&
       current_academic_degree !== "" &&
       year !== "" &&
-      major !== ""
+      majors.length > 0
     )
       setNextBtnActive(true);
     else setNextBtnActive(false);
-  }, [user_name, school, current_academic_degree, year, major]);
+  }, [user_name, school, current_academic_degree, year, majors]);
 
   useEffect(() => {
     const invite_code = localStorage.getItem("invite_code");
@@ -232,7 +242,7 @@ function Register() {
           <input
             type="text"
             placeholder=" 전공을 선택해주세요."
-            value={major}
+            value={majors.join(", ")}
             readOnly
             className="register-input"
             onClick={() => {
@@ -257,8 +267,8 @@ function Register() {
               onClick={() => setIsMajorPopupOpen(false)}
             ></div>
             <MajorPopUp
-              userSelectedMajors={[major]}
-              handleMajorChange={setMajor}
+              userSelectedMajors={majors}
+              handleMajorChange={handleMajorChange}
               setIsMajorPopupOpen={setIsMajorPopupOpen}
               doSearchUsers={() => {}}
               buttonText="확인"
