@@ -147,23 +147,19 @@ function NewSearch() {
       const flatMajors = prev.majors.flat(Infinity); // 평탄화
       console.log("flatMajors", flatMajors);
       
-      // major가 배열인지 확인
-      console.log("Incoming major:", major);
-  
-      // major가 배열인지 아닌지 확인
-      if (Array.isArray(major)) {
-        console.warn("Unexpected array in major:", major);
-        major = major.flat(); // 배열이 배열을 포함한 경우 다시 평탄화
-      }
+      // major가 배열인지 아닌지 확인하고 평탄화
+      let normalizedMajor = Array.isArray(major) ? major.flat() : [major];
+      console.log("Incoming major (normalized):", normalizedMajor);
   
       // 선택된 major가 이미 필터에 포함되어 있는지 확인
-      const newMajors = flatMajors.includes(major)
-        ? flatMajors.filter((item) => item !== major) // 이미 있으면 제거
-        : [...flatMajors, major]; // 없으면 추가
-      console.log("newMajors", newMajors);
+      const newMajors = flatMajors.filter((item) => !normalizedMajor.includes(item));
+      
+      // major가 배열인지 확인하여 중복을 방지
+      const uniqueNewMajors = [...new Set([...newMajors, ...normalizedMajor])];
+      console.log("newMajors", uniqueNewMajors);
   
       // 업데이트된 필터를 반환
-      return { ...prev, majors: newMajors };
+      return { ...prev, majors: uniqueNewMajors };
     });
   };
 
