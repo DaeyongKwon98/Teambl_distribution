@@ -443,6 +443,7 @@ li {
   display: inline-flex;
   align-items: center;
   font-size: 12px;
+  justify-content: space-between;
 }
 
 .remove-major {
@@ -453,4 +454,5 @@ li {
   cursor: pointer;
   display: flex;
   align-items: center;
+  margin-left: 5px;
 }
