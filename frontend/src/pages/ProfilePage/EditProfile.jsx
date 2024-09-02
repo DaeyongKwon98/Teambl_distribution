@@ -154,6 +154,12 @@ function EditProfile() {
           {newMajors.map((major, index) => (
             <div key={index} className="major-element">
               {major}
+              <img
+                src={removeIcon}
+                alt="전공 삭제"
+                className="newsearch-remove-major"
+                onClick={() => handleRemoveMajor(index)}
+              />
             </div>
           ))}
         </div>
