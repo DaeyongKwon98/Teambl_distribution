@@ -254,9 +254,7 @@ li {
   display: flex;
   flex-direction: column;
   height: 100%;
-  padding-top: 20px; /* 위쪽 여백 추가 */
 }
-
 
 /* .newSearch-major-popup-header {
   display: flex;
@@ -278,7 +276,7 @@ li {
   font-size: 15.38px;
   color: #121212;
   margin: 0;
-  padding-bottom: 7.69px;
+  /* padding-bottom: 7.69px; */
 }
 
 .newSearch-major-search-input {
