@@ -405,14 +405,14 @@ li {
   background-color: #F6F6F6;
   border-radius: 5px;
   padding: 5px; /* 내부 여백 설정 */
-  margin: 0 15px; /* 좌우 여백 설정 */
-  max-width: 100%;
+  margin: 0px; /* 좌우 여백 설정 */
+  width: 90%;
 }
 
 .newSearch-major-search-icon {
   margin-right: 8px; /* 아이콘과 입력 필드 사이의 간격 조정 */
-  width: 20px; /* 아이콘 너비 설정 */
-  height: 20px; /* 아이콘 높이 설정 */
+  width: 15px; /* 아이콘 너비 설정 */
+  height: 15px; /* 아이콘 높이 설정 */
 }
 
 .newSearch-major-search-input {
