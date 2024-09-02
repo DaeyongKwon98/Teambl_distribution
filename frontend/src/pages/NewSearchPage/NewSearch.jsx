@@ -66,7 +66,7 @@ function NewSearch() {
       const response = await api.post("/api/search/", {
         q: searchTerm,
         degree: filters.relationshipDegree,
-        majors: filters.majors,
+        majors: filters.majors.flat();,
       });
 
       console.log(response.data);
