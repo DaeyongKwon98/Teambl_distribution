@@ -42,6 +42,7 @@ from django.db.models import Q
 import logging
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
+from collections import OrderedDict
 
 logger = logging.getLogger(__name__)
 
@@ -628,17 +629,33 @@ class SearchUsersAPIView(generics.ListAPIView):
             # 촌수 오름차순으로 정렬
             profile_with_distances.sort(key=lambda x: x[1])
 
+            # # 정렬된 프로필 목록 추출
+            # degree_filtered_profiles = [
+            #     profile for profile, distance in profile_with_distances
+            # ]
+
+            # # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
+            # sorted_custom_users = [
+            #     CustomUser.objects.get(profile=profile)
+            #     for profile, _ in profile_with_distances
+            # ]
+
+            # 중복된 유저를 제거하기 위해 OrderedDict 사용 (유저 ID를 기준으로 중복 제거)
+            unique_users = OrderedDict()
+            for profile, distance in profile_with_distances:
+                user_id = profile.user.id
+                if user_id not in unique_users:
+                    unique_users[user_id] = profile
+
             # 정렬된 프로필 목록 추출
-            degree_filtered_profiles = [
-                profile for profile, distance in profile_with_distances
-            ]
+            unique_profiles = list(unique_users.values())
 
             # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
             sorted_custom_users = [
                 CustomUser.objects.get(profile=profile)
-                for profile, _ in profile_with_distances
+                for profile in unique_profiles
             ]
-
+            
             serializer = self.get_serializer(sorted_custom_users, many=True)
             return Response(serializer.data)
 
