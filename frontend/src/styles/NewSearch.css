@@ -382,8 +382,8 @@ li {
   color: #A8A8A8;
   font-size: 16px;
   cursor: pointer;
-  margin: 0; /* 모든 방향의 여백 제거 */
-  padding: 0; /* 추가적으로 패딩도 제거 */
+  padding: 0;
+  margin-left: 5px; /* 왼쪽 여백 5px 추가 */
 }
 
 .newSearch-cancel-button {
