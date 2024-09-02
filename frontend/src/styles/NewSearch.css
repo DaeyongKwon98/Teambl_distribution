@@ -339,3 +339,30 @@ li {
   background-color: #2546f3;
   color: #ffffff;
 }
+
+.newSearch-selected-majors {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 10px 0;
+  padding: 0 7.69px;
+}
+
+.newSearch-selected-major-item {
+  display: flex;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 15.38px;
+  padding: 5px 10px;
+  font-size: 12.3px;
+}
+
+.newSearch-remove-major {
+  background: none;
+  border: none;
+  color: #ff5e5e;
+  font-size: 16px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
