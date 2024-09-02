@@ -74,9 +74,9 @@ function EditProfile() {
     }
   };
 
-  // const handleRemoveMajor = (majorToRemove) => {
-  //   setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
-  // };
+  const handleRemoveMajor = (majorToRemove) => {
+    setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
+  };
 
   const handleMajorChange = (selectedMajors) => {
     if (selectedMajors.length <= 2) {
@@ -154,12 +154,12 @@ function EditProfile() {
           {newMajors.map((major, index) => (
             <div key={index} className="major-element">
               {major}
-              <img
-                src={removeIcon}
-                alt="전공 삭제"
-                className="newsearch-remove-major"
-                onClick={() => handleRemoveMajor(index)}
-              />
+              <button
+                className="newSearch-remove-major"
+                onClick={() => handleRemoveMajor(major)}
+              >
+                &times;
+              </button>
             </div>
           ))}
         </div>
