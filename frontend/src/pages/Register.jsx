@@ -3,6 +3,7 @@ import api from "../api";
 import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/Register.css";
 import MajorPopUp from "./NewSearchPage/MajorPopUp";
+import majorEdit from "../assets/Profile/majorEdit.svg";
 
 function Register() {
   const navigate = useNavigate();
