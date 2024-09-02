@@ -288,7 +288,8 @@ li {
 
 .newSearch-major-popup-body {
   flex: 1;
-  max-height: 50%;
+  /* max-height: 50%; */
+  max-height: 30%;
   padding: 7.69px;
   overflow-y: auto;
 }
