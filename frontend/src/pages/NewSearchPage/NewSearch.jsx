@@ -139,27 +139,20 @@ function NewSearch() {
   //   });
   // };
   
-  // 전공 필터를 추가 및 제거하는 함수
-  const handleMajorChange = (major) => {
+  // 전공 필터를 추가 및 제거하는 함수. 새로운 것만 반영
+  const handleMajorChange = (newMajors) => {
     setFilters((prev) => {
       // majors 배열을 평탄화하여 중첩 배열을 방지
-      console.log("prev", prev);
-      const flatMajors = prev.majors.flat(Infinity); // 평탄화
-      console.log("flatMajors", flatMajors);
+      const flatMajors = prev.majors.flat(Infinity);
       
-      // major가 배열인지 아닌지 확인하고 평탄화
-      let normalizedMajor = Array.isArray(major) ? major.flat() : [major];
-      console.log("Incoming major (normalized):", normalizedMajor);
-  
-      // 선택된 major가 이미 필터에 포함되어 있는지 확인
-      const newMajors = flatMajors.filter((item) => !normalizedMajor.includes(item));
+      // 새로 선택한 전공이 배열인지 아닌지 확인하고 평탄화
+      let normalizedNewMajors = Array.isArray(newMajors) ? newMajors.flat() : [newMajors];
       
-      // major가 배열인지 확인하여 중복을 방지
-      const uniqueNewMajors = [...new Set([...newMajors, ...normalizedMajor])];
-      console.log("newMajors", uniqueNewMajors);
-  
+      // 새로 선택한 전공 목록을 기준으로 필터링
+      const updatedMajors = [...new Set(normalizedNewMajors)];
+      
       // 업데이트된 필터를 반환
-      return { ...prev, majors: uniqueNewMajors };
+      return { ...prev, majors: updatedMajors };
     });
   };
 
