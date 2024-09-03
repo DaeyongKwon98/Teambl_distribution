@@ -15,6 +15,7 @@ function ResetPassword() {
   const [isPasswordChecked, setPasswordIsChecked] = useState(false); // 비밀번호 확인되었는지
   const [emailBtnActive, setEmailBtnActive] = useState(false);
   const [passwordResetBtnActive, setPasswordResetBtnActive] = useState(false);
+  const [isCodeRequested, setIsCodeRequested] = useState(false); // 인증코드 요청 상태
 
   useEffect(() => {
     if (email.length == 0) {
@@ -49,6 +50,7 @@ function ResetPassword() {
     setGeneratedCode(code);
     try {
       await api.post("/api/send_code/", { email, code });
+      setIsCodeRequested(true); // 인증코드 요청 상태 변경
       alert(`인증 코드가 이메일로 전송되었습니다.\n 인증코드는: ${code}`);
     } catch (error) {
       console.error(error);
@@ -120,35 +122,37 @@ function ResetPassword() {
           </button>
         </div>
 
-        <div className="resetPassword-email">
-          <input
-            type="password"
-            className="resetPassword-email"
-            placeholder=" 인증코드 입력"
-            onChange={(e) => setVerificationCode(e.target.value)}
-            value={verificationCode}
-            disabled={isCodeVerified} // 이메일 인증 성공 시 필드를 비활성화
-            required
-          />
-          <button
-            type="button"
-            className="resetPassword-emailBtn"
-            onClick={handleVerifyCode}
-            disabled={verificationCode.length <= 0 || isCodeVerified}
+        {isCodeRequested && (
+          <div className="resetPassword-email">
+            <input
+              type="password"
+              className="resetPassword-email"
+              placeholder=" 인증코드 입력"
+              onChange={(e) => setVerificationCode(e.target.value)}
+              value={verificationCode}
+              disabled={isCodeVerified} // 이메일 인증 성공 시 필드를 비활성화
+              required
+            />
+            <button
+              type="button"
+              className="resetPassword-emailBtn"
+              onClick={handleVerifyCode}
+              disabled={verificationCode.length <= 0 || isCodeVerified}
+            >
+              인증코드 확인
+            </button>
+          </div>
+          <label
+            className={`resetPassword-label-${
+              isCodeVerified ? "correct" : "incorrect"
+            }`}
           >
-            인증코드 확인
-          </button>
-        </div>
-        <label
-          className={`resetPassword-label-${
-            isCodeVerified ? "correct" : "incorrect"
-          }`}
-        >
-          {isCodeVerified
-            ? "인증코드가 일치합니다."
-            : "인증코드가 일치하지 않습니다."}
-          <br />
-        </label>
+            {isCodeVerified
+              ? "인증코드가 일치합니다."
+              : "인증코드가 일치하지 않습니다."}
+            <br />
+          </label>
+        )}
 
         <label className="resetPassword-label">
           비밀번호
