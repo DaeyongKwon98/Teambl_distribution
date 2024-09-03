@@ -74,6 +74,7 @@ function ResetPassword() {
   const handleVerifyCode = () => {
     if (verificationCode === generatedCode) {
       setIsCodeVerified(true);
+      setVerificationMessage(""); // 메시지 비우기
       alert("이메일 인증 성공");
     } else {
       setIsCodeVerified(false);
