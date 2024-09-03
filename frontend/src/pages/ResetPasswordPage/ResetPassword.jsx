@@ -1,5 +1,5 @@
 import "../../styles/ResetPasswordPage/ResetPassword.css";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../../api";
 import backIcon from "../../assets/backIcon.svg";
@@ -18,7 +18,7 @@ function ResetPassword() {
   const [isCodeRequested, setIsCodeRequested] = useState(false); // 인증코드 요청 상태
 
   useEffect(() => {
-    if (email.length == 0) {
+    if (email.length === 0) {
       setEmailBtnActive(false);
     } else {
       setEmailBtnActive(true);
@@ -31,7 +31,7 @@ function ResetPassword() {
     } else {
       setPasswordIsChecked(false);
     }
-  }, [passwordConfirm]);
+  }, [passwordConfirm, password]);
 
   useEffect(() => {
     if (isCodeVerified && isPasswordChecked) {
@@ -69,9 +69,6 @@ function ResetPassword() {
   };
 
   const handleResetPassword = async () => {
-    // TODO: Password Reset API 적용
-    //     : '비밀번호가 성공적으로 변경되었습니다' 페이지로 넘어가기
-
     try {
       const response = await api.patch("/api/change-password/", {
         email: email,
@@ -92,7 +89,7 @@ function ResetPassword() {
       <div className="resetPassword-container">
         <div className="resetPassword-back">
           <button type="button" onClick={handleBackButtonClicked}>
-            <img src={backIcon} />
+            <img src={backIcon} alt="back" />
           </button>
         </div>
 
@@ -123,35 +120,37 @@ function ResetPassword() {
         </div>
 
         {isCodeRequested && (
-          <div className="resetPassword-email">
-            <input
-              type="password"
-              className="resetPassword-email"
-              placeholder=" 인증코드 입력"
-              onChange={(e) => setVerificationCode(e.target.value)}
-              value={verificationCode}
-              disabled={isCodeVerified} // 이메일 인증 성공 시 필드를 비활성화
-              required
-            />
-            <button
-              type="button"
-              className="resetPassword-emailBtn"
-              onClick={handleVerifyCode}
-              disabled={verificationCode.length <= 0 || isCodeVerified}
+          <>
+            <div className="resetPassword-email">
+              <input
+                type="password"
+                className="resetPassword-email"
+                placeholder=" 인증코드 입력"
+                onChange={(e) => setVerificationCode(e.target.value)}
+                value={verificationCode}
+                disabled={isCodeVerified} // 이메일 인증 성공 시 필드를 비활성화
+                required
+              />
+              <button
+                type="button"
+                className="resetPassword-emailBtn"
+                onClick={handleVerifyCode}
+                disabled={verificationCode.length <= 0 || isCodeVerified}
+              >
+                인증코드 확인
+              </button>
+            </div>
+            <label
+              className={`resetPassword-label-${
+                isCodeVerified ? "correct" : "incorrect"
+              }`}
             >
-              인증코드 확인
-            </button>
-          </div>
-          <label
-            className={`resetPassword-label-${
-              isCodeVerified ? "correct" : "incorrect"
-            }`}
-          >
-            {isCodeVerified
-              ? "인증코드가 일치합니다."
-              : "인증코드가 일치하지 않습니다."}
-            <br />
-          </label>
+              {isCodeVerified
+                ? "인증코드가 일치합니다."
+                : "인증코드가 일치하지 않습니다."}
+              <br />
+            </label>
+          </>
         )}
 
         <label className="resetPassword-label">
