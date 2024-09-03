@@ -298,6 +298,7 @@ function ProfileSelf() {
       const response2 = await api.put("/api/profile/update/", imageData); // 이미지 업로드
       const updatedProfile = response2.data;
       console.log("프로필 이미지 데이터 업로드 완료:", updatedProfile);
+      alert("프로필 저장 완료!");
     } catch (error) {
       alert("프로필 업데이트 실패");
       console.error("Registration error:", error);
