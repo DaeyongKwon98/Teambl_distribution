@@ -78,6 +78,11 @@ class CreateUserView(generics.CreateAPIView):
                 from_user=from_user, to_user=to_user, status="accepted"
             )
 
+            # 회원가입 후 초대한 사람과 나의 one_degree_count 업데이트
+            update_profile_one_degree_count(from_user)
+            update_profile_one_degree_count(to_user)
+            
+
         # 회원가입에 성공한 경우 InvitationLink의 invitee_id 변경 / 초대 링크 상태를 accepted로 변경 / 알림 생성
         if invitation:
             invitation.invitee_id = user.id
@@ -805,3 +810,23 @@ class InquiryCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class UpdateOneDegreeCountView(generics.GenericAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # 현재 사용자를 가져옴
+        user = request.user
+
+        # 전달된 user_id가 있다면 해당 사용자의 프로필을 업데이트
+        user_id = request.data.get("user_id", None)
+        if user_id:
+            user = get_object_or_404(CustomUser, id=user_id)
+
+        # one_degree_count 업데이트
+        update_profile_one_degree_count(user)
+
+        # 업데이트된 one_degree_count를 반환
+        profile = user.profile
+        return Response({"one_degree_count": profile.one_degree_count})
