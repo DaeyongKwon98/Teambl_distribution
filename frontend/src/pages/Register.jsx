@@ -84,7 +84,6 @@ function Register() {
     }
   };
 
-  
   // const handleSendCode = async () => {
   //   const code = Math.floor(100000 + Math.random() * 900000).toString();
   //   setGeneratedCode(code);
@@ -136,8 +135,10 @@ function Register() {
 
   const handleRemoveMajor = (majorToRemove) => {
     setMajors((prevMajors) => {
-      const updatedMajors = prevMajors.filter((major) => major !== majorToRemove);
-  
+      const updatedMajors = prevMajors.filter(
+        (major) => major !== majorToRemove
+      );
+
       if (
         user_name !== "" &&
         school !== "" &&
@@ -149,11 +150,11 @@ function Register() {
       } else {
         setNextBtnActive(false);
       }
-  
+
       return updatedMajors;
     });
   };
-  
+
   return (
     <>
       <form className="register" onSubmit={handleRegister}>
@@ -185,6 +186,7 @@ function Register() {
             onChange={(e) => setSchool(e.target.value)}
             value={school}
             required
+            readOnly
           />
           <label className="register-label">
             학력
