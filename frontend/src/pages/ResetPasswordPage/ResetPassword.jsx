@@ -72,14 +72,15 @@ function ResetPassword() {
   };
 
   const handleVerifyCode = () => {
-    if (verificationCode === generatedCode) {
-      setIsCodeVerified(true);
-      setVerificationMessage(""); // 메시지 비우기
-      alert("이메일 인증 성공");
-    } else {
-      setIsCodeVerified(false);
-      alert("인증 코드가 일치하지 않습니다.");
-    }
+      if (verificationCode === generatedCode) {
+          setIsCodeVerified(true);
+          setVerificationMessage("");
+          alert("이메일 인증 성공");
+      } else {
+          setIsCodeVerified(false);
+          setVerificationMessage("인증코드가 일치하지 않습니다.");
+          alert("인증 코드가 일치하지 않습니다.");
+      }
   };
 
   const handleResetPassword = async () => {
@@ -154,7 +155,7 @@ function ResetPassword() {
                 인증코드 확인
               </button>
             </div>
-            {verificationMessage && (
+            {isCodeRequested && !isCodeVerified && verificationMessage && (
               <label
                 className={`resetPassword-label-${
                   verificationCode === generatedCode ? "correct" : "incorrect"
