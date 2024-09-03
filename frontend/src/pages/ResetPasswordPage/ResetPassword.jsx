@@ -16,7 +16,7 @@ function ResetPassword() {
   const [emailBtnActive, setEmailBtnActive] = useState(false);
   const [passwordResetBtnActive, setPasswordResetBtnActive] = useState(false);
   const [isCodeRequested, setIsCodeRequested] = useState(false); // 인증코드 요청 상태
-  const [isPasswordMessageVisible, setIsPasswordMessageVisible] = useState(false); // 비밀번호 일치 메시지 표시 여부
+  const [verificationMessage, setVerificationMessage] = useState(""); // 인증 메시지 상태
 
   useEffect(() => {
     if (email.length === 0) {
@@ -33,14 +33,6 @@ function ResetPassword() {
       setPasswordIsChecked(false);
     }
   }, [passwordConfirm, password]);
-
-  useEffect(() => {
-    if (isCodeVerified && passwordConfirm.length > 0) {
-      setIsPasswordMessageVisible(true);
-    } else {
-      setIsPasswordMessageVisible(false);
-    }
-  }, [isCodeVerified, passwordConfirm]);
 
   useEffect(() => {
     if (isCodeVerified && isPasswordChecked) {
@@ -60,6 +52,7 @@ function ResetPassword() {
     try {
       await api.post("/api/send_code/", { email, code });
       setIsCodeRequested(true); // 인증코드 요청 상태 변경
+      setVerificationMessage(""); // 초기화
       alert(`인증 코드가 이메일로 전송되었습니다.\n 인증코드는: ${code}`);
     } catch (error) {
       console.error(error);
@@ -67,13 +60,16 @@ function ResetPassword() {
     }
   };
 
-  const handleVerifyCode = () => {
-    if (verificationCode === generatedCode) {
+  const handleVerificationCodeChange = (e) => {
+    const value = e.target.value;
+    setVerificationCode(value);
+
+    if (value === generatedCode) {
       setIsCodeVerified(true);
-      alert("이메일 인증 성공");
+      setVerificationMessage("인증코드가 일치합니다.");
     } else {
       setIsCodeVerified(false);
-      alert("인증 코드가 일치하지 않습니다.");
+      setVerificationMessage("인증코드가 일치하지 않습니다.");
     }
   };
 
@@ -135,7 +131,7 @@ function ResetPassword() {
                 type="password"
                 className="resetPassword-email"
                 placeholder=" 인증코드 입력"
-                onChange={(e) => setVerificationCode(e.target.value)}
+                onChange={handleVerificationCodeChange}
                 value={verificationCode}
                 disabled={isCodeVerified} // 이메일 인증 성공 시 필드를 비활성화
                 required
@@ -143,22 +139,21 @@ function ResetPassword() {
               <button
                 type="button"
                 className="resetPassword-emailBtn"
-                onClick={handleVerifyCode}
                 disabled={verificationCode.length <= 0 || isCodeVerified}
               >
                 인증코드 확인
               </button>
             </div>
-            <label
-              className={`resetPassword-label-${
-                isCodeVerified ? "correct" : "incorrect"
-              }`}
-            >
-              {isCodeVerified
-                ? "인증코드가 일치합니다."
-                : "인증코드가 일치하지 않습니다."}
-              <br />
-            </label>
+            {verificationMessage && (
+              <label
+                className={`resetPassword-label-${
+                  isCodeVerified ? "correct" : "incorrect"
+                }`}
+              >
+                {verificationMessage}
+                <br />
+              </label>
+            )}
           </>
         )}
 
@@ -180,8 +175,7 @@ function ResetPassword() {
           onChange={(e) => setPasswordConfirm(e.target.value)}
           value={passwordConfirm}
         />
-
-        {isPasswordMessageVisible && (
+        {isCodeVerified && passwordConfirm.length > 0 && (
           <label
             className={`resetPassword-label-${
               isPasswordChecked ? "correct" : "incorrect"
