@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api"; // Axios 인스턴스 import
 import Profile1 from "../assets/NewSearch/profile1.jpg";
 import Profile2 from "../assets/NewSearch/profile2.jpg";
@@ -12,7 +13,8 @@ import "../styles/NewSearch.css";
 
 const NewUserSearchItem = ({ user, onAddRelationShip }) => {
   const [relationshipDegree, setRelationshipDegree] = useState(null);
-
+  const navigate = useNavigate();
+  
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
     try {
