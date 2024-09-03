@@ -306,7 +306,7 @@ function ProfileSelf() {
       <button
         type="button"
         className="profile-backbutton"
-        onClick={handleBackButton}
+        onClick={() => window.history.back()}
       >
         <img src={backIcon}></img>
       </button>
