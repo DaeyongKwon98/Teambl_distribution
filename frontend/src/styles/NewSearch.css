@@ -236,8 +236,7 @@ li {
   transform: translateX(-50%);
   width: 100%;
   max-width: 284.62px;
-  /* height: auto; */
-  height: 330px;
+  height: 390px;
   max-height: 80%;
   background: white;
   border-top-left-radius: 7.69px;
@@ -318,7 +317,7 @@ li {
 }
 
 .newSearch-result-button {
-  width: 100%;
+  width: 95%;
   padding: 6.15px;
   background-color: #0923a9;
   color: #ffffff;
