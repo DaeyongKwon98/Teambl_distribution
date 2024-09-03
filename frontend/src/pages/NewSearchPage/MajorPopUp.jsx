@@ -74,8 +74,8 @@ const MajorPopUp = ({
     }
   };
   
-  const saveSelectedMajors = (majors) => {
-    handleMajorChange(majors);
+  const saveSelectedMajors = () => {
+    handleMajorChange(selectedMajors);
     setIsMajorPopupOpen(false);
   };
 
