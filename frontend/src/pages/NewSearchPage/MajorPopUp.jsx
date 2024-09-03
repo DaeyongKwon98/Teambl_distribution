@@ -67,9 +67,7 @@ const MajorPopUp = ({
       setSelectedMajors(selectedMajors.filter((m) => m !== major));
     } else {
       if (selectedMajors.length < 2) {
-        const updatedMajors = [...selectedMajors, major];
-        setSelectedMajors(updatedMajors);
-        saveSelectedMajors(updatedMajors); // 전공을 추가한 후 저장
+        setSelectedMajors([...selectedMajors, major]);
       } else {
         alert("전공은 최대 2개까지 선택할 수 있습니다.");
       }
@@ -127,11 +125,7 @@ const MajorPopUp = ({
                     className={`newSearch-major-item ${
                       selectedMajors.includes(major) ? "selected" : ""
                     }`}
-                    onClick={() => {
-                      if (!selectedMajors.includes(major)) {
-                        toggleMajorSelection(major);
-                      }
-                    }}
+                    onClick={() => {toggleMajorSelection(major)}}
                   >
                     {major}
                   </li>
