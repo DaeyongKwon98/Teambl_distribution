@@ -127,7 +127,11 @@ function ProfileSelf() {
 
   // 뒤로 가기 버튼을 누른 경우 동작하는 함수
   const handleBackButton = () => {
-    navigate("/");
+    if (location.state && location.state.fromEditProfile) {
+      navigate("/"); // 이전 페이지가 "내 프로필 편집"일 경우 홈으로 이동
+    } else {
+      window.history.back();
+    }
   };
 
   // 유저의 1촌 수를 가지고 오는 코드
@@ -306,7 +310,7 @@ function ProfileSelf() {
       <button
         type="button"
         className="profile-backbutton"
-        onClick={() => window.history.back()}
+        onClick={handleBackButton}
       >
         <img src={backIcon}></img>
       </button>
