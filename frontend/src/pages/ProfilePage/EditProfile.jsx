@@ -72,6 +72,7 @@ function EditProfile() {
         navigate(`/profile/${currentUser.id}`, {
             state: {
                 profile: updatedProfile,
+                EditProfile: true,
             },
         });
     } catch (error) {
