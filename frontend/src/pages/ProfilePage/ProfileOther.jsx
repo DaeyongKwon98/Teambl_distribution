@@ -58,7 +58,7 @@ const ProfileOther = ({ userId }) => {
     return (
       <div className="profileOther-body">
         <div className="profileOther-container">
-          <button className="profileOther-backbutton" onClick={handleBackButton}>
+          <button className="profileOther-backbutton" onClick={() => window.history.back()}>
             <img src={backIcon} alt="back" />
           </button>
           <div className="profileOther-error">
