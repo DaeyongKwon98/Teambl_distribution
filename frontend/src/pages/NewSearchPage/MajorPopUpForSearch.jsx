@@ -66,10 +66,10 @@ const MajorPopUp = ({
     if (selectedMajors.includes(major)) {
       setSelectedMajors(selectedMajors.filter((m) => m !== major));
     } else {
-      if (selectedMajors.length < 2) {
+      if (selectedMajors.length < 5) {
         setSelectedMajors([...selectedMajors, major]);
       } else {
-        alert("전공은 최대 2개까지 선택할 수 있습니다.");
+        alert("전공은 최대 5개까지 선택할 수 있습니다.");
       }
     }
   };
