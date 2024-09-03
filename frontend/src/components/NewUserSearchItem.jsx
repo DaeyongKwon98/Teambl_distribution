@@ -34,6 +34,14 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
   const handleProfileClick = () => {
     navigate(`/profile/${user.id}`);
   };
+
+  const handleAddButtonClick = (e) => {
+    e.stopPropagation(); // 클릭 이벤트가 부모 div로 전파되는 것을 방지
+    if (relationshipDegree === 1) {
+      return;
+    }
+    navigate("/friends");
+  };
   
   return (
     <div className="newSearch-team-member" onClick={handleProfileClick}>
@@ -68,6 +76,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
         className={`newSearch-add-button ${
           relationshipDegree === 1 ? "checked" : ""
         }`}
+        onClick={handleAddButtonClick}
         disabled={relationshipDegree === 1}
       >
         {relationshipDegree === 1 ? (
