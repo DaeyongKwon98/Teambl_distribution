@@ -22,32 +22,52 @@ const ProfileOther = ({ userId }) => {
     experiences: [],
     portfolio_links: [],
   });
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [error, setError] = useState(null); // 오류 상태 추가
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchProfile(userId);
   }, [userId]);
 
-  useEffect(() => {
-    console.log("Updated profile:", profile);
-  }, [profile]); // profile이 업데이트될 때마다 로그를 출력
-
   const handleBackButton = () => {
     navigate("/");
   };
 
-  //TODO: DB에서 유저 id로 프로필을 불러오는 함수
   const fetchProfile = async (userId) => {
     try {
       const response = await api.get(`/api/user/${userId}/`);
       setProfile(response.data.profile);
-
-      console.log("response data profile:", response.data.profile);
-      console.log("profile:", profile);
+      setError(null); // 오류 상태 초기화
     } catch (error) {
-      console.error("Failed to fetch user profile:", error);
+      if (error.response && error.response.status === 404) {
+        setError("존재하지 않는 사용자입니다."); // 404 오류 메시지 설정
+      } else {
+        setError("사용자 정보를 불러오지 못했습니다.");
+      }
+    } finally {
+      setLoading(false); // 로딩 상태 종료
     }
   };
+
+  if (loading) {
+    return <div>로딩 중...</div>;
+  }
+
+  if (error) {
+    return (
+      <div className="profileOther-body">
+        <div className="profileOther-container">
+          <button className="profileOther-backbutton" onClick={handleBackButton}>
+            <img src={backIcon} alt="back" />
+          </button>
+          <div className="profileOther-error">
+            <h2>{error}</h2>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profileOther-body">
