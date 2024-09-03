@@ -217,7 +217,7 @@ function EditProfile() {
             handleMajorChange={handleMajorChange}
             setIsMajorPopupOpen={setIsMajorPopUp}
             doSearchUsers={() => {}}
-            buttonText={"선택"}
+            buttonText={"선택 완료"}
           />
         </>
       )}
