@@ -66,7 +66,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
         </p>
         <p className="newSearch-member-details">
           {user.profile.major1}
-          {user.profile.major2 && `• ${user.profile.major2}`}
+          {user.profile.major2 && ` • ${user.profile.major2}`}
         </p>
         <p className="newSearch-member-keywords">
           {user.profile.keywords.join(" / ")}
