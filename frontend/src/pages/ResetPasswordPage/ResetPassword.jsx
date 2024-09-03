@@ -16,6 +16,7 @@ function ResetPassword() {
   const [emailBtnActive, setEmailBtnActive] = useState(false);
   const [passwordResetBtnActive, setPasswordResetBtnActive] = useState(false);
   const [isCodeRequested, setIsCodeRequested] = useState(false); // 인증코드 요청 상태
+  const [isPasswordMessageVisible, setIsPasswordMessageVisible] = useState(false); // 비밀번호 일치 메시지 표시 여부
 
   useEffect(() => {
     if (email.length === 0) {
@@ -32,6 +33,14 @@ function ResetPassword() {
       setPasswordIsChecked(false);
     }
   }, [passwordConfirm, password]);
+
+  useEffect(() => {
+    if (isCodeVerified && passwordConfirm.length > 0) {
+      setIsPasswordMessageVisible(true);
+    } else {
+      setIsPasswordMessageVisible(false);
+    }
+  }, [isCodeVerified, passwordConfirm]);
 
   useEffect(() => {
     if (isCodeVerified && isPasswordChecked) {
@@ -171,16 +180,19 @@ function ResetPassword() {
           onChange={(e) => setPasswordConfirm(e.target.value)}
           value={passwordConfirm}
         />
-        <label
-          className={`resetPassword-label-${
-            isPasswordChecked ? "correct" : "incorrect"
-          }`}
-        >
-          {isPasswordChecked
-            ? "비밀번호가 일치합니다."
-            : "비밀번호가 일치하지 않습니다."}
-          <br />
-        </label>
+
+        {isPasswordMessageVisible && (
+          <label
+            className={`resetPassword-label-${
+              isPasswordChecked ? "correct" : "incorrect"
+            }`}
+          >
+            {isPasswordChecked
+              ? "비밀번호가 일치합니다."
+              : "비밀번호가 일치하지 않습니다."}
+            <br />
+          </label>
+        )}
 
         <button
           type="button"
