@@ -29,8 +29,12 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
     getRelationshipDegree(user.id);
   }, [user.id]);
 
+  const handleProfileClick = () => {
+    navigate(`/api/profile/${user.id}`);
+  };
+  
   return (
-    <div className="newSearch-team-member">
+    <div className="newSearch-team-member" onClick={handleProfileClick}>
       <img
         src={user.image ? user.image : ProfileDefaultImg}
         alt={user.profile.user_name}
