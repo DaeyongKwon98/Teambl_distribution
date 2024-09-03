@@ -142,14 +142,14 @@ const MajorPopUp = ({
             </ul>
           </div>
 
-          {/* <div className="newSearch-major-popup-footer">
+          <div className="newSearch-major-popup-footer">
             <button
               className="newSearch-result-button"
               onClick={saveSelectedMajors}
             >
               {buttonText}
             </button>
-          </div> */}
+          </div>
         </div>
       </div>
     </>
