@@ -111,10 +111,6 @@ const Notification = ({ updateUnreadCount }) => {
     return `${diffInDays}일 전`;
   };
 
-  const handleBack = () => {
-    navigate("/");
-  };
-
   const handleNotificationClick = async (notification) => {
     console.log("Notification Clicked: ", notification); // 로그 추가
     
@@ -219,7 +215,7 @@ const Notification = ({ updateUnreadCount }) => {
   return (
     <div className="notification-container">
       <div className="notification-back">
-        <button type="button" onClick={handleBack}></button>
+        <button type="button" onClick={() => window.history.back()}></button>
       </div>
       <h1>알림</h1>  
       <div>
