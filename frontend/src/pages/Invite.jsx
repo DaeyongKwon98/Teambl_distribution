@@ -52,29 +52,34 @@ function Invite() {
   };
 
   const handleGenerateLink = async () => {
-    if (name.trim() !== "" && invitesLeft > 0) {
-      try {
-        const response = await api.post("/api/create-invitation-link/", {
-          name,
-        });
-        const newLink = {
-          invitee_name: name,
-          inviter_name: response.data.inviter_name,
-          // invitee_id: response.data.invitee_id,
-          link: response.data.link,
-          id: response.data.id,
-          created_at: response.data.created_at,
-        }; // ID와 이름을 포함하여 newLink 객체 생성
-        setName(""); // 입력 필드를 초기화
-        fetchLinks(); // 추가된 링크로 데이터 베이스에서 다시 받아오기.
-        setCreatedLink(newLink);
-        setInviteGenerated(true);
-      } catch (error) {
-        console.error("Failed to generate invite link:", error);
-        console.log("Error response data:", error.response.data);
-      }
-    } else {
-      alert("Please enter a name.");
+    if (name.trim() === "") {
+      alert("이름을 입력해 주세요.");
+      return;
+    }
+  
+    if (invitesLeft <= 0) {
+      alert("더 이상 초대할 수 없습니다.");
+      return;
+    }
+  
+    try {
+      const response = await api.post("/api/create-invitation-link/", {
+        name,
+      });
+      const newLink = {
+        invitee_name: name,
+        inviter_name: response.data.inviter_name,
+        link: response.data.link,
+        id: response.data.id,
+        created_at: response.data.created_at,
+      }; // ID와 이름을 포함하여 newLink 객체 생성
+      setName(""); // 입력 필드를 초기화
+      fetchLinks(); // 추가된 링크로 데이터베이스에서 다시 받아오기.
+      setCreatedLink(newLink);
+      setInviteGenerated(true);
+    } catch (error) {
+      console.error("Failed to generate invite link:", error);
+      console.log("Error response data:", error.response.data);
     }
   };
 
