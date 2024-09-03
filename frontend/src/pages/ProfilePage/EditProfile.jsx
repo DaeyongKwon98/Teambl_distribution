@@ -35,6 +35,7 @@ function EditProfile() {
     navigate(`/profile/${currentUser.id}`, {
       state: {
         profile: newProfile,
+        EditProfile: true;
       },
     });
   }
