@@ -32,7 +32,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
   }, [user.id]);
 
   const handleProfileClick = () => {
-    navigate(`/api/profile/${user.id}`);
+    navigate(`/profile/${user.id}`);
   };
   
   return (
