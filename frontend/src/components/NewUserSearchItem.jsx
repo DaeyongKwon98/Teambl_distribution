@@ -4,6 +4,7 @@ import Profile1 from "../assets/NewSearch/profile1.jpg";
 import Profile2 from "../assets/NewSearch/profile2.jpg";
 import CheckIcon from "../assets/NewSearch/checkIcon.svg";
 import NoCheckIcon from "../assets/NewSearch/nocheckIcon.svg";
+import ProfileDefaultImg from "../assets/default_profile_image.svg";
 import "../styles/NewSearch.css";
 
 // 포함되어야 하는 정보
@@ -31,7 +32,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
   return (
     <div className="newSearch-team-member">
       <img
-        src={user.image}
+        src={user.image ? user.image : ProfileDefaultImg}
         alt={user.profile.user_name}
         className="newSearch-profile-image"
       />
