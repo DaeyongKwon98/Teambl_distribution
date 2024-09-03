@@ -159,7 +159,7 @@ function ProfileSelf() {
     navigate("/editprofile", {
       state: {
         profile: profile,
-        fromEditProfile: true;
+        fromEditProfile: true,
       },
     });
   }
