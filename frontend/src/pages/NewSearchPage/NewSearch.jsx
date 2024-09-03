@@ -7,7 +7,7 @@ import MajorIcon from "../../assets/NewSearch/majorIcon.svg";
 import NoMajorIcon from "../../assets/NewSearch/nomajorIcon.svg";
 import api from "../../api";
 import NewUserSearchItem from "../../components/NewUserSearchItem";
-import MajorPopUp from "./MajorPopUp";
+import MajorPopUpForSearch from "./MajorPopUpForSearch";
 
 function NewSearch() {
   const [users, setUsers] = useState([]); // 검색 결과로 필터링된 유저들
@@ -334,12 +334,12 @@ function NewSearch() {
             className="newSearch-overlay"
             onClick={() => setIsMajorPopupOpen(false)}
           ></div>
-          <MajorPopUp
+          <MajorPopUpForSearch
             userSelectedMajors={filters.majors}
             handleMajorChange={handleMajorChange}
             setIsMajorPopupOpen={setIsMajorPopupOpen}
             doSearchUsers={doSearchUsers}
-            buttonText="결과보기"
+            buttonText="결과 보기"
           />
         </>
       )}
