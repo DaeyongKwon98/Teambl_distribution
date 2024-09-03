@@ -198,7 +198,26 @@ class DeleteUserView(generics.DestroyAPIView):
         # 탈퇴하는 사용자의 ID와 일치하는 invitee_id를 가진 InvitationLink 삭제 (추후에는 status를 exited 등으로 바꿀 수 있음)
         InvitationLink.objects.filter(invitee_id=user.id).delete()
 
+        # Friend DB에서 해당 유저와 관련된 row 삭제
+        related_friends = Friend.objects.filter(Q(from_user=user) | Q(to_user=user))
+
+        # 친구 관계에 있는 유저들을 저장
+        related_users = set()
+        for friend in related_friends:
+            related_users.add(friend.from_user)
+            related_users.add(friend.to_user)
+            
+        # 해당 유저와 관련된 친구 관계 삭제
+        related_friends.delete()
+
+        # 유저 삭제
         user.delete()
+
+        # 관련된 유저들의 one_degree_count 업데이트
+        for related_user in related_users:
+            if related_user != user:  # 탈퇴한 유저를 제외한 나머지 유저들에 대해 업데이트
+                update_profile_one_degree_count(related_user)
+                
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
