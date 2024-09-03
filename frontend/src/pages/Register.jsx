@@ -275,7 +275,7 @@ function Register() {
               handleMajorChange={handleMajorChange}
               setIsMajorPopupOpen={setIsMajorPopupOpen}
               doSearchUsers={() => {}}
-              buttonText="확인"
+              buttonText="선택 완료"
             />
           </>
         )}
