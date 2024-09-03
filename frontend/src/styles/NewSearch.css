@@ -293,6 +293,7 @@ li {
 .newSearch-major-search-input::placeholder {
   color: #a8a8a8;
   font-size: 12.3px;
+  opacity: 1;
 }
 
 .newSearch-major-popup-body {
