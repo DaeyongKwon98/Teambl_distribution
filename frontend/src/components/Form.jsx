@@ -80,7 +80,13 @@ function Form({ route, method }) {
         />
         <p className="error">{error}</p>
         {/* {loading && <LoadingIndicator />} */}
-        <button className="login-button" onClick={handleSubmit}>로그인</button>
+        <button
+          className="login-button"
+          onClick={handleSubmit}
+          disabled={!isButtonEnabled}
+        >
+          로그인
+        </button>
         <div className="links">
           <span onClick={() => navigate('/password-reset')}>비밀번호 재설정</span>
         </div>
