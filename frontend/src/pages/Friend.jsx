@@ -201,7 +201,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {otherUserProfile.relationshipDegree}촌
+                        · {otherUserProfile.one_degree_count}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
@@ -269,7 +269,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {otherUserProfile.relationshipDegree}촌
+                        · {otherUserProfile.one_degree_count}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
@@ -329,7 +329,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {otherUserProfile.relationshipDegree}촌
+                        · {otherUserProfile.one_degree_count}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
