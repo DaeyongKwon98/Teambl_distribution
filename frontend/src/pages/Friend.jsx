@@ -4,44 +4,10 @@ import "../styles/Friend.css";
 import api from "../api";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
-import ProfileDefaultImg from "../assets/default_profile_image.svg"; 
+import ProfileDefaultImg from "../assets/default_profile_image.svg";
 
 function Friend() {
   /*
-  const [friendList, setFriendList] = useState([]);
-  const [friendEmail, setFriendEmail] = useState("");
-  const [currentUser, setCurrentUser] = useState(null);
-
-  
-  useEffect(() => {
-    getCurrentUser();
-    getFriends();
-  }, []);
-
-  const getCurrentUser = () => {
-    api
-      .get("/api/current-user/")
-      .then((res) => res.data)
-      .then((data) => {
-        setCurrentUser(data);
-      })
-      .catch((err) => alert(err));
-  };
-
-  const getFriends = () => {
-    api
-      .get("/api/friends/")
-      .then((res) => res.data)
-      .then((data) => {
-        setFriendList(data);
-        console.log(data);
-      })
-      .catch((err) => alert(err));
-  };
-
-  // const goToInvitePage = () => {
-  //   navigate("/invite");
-  // };
 
   const addFriend = (e) => {
     e.preventDefault();
@@ -89,29 +55,74 @@ function Friend() {
       .catch((error) => alert(error));
   };
   */
+
+  const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState("myChons");
-  const [myChonsRequests, setMyChonsRequests] = useState([]);
-  const [myAcceptedChons, setMyAcceptedChons] = useState([]);
-  const [requestsToMe, setRequestsToMe] = useState([]);
-  const [email, setEmail] = useState("");
+  const [myAcceptedChons, setMyAcceptedChons] = useState([]); // 나의 1촌
+  const [myChonsRequests, setMyChonsRequests] = useState([]); // 1촌 추가
+  const [requestsToMe, setRequestsToMe] = useState([]); // 내게 신청한
+  const [inputEmail, setInputEmail] = useState("");
   const [activeNav, setActiveNav] = useState("1촌");
 
   const navigate = useNavigate();
-  
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
+
+  // 현재 로그인 유저를 가져오는 함수
+  const getCurrentUser = () => {
+    api
+      .get("/api/current-user/")
+      .then((res) => res.data)
+      .then((data) => {
+        setCurrentUser(data);
+      })
+      .catch((err) => alert(err));
   };
-  
+
+  const handleInputEmailChange = (e) => {
+    setInputEmail(e.target.value);
+  };
+
+  // 유저의 1촌 리스트를 가져오는 함수
+  const getChons = () => {
+    api
+      .get("/api/friends/")
+      .then((res) => res.data)
+      .then((data) => {
+        console.log(data);
+
+        // 1촌 중 accept인 경우 나의 1촌
+        const myAcceptedChons = data.filter(
+          (friend) => friend.status === "accepted"
+        );
+        setMyAcceptedChons(myAcceptedChons);
+
+        // 1촌 중 from_user가 current_user인 경우
+        const myChonsRequests = data.filter(
+          (friend) =>
+            friend.status !== "accepted" &&
+            friend.from_user.id === currentUser.id
+        );
+        setMyChonsRequests(myChonsRequests);
+
+        // 1촌 중 to_user가 current_user인 경우
+        const requestsToMe = data.filter(
+          (friend) =>
+            friend.status !== "accepted" && friend.to_user.id === currentUser.id
+        );
+        setRequestsToMe(requestsToMe);
+      })
+      .catch((err) => alert(err));
+  };
+
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
-      case '초대':
+      case "초대":
         navigate("/invite");
         break;
-      case '설정':
+      case "설정":
         navigate("/setting");
         break;
-      case '홈':
+      case "홈":
         navigate("/");
         break;
       default:
@@ -120,100 +131,123 @@ function Friend() {
   };
 
   useEffect(() => {
-    const fetchMyChonsRequests = [
-      {
-        id: 1,
-        image: null,
-        profile: {
-          user_name: "박지성",
-          school: "카이스트",
-          current_academic_degree: "학사",
-          year: 2021,
-          major1: "산업디자인",
-          major2: "산업공학",
-          keywords: ["창의력", "협업", "데이터분석", "운동", "프랑스어ㄴㅇㄹㄴㅇㄹ"],
-        },
-        relationshipDegree: 2,
-      }
-    ];
+    getCurrentUser();
+    getChons();
+  }, []);
 
-    const fetchMyAcceptedChons = [
-      {
-        id: 1,
-        image: null,
-        profile: {
-          user_name: "최성희",
-          school: "카이스트",
-          current_academic_degree: "석사",
-          year: 2022,
-          major1: "산업디자인",
-          keywords: ["창의력", "협업"],
-        },
-        relationshipDegree: 1,
-      },
-      {
-        id: 2,
-        image: null,
-        profile: {
-          user_name: "최성희",
-          school: "카이스트",
-          current_academic_degree: "석사",
-          year: 2022,
-          major1: "산업디자인",
-          keywords: ["창의력", "협업", "데이터분석", "운동", "프랑스어ㄴㅇㄹㄴㅇㄹ"],
-        },
-        relationshipDegree: 1,
-      }
-    ];
-
-    const fetchRequestsToMe = [
-      {
-        id: 1,
-        image: null,
-        profile: {
-          user_name: "최대기",
-          school: "카이스트",
-          current_academic_degree: "박사",
-          year: 2023,
-          major1: "산업디자인",
-          major2: "산업공학",
-          keywords: ["창의력", "협업", "데이터분석", "운동", "프랑스어ㄴㅇㄹㄴㅇㄹ"],
-        },
-        relationshipDegree: 2,
-      },
-      {
-        id: 2,
-        image: null,
-        profile: {
-          user_name: "최대기",
-          school: "카이스트",
-          current_academic_degree: "박사",
-          year: 2023,
-          major1: "산업디자인",
-          major2: "산업공학",
-          keywords: ["관리", "리더십"],
-        },
-        relationshipDegree: 2,
-      },
-      {
-        id: 3,
-        image: null,
-        profile: {
-          user_name: "최대기",
-          school: "카이스트",
-          current_academic_degree: "박사",
-          year: 2023,
-          major1: "산업디자인",
-          major2: "산업공학",
-          keywords: ["관리", "리더십"],
-        },
-        relationshipDegree: 2,
-      },
-    ];
-
-    setMyChonsRequests(fetchMyChonsRequests);
-    setMyAcceptedChons(fetchMyAcceptedChons);
-    setRequestsToMe(fetchRequestsToMe);
+  useEffect(() => {
+    // 1촌 추가
+    // const fetchMyChonsRequests = [
+    //   {
+    //     id: 1,
+    //     image: null,
+    //     profile: {
+    //       user_name: "박지성",
+    //       school: "카이스트",
+    //       current_academic_degree: "학사",
+    //       year: 2021,
+    //       major1: "산업디자인",
+    //       major2: "산업공학",
+    //       keywords: [
+    //         "창의력",
+    //         "협업",
+    //         "데이터분석",
+    //         "운동",
+    //         "프랑스어ㄴㅇㄹㄴㅇㄹ",
+    //       ],
+    //     },
+    //     relationshipDegree: 2,
+    //   },
+    // ];
+    // 나의 1촌
+    // const fetchMyAcceptedChons = [
+    //   {
+    //     id: 1,
+    //     image: null,
+    //     profile: {
+    //       user_name: "최성희",
+    //       school: "카이스트",
+    //       current_academic_degree: "석사",
+    //       year: 2022,
+    //       major1: "산업디자인",
+    //       keywords: ["창의력", "협업"],
+    //     },
+    //     relationshipDegree: 1,
+    //   },
+    //   {
+    //     id: 2,
+    //     image: null,
+    //     profile: {
+    //       user_name: "최성희",
+    //       school: "카이스트",
+    //       current_academic_degree: "석사",
+    //       year: 2022,
+    //       major1: "산업디자인",
+    //       keywords: [
+    //         "창의력",
+    //         "협업",
+    //         "데이터분석",
+    //         "운동",
+    //         "프랑스어ㄴㅇㄹㄴㅇㄹ",
+    //       ],
+    //     },
+    //     relationshipDegree: 1,
+    //   },
+    // ];
+    // 내게 신청한
+    // const fetchRequestsToMe = [
+    //   {
+    //     id: 1,
+    //     image: null,
+    //     profile: {
+    //       user_name: "최대기",
+    //       school: "카이스트",
+    //       current_academic_degree: "박사",
+    //       year: 2023,
+    //       major1: "산업디자인",
+    //       major2: "산업공학",
+    //       keywords: [
+    //         "창의력",
+    //         "협업",
+    //         "데이터분석",
+    //         "운동",
+    //         "프랑스어ㄴㅇㄹㄴㅇㄹ",
+    //       ],
+    //     },
+    //     relationshipDegree: 2,
+    //   },
+    //   {
+    //     id: 2,
+    //     image: null,
+    //     profile: {
+    //       user_name: "최대기",
+    //       school: "카이스트",
+    //       current_academic_degree: "박사",
+    //       year: 2023,
+    //       major1: "산업디자인",
+    //       major2: "산업공학",
+    //       keywords: ["관리", "리더십"],
+    //     },
+    //     relationshipDegree: 2,
+    //   },
+    //   {
+    //     id: 3,
+    //     image: null,
+    //     profile: {
+    //       user_name: "최대기",
+    //       school: "카이스트",
+    //       current_academic_degree: "박사",
+    //       year: 2023,
+    //       major1: "산업디자인",
+    //       major2: "산업공학",
+    //       keywords: ["관리", "리더십"],
+    //     },
+    //     relationshipDegree: 2,
+    //   },
+    // ];
+    // setMyChonsRequests(fetchMyChonsRequests);
+    // setMyAcceptedChons(fetchMyAcceptedChons);
+    // setRequestsToMe(fetchRequestsToMe);
   }, []);
 
   return (
@@ -234,7 +268,9 @@ function Friend() {
           1촌 추가
         </div>
         <div
-          className={`friend-tab ${activeTab === "requestsToMe" ? "active" : ""}`}
+          className={`friend-tab ${
+            activeTab === "requestsToMe" ? "active" : ""
+          }`}
           onClick={() => setActiveTab("requestsToMe")}
         >
           내게 신청한
@@ -245,33 +281,46 @@ function Friend() {
         <div className="friend-myChons-content">
           <p className="friend-total-count">{myAcceptedChons.length}명</p>
           <div className="friend-team-member-results">
-            {myAcceptedChons.map((chon) => (
-              <div
-                className="friend-team-member"
-                key={chon.id}
-              >
-                <img
-                  src={chon.image ? chon.image : ProfileDefaultImg}
-                  alt={chon.profile.user_name}
-                  className="friend-profile-image"
-                />
-                <div className="friend-member-info">
-                  <p className="friend-member-name-relation">
-                    <strong className="friend-member-name">
-                      {chon.profile.user_name}
-                    </strong>
-                  </p>
-                  <p className="friend-member-details">
-                    {chon.profile.school} | {chon.profile.current_academic_degree}{" "}
-                    | {chon.profile.year % 100}학번
-                  </p>
-                  <p className="friend-member-details">{chon.profile.major1}</p>
-                  <p className="friend-member-keywords">
-                    {chon.profile.keywords.join(" / ")}
-                  </p>
+            {myAcceptedChons.map((chon) => {
+              const otherUserProfile =
+                chon.from_user.id === currentUser.id
+                  ? chon.to_user.profile
+                  : chon.from_user.profile;
+
+              return (
+                <div className="friend-team-member" key={chon.id}>
+                  <img
+                    src={
+                      otherUserProfile.image
+                        ? otherUserProfile.image
+                        : ProfileDefaultImg
+                    }
+                    alt={otherUserProfileuser_name}
+                    className="friend-profile-image"
+                  />
+                  <div className="friend-member-info">
+                    <p className="friend-member-name-relation">
+                      <strong className="friend-member-name">
+                        {otherUserProfileuser_name}
+                      </strong>
+                    </p>
+                    <p className="friend-member-details">
+                      {otherUserProfile.school} |{" "}
+                      {otherUserProfile.current_academic_degree} |{" "}
+                      {otherUserProfile.year % 100}학번
+                    </p>
+                    <p className="friend-member-details">
+                      {otherUserProfile.major1}
+                      {otherUserProfile.major2 &&
+                        ` • ${otherUserProfile.major2}`}
+                    </p>
+                    <p className="friend-member-keywords">
+                      {otherUserProfile.keywords.join(" / ")}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -283,53 +332,63 @@ function Friend() {
               type="text"
               placeholder="이메일을 입력하세요."
               className="friend-email-input"
-              value={email}
-              onChange={handleEmailChange}
+              value={inputEmail}
+              onChange={handleInputEmailChange}
             />
             <button
-              className={`friend-addChons-btn ${email ? "active" : ""}`}
-              disabled={!email}
+              className={`friend-addChons-btn ${inputEmail ? "active" : ""}`}
+              disabled={!inputEmail}
             >
               1촌 맺기 요청
             </button>
           </div>
           <p className="friend-total-count">{myChonsRequests.length}명</p>
           <div className="friend-team-member-results">
-            {myChonsRequests.map((chon) => (
-              <div
-                className="friend-team-member"
-                key={chon.id}
-              >
-                <img
-                  src={chon.image ? chon.image : ProfileDefaultImg}
-                  alt={chon.profile.user_name}
-                  className="friend-profile-image"
-                />
-                <div className="friend-member-info">
-                  <p className="friend-member-name-relation">
-                    <strong className="friend-member-name">
-                      {chon.profile.user_name}
-                    </strong>
-                    <span className="friend-member-relation">
-                      {" "}
-                      · {chon.relationshipDegree}촌
-                    </span>
-                  </p>
-                  <p className="friend-member-details">
-                    {chon.profile.school} | {chon.profile.current_academic_degree}{" "}
-                    | {chon.profile.year % 100}학번
-                  </p>
-                  <p className="friend-member-details">
-                    {chon.profile.major1}
-                    {chon.profile.major2 && ` • ${chon.profile.major2}`}
-                  </p>
-                  <p className="friend-member-keywords">
-                    {chon.profile.keywords.join(" / ")}
-                  </p>
+            {myChonsRequests.map((chon) => {
+              const otherUserProfile =
+                chon.from_user.id === currentUser.id
+                  ? chon.to_user.profile
+                  : chon.from_user.profile;
+
+              return (
+                <div className="friend-team-member" key={otherUserProfile.id}>
+                  <img
+                    src={
+                      otherUserProfile.image
+                        ? otherUserProfile.image
+                        : ProfileDefaultImg
+                    }
+                    alt={otherUserProfile.user_name}
+                    className="friend-profile-image"
+                  />
+                  <div className="friend-member-info">
+                    <p className="friend-member-name-relation">
+                      <strong className="friend-member-name">
+                        {otherUserProfile.user_name}
+                      </strong>
+                      <span className="friend-member-relation">
+                        {" "}
+                        · {otherUserProfile.relationshipDegree}촌
+                      </span>
+                    </p>
+                    <p className="friend-member-details">
+                      {otherUserProfile.school} |{" "}
+                      {otherUserProfile.current_academic_degree} |{" "}
+                      {otherUserProfile.year % 100}학번
+                    </p>
+                    <p className="friend-member-details">
+                      {otherUserProfile.major1}
+                      {otherUserProfile.major2 &&
+                        ` • ${otherUserProfile.major2}`}
+                    </p>
+                    <p className="friend-member-keywords">
+                      {otherUserProfile.keywords.join(" / ")}
+                    </p>
+                  </div>
+                  <div className="friend-wait-acceptance"></div>
                 </div>
-                <div className="friend-wait-acceptance"></div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -337,48 +396,60 @@ function Friend() {
       {activeTab === "requestsToMe" && (
         <div className="friend-requestsToMe-content">
           <div className="friend-instructions">
-            신청 수락은 신뢰를 바탕으로 신중히 결정해 주세요<br />믿을 수 있는 팀을 커뮤니티, 함께 만들어 가요!
+            신청 수락은 신뢰를 바탕으로 신중히 결정해 주세요
+            <br />
+            믿을 수 있는 팀을 커뮤니티, 함께 만들어 가요!
           </div>
           <p className="friend-total-count">{requestsToMe.length}명</p>
           <div className="friend-team-member-results">
-            {requestsToMe.map((chon) => (
-              <div
-                className="friend-team-member"
-                key={chon.id}
-              >
-                <img
-                  src={chon.image ? chon.image : ProfileDefaultImg}
-                  alt={chon.profile.user_name}
-                  className="friend-profile-image"
-                />
-                <div className="friend-member-info">
-                  <p className="friend-member-name-relation">
-                    <strong className="friend-member-name">
-                      {chon.profile.user_name}
-                    </strong>
-                    <span className="friend-member-relation">
-                      {" "}
-                      · {chon.relationshipDegree}촌
-                    </span>
-                  </p>
-                  <p className="friend-member-details">
-                    {chon.profile.school} | {chon.profile.current_academic_degree}{" "}
-                    | {chon.profile.year % 100}학번
-                  </p>
-                  <p className="friend-member-details">
-                    {chon.profile.major1}
-                    {chon.profile.major2 && ` • ${chon.profile.major2}`}
-                  </p>
-                  <p className="friend-member-keywords">
-                    {chon.profile.keywords.join(" / ")}
-                  </p>
+            {requestsToMe.map((chon) => {
+              const otherUserProfile =
+                chon.from_user.id === currentUser.id
+                  ? chon.to_user.profile
+                  : chon.from_user.profile;
+
+              return (
+                <div className="friend-team-member" key={chon.id}>
+                  <img
+                    src={
+                      otherUserProfile.image
+                        ? otherUserProfile.image
+                        : ProfileDefaultImg
+                    }
+                    alt={otherUserProfile.user_name}
+                    className="friend-profile-image"
+                  />
+                  <div className="friend-member-info">
+                    <p className="friend-member-name-relation">
+                      <strong className="friend-member-name">
+                        {otherUserProfile.user_name}
+                      </strong>
+                      <span className="friend-member-relation">
+                        {" "}
+                        · {otherUserProfile.relationshipDegree}촌
+                      </span>
+                    </p>
+                    <p className="friend-member-details">
+                      {otherUserProfile.school} |{" "}
+                      {otherUserProfile.current_academic_degree} |{" "}
+                      {otherUserProfile.year % 100}학번
+                    </p>
+                    <p className="friend-member-details">
+                      {otherUserProfile.major1}
+                      {otherUserProfile.major2 &&
+                        ` • ${otherUserProfile.major2}`}
+                    </p>
+                    <p className="friend-member-keywords">
+                      {otherUserProfile.keywords.join(" / ")}
+                    </p>
+                  </div>
+                  <div className="friend-action-buttons">
+                    <button className="friend-accept-button"></button>
+                    <button className="friend-reject-button"></button>
+                  </div>
                 </div>
-                <div className="friend-action-buttons">
-                  <button className="friend-accept-button"></button>
-                  <button className="friend-reject-button"></button>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
