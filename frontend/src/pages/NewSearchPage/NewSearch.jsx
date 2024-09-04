@@ -22,6 +22,7 @@ function NewSearch() {
   useEffect(() => {
     // console.log("키워드 가져오기");
     fetchKeywords(); // 키워드 데이터를 불러오는 함수 호출
+    fetchRecentSearches(); // 최근 검색 기록을 불러오는 함수 호출
   }, []); // 빈 배열을 의존성으로 전달하여 컴포넌트 마운트 시 한 번만 실행
 
   useEffect(() => {
@@ -48,32 +49,46 @@ function NewSearch() {
     }
   };
 
+  // DB에서 최근 검색 기록을 가져오는 함수
+  const fetchRecentSearches = async () => {
+    try {
+      const response = await api.get("/api/search-history/"); // 최근 검색 기록을 가져오는 API 엔드포인트
+      const recentSearchTerms = response.data.map((item) => item.keyword);
+      setRecentSearches(recentSearchTerms); // 가져온 검색 기록을 recentSearches 변수에 저장
+    } catch (error) {
+      console.error("Failed to fetch recent searches:", error);
+    }
+  };
+  
   // 검색을 실행하는 함수
   const doSearchUsers = async () => {
     setUsers([]);
     setIsSearched(true);
 
-    // 최근 검색 기록에 검색어 추가
+    // 최근 검색 기록에 검색어 추가 (중복 방지)
     if (searchTerm && !recentSearches.includes(searchTerm)) {
-      setRecentSearches([searchTerm, ...recentSearches.slice(0, 4)]);
+      await addSearchTerm(searchTerm);
     }
 
     try {
-      // console.log("Search Term:", searchTerm);
-      // console.log("Relationship Degree Filters:", filters.relationshipDegree);
-      // console.log("Major Filters:", filters.majors);
-
       const response = await api.post("/api/search/", {
         q: searchTerm,
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
       });
-
-      // console.log(response.data);
-
       setUsers(response.data);
     } catch (error) {
       console.error("검색 중 오류가 발생했습니다.", error);
+    }
+  };
+
+  // 새로운 검색 기록을 서버에 추가하는 함수
+  const addSearchTerm = async (term) => {
+    try {
+      await api.post("/api/search-history/", { keyword: term }); // 검색 기록을 추가하는 API 호출
+      setRecentSearches([term, ...recentSearches.slice(0, 4)]); // 최근 검색어 리스트를 업데이트
+    } catch (error) {
+      console.error("Failed to add search term:", error);
     }
   };
 
@@ -97,20 +112,45 @@ function NewSearch() {
   };
 
   // 최근 검색어를 지우는 함수
-  const handleClear = () => {
-    setRecentSearches([]);
+  const handleClear = async () => {
+    try {
+      await Promise.all(
+        recentSearches.map((term) =>
+          api.delete(`/api/search-history/${term}/`) // 모든 검색 기록 삭제
+        )
+      );
+      setRecentSearches([]);
+    } catch (error) {
+      console.error("Failed to clear search history:", error);
+    }
   };
 
+  // 최근 검색어에서 특정 검색어를 삭제하는 함수
+  const handleDelete = async (termToDelete) => {
+    try {
+      const response = await api.get("/api/search-history/");
+      const searchItem = response.data.find(
+        (item) => item.keyword === termToDelete
+      );
+      if (searchItem) {
+        await api.delete(`/api/search-history/${searchItem.id}/`); // 특정 검색 기록 삭제
+        setRecentSearches(recentSearches.filter((term) => term !== termToDelete)); // 로컬 상태 업데이트
+      }
+    } catch (error) {
+      console.error("Failed to delete search term:", error);
+    }
+  };
+  
   // 검색어를 선택했을 때 호출되는 함수
   const handleSelect = (term) => {
     setIsSearched(true);
     setSearchTerm(term);
   };
 
-  // 최근 검색어에서 특정 검색어를 삭제하는 함수
-  const handleDelete = (termToDelete) => {
-    setRecentSearches(recentSearches.filter((term) => term !== termToDelete));
-  };
+  // // 최근 검색어에서 특정 검색어를 삭제하는 함수
+  // const handleDelete = (termToDelete) => {
+  //   setRecentSearches(recentSearches.filter((term) => term !== termToDelete));
+  // };
 
   // Enter 키를 눌렀을 때 검색을 실행하는 함수
   const handleKeyPress = (e) => {
