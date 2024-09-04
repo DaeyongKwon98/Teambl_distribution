@@ -325,7 +325,7 @@ function ProfileSelf() {
         // 서버에서 400 오류를 반환할 때
         if (error.response.data.portfolio_links) {
           // 포트폴리오 링크 관련 오류인 경우
-          setErrorMessage("올바르지 않은 형식의 링크입니다.");
+          setErrorMessage("올바르지 않은 링크 형식입니다.");
         } else {
           setErrorMessage("프로필 업데이트 실패: " + error.response.data.message || "알 수 없는 오류 발생");
         }
@@ -549,6 +549,8 @@ function ProfileSelf() {
         </div>
       </div>
 
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+      
       {showSuccessPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
