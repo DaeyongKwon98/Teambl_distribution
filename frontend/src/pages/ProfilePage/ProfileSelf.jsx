@@ -15,6 +15,9 @@ import api from "../../api";
 function ProfileSelf() {
   const navigate = useNavigate();
   const location = useLocation();
+
+  const [initialProfile, setInitialProfile] = useState(null); // 초기 프로필 상태 저장 (비교용)
+  
   // 처음에 receivedProfile을 받아옴
   const [receivedProfile, setReceivedProfile] = useState(
     location.state?.profile || null
@@ -62,6 +65,7 @@ function ProfileSelf() {
     // 저장 버튼 활성화
     setIsSaveButtonActivate(true);
   };
+  
   useEffect(() => {
     if (receivedProfile) {
       // receivedProfile을 사용하여 초기 상태를 설정
@@ -72,11 +76,15 @@ function ProfileSelf() {
         setImagePreview(receivedProfile.image);
       }
 
+
+      // 초기 프로필을 저장
+      setInitialProfile(receivedProfile);
+      
       // receivedProfile을 사용 후 null로 설정
       setReceivedProfile(null);
 
-      // 저장 버튼 활성화
-      setIsSaveButtonActivate(true);
+      // // 저장 버튼 활성화
+      // setIsSaveButtonActivate(true);
     } else {
       // receivedProfile이 없는 경우 서버에서 프로필을 가져옴
       fetchProfile();
@@ -85,6 +93,7 @@ function ProfileSelf() {
 
   useEffect(() => {
     if (profile.keywords.length >= 5) setKeywordFull(true);
+    checkIfProfileChanged();
   }, [profile.keywords]);
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -261,6 +270,13 @@ function ProfileSelf() {
     setIsSaveButtonActivate(true);
   };
 
+  // 초기 프로필과 현재 상태를 비교하여 변경 여부를 확인
+  const checkIfProfileChanged = () => {
+    const isProfileChanged =
+      JSON.stringify(profile) !== JSON.stringify(initialProfile) || newImage;
+    setIsSaveButtonActivate(isProfileChanged);
+  };
+  
   // 서버에 프로필 정보를 업로드하는 코드
   const handleSave = async (e) => {
     e.preventDefault();
