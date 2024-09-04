@@ -10,6 +10,7 @@ from .models import (
     Friend,
     Notification,
     Inquiry,
+    SearchHistory,
 )
 from .serializers import (
     CustomUserSerializer,
@@ -26,6 +27,7 @@ from .serializers import (
     RelatedUserSerializer,
     SecondDegreeProfileSerializer,
     InquirySerializer,
+    SearchHistorySerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -849,3 +851,23 @@ class UpdateOneDegreeCountView(generics.GenericAPIView):
         # 업데이트된 one_degree_count를 반환
         profile = user.profile
         return Response({"one_degree_count": profile.one_degree_count})
+
+
+class SearchHistoryListCreateView(generics.ListCreateAPIView):
+    serializer_class = SearchHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return SearchHistory.objects.filter(user=self.request.user).order_by('-created_at')
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+
+class SearchHistoryDeleteView(generics.DestroyAPIView):
+    queryset = SearchHistory.objects.all()
+    serializer_class = SearchHistorySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return SearchHistory.objects.filter(user=self.request.user)
