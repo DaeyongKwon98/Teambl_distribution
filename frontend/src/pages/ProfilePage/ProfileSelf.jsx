@@ -274,6 +274,7 @@ function ProfileSelf() {
         (portfolio) => portfolio.portfolioLink !== portfolioToRemove
       ),
     }));
+    setErrorMessage("");
     setIsSaveButtonActivate(true);
   };
 
