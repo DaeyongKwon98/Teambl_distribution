@@ -51,8 +51,8 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background: #121212;
-    color: #A8A8A8;
+    background: #F5F5F5;
+    color: #121212;
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 400;
@@ -60,7 +60,7 @@
   }
 
   .login-form input::placeholder {
-    color: #F5F5F5;
+    color: #A8A8A8;
   }
 
   .error {
