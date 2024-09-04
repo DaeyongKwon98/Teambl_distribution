@@ -122,6 +122,12 @@ urlpatterns += [
     path("send_email/", views.SendEmailView.as_view(), name="send_email"),
 ]
 
+# Search History
+urlpatterns += [
+    path("search-history/", views.SearchHistoryListCreateView.as_view(), name="search-history-list-create"),
+    path('search-history/<int:pk>/', views.SearchHistoryDeleteView.as_view(), name='search-history-delete'),
+]
+
 # Others
 urlpatterns += [
     path("check-email/", views.CheckEmailExistsView.as_view(), name="check-email"),
