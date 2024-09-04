@@ -90,7 +90,7 @@ function Friend() {
         if (res.status === 201) alert("친구 추가 완료!");
         else alert("친구 추가 실패");
         getChons();
-        inputEmail("");
+        setInputEmail("");
       })
       .catch((error) => {
         console.log(error.response);
