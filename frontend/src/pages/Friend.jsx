@@ -167,6 +167,7 @@ function Friend() {
                   activeTab={"myChons"}
                   chon={chon}
                   currentUser={currentUser}
+                  getChons={getChons}
                   key={chon.id}
                 ></FriendItem>
               );
@@ -206,6 +207,7 @@ function Friend() {
                   activeTab={"addChons"}
                   chon={chon}
                   currentUser={currentUser}
+                  getChons={getChons}
                   key={chon.id}
                 ></FriendItem>
               );
@@ -234,6 +236,7 @@ function Friend() {
                   activeTab={"requestsToMe"}
                   chon={chon}
                   currentUser={currentUser}
+                  getChons={getChons}
                   key={chon.id}
                 ></FriendItem>
               );

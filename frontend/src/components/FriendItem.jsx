@@ -6,7 +6,7 @@ import rejectIcon from "../assets/Friend/reject.svg";
 import ProfileDefaultImg from "../assets/default_profile_image.svg";
 import "../styles/Friend.css";
 
-const FriendItem = ({ activeTab, chon, currentUser }) => {
+const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   const user =
     chon.from_user.id === currentUser.id ? chon.to_user : chon.from_user;
   const otherUserProfile = user.profile;
