@@ -190,10 +190,11 @@ function Friend() {
           <p className="friend-total-count">{myAcceptedChons.length}명</p>
           <div className="friend-team-member-results">
             {myAcceptedChons.map((chon) => {
-              const otherUserProfile =
+              const otherUser =
                 chon.from_user.id === currentUser.id
-                  ? chon.to_user.profile
-                  : chon.from_user.profile;
+                  ? chon.to_user
+                  : chon.from_user;
+              const otherUserProfile = otherUser.profile;
 
               return (
                 <div className="friend-team-member" key={chon.id}>
@@ -213,7 +214,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {getRelationshipDegree(otherUserProfile.id)}촌
+                        · {getRelationshipDegree(otherUser.id)}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
@@ -258,10 +259,11 @@ function Friend() {
           <p className="friend-total-count">{myChonsRequests.length}명</p>
           <div className="friend-team-member-results">
             {myChonsRequests.map((chon) => {
-              const otherUserProfile =
+              const otherUser =
                 chon.from_user.id === currentUser.id
-                  ? chon.to_user.profile
-                  : chon.from_user.profile;
+                  ? chon.to_user
+                  : chon.from_user;
+              const otherUserProfile = otherUser.profile;
 
               return (
                 <div className="friend-team-member" key={chon.id}>
@@ -281,7 +283,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {getRelationshipDegree(otherUserProfile.id)}촌
+                        · {getRelationshipDegree(otherUser.id)}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
@@ -318,10 +320,11 @@ function Friend() {
           <p className="friend-total-count">{requestsToMe.length}명</p>
           <div className="friend-team-member-results">
             {requestsToMe.map((chon) => {
-              const otherUserProfile =
+              const otherUser =
                 chon.from_user.id === currentUser.id
-                  ? chon.to_user.profile
-                  : chon.from_user.profile;
+                  ? chon.to_user
+                  : chon.from_user;
+              const otherUserProfile = otherUser.profile;
 
               return (
                 <div className="friend-team-member" key={chon.id}>
@@ -341,7 +344,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {getRelationshipDegree(otherUserProfile.id)}촌
+                        · {getRelationshipDegree(otherUser.id)}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
