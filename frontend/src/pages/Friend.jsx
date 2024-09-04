@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Friend.css";
-import pendingIcon from "../assets/Friend/pending.svg";
-import acceptIcon from "../assets/Friend/accept.svg";
-import rejectIcon from "../assets/Friend/reject.svg";
 import api from "../api";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
-import ProfileDefaultImg from "../assets/default_profile_image.svg";
 import FriendItem from "../components/FriendItem";
 
 function Friend() {
@@ -107,19 +103,6 @@ function Friend() {
       });
   };
 
-  // 1촌 리스트를 업데이트 하는 함수 (1촌 요청 수락, 1촌 요청 거절)
-  const updateFriendStatus = (id, status) => {
-    api
-      .patch(`/api/friends/update/${id}/`, { status })
-      .then((response) => {
-        alert("친구 업데이트 완료");
-        getChons();
-      })
-      .catch((error) => {
-        console.error("There was an error updating the friend status!", error);
-      });
-  };
-
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
@@ -179,12 +162,14 @@ function Friend() {
           <p className="friend-total-count">{myAcceptedChons.length}명</p>
           <div className="friend-team-member-results">
             {myAcceptedChons.map((chon) => {
-              const otherUser =
-                chon.from_user.id === currentUser.id
-                  ? chon.to_user
-                  : chon.from_user;
-
-              <FriendItem activeTab={"myChons"} user={otherUser}></FriendItem>;
+              return (
+                <FriendItem
+                  activeTab={"myChons"}
+                  chon={chon}
+                  currentUser={currentUser}
+                  key={chon.id}
+                ></FriendItem>
+              );
             })}
           </div>
         </div>
@@ -216,7 +201,14 @@ function Friend() {
                   ? chon.to_user
                   : chon.from_user;
 
-              <FriendItem activeTab={"addChons"} user={otherUser}></FriendItem>;
+              return (
+                <FriendItem
+                  activeTab={"addChons"}
+                  chon={chon}
+                  currentUser={currentUser}
+                  key={chon.id}
+                ></FriendItem>
+              );
             })}
           </div>
         </div>
@@ -237,10 +229,14 @@ function Friend() {
                   ? chon.to_user
                   : chon.from_user;
 
-              <FriendItem
-                activeTab={"requestsToMe"}
-                user={otherUser}
-              ></FriendItem>;
+              return (
+                <FriendItem
+                  activeTab={"requestsToMe"}
+                  chon={chon}
+                  currentUser={currentUser}
+                  key={chon.id}
+                ></FriendItem>
+              );
             })}
           </div>
         </div>

@@ -1,7 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import api from "../api";
+import pendingIcon from "../assets/Friend/pending.svg";
+import acceptIcon from "../assets/Friend/accept.svg";
+import rejectIcon from "../assets/Friend/reject.svg";
+import ProfileDefaultImg from "../assets/default_profile_image.svg";
 import "../styles/Friend.css";
 
-const FriendItem = ({ activeTab, user }) => {
+const FriendItem = ({ activeTab, chon, currentUser }) => {
+  const user =
+    chon.from_user.id === currentUser.id ? chon.to_user : chon.from_user;
   const otherUserProfile = user.profile;
   const [relationshipDegree, setRelationshipDegree] = useState(null);
 
@@ -11,10 +18,24 @@ const FriendItem = ({ activeTab, user }) => {
       const response = await api.get(`/api/get-user-distance/${targetUserId}/`);
       const degree = response.data.distance;
       setRelationshipDegree(degree);
+      console.log(degree);
     } catch (error) {
       console.error("Error fetching relationship degree:", error);
       return null;
     }
+  };
+
+  // 1촌 리스트를 업데이트 하는 함수 (1촌 요청 수락, 1촌 요청 거절)
+  const updateFriendStatus = (id, status) => {
+    api
+      .patch(`/api/friends/update/${id}/`, { status })
+      .then((response) => {
+        alert("친구 업데이트 완료");
+        getChons();
+      })
+      .catch((error) => {
+        console.error("There was an error updating the friend status!", error);
+      });
   };
 
   useEffect(() => {
@@ -41,7 +62,7 @@ const FriendItem = ({ activeTab, user }) => {
               </strong>
               <span className="friend-member-relation">
                 {" "}
-                · {getRelationshipDegree(otherUser.id)}촌
+                · {relationshipDegree}촌
               </span>
             </p>
             <p className="friend-member-details">
@@ -53,6 +74,9 @@ const FriendItem = ({ activeTab, user }) => {
               {otherUserProfile.major1}
               {otherUserProfile.major2 && ` • ${otherUserProfile.major2}`}
             </p>
+            {/* <p className="friend-member-keywords">
+            {otherUserProfile.keywords.join(" / ")}
+          </p> */}
           </div>
         </div>
       )}
@@ -75,7 +99,7 @@ const FriendItem = ({ activeTab, user }) => {
               </strong>
               <span className="friend-member-relation">
                 {" "}
-                · {getRelationshipDegree(otherUser.id)}촌
+                · {relationshipDegree}촌
               </span>
             </p>
             <p className="friend-member-details">
@@ -87,6 +111,12 @@ const FriendItem = ({ activeTab, user }) => {
               {otherUserProfile.major1}
               {otherUserProfile.major2 && ` • ${otherUserProfile.major2}`}
             </p>
+            {/* <p className="friend-member-keywords">
+            {otherUserProfile.keywords.join(" / ")}
+          </p> */}
+          </div>
+          <div className="friend-wait-acceptance">
+            <img src={pendingIcon}></img>
           </div>
         </div>
       )}
@@ -109,7 +139,7 @@ const FriendItem = ({ activeTab, user }) => {
               </strong>
               <span className="friend-member-relation">
                 {" "}
-                · {getRelationshipDegree(otherUser.id)}촌
+                · {relationshipDegree}촌
               </span>
             </p>
             <p className="friend-member-details">
@@ -121,6 +151,23 @@ const FriendItem = ({ activeTab, user }) => {
               {otherUserProfile.major1}
               {otherUserProfile.major2 && ` • ${otherUserProfile.major2}`}
             </p>
+            {/* <p className="friend-member-keywords">
+            {otherUserProfile.keywords.join(" / ")}
+          </p> */}
+          </div>
+          <div className="friend-action-buttons">
+            <button
+              className="friend-reject-button"
+              onClick={() => updateFriendStatus(chon.id, "rejected")}
+            >
+              <img src={rejectIcon}></img>
+            </button>
+            <button
+              className="friend-accept-button"
+              onClick={() => updateFriendStatus(chon.id, "accepted")}
+            >
+              <img src={acceptIcon}></img>
+            </button>
           </div>
         </div>
       )}
