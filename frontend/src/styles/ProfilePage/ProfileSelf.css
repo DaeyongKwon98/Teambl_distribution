@@ -237,3 +237,45 @@ button.profile-submitBtn:hover {
 button.profile-submitBtn:disabled:hover {
   cursor: default;
 }
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* 배경을 회색으로 어둡게 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 팝업이 항상 위에 있도록 설정 */
+}
+
+.popup-content {
+  background-color: white; /* 팝업창의 배경을 흰색으로 */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  text-align: center;
+  width: 300px;
+  max-width: 90%; /* 작은 화면에서도 잘 보이도록 */
+}
+
+.popup-content p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.popup-content button {
+  padding: 10px 20px;
+  background-color: #007bff; /* 버튼의 배경색 */
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.popup-content button:hover {
+  background-color: #0056b3; /* 버튼에 hover 효과 */
+}
+
