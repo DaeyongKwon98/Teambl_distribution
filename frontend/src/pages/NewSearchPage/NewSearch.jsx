@@ -365,13 +365,17 @@ function NewSearch() {
           </div>
           
           <div className="newSearch-team-member-results">
-            {users.map((user, index) => (
-              <NewUserSearchItem
-                user={user}
-                onAddRelationShip={() => {}}
-                key={index}
-              />
-            ))}
+            {users.length === 0 ? (
+              <div className="no-results-message">사용자를 찾을 수 없습니다.</div>
+            ) : (
+              users.map((user, index) => (
+                <NewUserSearchItem
+                  user={user}
+                  onAddRelationShip={() => {}}
+                  key={index}
+                />
+              ))
+            )}
           </div>
         </>
       )}
