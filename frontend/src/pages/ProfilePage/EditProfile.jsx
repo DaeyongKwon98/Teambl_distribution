@@ -26,6 +26,7 @@ function EditProfile() {
   );
   const [isCADPopUp, setIsCADPopUp] = useState(false);
   const [isMajorPopUp, setIsMajorPopUp] = useState(false);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // 성공 팝업 상태
 
   useEffect(() => {
     fetchCurrentUser();
@@ -69,12 +70,7 @@ function EditProfile() {
         const response = await api.put(`/api/profile/update/`, updatedProfile);
         console.log("Profile updated successfully:", response.data);
         setNewProfile(updatedProfile);
-        navigate(`/profile/${currentUser.id}`, {
-            state: {
-                profile: updatedProfile,
-                EditProfile: true,
-            },
-        });
+        setShowSuccessPopup(true);
     } catch (error) {
         console.error("Failed to update profile:", error);
         alert("프로필 업데이트 실패");
@@ -193,6 +189,24 @@ function EditProfile() {
         </button>
       </div>
 
+      {showSuccessPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>저장되었습니다.</p>
+            <button
+              onClick={() => navigate(`/profile/${currentUser.id}`, {
+                state: {
+                  profile: newProfile,
+                  EditProfile: true,
+                },
+              })}
+            >
+              확인
+            </button>
+          </div>
+        </div>
+      )}
+      
       {isCADPopUp && (
         <>
           <div
