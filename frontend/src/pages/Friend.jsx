@@ -11,7 +11,6 @@ function Friend() {
   const [friendList, setFriendList] = useState([]);
   const [friendEmail, setFriendEmail] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeNav, setActiveNav] = useState("1촌");
 
   const navigate = useNavigate();
   
@@ -96,6 +95,7 @@ function Friend() {
   const [myAcceptedChons, setMyAcceptedChons] = useState([]);
   const [requestsToMe, setRequestsToMe] = useState([]);
   const [email, setEmail] = useState("");
+  const [activeNav, setActiveNav] = useState("1촌");
 
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
@@ -117,7 +117,7 @@ function Friend() {
         break;
     }
   };
-  
+
   useEffect(() => {
     const fetchMyChonsRequests = [
       {
