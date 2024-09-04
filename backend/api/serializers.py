@@ -12,6 +12,7 @@ from .models import (
     PortfolioLink,
     Notification,
     Inquiry,
+    SearchHistory,
 )
 import os
 
@@ -413,4 +414,11 @@ class InquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inquiry
         fields = ['id', 'user', 'text', 'created_at']
+        read_only_fields = ['id', 'user', 'created_at']
+
+
+class SearchHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchHistory
+        fields = ['id', 'user', 'keyword', 'created_at']
         read_only_fields = ['id', 'user', 'created_at']
