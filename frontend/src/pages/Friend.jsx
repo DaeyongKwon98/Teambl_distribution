@@ -90,7 +90,17 @@ function Friend() {
       })
       .catch((error) => alert(error));
   };
+  */
+  const [activeTab, setActiveTab] = useState("myChons");
+  const [myChonsRequests, setMyChonsRequests] = useState([]);
+  const [myAcceptedChons, setMyAcceptedChons] = useState([]);
+  const [requestsToMe, setRequestsToMe] = useState([]);
+  const [email, setEmail] = useState("");
 
+  const handleEmailChange = (e) => {
+    setEmail(e.target.value);
+  };
+  
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
@@ -107,17 +117,7 @@ function Friend() {
         break;
     }
   };
-  */
-  const [activeTab, setActiveTab] = useState("myChons");
-  const [myChonsRequests, setMyChonsRequests] = useState([]);
-  const [myAcceptedChons, setMyAcceptedChons] = useState([]);
-  const [requestsToMe, setRequestsToMe] = useState([]);
-  const [email, setEmail] = useState("");
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
+  
   useEffect(() => {
     const fetchMyChonsRequests = [
       {
