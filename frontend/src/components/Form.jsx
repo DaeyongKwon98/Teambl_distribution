@@ -11,10 +11,16 @@ function Form({ route, method }) {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [isButtonEnabled, setIsButtonEnabled] = useState(false); // 버튼 활성화 상태
   const navigate = useNavigate();
 
   const name = method === "login" ? "Login" : "Register";
 
+  useEffect(() => {
+    // 이메일과 비밀번호가 모두 입력되었을 때만 버튼 활성화
+    setIsButtonEnabled(email.trim() !== "" && password.trim() !== "");
+  }, [email, password]);
+  
   const handleSubmit = async (e) => {
     // submit됐을때 처리
     e.preventDefault();
@@ -62,13 +68,13 @@ function Form({ route, method }) {
       <div className="login-form">
         <input
           type="text"
-          placeholder="Email"
+          placeholder="학교 이메일 입력"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder="비밀번호 입력"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
