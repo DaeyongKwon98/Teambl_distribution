@@ -312,12 +312,20 @@ const Setting = () => {
       {showPolicySection && (
         <div className="setting-policy-section">
           <p>
-            <a href="https://example.com/privacy-policy" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.notion.so/Personal-Information-Terms-da10ebf1ada6470780d6ba9ab260916b"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               팀블 개인정보 방침
             </a>
           </p>
           <p>
-            <a href="https://example.com/terms-of-service" target="_blank" rel="noopener noreferrer">
+            <a
+              href="https://www.notion.so/Service-Terms-and-Condition-5379c333ce1543c895dc0cebe39f4844"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               팀블 서비스 약관
             </a>
           </p>
