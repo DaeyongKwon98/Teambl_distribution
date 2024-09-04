@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "../styles/Friend.css";
+import pendingIcon from "../assets/Friend/pending.svg";
+import acceptIcon from "../assets/Friend/accept.svg";
+import rejectIcon from "../assets/Friend/reject.svg";
 import api from "../api";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
@@ -8,41 +11,7 @@ import ProfileDefaultImg from "../assets/default_profile_image.svg";
 
 function Friend() {
   /*
-
-  const addFriend = (e) => {
-    e.preventDefault();
-    api
-      .post("/api/friends/", {
-        to_user_email: friendEmail,
-      })
-      .then((res) => {
-        if (res.status === 201) alert("친구 추가 완료!");
-        else alert("친구 추가 실패");
-        getFriends();
-        setFriendEmail("");
-      })
-      .catch((error) => {
-        console.log(error.response);
-        console.log(error.message);
-        if (error.response) {
-          alert(`친구 추가 실패: ${error.response.data}`);
-        } else {
-          alert(`친구 추가 실패: ${error.message}`);
-        }
-      });
-  };
-
-  const updateFriendStatus = (id, status) => {
-    api
-      .patch(`/api/friends/update/${id}/`, { status })
-      .then((response) => {
-        alert("친구 업데이트 완료");
-        getFriends();
-      })
-      .catch((error) => {
-        console.error("There was an error updating the friend status!", error);
-      });
-  };
+  TODO: 1촌을 삭제하는 기능도 넣어야할 것 같음!
 
   const deleteFriend = (id) => {
     api
@@ -77,10 +46,6 @@ function Friend() {
       .catch((err) => alert(err));
   };
 
-  const handleInputEmailChange = (e) => {
-    setInputEmail(e.target.value);
-  };
-
   // 유저의 1촌 리스트를 가져오는 함수
   const getChons = () => {
     api
@@ -113,6 +78,47 @@ function Friend() {
       .catch((err) => alert(err));
   };
 
+  const handleInputEmailChange = (e) => {
+    setInputEmail(e.target.value);
+  };
+
+  // 1촌을 추가하는 함수
+  const addFriend = (e) => {
+    e.preventDefault();
+    api
+      .post("/api/friends/", {
+        to_user_email: inputEmail,
+      })
+      .then((res) => {
+        if (res.status === 201) alert("친구 추가 완료!");
+        else alert("친구 추가 실패");
+        getChons();
+        inputEmail("");
+      })
+      .catch((error) => {
+        console.log(error.response);
+        console.log(error.message);
+        if (error.response) {
+          alert(`친구 추가 실패: ${error.response.data}`);
+        } else {
+          alert(`친구 추가 실패: ${error.message}`);
+        }
+      });
+  };
+
+  // 1촌 리스트를 업데이트 하는 함수 (1촌 요청 수락, 1촌 요청 거절)
+  const updateFriendStatus = (id, status) => {
+    api
+      .patch(`/api/friends/update/${id}/`, { status })
+      .then((response) => {
+        alert("친구 업데이트 완료");
+        getChons();
+      })
+      .catch((error) => {
+        console.error("There was an error updating the friend status!", error);
+      });
+  };
+
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
@@ -132,123 +138,13 @@ function Friend() {
 
   useEffect(() => {
     getCurrentUser();
-    getChons();
   }, []);
 
   useEffect(() => {
-    // 1촌 추가
-    // const fetchMyChonsRequests = [
-    //   {
-    //     id: 1,
-    //     image: null,
-    //     profile: {
-    //       user_name: "박지성",
-    //       school: "카이스트",
-    //       current_academic_degree: "학사",
-    //       year: 2021,
-    //       major1: "산업디자인",
-    //       major2: "산업공학",
-    //       keywords: [
-    //         "창의력",
-    //         "협업",
-    //         "데이터분석",
-    //         "운동",
-    //         "프랑스어ㄴㅇㄹㄴㅇㄹ",
-    //       ],
-    //     },
-    //     relationshipDegree: 2,
-    //   },
-    // ];
-    // 나의 1촌
-    // const fetchMyAcceptedChons = [
-    //   {
-    //     id: 1,
-    //     image: null,
-    //     profile: {
-    //       user_name: "최성희",
-    //       school: "카이스트",
-    //       current_academic_degree: "석사",
-    //       year: 2022,
-    //       major1: "산업디자인",
-    //       keywords: ["창의력", "협업"],
-    //     },
-    //     relationshipDegree: 1,
-    //   },
-    //   {
-    //     id: 2,
-    //     image: null,
-    //     profile: {
-    //       user_name: "최성희",
-    //       school: "카이스트",
-    //       current_academic_degree: "석사",
-    //       year: 2022,
-    //       major1: "산업디자인",
-    //       keywords: [
-    //         "창의력",
-    //         "협업",
-    //         "데이터분석",
-    //         "운동",
-    //         "프랑스어ㄴㅇㄹㄴㅇㄹ",
-    //       ],
-    //     },
-    //     relationshipDegree: 1,
-    //   },
-    // ];
-    // 내게 신청한
-    // const fetchRequestsToMe = [
-    //   {
-    //     id: 1,
-    //     image: null,
-    //     profile: {
-    //       user_name: "최대기",
-    //       school: "카이스트",
-    //       current_academic_degree: "박사",
-    //       year: 2023,
-    //       major1: "산업디자인",
-    //       major2: "산업공학",
-    //       keywords: [
-    //         "창의력",
-    //         "협업",
-    //         "데이터분석",
-    //         "운동",
-    //         "프랑스어ㄴㅇㄹㄴㅇㄹ",
-    //       ],
-    //     },
-    //     relationshipDegree: 2,
-    //   },
-    //   {
-    //     id: 2,
-    //     image: null,
-    //     profile: {
-    //       user_name: "최대기",
-    //       school: "카이스트",
-    //       current_academic_degree: "박사",
-    //       year: 2023,
-    //       major1: "산업디자인",
-    //       major2: "산업공학",
-    //       keywords: ["관리", "리더십"],
-    //     },
-    //     relationshipDegree: 2,
-    //   },
-    //   {
-    //     id: 3,
-    //     image: null,
-    //     profile: {
-    //       user_name: "최대기",
-    //       school: "카이스트",
-    //       current_academic_degree: "박사",
-    //       year: 2023,
-    //       major1: "산업디자인",
-    //       major2: "산업공학",
-    //       keywords: ["관리", "리더십"],
-    //     },
-    //     relationshipDegree: 2,
-    //   },
-    // ];
-    // setMyChonsRequests(fetchMyChonsRequests);
-    // setMyAcceptedChons(fetchMyAcceptedChons);
-    // setRequestsToMe(fetchRequestsToMe);
-  }, []);
+    if (currentUser) {
+      getChons();
+    }
+  }, [currentUser]);
 
   return (
     <div className="friend-container">
@@ -295,14 +191,18 @@ function Friend() {
                         ? otherUserProfile.image
                         : ProfileDefaultImg
                     }
-                    alt={otherUserProfileuser_name}
+                    alt={otherUserProfile.user_name}
                     className="friend-profile-image"
                   />
                   <div className="friend-member-info">
                     <p className="friend-member-name-relation">
                       <strong className="friend-member-name">
-                        {otherUserProfileuser_name}
+                        {otherUserProfile.user_name}
                       </strong>
+                      <span className="friend-member-relation">
+                        {" "}
+                        · {otherUserProfile.relationshipDegree}촌
+                      </span>
                     </p>
                     <p className="friend-member-details">
                       {otherUserProfile.school} |{" "}
@@ -314,9 +214,9 @@ function Friend() {
                       {otherUserProfile.major2 &&
                         ` • ${otherUserProfile.major2}`}
                     </p>
-                    <p className="friend-member-keywords">
+                    {/* <p className="friend-member-keywords">
                       {otherUserProfile.keywords.join(" / ")}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               );
@@ -337,6 +237,7 @@ function Friend() {
             />
             <button
               className={`friend-addChons-btn ${inputEmail ? "active" : ""}`}
+              onClick={addFriend}
               disabled={!inputEmail}
             >
               1촌 맺기 요청
@@ -351,7 +252,7 @@ function Friend() {
                   : chon.from_user.profile;
 
               return (
-                <div className="friend-team-member" key={otherUserProfile.id}>
+                <div className="friend-team-member" key={chon.id}>
                   <img
                     src={
                       otherUserProfile.image
@@ -381,11 +282,13 @@ function Friend() {
                       {otherUserProfile.major2 &&
                         ` • ${otherUserProfile.major2}`}
                     </p>
-                    <p className="friend-member-keywords">
+                    {/* <p className="friend-member-keywords">
                       {otherUserProfile.keywords.join(" / ")}
-                    </p>
+                    </p> */}
                   </div>
-                  <div className="friend-wait-acceptance"></div>
+                  <div className="friend-wait-acceptance">
+                    <img src={pendingIcon}></img>
+                  </div>
                 </div>
               );
             })}
@@ -439,13 +342,23 @@ function Friend() {
                       {otherUserProfile.major2 &&
                         ` • ${otherUserProfile.major2}`}
                     </p>
-                    <p className="friend-member-keywords">
+                    {/* <p className="friend-member-keywords">
                       {otherUserProfile.keywords.join(" / ")}
-                    </p>
+                    </p> */}
                   </div>
                   <div className="friend-action-buttons">
-                    <button className="friend-accept-button"></button>
-                    <button className="friend-reject-button"></button>
+                    <button
+                      className="friend-reject-button"
+                      onClick={() => updateFriendStatus(chon.id, "rejected")}
+                    >
+                      <img src={rejectIcon}></img>
+                    </button>
+                    <button
+                      className="friend-accept-button"
+                      onClick={() => updateFriendStatus(chon.id, "accepted")}
+                    >
+                      <img src={acceptIcon}></img>
+                    </button>
                   </div>
                 </div>
               );
