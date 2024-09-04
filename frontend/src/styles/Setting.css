@@ -202,3 +202,9 @@ body {
   font-size: 14px;
   box-sizing: border-box; /* 패딩과 경계를 포함한 전체 너비로 설정 */
 }
+
+.setting-policy-section a {
+  color: #121212;
+  text-decoration: underline;
+  font-size: 14px;
+}
