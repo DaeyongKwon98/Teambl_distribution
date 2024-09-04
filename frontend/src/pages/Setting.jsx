@@ -24,6 +24,7 @@ const Setting = () => {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
   const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
+  const [showLogoutSection, setShowLogoutSection] = useState(false); // 로그아웃 섹션 표시 여부
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
   const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
   const [showPolicySection, setShowPolicySection] = useState(false); // 약관 및 정책 섹션 표시 여부
@@ -246,10 +247,22 @@ const Setting = () => {
         </div>
       )}
 
-      <h2 className="setting-section-title">로그아웃</h2>
-      <button className="setting-logout-button" onClick={handleLogout}>
-        로그아웃
-      </button>
+      <div
+        className="setting-password-toggle"
+        onClick={() => setShowLogoutSection(!showLogoutSection)}
+      >
+        <span className="setting-section-title">로그아웃</span>
+        <img
+          src={ArrowDownIcon}
+          alt="Toggle Logout Section"
+          className={`setting-arrow-icon ${showLogoutSection ? "rotate" : ""}`}
+        />
+      </div>
+      {showLogoutSection && (
+        <button className="setting-logout-button" onClick={handleLogout}>
+          로그아웃
+        </button>
+      )}
 
       <div
         className="setting-password-toggle"
