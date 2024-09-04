@@ -22,7 +22,12 @@
     font-family: Arial, sans-serif;
     text-align: center;
   }
-  
+
+  .login-button:disabled {
+    opacity: 0.5; /* 비활성화된 버튼은 투명하게 표시 */
+    cursor: not-allowed; /* 비활성화된 버튼에 마우스 커서를 변경 */
+  }
+
   .login-teambl-icon{
     width: 110px;
     height: 25px;
@@ -46,14 +51,18 @@
     padding: 10px;
     border: none;
     border-radius: 5px;
-    background: #F5F5F5;
+    background: #121212;
     color: #A8A8A8;
     font-family: Pretendard;
     font-size: 14px;
     font-weight: 400;
     letter-spacing: -0.304px;
   }
-  
+
+  .login-form input::placeholder {
+    color: #F5F5F5;
+  }
+
   .error {
     color: red;
     font-size: 12px;
@@ -71,7 +80,11 @@
     border-radius: 5px;
     cursor: pointer;
   }
-  
+
+  .login-button:disabled {
+    background-color: #A8A8A8;
+  }
+
   .links {
     display: flex;
     justify-content: center;
