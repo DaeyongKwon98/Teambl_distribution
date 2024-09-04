@@ -23,10 +23,10 @@ const Setting = () => {
   const [inquiryBtnActive, setInquiryBtnActive] = useState(false); // 문의하기 버튼 상태
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
-  const [showChangePasswordSection, setShowChangePasswordSection] =
-    useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
+  const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
   const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
+  const [showPolicySection, setShowPolicySection] = useState(false); // 약관 및 정책 섹션 표시 여부
 
   useEffect(() => {
     setChangeBtnActive(
@@ -297,6 +297,33 @@ const Setting = () => {
           }`}
         />
       </div>
+
+      <div
+        className="setting-password-toggle"
+        onClick={() => setShowPolicySection(!showPolicySection)}
+      >
+        <span className="setting-section-title">약관 및 정책</span>
+        <img
+          src={ArrowDownIcon}
+          alt="Toggle Policy Section"
+          className={`setting-arrow-icon ${showPolicySection ? "rotate" : ""}`}
+        />
+      </div>
+      {showPolicySection && (
+        <div className="setting-policy-section">
+          <p>
+            <a href="https://example.com/privacy-policy" target="_blank" rel="noopener noreferrer">
+              팀블 개인정보 방침
+            </a>
+          </p>
+          <p>
+            <a href="https://example.com/terms-of-service" target="_blank" rel="noopener noreferrer">
+              팀블 서비스 약관
+            </a>
+          </p>
+        </div>
+      )}
+      
       {/* <h2 className="setting-section-title">회원 탈퇴</h2> */}
       {showWithdrawSection && (
         <div className="setting-withdraw-section">
