@@ -8,6 +8,7 @@ import api from "../api";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import ProfileDefaultImg from "../assets/default_profile_image.svg";
+import FriendItem from "../components/FriendItem";
 
 function Friend() {
   /*
@@ -76,18 +77,6 @@ function Friend() {
         setRequestsToMe(requestsToMe);
       })
       .catch((err) => alert(err));
-  };
-
-  // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
-  const getRelationshipDegree = async (targetUserId) => {
-    try {
-      const response = await api.get(`/api/get-user-distance/${targetUserId}/`);
-      const degree = response.data.distance;
-      return degree;
-    } catch (error) {
-      console.error("Error fetching relationship degree:", error);
-      return null;
-    }
   };
 
   const handleInputEmailChange = (e) => {
@@ -194,45 +183,8 @@ function Friend() {
                 chon.from_user.id === currentUser.id
                   ? chon.to_user
                   : chon.from_user;
-              const otherUserProfile = otherUser.profile;
 
-              return (
-                <div className="friend-team-member" key={chon.id}>
-                  <img
-                    src={
-                      otherUserProfile.image
-                        ? otherUserProfile.image
-                        : ProfileDefaultImg
-                    }
-                    alt={otherUserProfile.user_name}
-                    className="friend-profile-image"
-                  />
-                  <div className="friend-member-info">
-                    <p className="friend-member-name-relation">
-                      <strong className="friend-member-name">
-                        {otherUserProfile.user_name}
-                      </strong>
-                      <span className="friend-member-relation">
-                        {" "}
-                        · {getRelationshipDegree(otherUser.id)}촌
-                      </span>
-                    </p>
-                    <p className="friend-member-details">
-                      {otherUserProfile.school} |{" "}
-                      {otherUserProfile.current_academic_degree} |{" "}
-                      {otherUserProfile.year % 100}학번
-                    </p>
-                    <p className="friend-member-details">
-                      {otherUserProfile.major1}
-                      {otherUserProfile.major2 &&
-                        ` • ${otherUserProfile.major2}`}
-                    </p>
-                    {/* <p className="friend-member-keywords">
-                      {otherUserProfile.keywords.join(" / ")}
-                    </p> */}
-                  </div>
-                </div>
-              );
+              <FriendItem activeTab={"myChons"} user={otherUser}></FriendItem>;
             })}
           </div>
         </div>
@@ -263,48 +215,8 @@ function Friend() {
                 chon.from_user.id === currentUser.id
                   ? chon.to_user
                   : chon.from_user;
-              const otherUserProfile = otherUser.profile;
 
-              return (
-                <div className="friend-team-member" key={chon.id}>
-                  <img
-                    src={
-                      otherUserProfile.image
-                        ? otherUserProfile.image
-                        : ProfileDefaultImg
-                    }
-                    alt={otherUserProfile.user_name}
-                    className="friend-profile-image"
-                  />
-                  <div className="friend-member-info">
-                    <p className="friend-member-name-relation">
-                      <strong className="friend-member-name">
-                        {otherUserProfile.user_name}
-                      </strong>
-                      <span className="friend-member-relation">
-                        {" "}
-                        · {getRelationshipDegree(otherUser.id)}촌
-                      </span>
-                    </p>
-                    <p className="friend-member-details">
-                      {otherUserProfile.school} |{" "}
-                      {otherUserProfile.current_academic_degree} |{" "}
-                      {otherUserProfile.year % 100}학번
-                    </p>
-                    <p className="friend-member-details">
-                      {otherUserProfile.major1}
-                      {otherUserProfile.major2 &&
-                        ` • ${otherUserProfile.major2}`}
-                    </p>
-                    {/* <p className="friend-member-keywords">
-                      {otherUserProfile.keywords.join(" / ")}
-                    </p> */}
-                  </div>
-                  <div className="friend-wait-acceptance">
-                    <img src={pendingIcon}></img>
-                  </div>
-                </div>
-              );
+              <FriendItem activeTab={"addChons"} user={otherUser}></FriendItem>;
             })}
           </div>
         </div>
@@ -324,59 +236,11 @@ function Friend() {
                 chon.from_user.id === currentUser.id
                   ? chon.to_user
                   : chon.from_user;
-              const otherUserProfile = otherUser.profile;
 
-              return (
-                <div className="friend-team-member" key={chon.id}>
-                  <img
-                    src={
-                      otherUserProfile.image
-                        ? otherUserProfile.image
-                        : ProfileDefaultImg
-                    }
-                    alt={otherUserProfile.user_name}
-                    className="friend-profile-image"
-                  />
-                  <div className="friend-member-info">
-                    <p className="friend-member-name-relation">
-                      <strong className="friend-member-name">
-                        {otherUserProfile.user_name}
-                      </strong>
-                      <span className="friend-member-relation">
-                        {" "}
-                        · {getRelationshipDegree(otherUser.id)}촌
-                      </span>
-                    </p>
-                    <p className="friend-member-details">
-                      {otherUserProfile.school} |{" "}
-                      {otherUserProfile.current_academic_degree} |{" "}
-                      {otherUserProfile.year % 100}학번
-                    </p>
-                    <p className="friend-member-details">
-                      {otherUserProfile.major1}
-                      {otherUserProfile.major2 &&
-                        ` • ${otherUserProfile.major2}`}
-                    </p>
-                    {/* <p className="friend-member-keywords">
-                      {otherUserProfile.keywords.join(" / ")}
-                    </p> */}
-                  </div>
-                  <div className="friend-action-buttons">
-                    <button
-                      className="friend-reject-button"
-                      onClick={() => updateFriendStatus(chon.id, "rejected")}
-                    >
-                      <img src={rejectIcon}></img>
-                    </button>
-                    <button
-                      className="friend-accept-button"
-                      onClick={() => updateFriendStatus(chon.id, "accepted")}
-                    >
-                      <img src={acceptIcon}></img>
-                    </button>
-                  </div>
-                </div>
-              );
+              <FriendItem
+                activeTab={"requestsToMe"}
+                user={otherUser}
+              ></FriendItem>;
             })}
           </div>
         </div>
