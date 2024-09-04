@@ -553,7 +553,10 @@ function ProfileSelf() {
         <div className="popup-overlay">
           <div className="popup-content">
             <p>저장되었습니다.</p>
-            <button onClick={() => setShowSuccessPopup(false)}>확인</button>
+            <button onClick={() => {
+              setShowSuccessPopup(false);
+              setIsSaveButtonActivate(false);
+            }>확인</button>
           </div>
         </div>
       )}
