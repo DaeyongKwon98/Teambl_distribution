@@ -12,7 +12,6 @@ function Friend() {
   const [friendEmail, setFriendEmail] = useState("");
   const [currentUser, setCurrentUser] = useState(null);
 
-  const navigate = useNavigate();
   
   useEffect(() => {
     getCurrentUser();
@@ -97,6 +96,8 @@ function Friend() {
   const [email, setEmail] = useState("");
   const [activeNav, setActiveNav] = useState("1촌");
 
+  const navigate = useNavigate();
+  
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
   };
