@@ -78,6 +78,18 @@ function Friend() {
       .catch((err) => alert(err));
   };
 
+  // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
+  const getRelationshipDegree = async (targetUserId) => {
+    try {
+      const response = await api.get(`/api/get-user-distance/${targetUserId}/`);
+      const degree = response.data.distance;
+      return degree;
+    } catch (error) {
+      console.error("Error fetching relationship degree:", error);
+      return null;
+    }
+  };
+
   const handleInputEmailChange = (e) => {
     setInputEmail(e.target.value);
   };
@@ -201,7 +213,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {otherUserProfile.one_degree_count}촌
+                        · {getRelationshipDegree(otherUserProfile.id)}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
@@ -269,7 +281,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {otherUserProfile.one_degree_count}촌
+                        · {getRelationshipDegree(otherUserProfile.id)}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
@@ -329,7 +341,7 @@ function Friend() {
                       </strong>
                       <span className="friend-member-relation">
                         {" "}
-                        · {otherUserProfile.one_degree_count}촌
+                        · {getRelationshipDegree(otherUserProfile.id)}촌
                       </span>
                     </p>
                     <p className="friend-member-details">
