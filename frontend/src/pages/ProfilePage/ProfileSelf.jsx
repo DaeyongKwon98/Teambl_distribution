@@ -92,6 +92,12 @@ function ProfileSelf() {
   }, []);
 
   useEffect(() => {
+    if (profile && initialProfile) {
+      checkIfProfileChanged();
+    }
+  }, [profile, newImage]);
+  
+  useEffect(() => {
     if (profile.keywords.length >= 5) setKeywordFull(true);
     checkIfProfileChanged();
   }, [profile.keywords]);
@@ -109,26 +115,25 @@ function ProfileSelf() {
   const fetchProfile = async () => {
     try {
       const response = await api.get("/api/current-user/");
-
-      // 먼저 서버에서 프로필 데이터를 가져옴
       const fetchedProfile = response.data.profile;
-      console.log(fetchedProfile);
-
-      // 1촌(친구) 수를 가져옴
       const oneDegreeCount = await fetchFriendCount();
 
-      // 프로필 정보를 업데이트하면서 one_degree_count를 추가하여 상태 업데이트
-      setProfile({
+      const completeProfile = {
         ...fetchedProfile,
         one_degree_count: oneDegreeCount,
-      });
+      };
 
-      // 프로필 이미지가 있는 경우 image 미리보기를 해당 이미지로 바꾸기
+      setProfile(completeProfile);
+      setInitialProfile(completeProfile);
+
       if (fetchedProfile.image) {
         setImagePreview(fetchedProfile.image);
       } else {
         setImagePreview(profileDefaultImg);
       }
+
+      // 초기 상태에서는 변경 사항이 없으므로 저장 버튼 비활성화
+      setIsSaveButtonActivate(false);
     } catch (error) {
       console.error("Failed to fetch current user profile:", error);
     }
