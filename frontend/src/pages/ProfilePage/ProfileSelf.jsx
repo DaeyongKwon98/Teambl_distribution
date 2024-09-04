@@ -78,15 +78,14 @@ function ProfileSelf() {
         setImagePreview(receivedProfile.image);
       }
 
-
       // 초기 프로필을 저장
       setInitialProfile(receivedProfile);
       
       // receivedProfile을 사용 후 null로 설정
       setReceivedProfile(null);
 
-      // // 저장 버튼 활성화
-      // setIsSaveButtonActivate(true);
+      // 저장 버튼 비활성화
+      setIsSaveButtonActivate(false);
     } else {
       // receivedProfile이 없는 경우 서버에서 프로필을 가져옴
       fetchProfile();
