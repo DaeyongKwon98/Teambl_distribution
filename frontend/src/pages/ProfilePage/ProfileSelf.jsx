@@ -50,6 +50,7 @@ function ProfileSelf() {
 
   const [KeywordVisible, setKeywordVisible] = useState(false);
   const [isSaveButtonActivate, setIsSaveButtonActivate] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
