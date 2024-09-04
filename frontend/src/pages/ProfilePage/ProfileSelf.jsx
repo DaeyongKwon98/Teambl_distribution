@@ -311,21 +311,25 @@ function ProfileSelf() {
     console.log("ProfileSelf.jsx: profileDataWithoutImage", profileDataWithoutImage);
 
     try {
-      const response1 = await api.put(
-        "/api/profile/update/",
-        profileDataWithoutImage
-      ); // 이미지 이외 데이터 업로드
+      const response1 = await api.put("/api/profile/update/", profileDataWithoutImage); // 이미지 이외 데이터 업로드
       console.log("프로필 이미지 이외의 데이터 업로드 완료:", response1.data);
       const response2 = await api.put("/api/profile/update/", imageData); // 이미지 업로드
       const updatedProfile = response2.data;
       console.log("프로필 이미지 데이터 업로드 완료:", updatedProfile);
       alert("프로필 저장 완료!");
     } catch (error) {
-      alert("프로필 업데이트 실패");
-      console.error("Registration error:", error);
-      if (error.response) {
-        console.error("Error response data:", error.response.data);
+      if (error.response && error.response.status === 400) {
+        // 서버에서 400 오류를 반환할 때
+        if (error.response.data.portfolio_links) {
+          // 포트폴리오 링크 관련 오류인 경우
+          setErrorMessage("올바르지 않은 형식의 링크입니다.");
+        } else {
+          setErrorMessage("프로필 업데이트 실패: " + error.response.data.message || "알 수 없는 오류 발생");
+        }
+      } else {
+        setErrorMessage("프로필 업데이트 실패");
       }
+      console.error("Registration error:", error);
     }
   };
 
