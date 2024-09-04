@@ -96,12 +96,15 @@ function ProfileSelf() {
     if (profile && initialProfile) {
       checkIfProfileChanged();
     }
-  }, [profile, newImage]);
   
-  useEffect(() => {
-    if (profile.keywords.length >= 5) setKeywordFull(true);
-    checkIfProfileChanged();
-  }, [profile.keywords]);
+    if (profile.keywords.length >= 5) {
+      setKeywordFull(true);
+    }
+
+    // 저장 버튼 비활성화
+    setIsSaveButtonActivate(false);
+    
+  }, [profile, newImage, profile.keywords]);
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
