@@ -455,3 +455,12 @@ li {
   align-items: center;
   margin-left: 5px;
 }
+
+.no-results-message {
+  text-align: center;
+  font-size: 14px;
+  color: #121212;
+  margin-top: 20px;
+  padding: 10px;
+  border: none;
+}
