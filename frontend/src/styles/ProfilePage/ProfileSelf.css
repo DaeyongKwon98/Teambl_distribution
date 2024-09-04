@@ -281,3 +281,10 @@ button.profile-submitBtn:disabled:hover {
   text-align: center;
 }
 
+.error-message {
+  color: red;
+  font-size: 12px;
+  text-align: left;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
