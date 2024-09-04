@@ -104,7 +104,9 @@ function ProfileSelf() {
   
     if (profile.keywords.length >= 5) {
       setKeywordFull(true);
-    }    
+    } else {
+      setKeywordFull(false);
+    }
   }, [profile, newImage, profile.keywords]);
 
   const { getRootProps, getInputProps } = useDropzone({
