@@ -556,7 +556,7 @@ function ProfileSelf() {
             <button onClick={() => {
               setShowSuccessPopup(false);
               setIsSaveButtonActivate(false);
-            }>확인</button>
+            }}>확인</button>
           </div>
         </div>
       )}
