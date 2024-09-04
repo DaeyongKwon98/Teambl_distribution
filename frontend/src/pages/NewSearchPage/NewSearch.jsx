@@ -114,11 +114,18 @@ function NewSearch() {
   // 최근 검색어를 지우는 함수
   const handleClear = async () => {
     try {
+      // 먼저 서버에서 모든 검색 기록을 가져옵니다.
+      const response = await api.get("/api/search-history/");
+      const searchHistoryItems = response.data;
+  
+      // 검색 기록의 ID를 이용해 각각의 기록을 삭제합니다.
       await Promise.all(
-        recentSearches.map((term) =>
-          api.delete(`/api/search-history/${term}/`) // 모든 검색 기록 삭제
+        searchHistoryItems.map((item) =>
+          api.delete(`/api/search-history/${item.id}/`)
         )
       );
+  
+      // 모든 검색 기록을 삭제한 후, 상태를 업데이트합니다.
       setRecentSearches([]);
     } catch (error) {
       console.error("Failed to clear search history:", error);
