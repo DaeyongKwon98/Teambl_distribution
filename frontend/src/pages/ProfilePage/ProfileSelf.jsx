@@ -51,7 +51,8 @@ function ProfileSelf() {
   const [KeywordVisible, setKeywordVisible] = useState(false);
   const [isSaveButtonActivate, setIsSaveButtonActivate] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false); // 성공 팝업 상태
+  
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     setNewImage(file);
@@ -317,7 +318,8 @@ function ProfileSelf() {
       const response2 = await api.put("/api/profile/update/", imageData); // 이미지 업로드
       const updatedProfile = response2.data;
       console.log("프로필 이미지 데이터 업로드 완료:", updatedProfile);
-      alert("프로필 저장 완료!");
+      // alert("프로필 저장 완료!");
+      setShowSuccessPopup(true); // 성공적으로 저장되면 팝업 띄우기
     } catch (error) {
       if (error.response && error.response.status === 400) {
         // 서버에서 400 오류를 반환할 때
@@ -547,6 +549,15 @@ function ProfileSelf() {
         </div>
       </div>
 
+      {showSuccessPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <p>저장되었습니다.</p>
+            <button onClick={() => setShowSuccessPopup(false)}>확인</button>
+          </div>
+        </div>
+      )}
+      
       <button
         type="submit"
         className="profile-submitBtn"
