@@ -94,16 +94,17 @@ function ProfileSelf() {
 
   useEffect(() => {
     if (profile && initialProfile) {
-      checkIfProfileChanged();
+      // 프로필이 변경된 경우에만 저장 버튼을 활성화
+      if (JSON.stringify(profile) !== JSON.stringify(initialProfile) || newImage) {
+        setIsSaveButtonActivate(true);
+      } else {
+        setIsSaveButtonActivate(false);
+      }
     }
   
     if (profile.keywords.length >= 5) {
       setKeywordFull(true);
-    }
-
-    // 저장 버튼 비활성화
-    setIsSaveButtonActivate(false);
-    
+    }    
   }, [profile, newImage, profile.keywords]);
 
   const { getRootProps, getInputProps } = useDropzone({
