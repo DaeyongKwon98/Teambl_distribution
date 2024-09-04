@@ -252,30 +252,28 @@ button.profile-submitBtn:disabled:hover {
 }
 
 .popup-content {
-  background-color: white; /* 팝업창의 배경을 흰색으로 */
+  background-color: #FFF;
   padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(18, 18, 18, 0.80); /* 약간의 그림자 */
   text-align: center;
   width: 300px;
-  max-width: 90%; /* 작은 화면에서도 잘 보이도록 */
+  max-width: 80%; /* 작은 화면에서도 잘 보이도록 */
 }
 
 .popup-content p {
-  font-size: 16px;
+  font-size: 13px;
   margin-bottom: 10px;
 }
 
 .popup-content button {
   padding: 10px 20px;
-  background-color: #007bff; /* 버튼의 배경색 */
-  color: white;
+  background-color: #FFF; /* 버튼의 배경색 */
+  color: #121212;
   border: none;
-  border-radius: 4px;
   cursor: pointer;
-}
-
-.popup-content button:hover {
-  background-color: #0056b3; /* 버튼에 hover 효과 */
+  font-family: Pretendard;
+  font-weight: 700;
+  text-align: center;
 }
 
