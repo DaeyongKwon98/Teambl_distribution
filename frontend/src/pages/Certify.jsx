@@ -179,16 +179,18 @@ function Certify(){
         value={pwCheck}
         disabled={!isVerified}
       />
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
-        {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
-        <label
-          ref={labelRef2}
-          className={isChecked ? 'label-success' : 'label-error'}
-        >
-          {isChecked ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
-        </label>
-      </div>
+      {(password !== '' && pwCheck !== '') && (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
+          {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
+          <label
+            ref={labelRef2}
+            className={isChecked ? 'label-success' : 'label-error'}
+          >
+            {isChecked ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
+          </label>
+        </div>
+      )}
       <button 
         type='button' 
         className='certify-nextBtn' 
