@@ -125,9 +125,7 @@ button.welcome-exitBtn{
   margin-top: 280px;
   padding: 10px;
 }
-button.welcome-exitBtn:hover{
-  cursor: default;
-}
+
 button.welcome-exitBtn:hover{
   cursor: pointer;
 }
