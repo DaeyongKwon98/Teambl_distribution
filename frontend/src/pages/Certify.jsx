@@ -181,8 +181,8 @@ function Certify(){
       />
       {(password !== '' && pwCheck !== '') && (
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
-          {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
+          {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px', verticalAlign: 'middle'}} />}
+          {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px', verticalAlign: 'middle'}} />}
           <label
             ref={labelRef2}
             className={isChecked ? 'label-success' : 'label-error'}
