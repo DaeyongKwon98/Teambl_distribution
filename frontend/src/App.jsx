@@ -48,7 +48,11 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Start />} />
-        <Route path="/start" element={<Start />} />
+        <Route path="/home" element={
+          <ProtectedRoute>
+            <Home />
+          </ProtectedRoute}
+        />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/password-reset" element={<ResetPassword />} />
