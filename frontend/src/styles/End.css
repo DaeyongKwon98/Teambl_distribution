@@ -41,11 +41,11 @@ button.end-profileBtn{
   width: 100%;
   border: none;
   border-radius: 5px;
-  color: white;
+  color: #121212;
   font-size: 0.75rem;
   font-weight: bold;
   line-height: 0.8rem;
-  margin-top: 200px;
+  margin-top: 250px;
   padding: 10px;
 
 }
@@ -59,7 +59,7 @@ button.end-loginBtn{
   font-size: 0.75rem;
   font-weight: bold;
   line-height: 0.8rem;
-  margin-top: 20px;
+  margin-top: 15px;
   padding: 10px;
 }
 button.end-profileBtn:hover{
