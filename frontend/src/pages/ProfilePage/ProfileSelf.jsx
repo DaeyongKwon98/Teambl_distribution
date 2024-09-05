@@ -421,7 +421,7 @@ function ProfileSelf() {
                 className="profile-addTag"
                 onClick={() => setKeywordVisible(true)}
               >
-                + 추가
+                +
               </span>
             )}
           </div>
