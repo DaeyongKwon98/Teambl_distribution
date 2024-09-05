@@ -104,3 +104,24 @@ span.welcome-expired-span {
   font-weight: 400;
   letter-spacing: -0.304px;
 }
+
+
+button.welcome-nextBtn{
+  background-color: #0000b3;
+  height: 2rem;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 0.75rem;
+  font-weight: bold;
+  line-height: 0.8rem;
+  margin-top: 300px;
+  padding: 10px;
+}
+button.welcome-nextBtn:hover{
+  cursor: default;
+}
+button.welcome-nextBtn:hover{
+  cursor: pointer;
+}
