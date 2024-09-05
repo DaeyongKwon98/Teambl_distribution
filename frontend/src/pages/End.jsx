@@ -5,13 +5,34 @@ function End() {
   const location = useLocation();
   const navigate = useNavigate();
   const name = { ...location.state }.user_name;
+  const [userId, setUserId] = useState(null);
 
-  console.log("location.state", location.state);
+  // 사용자 정보를 가져오는 함수
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        // 서버에서 현재 사용자 정보 가져오기
+        const response = await axios.get("/current-user/", {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`, // 토큰을 사용해 인증
+          },
+        });
+        const fetchedUserId = response.data.id; // API에서 받은 user_id (id 필드 가정)
+        setUserId(fetchedUserId); // userId 상태에 저장
+      } catch (error) {
+        console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
+      }
+    };
 
+    fetchUserId();
+  }, []); // 컴포넌트 마운트 시 API 호출
+  
   function handleProfile() {
-    localStorage.removeItem("invited"); // 초대받은 경우에만 초대 상태 초기화
-    localStorage.removeItem("invite_code"); // 초대 코드를 삭제
-    navigate("/profile/현재유저");
+    if (userId) {
+      localStorage.removeItem("invited"); // 초대받은 경우에만 초대 상태 초기화
+      localStorage.removeItem("invite_code"); // 초대 코드를 삭제
+      navigate(`/profile/${userId}`); // user_id를 사용하여 프로필 페이지로 이동
+    }
   }
   function handleLogin() {
     localStorage.removeItem("invited"); // 초대받은 경우에만 초대 상태 초기화
