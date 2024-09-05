@@ -6,10 +6,12 @@ function End() {
   const navigate = useNavigate();
   const name = { ...location.state }.user_name;
 
+  console.log("location.state", location.state);
+
   function handleProfile() {
     localStorage.removeItem("invited"); // 초대받은 경우에만 초대 상태 초기화
     localStorage.removeItem("invite_code"); // 초대 코드를 삭제
-    navigate("/");
+    navigate("/profile/현재유저");
   }
   function handleLogin() {
     localStorage.removeItem("invited"); // 초대받은 경우에만 초대 상태 초기화
@@ -39,7 +41,6 @@ function End() {
           type="button"
           className="end-profileBtn"
           onClick={handleProfile}
-          disabled={true}
         >
           프로필 추가로 작성하기
         </button>
