@@ -6,13 +6,16 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   // 처음 팝업이 열릴 때만 cad를 newCad로 초기화
   const [newCad, setNewCad] = useState(cad);
 
+  useEffect(() => {
+    console.log("newCad updated:", newCad);
+  }, [newCad]); // newCad가 업데이트될 때마다 실행
+  
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
     setNewCad(newCadInput); // newCad를 사용하여 상태 변경
     setCad(newCadInput);    // 부모 상태도 업데이트
     setIsPopupOpen(false);  // 팝업 닫기
     console.log("handleCadChange - newCadInput:", newCadInput); // 상태 업데이트 확인
-    console.log("handleCadChange - newCad (before close):", newCad);
   };
 
   return (
