@@ -6,9 +6,10 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   // 처음 팝업이 열릴 때만 cad를 newCad로 초기화
   const [newCad, setNewCad] = useState(cad);
 
+  // 부모로부터 전달된 cad가 변경될 때마다 newCad를 동기화
   useEffect(() => {
-    console.log("newCad updated:", newCad);
-  }, [newCad]); // newCad가 업데이트될 때마다 실행
+    setNewCad(cad);  // 부모 컴포넌트로부터 최신 값을 받아서 동기화
+  }, [cad]);
   
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
