@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Notification.css";
+import backIcon from "../../assets/Profile/left-arrow.svg";
 
 const Notification = ({ updateUnreadCount }) => {
   const navigate = useNavigate();
@@ -215,8 +216,15 @@ const Notification = ({ updateUnreadCount }) => {
   return (
     <div className="notification-container">
       <div className="notification-back">
-        <button type="button" onClick={() => window.history.back()}></button>
+        <button
+          type="button"
+          className="notification-backbutton"
+          onClick={() => window.history.back()}
+        >
+          <img src={backIcon}></img>
+        </button>
       </div>
+      
       <h1>알림</h1>  
       <div>
         {/* <h2>Notification List</h2> */}
