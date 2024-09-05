@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import api from "../api";
 import "../styles/End.css";
 
 function End() {
@@ -13,7 +14,7 @@ function End() {
     const fetchUserId = async () => {
       try {
         // 서버에서 현재 사용자 정보 가져오기
-        const response = await axios.get("/current-user/", {
+        const response = await api.get("/current-user/", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`, // 토큰을 사용해 인증
           },
