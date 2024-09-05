@@ -189,7 +189,7 @@ function Register() {
             readOnly
           />
           <label className="register-label">
-            학력
+            재학 과정
             <br />
           </label>
           <select onChange={handleDegree} id="list">
