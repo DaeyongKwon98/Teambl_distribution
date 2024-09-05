@@ -21,6 +21,7 @@ function End() {
         });
         const fetchedUserId = response.data.id; // API에서 받은 user_id (id 필드 가정)
         setUserId(fetchedUserId); // userId 상태에 저장
+        console.log("Current user id:", fetchedUserId);
       } catch (error) {
         console.error("사용자 정보를 가져오는 데 실패했습니다.", error);
       }
