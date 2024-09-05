@@ -175,9 +175,9 @@ span.profile-tag {
 
 span.profile-addTag {
   background-color: #ffffff;
-  color: #121212;
-  padding: 8px 12px; /* 박스 내부 패딩 */
-  border-radius: 5px; /* 모서리를 둥글게 */
+  color: #0923A9;
+  padding: 4px 8px; /* 박스 내부 패딩 */
+  border-radius: 20px; /* 모서리를 둥글게 */
   font-size: 13.714px; /* 텍스트 크기 */
   display: flex; /* 내용물이 수평으로 중앙 정렬되도록 함 */
   align-items: center; /* 내용물이 수직으로 중앙 정렬되도록 함 */
