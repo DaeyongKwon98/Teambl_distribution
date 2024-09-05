@@ -41,7 +41,8 @@ label.portf-definition{
 .portf-description {
   text-align: start;
   color: #333;
-  font-size: 14px;
+  font-size: 13px;
+  margin-left: 10px;
 }
 
 .portf-period {
