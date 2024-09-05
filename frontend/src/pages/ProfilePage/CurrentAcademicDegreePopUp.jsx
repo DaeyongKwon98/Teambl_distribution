@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../styles/ProfilePage/CurrentAcademicDegreePopUp.css"; // CSS 파일을 가져옵니다.
 import topBarIcon from "../../assets/popUpTopBar.svg";
 
-const CurrentAcademicDegreePopUp = ({ cad, setCad }) => {
+const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   const [newCad, setNewCad] = useState(cad);
 
   const handleCadChange = (e) => {
