@@ -113,7 +113,7 @@ function Friend() {
         navigate("/setting");
         break;
       case "홈":
-        navigate("/");
+        navigate("/home");
         break;
       default:
         break;
