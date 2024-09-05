@@ -23,7 +23,7 @@ body {
   margin-bottom: 20px;
 }
 
-.notification-back button {
+/* .notification-back button {
   border: none;
   background-image: url("../assets/backIcon.svg");
   background-size: cover;
@@ -34,7 +34,7 @@ body {
 
 .notification-back button:hover {
   cursor: pointer;
-}
+} */
 
 .notification-list {
   list-style-type: none;
