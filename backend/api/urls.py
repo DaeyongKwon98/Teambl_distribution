@@ -6,6 +6,7 @@ urlpatterns = [
     path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
     path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
     path("user/<int:id>/", views.OtherUserView.as_view(), name="other-user"),
+    path('latest-user-id/', views.LatestUserIdView.as_view(), name='latest-user-id'),
 ]
 
 # Profile
