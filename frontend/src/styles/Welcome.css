@@ -13,6 +13,10 @@
 }
 .welcome-intro{
   text-align: center;
+  font-family: Pretendard;
+  font-weight: 600;
+  letter-spacing: -0.384px;
+  padding-top: 20px;
 }
 span.welcome-name{
   margin-top: 30px;
@@ -20,19 +24,19 @@ span.welcome-name{
   font-size: 12px;
 }
 .welcome-teambl{
-  font-weight: bold;
-  font-size: 17.5px;
+  font-weight: 600;
+  font-size: 20px;
   line-height: 1.5em;
-  margin-top: 20px;
+  margin-top: 35px;
+  letter-spacing: -0.624px;
 }
 label.welcome-outro{
   margin-top: 10px;
   display: inline-block;
   font-size: 12px;
-  word-spacing: 0.0000000001px;
-  
+  letter-spacing: -0.384px;
+  font-family: Pretendard;
 }
-
 
 button.welcome-nextBtn{
   background-color: #0000b3;
@@ -44,7 +48,7 @@ button.welcome-nextBtn{
   font-size: 0.75rem;
   font-weight: bold;
   line-height: 0.8rem;
-  margin-top: 250px;
+  margin-top: 350px;
   padding: 10px;
 }
 button.welcome-nextBtn:hover{
