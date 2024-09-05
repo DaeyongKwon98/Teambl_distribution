@@ -134,8 +134,8 @@ span.profile-oneDegree {
 
 label.profile-tags-definition {
   display: inline-block; /* 필요 시 유지 */
-  font-size: 10px;
-  margin: 0px 10px 5px;
+  font-size: 10.5px;
+  margin: 0px 7px;
   color: hsl(0, 0%, 50%);
 }
 
