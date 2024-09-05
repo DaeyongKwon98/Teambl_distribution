@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import WithdrawIcon from "../assets/withdrawIcon.svg";
 import ArrowDownIcon from "../assets/arrowDownIcon.svg";
+import LogoutRightIcon from "../assets/logout_right_icon.svg";
 
 const Setting = () => {
   const navigate = useNavigate();
@@ -242,6 +243,11 @@ const Setting = () => {
 
       <div className="setting-password-toggle" onClick={handleLogout}>
         <span className="setting-section-title">로그아웃</span>
+        <img
+          src={LogoutRightIcon}
+          alt="Logout Icon"
+          className="setting-logout-icon"
+        />
       </div>
 
       <div
