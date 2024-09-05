@@ -18,6 +18,10 @@
   z-index: 101;
 }
 
+.cad-popup-overlay-wrapper {
+  background: rgba(18, 18, 18, 0.8); /* #121212 80% 투명 */
+}
+
 .cad-popup-top {
   width: 100%;
   align-items: center;
