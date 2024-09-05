@@ -38,7 +38,7 @@
   letter-spacing: -0.266px;
 }
 
-button.welcome-exitBtn{
+button.start-loginBtn{
   background-color: #0000b3;
   height: 2rem;
   width: 100%;
@@ -51,6 +51,6 @@ button.welcome-exitBtn{
   margin-top: 280px;
   padding: 10px;
 }
-button.welcome-exitBtn:hover{
+button.start-loginBtn:hover{
   cursor: pointer;
 }
