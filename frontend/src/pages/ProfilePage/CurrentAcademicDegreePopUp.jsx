@@ -4,6 +4,10 @@ import topBarIcon from "../../assets/popUpTopBar.svg";
 
 const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   const [newCad, setNewCad] = useState(cad);
+
+  useEffect(() => {
+    setNewCad(cad); // cad 값이 변경될 때 newCad도 업데이트
+  }, [cad]);
   
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
@@ -28,7 +32,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="학사"
-              checked={cad === "학사"}
+              checked={newCad === "학사"}
               onChange={handleCadChange}
             />
             {" 학사"}
@@ -37,7 +41,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="석사"
-              checked={cad === "석사"}
+              checked={newCad === "석사"}
               onChange={handleCadChange}
             />
             {" 석사"}
@@ -46,7 +50,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="박사"
-              checked={cad === "박사"}
+              checked={newCad === "박사"}
               onChange={handleCadChange}
             />
             {" 박사"}
