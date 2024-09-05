@@ -455,7 +455,7 @@ function ProfileSelf() {
                 className="profile-deleteBtn"
                 onClick={() => handleRemoveExperience(exp.experience)}
               >
-                X
+                &times;
               </button>
             </div>
           ))}
@@ -487,7 +487,7 @@ function ProfileSelf() {
                 className="profile-deleteBtn"
                 onClick={() => handleRemoveTool(t.tool)}
               >
-                X
+                &times;
               </button>
             </div>
           ))}
@@ -534,7 +534,7 @@ function ProfileSelf() {
                 className="profile-deleteBtn"
                 onClick={() => handleRemovePortfolio(p.portfolioLink)}
               >
-                X
+                &times;
               </button>
             </div>
           ))}
