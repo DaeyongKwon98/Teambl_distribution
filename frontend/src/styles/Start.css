@@ -1,0 +1,57 @@
+.start {
+  margin: 0 auto;
+  width: 300px;
+  min-width: 300px;
+  text-align: center;
+}
+
+.start-container {
+  margin: 150px 13px 0px;
+}
+
+.start-span {
+  color: #000;
+  font-family: Pretendard;
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 140%;
+  letter-spacing: -0.624px;
+}
+
+.start-label1 {
+  margin-top: 30px;
+  display: inline-block;
+  font-size: 12px;
+  color: #121212;
+  font-family: Pretendard;
+  font-weight: 400;
+  letter-spacing: -0.304px;
+}
+
+.start-label2 {
+  margin-top: 10px;
+  display: inline-block;
+  font-size: 10px;
+  color: #595959;
+  font-family: Pretendard;
+  font-weight: 400;
+  letter-spacing: -0.266px;
+}
+
+button.start-loginBtn {
+  background-color: #0000b3;
+  height: 2.5rem;
+  width: 100%;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  margin-top: 50px;
+  padding: 10px;
+}
+
+button.start-loginBtn:hover {
+  cursor: pointer;
+  background-color: #000099;
+}
