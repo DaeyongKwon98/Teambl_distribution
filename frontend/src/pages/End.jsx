@@ -61,14 +61,14 @@ function End() {
           프로필을 더 자세히 작성할수록 다른 회원들과 더 쉽게 연결될 수
           있습니다. 이어서 프로필을 작성해 볼까요?
         </label>
-        <button
+        {/* <button
           type="button"
           className="end-profileBtn"
           onClick={handleProfile}
           disabled={true}
         >
           프로필 추가로 작성하기
-        </button>
+        </button> */}
         <button type="button" className="end-loginBtn" onClick={handleLogin}>
           팀블 시작하기
         </button>
