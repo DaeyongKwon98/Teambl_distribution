@@ -169,6 +169,8 @@ span.profile-tag {
   color: #a8a8a8;
   border: none;
   cursor: pointer;
+  font-size: 17px;
+  padding-right: 0px;
 }
 
 span.profile-addTag {
