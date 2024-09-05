@@ -52,7 +52,7 @@ body {
 
 .friend-team-member {
   display: flex;
-  padding: 3.08px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #ddd;
   align-items: center;
   justify-content: center;
