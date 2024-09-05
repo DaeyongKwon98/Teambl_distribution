@@ -1,9 +1,19 @@
-/* Popup 스타일 */
-.cad-popup-overlay {
+.cad-popup-overlay-wrapper {
   position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(18, 18, 18, 0.8); /* #121212 80% 투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* 팝업을 하단에 배치 */
+  z-index: 1000;
+}
+
+.cad-popup-overlay {
+  position: relative;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
   width: 100%;
   max-width: 284.62px;
   height: auto;
@@ -16,10 +26,6 @@
   flex-direction: column;
   padding: 0px 27.4px 27.4px 27.4px;
   z-index: 101;
-}
-
-.cad-popup-overlay-wrapper {
-  background: rgba(18, 18, 18, 0.8); /* #121212 80% 투명 */
 }
 
 .cad-popup-top {
