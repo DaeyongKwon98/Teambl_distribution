@@ -8,7 +8,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   // cad가 변경될 때마다 newCad 상태를 동기화
   useEffect(() => {
     setNewCad(cad);
-  }, [cad]);
+  }, [cad, setIsPopupOpen]);
   
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
