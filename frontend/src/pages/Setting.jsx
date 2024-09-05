@@ -241,8 +241,8 @@ const Setting = () => {
         </div>
       )}
 
-      <div className="setting-password-toggle" onClick={handleLogout}>
-        <span className="setting-section-title">로그아웃</span>
+      <div className="setting-password-toggle">
+        <span className="setting-section-title" onClick={handleLogout}>로그아웃</span>
         <img
           src={LogoutRightIcon}
           alt="Logout Icon"
