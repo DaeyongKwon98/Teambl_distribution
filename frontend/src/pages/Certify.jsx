@@ -72,19 +72,19 @@ function Certify(){
   
   useEffect(()=>{
     if(password===pwCheck && password!==''){
-      labelRef2.current.innerHTML='비밀번호가 일치합니다.';
-      labelRef2.current.style.fontSize='10px';
-      labelRef2.current.style.color='green'
+      // labelRef2.current.innerHTML='비밀번호가 일치합니다.';
+      // labelRef2.current.style.fontSize='10px';
+      // labelRef2.current.style.color='green'
       setIsChecked(true);
     }
     else if(password!==pwCheck && pwCheck!==''){
-      labelRef2.current.innerHTML='비밀번호가 일치하지 않습니다.';
-      labelRef2.current.style.fontSize='10px';
-      labelRef2.current.style.color='red'
+      // labelRef2.current.innerHTML='비밀번호가 일치하지 않습니다.';
+      // labelRef2.current.style.fontSize='10px';
+      // labelRef2.current.style.color='red'
       setIsChecked(false);
     }
     else{
-      labelRef2.current.innerHTML='';
+      // labelRef2.current.innerHTML='';
       setIsChecked(false);
     }
 
@@ -214,7 +214,12 @@ function Certify(){
       <div style={{ display: 'flex', alignItems: 'center' }}>
         {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
         {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
-        <label ref={labelRef2}></label>
+        <label
+          ref={labelRef2}
+          className={isChecked ? 'label-success' : 'label-error'}
+        >
+          {isChecked ? '비밀번호가 일치합니다.' : '비밀번호가 일치하지 않습니다.'}
+        </label>
       </div>
       <button 
         type='button' 
