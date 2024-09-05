@@ -1,28 +1,23 @@
-import React, { useState, useEffect } from "react";
-import "../../styles/ProfilePage/CurrentAcademicDegreePopUp.css"; // CSS 파일을 가져옵니다.
+import React, { useState } from "react";
+import "../../styles/ProfilePage/CurrentAcademicDegreePopUp.css";
 import topBarIcon from "../../assets/popUpTopBar.svg";
 
 const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
+  // 처음 팝업이 열릴 때만 cad를 newCad로 초기화
   const [newCad, setNewCad] = useState(cad);
 
-  useEffect(() => {
-    setNewCad(cad); // cad 값이 변경될 때 newCad도 업데이트
-    console.log("newcad is updated into", cad);
-  }, [cad]);
-  
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
-    setNewCad(newCadInput);
-    setCad(newCadInput);
-    setIsPopupOpen(false);
-    console.log("handlecadchange: newCad", newCad);
+    setNewCad(newCadInput); // newCad를 사용하여 상태 변경
+    setCad(newCadInput);    // 부모 상태도 업데이트
+    setIsPopupOpen(false);  // 팝업 닫기
   };
 
   return (
     <div className="cad-popup-overlay">
       <div className="cad-popup-content">
         <div className="cad-popup-top">
-          <img src={topBarIcon} />
+          <img src={topBarIcon} alt="popup top bar" />
         </div>
         <div className="cad-popup-discription">
           <h3>재학 과정</h3>
@@ -34,8 +29,8 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="학사"
-              checked={newCad === "학사"}
-              onChange={handleCadChange}
+              checked={newCad === "학사"}  {/* newCad로 체크 상태 관리 */}
+              onChange={handleCadChange}  {/* 라디오 버튼 선택 시 상태 변경 */}
             />
             {" 학사"}
           </label>
@@ -43,7 +38,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="석사"
-              checked={newCad === "석사"}
+              checked={newCad === "석사"}  {/* newCad로 체크 상태 관리 */}
               onChange={handleCadChange}
             />
             {" 석사"}
@@ -52,7 +47,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="박사"
-              checked={newCad === "박사"}
+              checked={newCad === "박사"}  {/* newCad로 체크 상태 관리 */}
               onChange={handleCadChange}
             />
             {" 박사"}
