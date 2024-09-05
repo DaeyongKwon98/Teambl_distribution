@@ -63,7 +63,6 @@ body {
 }
 
 .setting-change-password-button,
-.setting-logout-button,
 .setting-withdraw-button,
 .setting-inquiry-button {
   width: 100%;
@@ -207,4 +206,8 @@ body {
   color: #121212;
   text-decoration: underline;
   font-size: 14px;
+}
+
+.setting-logout-icon {
+  margin-left: 8px; /* 텍스트와 아이콘 사이 간격 */
 }
