@@ -214,7 +214,7 @@ function EditProfile() {
             onClick={() => setIsCADPopUp(false)}
           ></div>
           <CurrentAcademicDegreePopUp
-            cad={newProfile.current_academic_degree}
+            cad={newCurrent_academic_degree}
             setCad={setNewCurrent_academic_degree}
             setIsPopupOpen={setIsCADPopUp}
           />
