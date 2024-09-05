@@ -11,7 +11,8 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
     setNewCad(newCadInput); // newCad를 사용하여 상태 변경
     setCad(newCadInput);    // 부모 상태도 업데이트
     setIsPopupOpen(false);  // 팝업 닫기
-    console.log("handleCadChange - newCadInput", newCadInput);
+    console.log("handleCadChange - newCadInput:", newCadInput); // 상태 업데이트 확인
+    console.log("handleCadChange - newCad (before close):", newCad);
   };
 
   return (
