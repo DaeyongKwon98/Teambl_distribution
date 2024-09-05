@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Notification.css";
-import backIcon from "../../assets/Profile/left-arrow.svg";
+import backIcon from "../assets/Profile/left-arrow.svg";
 
 const Notification = ({ updateUnreadCount }) => {
   const navigate = useNavigate();
