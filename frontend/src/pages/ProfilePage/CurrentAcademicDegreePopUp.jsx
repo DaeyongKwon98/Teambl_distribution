@@ -11,6 +11,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
     setNewCad(newCadInput); // newCad를 사용하여 상태 변경
     setCad(newCadInput);    // 부모 상태도 업데이트
     setIsPopupOpen(false);  // 팝업 닫기
+    console.log("handleCadChange - newCadInput", newCadInput);
   };
 
   return (
@@ -29,8 +30,8 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="학사"
-              checked={newCad === "학사"}  {/* newCad로 체크 상태 관리 */}
-              onChange={handleCadChange}  {/* 라디오 버튼 선택 시 상태 변경 */}
+              checked={newCad === "학사"}
+              onChange={handleCadChange}
             />
             {" 학사"}
           </label>
@@ -38,7 +39,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="석사"
-              checked={newCad === "석사"}  {/* newCad로 체크 상태 관리 */}
+              checked={newCad === "석사"}
               onChange={handleCadChange}
             />
             {" 석사"}
@@ -47,7 +48,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
             <input
               type="radio"
               value="박사"
-              checked={newCad === "박사"}  {/* newCad로 체크 상태 관리 */}
+              checked={newCad === "박사"}
               onChange={handleCadChange}
             />
             {" 박사"}
