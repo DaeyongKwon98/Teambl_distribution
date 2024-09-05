@@ -14,10 +14,9 @@ body {
 /* 대용 추가 */
 .setting-password-toggle {
   display: flex;
-  /* justify-content: space-between; */
   align-items: center;
   cursor: pointer;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 .setting-arrow-icon {
@@ -31,6 +30,7 @@ body {
   font-weight: 600;
   line-height: 19px;
   color: #121212;
+  margin-right: 10px;
 }
 
 .setting-password-change-section,
@@ -209,5 +209,5 @@ body {
 }
 
 .setting-logout-icon {
-  margin-left: 8px; /* 텍스트와 아이콘 사이 간격 */
+  margin-left: 2px; /* 텍스트와 아이콘 사이 간격 */
 }
