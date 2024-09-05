@@ -152,7 +152,6 @@ const Setting = () => {
       const response = await api.delete("/api/delete-user/");
       if (response && response.data && response.data.detail) {
         console.log(response.data.detail);
-      } else {
         // alert(response.data.detail);
       } else {
         console.log("회원 탈퇴 성공");
