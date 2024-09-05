@@ -186,7 +186,15 @@ function Certify(){
           ) : (
             <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px' }} />
           )}
-          <label ref={labelRef1}>{codeVerified ? '인증코드가 일치합니다.' : '인증코드가 일치하지 않습니다.'}</label>
+          <label
+            ref={labelRef1}
+            style={{
+              fontSize: '10px',
+              color: codeVerified ? 'green' : 'red',
+            }}
+          >
+            {codeVerified ? '인증코드가 일치합니다.' : '인증코드가 일치하지 않습니다.'}
+          </label>
         </div>
       )}
       <label className='certify-label' >비밀번호<br/></label>
