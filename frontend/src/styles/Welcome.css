@@ -106,7 +106,7 @@ span.welcome-expired-span {
 }
 
 
-button.welcome-nextBtn{
+button.welcome-exitBtn{
   background-color: #0000b3;
   height: 2rem;
   width: 100%;
@@ -119,9 +119,9 @@ button.welcome-nextBtn{
   margin-top: 300px;
   padding: 10px;
 }
-button.welcome-nextBtn:hover{
+button.welcome-exitBtn:hover{
   cursor: default;
 }
-button.welcome-nextBtn:hover{
+button.welcome-exitBtn:hover{
   cursor: pointer;
 }
