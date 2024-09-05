@@ -47,16 +47,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route
-          path="/"
-          element={
-            // Home은 로그인돼야 들어올 수 있다
-            {/* <ProtectedRoute>
-              <Home />
-            </ProtectedRoute> */}
-            <Start />
-          }
-        />
+        <Route path="/" element={<Start />} />
         <Route path="/start" element={<Start />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
