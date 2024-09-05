@@ -377,9 +377,9 @@ function ProfileSelf() {
             <div className="profile-row1">
               <p> {profile.school}</p>
               <p> | </p>
-              <p>{profile.current_academic_degree}</p>
+              <p>{profile.year % 100}학번</p>
               <p> | </p>
-              <p>{profile.year % 100} 학번</p>
+              <p>{profile.current_academic_degree}</p>
             </div>
             <div className="profile-row2">
               <p>
@@ -400,7 +400,7 @@ function ProfileSelf() {
       <div className="profile-tags">
         <div className="profile-tags-title">
           키워드
-          <label className="profile-tags-definition">최대5개</label>
+          <label className="profile-tags-definition">본인을 나타내는 키워드를 입력해보세요. (최대 5개)</label>
         </div>
         <div className="profile-tag-container">
           <div className="profile-tags-list">
