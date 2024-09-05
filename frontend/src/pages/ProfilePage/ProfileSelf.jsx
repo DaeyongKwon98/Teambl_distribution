@@ -412,7 +412,7 @@ function ProfileSelf() {
                   type="button"
                   onClick={() => handleRemoveKeyword(keyword)}
                 >
-                  X
+                  &times;
                 </button>
               </span>
             ))}
