@@ -27,8 +27,8 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   };
   
   return (
-    <div className="cad-popup-overlay" onClick={handleOverlayClick}>
-      <div className="cad-popup-content">
+    <div className="cad-popup-overlay-wrapper" onClick={handleOverlayClick}>
+      <div className="cad-popup-overlay">
         <div className="cad-popup-top">
           <img src={topBarIcon} alt="popup top bar" />
         </div>
