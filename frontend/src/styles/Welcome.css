@@ -86,23 +86,29 @@ button.welcome-nextBtn:hover{
 }
 
 .welcome-expired-container {
-  margin: 150px 13px 0px;
+  margin: 200px 13px 0px;
 }
 
 span.welcome-expired-span {
-  line-height: 1.5em;
-  font-weight: bold;
-  font-size: 20px;
+  color: #000;
+  font-family: Pretendard;
+  font-size: 26px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 140%; /* 36.4px */
+  letter-spacing: -0.624px;
 }
 
 .welcome-expired-label {
   margin-top: 30px;
   display: inline-block;
-  font-size: 12px;
   color: #121212;
   font-family: Pretendard;
   font-weight: 400;
   letter-spacing: -0.304px;
+  font-size: 16px;
+  font-style: normal;
+  line-height: 140%; /* 22.4px */
 }
 
 
