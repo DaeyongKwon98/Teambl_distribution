@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import Start from "./pages/Start";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Certify from "./pages/Certify";
@@ -24,12 +25,6 @@ function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
   return <Navigate to="/login/" />; // 로그인 페이지로 이동시키기
 }
-
-// function RegisterAndLogout() {
-//   // register하면 정보 클리어 해줘야 한다
-//   localStorage.clear();
-//   return <Register />;
-// }
 
 // Custom route to check for the invited status
 function ProtectedRegisterRoute({ children }) {
@@ -61,6 +56,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/start" element={<Start />} />
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/password-reset" element={<ResetPassword />} />
