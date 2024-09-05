@@ -83,24 +83,33 @@ const Welcome = () => {
             </button>
           </div>
         </div>
-        
-        // <div className="error-container">
-        //   <h1>초대 링크가 만료되었습니다.</h1>
-        //   <p>새로운 링크를 요청해 주세요.</p>
-        // </div>
       );
     } else if (errorType === 'invalid') {
       return (
-        <div className="error-container">
-          <h1>유효하지 않은 초대 링크입니다.</h1>
-          <p>올바른 링크를 사용해 주세요.</p>
+        <div className="welcome-expired">
+          <div className="welcome-expired-container">
+            <span className="welcome-expired-span">유효하지 않은 초대 링크입니다.</span>
+            <label className="welcome-expired-label">
+              올바른 링크를 사용해 주세요.
+            </label>
+            <button type="button" className="welcome-exitBtn" onClick={handleLogin}>
+              팀블 로그인으로 가기
+            </button>
+          </div>
         </div>
       );
     } else {
       return (
-        <div className="error-container">
-          <h1>알 수 없는 오류가 발생했습니다.</h1>
-          <p>다시 시도해 주세요.</p>
+        <div className="welcome-expired">
+          <div className="welcome-expired-container">
+            <span className="welcome-expired-span">알 수 없는 오류가 발생했습니다.</span>
+            <label className="welcome-expired-label">
+              다시 시도해 주세요.
+            </label>
+            <button type="button" className="welcome-exitBtn" onClick={handleLogin}>
+              팀블 로그인으로 가기
+            </button>
+          </div>
         </div>
       );
     }
