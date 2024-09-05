@@ -65,13 +65,14 @@ button.profile-editBtn {
   margin-left: 5px;
   background: transparent;
   border: none;
+  display: flex;
 }
 button.profile-editBtn:hover {
   cursor: pointer;
 }
 button.profile-editBtn img {
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
 }
 
 .profile-info h2 {
