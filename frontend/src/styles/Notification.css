@@ -132,3 +132,11 @@ body {
   top: 75%; /* 시간 위치를 가운데에서 약간 아래로 조정 */
   transform: translateY(-50%); /* 수직 정렬 보정 */
 }
+
+.notification-backbutton {
+  border: none;
+  margin: 0px;
+  padding: 0px;
+  background-color: transparent;
+  width: 20px;
+}
