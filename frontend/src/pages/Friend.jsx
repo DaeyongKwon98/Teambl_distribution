@@ -221,7 +221,7 @@ function Friend() {
           <div className="friend-instructions">
             신청 수락은 신뢰를 바탕으로 신중히 결정해 주세요
             <br />
-            믿을 수 있는 팀을 커뮤니티, 함께 만들어 가요!
+            믿을 수 있는 팀블 커뮤니티, 함께 만들어 가요!
           </div>
           <p className="friend-total-count">{requestsToMe.length}명</p>
           <div className="friend-team-member-results">
