@@ -32,7 +32,6 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad }) => {
             />
             {" 학사"}
           </label>
-          <br />
           <label>
             <input
               type="radio"
@@ -42,7 +41,6 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad }) => {
             />
             {" 석사"}
           </label>
-          <br />
           <label>
             <input
               type="radio"
