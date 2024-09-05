@@ -312,5 +312,5 @@ button.profile-submitBtn:disabled:hover {
   outline: none; /* 포커스 시 기본 브라우저 outline 제거 */
   border: none; /* 포커스 시 테두리 없음 */
   background: transparent; /* 포커스 시 배경색 유지 */
-  color: #A8A8A8; /* 텍스트 색상 유지 */
+  color: #121212; /* 텍스트 색상 유지 */
 }
