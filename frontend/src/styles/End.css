@@ -6,7 +6,7 @@
   
 }
 .end-container{
-  margin: 80px 20px 0px;
+  margin: 150px 13px 0px;
   /* display: flex;
   flex-direction: column; */
 }
@@ -21,12 +21,19 @@ label.end-label1{
   margin-top: 30px;
   display: inline-block;
   font-size: 12px;
-
+  color: #121212;
+  font-family: Pretendard;
+  font-weight: 400;
+  letter-spacing: -0.304px;
 }
 label.end-label2{
   margin-top: 10px;
   display: inline-block;
   font-size: 10px;
+  color: #595959;
+  font-family: Pretendard;
+  font-weight: 400;
+  letter-spacing: -0.266px;
 }
 button.end-profileBtn{
   background-color: transparent;
