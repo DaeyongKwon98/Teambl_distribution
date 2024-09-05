@@ -11,7 +11,6 @@ body {
   padding: 20px;
 }
 
-/* 대용 추가 */
 .setting-password-toggle {
   display: flex;
   align-items: center;
@@ -22,7 +21,6 @@ body {
 .setting-arrow-icon {
   transition: transform 0.3s;
 }
-/* 대용 추가 끝 */
 
 .setting-section-title {
   font-size: 16px;
