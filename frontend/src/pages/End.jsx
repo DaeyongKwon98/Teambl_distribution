@@ -31,7 +31,7 @@ function End() {
   }, []); // 컴포넌트 마운트 시 API 호출
   
   function handleProfile() {
-    if (userId) {
+    if (latestUserId) {
       localStorage.removeItem("invited"); // 초대받은 경우에만 초대 상태 초기화
       localStorage.removeItem("invite_code"); // 초대 코드를 삭제
       navigate(`/profile/${latestUserId}`); // user_id를 사용하여 프로필 페이지로 이동
