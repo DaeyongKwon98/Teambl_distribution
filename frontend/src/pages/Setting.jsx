@@ -176,7 +176,7 @@ const Setting = () => {
         navigate("/friends");
         break;
       case "홈":
-        navigate("/");
+        navigate("/home");
         break;
       default:
         break;
