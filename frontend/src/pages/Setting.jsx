@@ -247,6 +247,7 @@ const Setting = () => {
           src={LogoutRightIcon}
           alt="Logout Icon"
           className="setting-logout-icon"
+          onClick={handleLogout}
         />
       </div>
 
