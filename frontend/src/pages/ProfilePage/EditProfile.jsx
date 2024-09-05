@@ -216,6 +216,7 @@ function EditProfile() {
           <CurrentAcademicDegreePopUp
             cad={newProfile.current_academic_degree}
             setCad={setNewCurrent_academic_degree}
+            setIsPopupOpen={setIsCADPopUp}
           />
         </>
       )}
