@@ -409,8 +409,8 @@ class WelcomeView(generics.GenericAPIView):
                     f"Found InvitationLink: inviter={inviter_name}, invitee={invitee_name}"
                 )  # 로그 추가
 
-                # 만료 날짜 계산 (생성 후 일주일)
-                expired_date = invite_link.created_at + timezone.timedelta(days=7)
+                # 만료 날짜 계산
+                expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
                 current_date = timezone.now()
 
                 # 초대 링크가 만료된 경우
@@ -766,7 +766,7 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
 
     def get(self, request, *args, **kwargs):
         user = request.user
-        recent_times = timezone.now() - timezone.timedelta(days=3)
+        recent_times = timezone.now() - timezone.timedelta(days=7)
 
         # 유사한 사용자 목록을 가져옴
         related_users_data = user.get_related_users_by_keywords()
@@ -790,7 +790,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
     def get(self, request, *args, **kwargs):
         user = request.user
 
-        recent_times = timezone.now() - timezone.timedelta(days=3)
+        recent_times = timezone.now() - timezone.timedelta(days=7)
 
         # 1촌 및 2촌 정보 가져오기
         first_degree_ids, second_degree_ids, second_degree_connections = (
