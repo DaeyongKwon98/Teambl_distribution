@@ -65,6 +65,7 @@ function End() {
           type="button"
           className="end-profileBtn"
           onClick={handleProfile}
+          disabled={true}
         >
           프로필 추가로 작성하기
         </button>
