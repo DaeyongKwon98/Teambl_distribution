@@ -148,23 +148,20 @@ const Setting = () => {
 
   const handleFinalConfirmation = async () => {
     setShowFinalModal(false);
-    if (
-      window.confirm(
-        "Are you sure you want to delete your account? This action cannot be undone."
-      )
-    ) {
-      try {
-        const response = await api.delete("/api/delete-user/");
-        if (response && response.data && response.data.detail) {
-          alert(response.data.detail);
-        } else {
-          alert("Account deleted successfully.");
-        }
-        navigate("/login"); // 계정 삭제 후 로그인 페이지로 이동
-      } catch (error) {
-        console.error("Account deletion failed:", error);
-        alert("Account deletion failed");
+    try {
+      const response = await api.delete("/api/delete-user/");
+      if (response && response.data && response.data.detail) {
+        console.log(response.data.detail);
+      } else {
+        // alert(response.data.detail);
+      } else {
+        console.log("회원 탈퇴 성공");
+        // alert("Account deleted successfully.");
       }
+      navigate("/login"); // 계정 삭제 후 로그인 페이지로 이동
+    } catch (error) {
+      console.error("Account deletion failed:", error);
+      alert("Account deletion failed");
     }
   };
 
