@@ -41,6 +41,7 @@ label.certify-label{
   margin-bottom: 5px;
   flex-grow: 1;
   padding: 1px 10px;
+  color: black;
 
 }
 button.certify-emailBtn{
