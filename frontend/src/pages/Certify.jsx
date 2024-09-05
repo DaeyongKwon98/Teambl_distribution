@@ -188,10 +188,7 @@ function Certify(){
           )}
           <label
             ref={labelRef1}
-            style={{
-              fontSize: '10px',
-              color: codeVerified ? 'green' : 'red',
-            }}
+            className={codeVerified ? 'label-success' : 'label-error'}
           >
             {codeVerified ? '인증코드가 일치합니다.' : '인증코드가 일치하지 않습니다.'}
           </label>
