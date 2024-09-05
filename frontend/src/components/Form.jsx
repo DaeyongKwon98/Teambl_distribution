@@ -5,6 +5,7 @@ import { ACCESS_TOKEN, REFRESH_TOKEN } from "../constants";
 import "../styles/Form.css";
 import LoadingIndicator from "./LoadingIndicator";
 import LoginTeamblIcon from "../assets/loginteamblIcon.svg";
+import redNotiIcon from "../assets/red_noti_icon.svg";
 
 function Form({ route, method }) {
   const [email, setEmail] = useState("");
@@ -78,7 +79,10 @@ function Form({ route, method }) {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <p className="error">{error}</p>
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '8px' }} />
+          <p className="error">{error}</p>
+        </div>
         {/* {loading && <LoadingIndicator />} */}
         <button
           className="login-button"
