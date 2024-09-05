@@ -191,11 +191,16 @@ function Certify(){
           >인증코드 확인</button>
         </div>
       )}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        {isVerified && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '4px' }} />}
-        {!isVerified && verificationCode !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '4px' }} />}
-        <label ref={labelRef1}></label>
-      </div>
+      {codeVerified !== null && (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          {codeVerified ? (
+            <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px' }} />
+          ) : (
+            <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px' }} />
+          )}
+          <label ref={labelRef1}>{codeVerified ? '인증코드가 일치합니다.' : '인증코드가 일치하지 않습니다.'}</label>
+        </div>
+      )}
       <label className='certify-label' >비밀번호<br/></label>
       <input 
         type='password'
@@ -214,8 +219,8 @@ function Certify(){
         disabled={!isVerified}
       />
       <div style={{ display: 'flex', alignItems: 'center' }}>
-        {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '4px' }} />}
-        {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '4px' }} />}
+        {isChecked && <img src={greenNotiIcon} alt="Success icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
+        {!isChecked && pwCheck !== '' && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '2px', verticalAlign: 'middle', width: '16px', height: '16px' }} />}
         <label ref={labelRef2}></label>
       </div>
       <button 
