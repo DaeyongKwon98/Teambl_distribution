@@ -51,9 +51,10 @@ function App() {
           path="/"
           element={
             // Home은 로그인돼야 들어올 수 있다
-            <ProtectedRoute>
+            {/* <ProtectedRoute>
               <Home />
-            </ProtectedRoute>
+            </ProtectedRoute> */}
+            <Start />
           }
         />
         <Route path="/start" element={<Start />} />
