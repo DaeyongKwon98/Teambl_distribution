@@ -168,7 +168,7 @@ function Invite() {
         navigate("/friends");
         break;
       case '홈':
-        navigate("/");
+        navigate("/home");
         break;
       case '설정':
         navigate("/setting");
