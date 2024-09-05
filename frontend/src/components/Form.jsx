@@ -80,7 +80,7 @@ function Form({ route, method }) {
           onChange={(e) => setPassword(e.target.value)}
         />
         <div style={{ display: 'flex', alignItems: 'center' }}>
-          <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '8px' }} />
+          {error && <img src={redNotiIcon} alt="Error icon" style={{ marginRight: '4px' }} />}
           <p className="error">{error}</p>
         </div>
         {/* {loading && <LoadingIndicator />} */}
