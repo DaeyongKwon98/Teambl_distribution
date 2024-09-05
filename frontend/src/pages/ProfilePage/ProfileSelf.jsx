@@ -150,7 +150,7 @@ function ProfileSelf() {
   const handleBackButton = () => {
     console.log("location.state", location.state);
     if (location.state && location.state.EditProfile) {
-      navigate("/"); // 이전 페이지가 "내 프로필 편집"일 경우 홈으로 이동
+      navigate("/home"); // 이전 페이지가 "내 프로필 편집"일 경우 홈으로 이동
     } else {
       window.history.back();
     }
