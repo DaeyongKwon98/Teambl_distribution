@@ -34,26 +34,6 @@ function Certify(){
     }
   },[email]);
 
-  // useEffect(()=>{
-  //   if(code===codekey){
-  //     labelRef1.current.innerHTML='인증코드가 일치합니다.';
-  //     labelRef1.current.style.fontSize='10px';
-  //     labelRef1.current.style.color='green'
-  //     setValid1(true);
-  //   }
-  //   else if(code!==codekey && code!==''){
-  //     labelRef1.current.innerHTML='인증코드가 일치하지 않습니다.';
-  //     labelRef1.current.style.fontSize='10px';
-  //     labelRef1.current.style.color='red'
-  //     setValid1(false);
-  //   }
-  //   else{
-  //     labelRef1.current.innerHTML='';
-  //     setValid1(false);
-  //   }
-
-  // },[code])
-
   const checkEmailExists = async () => {
         try {
             const response = await api.post('/api/check-email/', { email });
@@ -70,30 +50,18 @@ function Certify(){
         }
     };
   
-  useEffect(()=>{
-    if(password===pwCheck && password!==''){
-      // labelRef2.current.innerHTML='비밀번호가 일치합니다.';
-      // labelRef2.current.style.fontSize='10px';
-      // labelRef2.current.style.color='green'
+  useEffect(() => {
+    if (password === pwCheck && password !== '') {
       setIsChecked(true);
-    }
-    else if(password!==pwCheck && pwCheck!==''){
-      // labelRef2.current.innerHTML='비밀번호가 일치하지 않습니다.';
-      // labelRef2.current.style.fontSize='10px';
-      // labelRef2.current.style.color='red'
+    } else {
       setIsChecked(false);
     }
-    else{
-      // labelRef2.current.innerHTML='';
-      setIsChecked(false);
-    }
-
-  },[pwCheck])
+  }, [pwCheck, password]);
 
   useEffect(()=>{
     if(isVerified&&isChecked) setNextBtnActive(true);
     else setNextBtnActive(false);
-  },[isVerified,isChecked, emailError]);
+  }, [isVerified, isChecked, emailError]);
 
   function handleNext(){
     navigate('/register',{
@@ -129,11 +97,11 @@ function Certify(){
     if (verificationCode === generatedCode) {
       setCodeVerified(true); // 인증 성공 시 codeVerified를 true로 설정
       setIsVerified(true);
-      alert("이메일 인증 성공");
+      // alert("이메일 인증 성공");
     } else {
       setCodeVerified(false); // 인증 실패 시 codeVerified를 false로 설정
       setIsVerified(false);
-      alert("인증 코드가 일치하지 않습니다.");
+      // alert("인증 코드가 일치하지 않습니다.");
     }
   };
 
