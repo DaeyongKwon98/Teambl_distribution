@@ -19,11 +19,9 @@ function Certify(){
   const [isChecked, setIsChecked] = useState(false);
   const [emailBtnActive, setEmailBtnActive] = useState(false);
   const [nextBtnActive, setNextBtnActive] = useState(false);
-  // let [code , setCode] = useState('');
   const [pwCheck, setPwCheck] = useState('');
   const [emailError, setEmailError] = useState("");
-  // let [valid1, setValid1] = useState(false);
-  // let [valid2, setValid2] = useState(false);
+  const [codeVerified, setCodeVerified] = useState(null); // 인증 코드 확인 상태 추가
 
   useEffect(()=>{
     if(email!=='') {
@@ -106,10 +104,6 @@ function Certify(){
     });
   };
   
-  // function handleBack(){
-  //   navigate('/welcome');
-  // }
-  
   const handleSendCode = async () => {
     const isEmailExists = await checkEmailExists(); // 이메일 중복 체크
 
@@ -130,20 +124,14 @@ function Certify(){
     }
   };
 
+  // 인증 코드 확인
   const handleVerifyCode = () => {
     if (verificationCode === generatedCode) {
-      labelRef1.current.innerHTML='인증코드가 일치합니다.';
-      labelRef1.current.style.fontSize='10px';
-      labelRef1.current.style.color='green';
+      setCodeVerified(true); // 인증 성공 시 codeVerified를 true로 설정
       setIsVerified(true);
       alert("이메일 인증 성공");
-    } else if (verificationCode!==generatedCode && verificationCode!=='') {
-      labelRef1.current.innerHTML='인증코드가 일치하지 않습니다.';
-      labelRef1.current.style.fontSize='10px';
-      labelRef1.current.style.color='red';
-      setIsVerified(false);
     } else {
-      labelRef1.current.innerHTML='';
+      setCodeVerified(false); // 인증 실패 시 codeVerified를 false로 설정
       setIsVerified(false);
       alert("인증 코드가 일치하지 않습니다.");
     }
