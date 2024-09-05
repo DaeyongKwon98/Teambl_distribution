@@ -52,5 +52,5 @@ button.welcome-exitBtn{
   padding: 10px;
 }
 button.welcome-exitBtn:hover{
-  cursor: default;
+  cursor: pointer;
 }
