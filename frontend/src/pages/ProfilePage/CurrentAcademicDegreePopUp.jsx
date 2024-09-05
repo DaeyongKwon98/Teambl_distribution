@@ -7,13 +7,15 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
 
   useEffect(() => {
     setNewCad(cad); // cad 값이 변경될 때 newCad도 업데이트
+    console.log("newcad is updated into", cad);
   }, [cad]);
   
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
     setNewCad(newCadInput);
     setCad(newCadInput);
-    setIsPopupOpen(false);
+    setIsPopupOpen(false
+    console.log("handlecadchange: newCad", newCad);
   };
 
   return (
