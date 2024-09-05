@@ -9,26 +9,26 @@ function End() {
   const name = { ...location.state }.user_name;
   const [latestUserId, setLatestUserId] = useState(null); // 가장 최근 사용자 ID 상태
 
-  // 가장 최근 사용자 ID를 가져오는 함수
-  useEffect(() => {
-    const fetchLatestUserId = async () => {
-      try {
-        // 서버에서 가장 최근 사용자 정보 가져오기
-        const response = await api.get("/api/latest-user-id/", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`, // 인증 토큰 포함
-          },
-        });
-        const fetchedUserId = response.data.user_id; // API에서 받은 user_id (id 필드 가정)
-        setLatestUserId(fetchedUserId); // 가장 최근 사용자 ID 상태에 저장
-        console.log("Latest user id:", fetchedUserId);
-      } catch (error) {
-        console.error("가장 최근 사용자 ID를 가져오는 데 실패했습니다.", error);
-      }
-    };
+  // // 가장 최근 사용자 ID를 가져오는 함수
+  // useEffect(() => {
+  //   const fetchLatestUserId = async () => {
+  //     try {
+  //       // 서버에서 가장 최근 사용자 정보 가져오기
+  //       const response = await api.get("/api/latest-user-id/", {
+  //         headers: {
+  //           Authorization: `Bearer ${localStorage.getItem("token")}`, // 인증 토큰 포함
+  //         },
+  //       });
+  //       const fetchedUserId = response.data.user_id; // API에서 받은 user_id (id 필드 가정)
+  //       setLatestUserId(fetchedUserId); // 가장 최근 사용자 ID 상태에 저장
+  //       console.log("Latest user id:", fetchedUserId);
+  //     } catch (error) {
+  //       console.error("가장 최근 사용자 ID를 가져오는 데 실패했습니다.", error);
+  //     }
+  //   };
 
-    fetchLatestUserId();
-  }, []); // 컴포넌트 마운트 시 API 호출
+  //   fetchLatestUserId();
+  // }, []); // 컴포넌트 마운트 시 API 호출
   
   function handleProfile() {
     if (latestUserId) {
