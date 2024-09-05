@@ -9,6 +9,7 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad }) => {
     const newCadInput = e.target.value;
     setNewCad(newCadInput);
     setCad(newCadInput);
+    setIsPopupOpen(false);
   };
 
   return (
