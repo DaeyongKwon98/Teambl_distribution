@@ -297,7 +297,7 @@ button.profile-submitBtn:disabled:hover {
 .profile-input {
   width: 100%; /* 입력 필드가 부모 컨테이너의 전체 너비를 차지 */
   padding: 10px; /* 내부 패딩 */
-  margin: 10px 0 10px; /* 입력 필드의 위, 아래에 마진 추가 */
+  /* margin: 10px 0px; /* 입력 필드의 위, 아래에 마진 추가 */ */
   border: none;
   font-family: Pretendard;
   font-size: 13px; /* 폰트 크기 */
