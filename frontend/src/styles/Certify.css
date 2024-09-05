@@ -127,3 +127,15 @@ button.certify-nextBtn:hover{
 button.certify-nextBtn:disabled:hover{
   cursor: default;
 }
+
+.label-success {
+  font-size: 10px;
+  color: #42A513;
+  font-weight: 400;
+}
+
+.label-error {
+  font-size: 10px;
+  color: #B80000;
+  font-weight: 400;
+}
