@@ -19,8 +19,15 @@ const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
     console.log("handleCadChange - newCadInput:", newCadInput); // 상태 업데이트 확인
   };
 
+  // 팝업 외부를 클릭하면 팝업 닫기
+  const handleOverlayClick = (e) => {
+    if (e.target === e.currentTarget) {
+      setIsPopupOpen(false); // 팝업 닫기
+    }
+  };
+  
   return (
-    <div className="cad-popup-overlay">
+    <div className="cad-popup-overlay" onClick={handleOverlayClick}>
       <div className="cad-popup-content">
         <div className="cad-popup-top">
           <img src={topBarIcon} alt="popup top bar" />
