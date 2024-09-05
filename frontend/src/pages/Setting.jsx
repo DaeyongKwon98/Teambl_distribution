@@ -24,7 +24,6 @@ const Setting = () => {
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
   const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
-  const [showLogoutSection, setShowLogoutSection] = useState(false); // 로그아웃 섹션 표시 여부
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
   const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
   const [showPolicySection, setShowPolicySection] = useState(false); // 약관 및 정책 섹션 표시 여부
@@ -114,7 +113,6 @@ const Setting = () => {
         setNewPassword(""); // 비밀번호 변경 후 입력 필드 초기화
 
         // 로그아웃 처리
-        // localStorage.removeItem("token"); // 토큰 제거
         localStorage.clear();
         alert("Password changed successfully. You will be logged out.");
         navigate("/login"); // 로그인 페이지로 이동
@@ -127,7 +125,6 @@ const Setting = () => {
 
   const handleLogout = () => {
     // 로그아웃 처리
-    // localStorage.removeItem("token"); // 토큰 제거
     localStorage.clear();
     navigate("/login"); // 로그인 페이지로 이동
   };
@@ -243,22 +240,9 @@ const Setting = () => {
         </div>
       )}
 
-      <div
-        className="setting-password-toggle"
-        onClick={() => setShowLogoutSection(!showLogoutSection)}
-      >
+      <div className="setting-password-toggle" onClick={handleLogout}>
         <span className="setting-section-title">로그아웃</span>
-        <img
-          src={ArrowDownIcon}
-          alt="Toggle Logout Section"
-          className={`setting-arrow-icon ${showLogoutSection ? "rotate" : ""}`}
-        />
       </div>
-      {showLogoutSection && (
-        <button className="setting-logout-button" onClick={handleLogout}>
-          로그아웃
-        </button>
-      )}
 
       <div
         className="setting-password-toggle"
