@@ -42,7 +42,7 @@ function Form({ route, method }) {
         localStorage.setItem(REFRESH_TOKEN, res.data.refresh);
         localStorage.setItem("userId", res.data.userId);
         console.log("Stored userId:", localStorage.getItem("userId"));
-        navigate("/");
+        navigate("/home");
       } else {
         navigate("/login");
       }
@@ -92,7 +92,7 @@ function Form({ route, method }) {
           로그인
         </button>
         <div className="links">
-          <span onClick={() => navigate('/password-reset')}>비밀번호 재설정</span>
+          <span onClick={() => ('/password-reset')}>비밀번호 재설정</span>
         </div>
       </div>
     </div>
