@@ -44,14 +44,23 @@
 
 .cad-popup-discription h3 {
   font-size: 15.428px;
-  font-weight: 500;
+  font-weight: 600;
   margin: 0px;
 }
 
 .cad-popup-discription p {
-  font-size: 10.28px;
+  font-size: 11px;
   margin: 0px;
 }
 
-.cad-popup-radio-container {
+.cad-popup-radio-container label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 2px;
+  display: flex;
+  align-items: center;
+}
+
+.cad-popup-radio-container input {
+  margin-right: 8px;
 }
