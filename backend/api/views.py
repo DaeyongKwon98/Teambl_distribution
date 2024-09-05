@@ -212,13 +212,13 @@ class DeleteUserView(generics.DestroyAPIView):
         # 해당 유저와 관련된 친구 관계 삭제
         related_friends.delete()
 
-        # 유저 삭제
-        user.delete()
-
         # 관련된 유저들의 one_degree_count 업데이트
         for related_user in related_users:
             if related_user != user:  # 탈퇴한 유저를 제외한 나머지 유저들에 대해 업데이트
                 update_profile_one_degree_count(related_user)
+        
+        # 유저 삭제
+        user.delete()
                 
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
