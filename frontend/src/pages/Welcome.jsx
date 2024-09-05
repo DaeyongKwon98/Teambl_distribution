@@ -54,6 +54,10 @@ const Welcome = () => {
     navigate('/certify');
   };
 
+  function handleLogin() {
+    navigate("/login");
+  }
+  
   if (loading) {
     return (
       <div className="loading-container">
@@ -68,10 +72,22 @@ const Welcome = () => {
   if (error) {
     if (errorType === 'expired') {
       return (
-        <div className="error-container">
-          <h1>초대 링크가 만료되었습니다.</h1>
-          <p>새로운 링크를 요청해 주세요.</p>
+        <div className="welcome-expired">
+          <div className="welcome-expired-container">
+            <span className="welcome-expired-span">앗, 더 이상<br />사용할 수 없는 링크에요.</span>
+            <label className="welcome-expired-label">
+              회원가입을 원하시면 초대 링크를<br/>보내준 분께 다시 링크를 요청해보세요.
+            </label>
+            <button type="button" className="welcome-exitBtn" onClick={handleLogin}>
+              팀블 로그인으로 가기
+            </button>
+          </div>
         </div>
+        
+        // <div className="error-container">
+        //   <h1>초대 링크가 만료되었습니다.</h1>
+        //   <p>새로운 링크를 요청해 주세요.</p>
+        // </div>
       );
     } else if (errorType === 'invalid') {
       return (
