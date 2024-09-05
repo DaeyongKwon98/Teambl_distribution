@@ -293,3 +293,14 @@ button.profile-submitBtn:disabled:hover {
   margin-top: 5px;
   margin-bottom: 10px;
 }
+
+.profile-input {
+  width: 100%; /* 입력 필드가 부모 컨테이너의 전체 너비를 차지 */
+  padding: 0px; /* 내부 패딩 */
+  margin: 0 0 10px; /* 입력 필드의 위, 아래에 마진 추가 */
+  border: none;
+  font-size: 14px; /* 폰트 크기 */
+  box-sizing: border-box; /* 패딩과 테두리를 포함한 전체 너비 계산 */
+  background: transparent;
+  color: #A8A8A8; /* 텍스트 색상 */
+}
