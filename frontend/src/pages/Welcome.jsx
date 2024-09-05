@@ -88,7 +88,7 @@ const Welcome = () => {
       return (
         <div className="welcome-expired">
           <div className="welcome-expired-container">
-            <span className="welcome-expired-span">유효하지 않은 초대 링크입니다.</span>
+            <span className="welcome-expired-span">유효하지 않은<br />초대 링크입니다.</span>
             <label className="welcome-expired-label">
               올바른 링크를 사용해 주세요.
             </label>
@@ -102,7 +102,7 @@ const Welcome = () => {
       return (
         <div className="welcome-expired">
           <div className="welcome-expired-container">
-            <span className="welcome-expired-span">알 수 없는 오류가 발생했습니다.</span>
+            <span className="welcome-expired-span">알 수 없는<br />오류가 발생했습니다.</span>
             <label className="welcome-expired-label">
               다시 시도해 주세요.
             </label>
