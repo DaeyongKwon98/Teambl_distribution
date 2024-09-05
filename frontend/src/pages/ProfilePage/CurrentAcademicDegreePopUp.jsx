@@ -5,6 +5,11 @@ import topBarIcon from "../../assets/popUpTopBar.svg";
 const CurrentAcademicDegreePopUp = ({ cad, setCad, setIsPopupOpen }) => {
   const [newCad, setNewCad] = useState(cad);
 
+  // cad가 변경될 때마다 newCad 상태를 동기화
+  useEffect(() => {
+    setNewCad(cad);
+  }, [cad]);
+  
   const handleCadChange = (e) => {
     const newCadInput = e.target.value;
     setNewCad(newCadInput);
