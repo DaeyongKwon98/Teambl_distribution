@@ -78,3 +78,27 @@ button.welcome-nextBtn:hover{
 .loading-highlight {
   color: #0923A9; /* 파란색 */
 }
+
+.welcome-expired {
+  margin: 0 auto;
+  width: 300px;
+  min-width: 300px; 
+}
+
+.welcome-expired-container {
+  margin: 150px 13px 0px;
+}
+
+span.welcome-expired-span {
+  line-height: 1.5em;
+}
+
+.welcome-expired-label {
+  margin-top: 30px;
+  display: inline-block;
+  font-size: 12px;
+  color: #121212;
+  font-family: Pretendard;
+  font-weight: 400;
+  letter-spacing: -0.304px;
+}
