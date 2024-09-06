@@ -60,7 +60,7 @@ function Friend() {
         // 1촌 중 from_user가 current_user인 경우
         const myChonsRequests = data.filter(
           (friend) =>
-            friend.status !== "accepted" &&
+            friend.status === "pending" &&
             friend.from_user.id === currentUser.id
         );
         setMyChonsRequests(myChonsRequests);
@@ -68,7 +68,7 @@ function Friend() {
         // 1촌 중 to_user가 current_user인 경우
         const requestsToMe = data.filter(
           (friend) =>
-            friend.status !== "accepted" && friend.to_user.id === currentUser.id
+            friend.status === "pending" && friend.to_user.id === currentUser.id
         );
         setRequestsToMe(requestsToMe);
       })
@@ -80,27 +80,25 @@ function Friend() {
   };
 
   // 1촌을 추가하는 함수
-  const addFriend = (e) => {
+  const addFriend = async (e) => {
     e.preventDefault();
-    api
-      .post("/api/friends/", {
+    try {
+      const response = api.post("/api/friends/", {
         to_user_email: inputEmail,
-      })
-      .then((res) => {
-        if (res.status === 201) alert("친구 추가 완료!");
-        else alert("친구 추가 실패");
-        getChons();
-        setInputEmail("");
-      })
-      .catch((error) => {
-        console.log(error.response);
-        console.log(error.message);
-        if (error.response) {
-          alert(`친구 추가 실패: ${error.response.data}`);
-        } else {
-          alert(`친구 추가 실패: ${error.message}`);
-        }
       });
+      console.log(response);
+
+      if (response.status === 201) alert("친구 추가 완료!");
+      getChons();
+      setInputEmail("");
+    } catch (error) {
+      console.log(error);
+      if (error.response.data.message) {
+        alert(`${error.response.data.message}`);
+      } else {
+        alert(`${error.response.data.to_user_email}`);
+      }
+    }
   };
 
   const handleNavClick = (item) => {

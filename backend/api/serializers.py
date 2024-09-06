@@ -208,7 +208,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
     # second_degree_ids = serializers.SerializerMethodField()
     # second_degree_connections = serializers.SerializerMethodField()
     # related_users = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = CustomUser
         fields = [
@@ -231,7 +231,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "is_active": {"read_only": True},
             "date_joined": {"read_only": True},
         }
-    
+
     def create(self, validated_data):
         profile_data = validated_data.pop("profile", {})
         keywords_data = profile_data.pop("keywords", [])
@@ -308,7 +308,10 @@ class InvitationLinkSerializer(serializers.ModelSerializer):
 
 
 class FriendCreateSerializer(serializers.ModelSerializer):
-    to_user_email = serializers.EmailField(write_only=True)
+    to_user_email = serializers.EmailField(
+        write_only=True,
+        error_messages={"invalid": "유효한 이메일 주소를 입력해주세요."},
+    )
     from_user = CustomUserSerializer(read_only=True)
     to_user = CustomUserSerializer(read_only=True)
     id = serializers.IntegerField(read_only=True)
@@ -318,29 +321,31 @@ class FriendCreateSerializer(serializers.ModelSerializer):
         fields = ["id", "from_user", "to_user", "status", "to_user_email"]
         read_only_fields = ["id", "from_user", "to_user"]
 
-    def validate_to_user_email(self, value):
-        try:
-            to_user = CustomUser.objects.get(email=value)
-        except CustomUser.DoesNotExist:
-            raise serializers.ValidationError("User with this email does not exist.")
-        return to_user
-
     def validate(self, attrs):
-        if "to_user_email" in attrs:
-            from_user = self.context["request"].user
-            to_user = attrs["to_user_email"]
+        from_user = self.context["request"].user
+        to_user_email = attrs.get("to_user_email")
 
-            if from_user == to_user:
-                raise serializers.ValidationError(
-                    "You cannot be friends with yourself."
-                )
+        # 이메일에 해당하는 사용자가 있는지 확인
+        try:
+            to_user = CustomUser.objects.get(email=to_user_email)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError(
+                {"message": "해당 이메일의 유저가 없습니다."}
+            )
 
-            if Friend.objects.filter(from_user=from_user, to_user=to_user).exists():
-                raise serializers.ValidationError("Friendship request already exists.")
+        # 자신에게 1촌 신청하는지 확인
+        if from_user == to_user:
+            raise serializers.ValidationError(
+                {"message": "자신에게 1촌 신청할 수 없습니다."}
+            )
 
-            attrs["from_user"] = from_user
-            attrs["to_user"] = to_user
+        # 이미 1촌인 유저인지 확인
+        if Friend.objects.filter(from_user=from_user, to_user=to_user).exists():
+            raise serializers.ValidationError({"message": "이미 1촌인 유저입니다."})
 
+        # 검증 완료 후 attrs에 추가
+        attrs["from_user"] = from_user
+        attrs["to_user"] = to_user
         return attrs
 
     def create(self, validated_data):
@@ -402,9 +407,7 @@ class RelatedUserSerializer(serializers.Serializer):
 
 
 class SecondDegreeProfileSerializer(serializers.Serializer):
-    second_degree_profile_id = serializers.IntegerField(
-        help_text="2촌 사용자의 ID"
-    )
+    second_degree_profile_id = serializers.IntegerField(help_text="2촌 사용자의 ID")
     connector_friend_id = serializers.IntegerField(
         help_text="2촌과 연결된 1촌 사용자의 ID"
     )
@@ -413,12 +416,12 @@ class SecondDegreeProfileSerializer(serializers.Serializer):
 class InquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = Inquiry
-        fields = ['id', 'user', 'text', 'created_at']
-        read_only_fields = ['id', 'user', 'created_at']
+        fields = ["id", "user", "text", "created_at"]
+        read_only_fields = ["id", "user", "created_at"]
 
 
 class SearchHistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = SearchHistory
-        fields = ['id', 'user', 'keyword', 'created_at']
-        read_only_fields = ['id', 'user', 'created_at']
+        fields = ["id", "user", "keyword", "created_at"]
+        read_only_fields = ["id", "user", "created_at"]

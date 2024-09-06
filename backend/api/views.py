@@ -83,7 +83,6 @@ class CreateUserView(generics.CreateAPIView):
             # 회원가입 후 초대한 사람과 나의 one_degree_count 업데이트
             update_profile_one_degree_count(from_user)
             update_profile_one_degree_count(to_user)
-            
 
         # 회원가입에 성공한 경우 InvitationLink의 invitee_id 변경 / 초대 링크 상태를 accepted로 변경 / 알림 생성
         if invitation:
@@ -208,18 +207,20 @@ class DeleteUserView(generics.DestroyAPIView):
         for friend in related_friends:
             related_users.add(friend.from_user)
             related_users.add(friend.to_user)
-            
+
         # 해당 유저와 관련된 친구 관계 삭제
         related_friends.delete()
 
         # 관련된 유저들의 one_degree_count 업데이트
         for related_user in related_users:
-            if related_user != user:  # 탈퇴한 유저를 제외한 나머지 유저들에 대해 업데이트
+            if (
+                related_user != user
+            ):  # 탈퇴한 유저를 제외한 나머지 유저들에 대해 업데이트
                 update_profile_one_degree_count(related_user)
-        
+
         # 유저 삭제
         user.delete()
-                
+
         return Response(
             {"detail": "User deleted successfully."}, status=status.HTTP_204_NO_CONTENT
         )
@@ -529,7 +530,7 @@ class ListCreateFriendView(generics.ListCreateAPIView):
 
         except CustomUser.DoesNotExist:
             logger.error(f"User with id {to_user_id} does not exist")
-            raise ValidationError("User with this ID does not exist.")
+            raise ValidationError("해당 아이디를 가진 사용자가 존재하지 않습니다.")
 
 
 class FriendUpdateView(generics.UpdateAPIView):
@@ -678,10 +679,9 @@ class SearchUsersAPIView(generics.ListAPIView):
 
             # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
             sorted_custom_users = [
-                CustomUser.objects.get(profile=profile)
-                for profile in unique_profiles
+                CustomUser.objects.get(profile=profile) for profile in unique_profiles
             ]
-            
+
             serializer = self.get_serializer(sorted_custom_users, many=True)
             return Response(serializer.data)
 
@@ -858,7 +858,9 @@ class SearchHistoryListCreateView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        return SearchHistory.objects.filter(user=self.request.user).order_by('-created_at')
+        return SearchHistory.objects.filter(user=self.request.user).order_by(
+            "-created_at"
+        )
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
@@ -872,13 +874,16 @@ class SearchHistoryDeleteView(generics.DestroyAPIView):
     def get_queryset(self):
         return SearchHistory.objects.filter(user=self.request.user)
 
+
 # 가장 최근(새로 가입한) 사용자의 id 얻기
 class LatestUserIdView(generics.GenericAPIView):
     serializer_class = CustomUserSerializer
 
     def get(self, request, *args, **kwargs):
         try:
-            latest_user = CustomUser.objects.latest('id')  # 가장 최근 생성된 유저 찾기
+            latest_user = CustomUser.objects.latest("id")  # 가장 최근 생성된 유저 찾기
             return Response({"user_id": latest_user.id}, status=status.HTTP_200_OK)
         except CustomUser.DoesNotExist:
-            return Response({"error": "No users found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "No users found"}, status=status.HTTP_404_NOT_FOUND
+            )
