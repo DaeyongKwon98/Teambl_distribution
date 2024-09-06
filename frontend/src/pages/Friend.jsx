@@ -83,7 +83,7 @@ function Friend() {
   const addFriend = async (e) => {
     e.preventDefault();
     try {
-      const response = api.post("/api/friends/", {
+      const response = await api.post("/api/friends/", {
         to_user_email: inputEmail,
       });
       console.log(response);
