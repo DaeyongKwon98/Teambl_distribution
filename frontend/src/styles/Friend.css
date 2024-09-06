@@ -177,3 +177,8 @@ body {
   background-color: #0923a9;
   cursor: pointer;
 }
+
+.friend-threedots-image {
+  width: 24px;
+  height: 8px;
+}
