@@ -292,63 +292,64 @@ function NewSearch() {
         </>
       ) : (
         <>
-          <div className="newSearch-filter-bar">
-            <button
-              className={`newSearch-filter-button ${
-                filters.relationshipDegree.includes(1) ? "active" : ""
-              }`}
-              onClick={() => {
-                handleRelationshipDegreeChange(1);
-              }}
-            >
-              1촌
-            </button>
-            <button
-              className={`newSearch-filter-button ${
-                filters.relationshipDegree.includes(2) ? "active" : ""
-              }`}
-              onClick={() => {
-                handleRelationshipDegreeChange(2);
-              }}
-            >
-              2촌
-            </button>
-            <button
-              className={`newSearch-filter-button ${
-                filters.relationshipDegree.includes(3) ? "active" : ""
-              }`}
-              onClick={() => {
-                handleRelationshipDegreeChange(3);
-              }}
-            >
-              3촌
-            </button>
-            <button
-              className={`newSearch-filter-button ${
-                isMajorPopupOpen || filters.majors.length > 0 ? "active" : ""
-              }`}
-              onClick={() => setIsMajorPopupOpen(true)}
-            >
-              {filters.majors.length > 0
-                ? filters.majors.length > 1
-                  ? `전공 ${filters.majors.length} `
-                  : filters.majors[0] + " "
-                : "전공 "}
-              {filters.majors.length > 0 || isMajorPopupOpen ? (
-                <img
-                  src={MajorIcon}
-                  alt="전공 아이콘"
-                  className="newSearch-major-icon"
-                />
-              ) : (
-                <img
-                  src={NoMajorIcon}
-                  alt="0전공 아이콘"
-                  className="newSearch-nomajor-icon"
-                />
-              )}
-            </button>
-          </div>
+          {users.length > 0 && (
+            <div className="newSearch-filter-bar">
+              <button
+                className={`newSearch-filter-button ${
+                  filters.relationshipDegree.includes(1) ? "active" : ""
+                }`}
+                onClick={() => {
+                  handleRelationshipDegreeChange(1);
+                }}
+              >
+                1촌
+              </button>
+              <button
+                className={`newSearch-filter-button ${
+                  filters.relationshipDegree.includes(2) ? "active" : ""
+                }`}
+                onClick={() => {
+                  handleRelationshipDegreeChange(2);
+                }}
+              >
+                2촌
+              </button>
+              <button
+                className={`newSearch-filter-button ${
+                  filters.relationshipDegree.includes(3) ? "active" : ""
+                }`}
+                onClick={() => {
+                  handleRelationshipDegreeChange(3);
+                }}
+              >
+                3촌
+              </button>
+              <button
+                className={`newSearch-filter-button ${
+                  isMajorPopupOpen || filters.majors.length > 0 ? "active" : ""
+                }`}
+                onClick={() => setIsMajorPopupOpen(true)}
+              >
+                {filters.majors.length > 0
+                  ? filters.majors.length > 1
+                    ? `전공 ${filters.majors.length} `
+                    : filters.majors[0] + " "
+                  : "전공 "}
+                {filters.majors.length > 0 || isMajorPopupOpen ? (
+                  <img
+                    src={MajorIcon}
+                    alt="전공 아이콘"
+                    className="newSearch-major-icon"
+                  />
+                ) : (
+                  <img
+                    src={NoMajorIcon}
+                    alt="0전공 아이콘"
+                    className="newSearch-nomajor-icon"
+                  />
+                )}
+              </button>
+            </div>
 
           <div className="newSearch-selected-majors">
             {filters.majors.map((major, index) => (
@@ -366,7 +367,7 @@ function NewSearch() {
           
           <div className="newSearch-team-member-results">
             {users.length === 0 ? (
-              <div className="no-results-message">사용자를 찾을 수 없습니다.</div>
+              <div className="no-results-message">키워드에 일치하는 인물이 없습니다.<br />다른 키워드를 활용해 검색해보세요.</div>
             ) : (
               users.map((user, index) => (
                 <NewUserSearchItem
