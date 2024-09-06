@@ -4,6 +4,7 @@ import pendingIcon from "../assets/Friend/pending.svg";
 import acceptIcon from "../assets/Friend/accept.svg";
 import rejectIcon from "../assets/Friend/reject.svg";
 import ProfileDefaultImg from "../assets/default_profile_image.svg";
+import threeDotsImg from "../assets/three_dots.svg";
 import "../styles/Friend.css";
 
 const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
@@ -78,6 +79,11 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
             {otherUserProfile.keywords.join(" / ")}
           </p> */}
           </div>
+          <img
+            src={threeDotsImg}
+            alt="three dots image"
+            className="friend-threedots-image"
+          />
         </div>
       )}
 
