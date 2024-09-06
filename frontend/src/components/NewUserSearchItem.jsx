@@ -40,7 +40,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
     if (relationshipDegree === 1) {
       return;
     }
-    navigate("/friends");
+    navigate("/friends", { state: { activeTab: 'addChons' } });
   };
   
   return (

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "../styles/Friend.css";
 import api from "../api";
 import Header from "../components/Header";
@@ -22,8 +22,9 @@ function Friend() {
   };
   */
 
+  const location = useLocation();
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeTab, setActiveTab] = useState("myChons");
+  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'myChons');
   const [myAcceptedChons, setMyAcceptedChons] = useState([]); // 나의 1촌
   const [myChonsRequests, setMyChonsRequests] = useState([]); // 1촌 추가
   const [requestsToMe, setRequestsToMe] = useState([]); // 내게 신청한
