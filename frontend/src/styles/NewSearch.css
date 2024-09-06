@@ -458,6 +458,11 @@ li {
 
 .no-results-message {
   text-align: center;
-  font-size: 14px;
-  color: #121212;
+  font-size: 13px;
+  color: #595959;
+  margin-top: 70px;
+  font-family: Pretendard;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
