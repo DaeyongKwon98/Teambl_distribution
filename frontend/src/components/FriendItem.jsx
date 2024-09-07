@@ -101,6 +101,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
             <FriendDeletePopup
               setIsPopupOpen={setIsDeletePopupOpen}
               handleDeleteFriend={handleDeleteFriend}
+              friendName={otherUserProfile.user_name}
             />
           )}
         </div>

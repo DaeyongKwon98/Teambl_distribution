@@ -3,7 +3,7 @@ import "../../styles/FriendPage/FriendDeletePopup.css";
 import topBarIcon from "../../assets/popUpTopBar.svg";
 import blueXIcon from "../../assets/Friend/blue_x_icon.svg";
 
-const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
+const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend, friendName }) => {
   const [showFinalDelete, setShowFinalDelete] = useState(false);
 
   // Handle clicking outside the popup to close it
@@ -52,7 +52,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
               <p>1촌 끊기</p>
             </div>
             <p className="fd-modal-description">
-              000님과 1촌을 끊으시겠습니까?
+              {friendName}님과 1촌을 끊으시겠습니까?
               <br />
               1촌의 맺고 끊음은 신중히 결정해주세요.
             </p>
