@@ -1,6 +1,7 @@
 import React from "react";
 import "../../styles/FriendPage/FriendDeletePopup.css";
 import topBarIcon from "../../assets/popUpTopBar.svg";
+import blueXIcon from "../../assets/Friend/blue_x_icon.svg";
 
 const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
   // Handle clicking outside the popup to close it
@@ -24,6 +25,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
               setIsPopupOpen(false); // Close popup after deletion
             }}
           >
+            <img src={blueXIcon} alt="blue x icon" className="fd-bluex-icon" />
             1촌 끊기
           </button>
           {/* <button
