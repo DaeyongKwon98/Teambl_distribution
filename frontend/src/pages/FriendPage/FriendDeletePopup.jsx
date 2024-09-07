@@ -16,12 +16,14 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
   // Close the final delete confirmation popup
   const closeFriendDeleteModal = () => {
     setShowFinalDelete(false);
-    setIsPopupOpen(false); // Also close the main popup
+    setIsPopupOpen(false); // Close both modals
   };
 
   return (
     <div className="fd-popup-overlay-wrapper" onClick={handleOverlayClick}>
-      <div className="fd-popup-overlay">
+      <div
+        className={`fd-popup-overlay ${showFinalDelete ? "hidden" : ""}`}
+      >
         <div className="fd-popup-top">
           <img src={topBarIcon} alt="popup top bar" />
         </div>
@@ -35,45 +37,45 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
             <img src={blueXIcon} alt="blue x icon" className="fd-bluex-icon" />
             1촌 끊기
           </button>
-
-          {showFinalDelete && (
-            <div className="fd-modal-overlay">
-              <div className="fd-withdraw-modal-content">
-                <div className="fd-modal-title">
-                  <img
-                    src={blueXIcon} // Use the existing icon for consistency
-                    alt="탈퇴 아이콘"
-                    className="fd-withdraw-icon"
-                  />
-                  <p>1촌 끊기</p>
-                </div>
-                <p className="fd-modal-description">
-                  000님과 1촌을 끊으시겠습니까?
-                  <br />
-                  1촌의 맺고 끊음은 신중히 결정해주세요.
-                </p>
-                <div className="fd-modal-buttons">
-                  <button
-                    className="fd-modal-button fd-cancel-button"
-                    onClick={closeFriendDeleteModal} // Close both modals
-                  >
-                    취소
-                  </button>
-                  <button
-                    className="fd-modal-button fd-confirm-button"
-                    onClick={() => {
-                      handleDeleteFriend(); // Call delete function
-                      closeFriendDeleteModal(); // Close modals after deleting
-                    }}
-                  >
-                    끊기
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      {showFinalDelete && (
+        <div className="fd-modal-overlay">
+          <div className="fd-withdraw-modal-content">
+            <div className="fd-modal-title">
+              <img
+                src={blueXIcon} // Use the existing icon for consistency
+                alt="탈퇴 아이콘"
+                className="fd-withdraw-icon"
+              />
+              <p>1촌 끊기</p>
+            </div>
+            <p className="fd-modal-description">
+              000님과 1촌을 끊으시겠습니까?
+              <br />
+              1촌의 맺고 끊음은 신중히 결정해주세요.
+            </p>
+            <div className="fd-modal-buttons">
+              <button
+                className="fd-modal-button fd-cancel-button"
+                onClick={closeFriendDeleteModal} // Close both modals
+              >
+                취소
+              </button>
+              <button
+                className="fd-modal-button fd-confirm-button"
+                onClick={() => {
+                  handleDeleteFriend(); // Call delete function
+                  closeFriendDeleteModal(); // Close modals after deleting
+                }}
+              >
+                끊기
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
