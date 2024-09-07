@@ -340,7 +340,7 @@ class FriendCreateSerializer(serializers.ModelSerializer):
             )
 
         # 이미 1촌인 유저인지 확인
-        if Friend.objects.filter(from_user=from_user, to_user=to_user).exists():
+        if Friend.objects.filter(from_user=from_user, to_user=to_user, status="accepted").exists():
             raise serializers.ValidationError({"message": "이미 1촌인 유저입니다."})
 
         # 검증 완료 후 attrs에 추가
