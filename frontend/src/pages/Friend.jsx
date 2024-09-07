@@ -7,21 +7,6 @@ import Navbar from "../components/Navbar";
 import FriendItem from "../components/FriendItem";
 
 function Friend() {
-  /*
-  TODO: 1촌을 삭제하는 기능도 넣어야할 것 같음!
-
-  const deleteFriend = (id) => {
-    api
-      .delete(`/api/friends/delete/${id}/`)
-      .then((res) => {
-        if (res.status === 204) alert("친구 삭제 완료");
-        else alert("Failed to delete Friend.");
-        getFriends();
-      })
-      .catch((error) => alert(error));
-  };
-  */
-
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState(null);
   const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'myChons');
@@ -33,6 +18,8 @@ function Friend() {
 
   const navigate = useNavigate();
 
+  // 1촌 삭제 함수는 components/FriendDeletePopup.jsx에 구현
+  
   // 현재 로그인 유저를 가져오는 함수
   const getCurrentUser = () => {
     api
@@ -101,7 +88,7 @@ function Friend() {
       }
     }
   };
-
+  
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
