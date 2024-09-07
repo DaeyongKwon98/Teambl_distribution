@@ -12,6 +12,12 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
       setIsPopupOpen(false); // Close popup
     }
   };
+
+  // Close the final delete confirmation popup
+  const closeFriendDeleteModal = () => {
+    setShowFinalDelete(false);
+    setIsPopupOpen(false); // Also close the main popup
+  };
   
   return (
     <div className="fd-popup-overlay-wrapper" onClick={handleOverlayClick}>
@@ -23,7 +29,6 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
           <button
             className="fd-delete-confirm-button"
             onClick={() => {
-              handleDeleteFriend();
               setShowFinalDelete(true);
               setIsPopupOpen(false); // Close popup after deletion
             }}
@@ -57,13 +62,16 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
                 <div className="fd-modal-buttons">
                   <button
                     className="fd-modal-button fd-cancel-button"
-                    onClick={closeWithdrawModal}
+                    onClick={closeFriendDeleteModal}
                   >
                     취소
                   </button>
                   <button
                     className="fd-modal-button fd-confirm-button"
-                    onClick={confirmWithdraw}
+                    onClick={() => {
+                      handleDeleteFriend(); // Call delete function
+                      closeWithdrawModal(); // Close modal after deleting
+                    }}
                   >
                     끊기
                   </button>
