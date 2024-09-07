@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/ProfilePage/CurrentAcademicDegreePopUp.css";
+import "../../styles/FriendPage/FriendDeletePopup.css";
 import topBarIcon from "../../assets/popUpTopBar.svg";
 
 const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
@@ -11,32 +11,31 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
   };
   
   return (
-    <div className="cad-popup-overlay-wrapper" onClick={handleOverlayClick}>
-      <div className="cad-popup-overlay">
-        <div className="cad-popup-top">
+    <div className="fd-popup-overlay-wrapper" onClick={handleOverlayClick}>
+      <div className="fd-popup-overlay">
+        <div className="fd-popup-top">
           <img src={topBarIcon} alt="popup top bar" />
         </div>
-        <div className="cad-popup-description">
-          <h3>친구 삭제</h3>
+        <div className="fd-popup-description">
           <p>이 친구를 삭제하시겠습니까?</p>
         </div>
 
-        <div className="cad-popup-radio-container">
+        <div className="fd-popup-radio-container">
           <button
-            className="delete-confirm-button"
+            className="fd-delete-confirm-button"
             onClick={() => {
               handleDeleteFriend();
               setIsPopupOpen(false); // Close popup after deletion
             }}
           >
-            예, 삭제합니다
+            1촌 끊기
           </button>
-          <button
+          {/* <button
             className="delete-cancel-button"
             onClick={() => setIsPopupOpen(false)}
           >
             아니오
-          </button>
+          </button> */}
         </div>
       </div>
     </div>
