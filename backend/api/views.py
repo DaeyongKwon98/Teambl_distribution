@@ -626,7 +626,12 @@ class SearchUsersAPIView(generics.ListAPIView):
             # 1. 검색 쿼리로 필터링
             if query != "":
                 filtered_profiles = filtered_profiles.filter(
-                    keywords__keyword__icontains=query
+                    Q(keywords__keyword__icontains=query)  # 키워드 필터링
+                    | Q(user_name__icontains=query)  # 이름 필터링
+                    | Q(school__icontains=query)  # 학교 필터링
+                    | Q(current_academic_degree__icontains=query)  # 학력 필터링
+                    | Q(major1__icontains=query)  # 전공1 필터링
+                    | Q(major2__icontains=query)  # 전공2 필터링
                 )
 
             # 2. 전공 필터링

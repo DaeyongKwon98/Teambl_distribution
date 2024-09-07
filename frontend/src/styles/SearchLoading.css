@@ -1,0 +1,17 @@
+.searchloading-body {
+  margin: 20px;
+}
+
+.searchloading-title {
+  text-align: center;
+  align-items: center;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 5px;
+}
+
+.searchloading-text {
+  text-align: center;
+  align-items: center;
+  font-size: 13px;
+}

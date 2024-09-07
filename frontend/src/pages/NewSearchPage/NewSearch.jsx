@@ -8,6 +8,7 @@ import NoMajorIcon from "../../assets/NewSearch/nomajorIcon.svg";
 import api from "../../api";
 import NewUserSearchItem from "../../components/NewUserSearchItem";
 import MajorPopUpForSearch from "./MajorPopUpForSearch";
+import SearchLoading from "./SearchLoading";
 
 function NewSearch() {
   const [users, setUsers] = useState([]); // 검색 결과로 필터링된 유저들
@@ -15,9 +16,13 @@ function NewSearch() {
   const [recentSearches, setRecentSearches] = useState([]); // 최근 검색 기록
   const [keywords, setKeywords] = useState([]); // DB에서 가져온 키워드들
   const [searchSuggestions, setSearchSuggestions] = useState([]); // 검색시 아래에 뜨는 추천 검색어
-  const [filters, setFilters] = useState({ relationshipDegree: [], majors: [] }); // 사용자가 선택한 검색 필터
+  const [filters, setFilters] = useState({
+    relationshipDegree: [],
+    majors: [],
+  }); // 사용자가 선택한 검색 필터
   const [isSearched, setIsSearched] = useState(false); // 사용자가 검색 버튼을 눌렀는지 여부 (true이면 검색 결과창이 보임)
   const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
+  const [isSearchLoading, setIsSearchLoading] = useState(false); // 검색 로딩중인지 여부
 
   useEffect(() => {
     // console.log("키워드 가져오기");
@@ -59,11 +64,12 @@ function NewSearch() {
       console.error("Failed to fetch recent searches:", error);
     }
   };
-  
+
   // 검색을 실행하는 함수
   const doSearchUsers = async () => {
     setUsers([]);
     setIsSearched(true);
+    setIsSearchLoading(true);
 
     // 최근 검색 기록에 검색어 추가 (중복 방지)
     if (searchTerm && !recentSearches.includes(searchTerm)) {
@@ -77,6 +83,7 @@ function NewSearch() {
         majors: filters.majors.flat(),
       });
       setUsers(response.data);
+      setIsSearchLoading(false);
     } catch (error) {
       console.error("검색 중 오류가 발생했습니다.", error);
     }
@@ -117,14 +124,14 @@ function NewSearch() {
       // 먼저 서버에서 모든 검색 기록을 가져옵니다.
       const response = await api.get("/api/search-history/");
       const searchHistoryItems = response.data;
-  
+
       // 검색 기록의 ID를 이용해 각각의 기록을 삭제합니다.
       await Promise.all(
         searchHistoryItems.map((item) =>
           api.delete(`/api/search-history/${item.id}/`)
         )
       );
-  
+
       // 모든 검색 기록을 삭제한 후, 상태를 업데이트합니다.
       setRecentSearches([]);
     } catch (error) {
@@ -141,13 +148,15 @@ function NewSearch() {
       );
       if (searchItem) {
         await api.delete(`/api/search-history/${searchItem.id}/`); // 특정 검색 기록 삭제
-        setRecentSearches(recentSearches.filter((term) => term !== termToDelete)); // 로컬 상태 업데이트
+        setRecentSearches(
+          recentSearches.filter((term) => term !== termToDelete)
+        ); // 로컬 상태 업데이트
       }
     } catch (error) {
       console.error("Failed to delete search term:", error);
     }
   };
-  
+
   // 검색어를 선택했을 때 호출되는 함수
   const handleSelect = (term) => {
     setIsSearched(true);
@@ -185,19 +194,21 @@ function NewSearch() {
   //     return { ...prev, majors: newMajor };
   //   });
   // };
-  
+
   // 전공 필터를 추가 및 제거하는 함수
   const handleMajorChange = (newMajors) => {
     setFilters((prev) => {
       // majors 배열을 평탄화하여 중첩 배열을 방지
       const flatMajors = prev.majors.flat(Infinity);
-      
+
       // 새로 선택한 전공이 배열인지 아닌지 확인하고 평탄화
-      let normalizedNewMajors = Array.isArray(newMajors) ? newMajors.flat() : [newMajors];
-      
+      let normalizedNewMajors = Array.isArray(newMajors)
+        ? newMajors.flat()
+        : [newMajors];
+
       // 새로 선택한 전공 목록을 기준으로 필터링
       const updatedMajors = [...new Set(normalizedNewMajors)];
-      
+
       // 업데이트된 필터를 반환
       return { ...prev, majors: updatedMajors };
     });
@@ -293,90 +304,84 @@ function NewSearch() {
         </>
       ) : (
         <>
-          {users.length > 0 && (
-            <>
-              <div className="newSearch-filter-bar">
+          <div className="newSearch-filter-bar">
+            <button
+              className={`newSearch-filter-button ${
+                filters.relationshipDegree.includes(1) ? "active" : ""
+              }`}
+              onClick={() => {
+                handleRelationshipDegreeChange(1);
+              }}
+            >
+              1촌
+            </button>
+            <button
+              className={`newSearch-filter-button ${
+                filters.relationshipDegree.includes(2) ? "active" : ""
+              }`}
+              onClick={() => {
+                handleRelationshipDegreeChange(2);
+              }}
+            >
+              2촌
+            </button>
+            <button
+              className={`newSearch-filter-button ${
+                filters.relationshipDegree.includes(3) ? "active" : ""
+              }`}
+              onClick={() => {
+                handleRelationshipDegreeChange(3);
+              }}
+            >
+              3촌
+            </button>
+            <button
+              className={`newSearch-filter-button ${
+                isMajorPopupOpen || filters.majors.length > 0 ? "active" : ""
+              }`}
+              onClick={() => setIsMajorPopupOpen(true)}
+            >
+              {filters.majors.length > 0
+                ? filters.majors.length > 1
+                  ? `전공 ${filters.majors.length} `
+                  : filters.majors[0] + " "
+                : "전공 "}
+              {filters.majors.length > 0 || isMajorPopupOpen ? (
+                <img
+                  src={MajorIcon}
+                  alt="전공 아이콘"
+                  className="newSearch-major-icon"
+                />
+              ) : (
+                <img
+                  src={NoMajorIcon}
+                  alt="0전공 아이콘"
+                  className="newSearch-nomajor-icon"
+                />
+              )}
+            </button>
+          </div>
+
+          <div className="newSearch-selected-majors">
+            {filters.majors.map((major, index) => (
+              <span key={index} className="selected-major">
+                {major}
                 <button
-                  className={`newSearch-filter-button ${
-                    filters.relationshipDegree.includes(1) ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    handleRelationshipDegreeChange(1);
-                  }}
+                  className="remove-major"
+                  onClick={() =>
+                    handleMajorChange(filters.majors.filter((m) => m !== major))
+                  }
                 >
-                  1촌
+                  &times;
                 </button>
-                <button
-                  className={`newSearch-filter-button ${
-                    filters.relationshipDegree.includes(2) ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    handleRelationshipDegreeChange(2);
-                  }}
-                >
-                  2촌
-                </button>
-                <button
-                  className={`newSearch-filter-button ${
-                    filters.relationshipDegree.includes(3) ? "active" : ""
-                  }`}
-                  onClick={() => {
-                    handleRelationshipDegreeChange(3);
-                  }}
-                >
-                  3촌
-                </button>
-                <button
-                  className={`newSearch-filter-button ${
-                    isMajorPopupOpen || filters.majors.length > 0
-                      ? "active"
-                      : ""
-                  }`}
-                  onClick={() => setIsMajorPopupOpen(true)}
-                >
-                  {filters.majors.length > 0
-                    ? filters.majors.length > 1
-                      ? `전공 ${filters.majors.length} `
-                      : filters.majors[0] + " "
-                    : "전공 "}
-                  {filters.majors.length > 0 || isMajorPopupOpen ? (
-                    <img
-                      src={MajorIcon}
-                      alt="전공 아이콘"
-                      className="newSearch-major-icon"
-                    />
-                  ) : (
-                    <img
-                      src={NoMajorIcon}
-                      alt="0전공 아이콘"
-                      className="newSearch-nomajor-icon"
-                    />
-                  )}
-                </button>
-              </div>
-  
-              <div className="newSearch-selected-majors">
-                {filters.majors.map((major, index) => (
-                  <span key={index} className="selected-major">
-                    {major}
-                    <button
-                      className="remove-major"
-                      onClick={() =>
-                        handleMajorChange(
-                          filters.majors.filter((m) => m !== major)
-                        )
-                      }
-                    >
-                      &times;
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </>
-          )}
-  
+              </span>
+            ))}
+          </div>
+
           <div className="newSearch-team-member-results">
-            {users.length === 0 ? (
+            {isSearchLoading ? (
+              <SearchLoading />
+            ) : users.length === 0 ? (
               <div className="no-results-message">
                 키워드에 일치하는 인물이 없습니다.
                 <br />
@@ -394,6 +399,7 @@ function NewSearch() {
           </div>
         </>
       )}
+
       {isMajorPopupOpen && (
         <>
           <div
