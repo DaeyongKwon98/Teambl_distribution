@@ -324,6 +324,19 @@ class Friend(models.Model):
     class Meta:
         unique_together = ("to_user", "from_user")
 
+    @classmethod
+    def create_or_replace_friendship(cls, from_user, to_user):
+        # 거절된 상태의 친구 관계가 있는지 확인
+        rejected_friendship = cls.objects.filter(from_user=from_user, to_user=to_user, status="rejected").first()
+        
+        # 거절된 관계가 있으면 삭제
+        if rejected_friendship:
+            rejected_friendship.delete()
+        
+        # 새로운 친구 관계 생성 (pending 상태로)
+        new_friendship = cls.objects.create(from_user=from_user, to_user=to_user, status="pending")
+        return new_friendship
+    
     def __str__(self):
         return f"{self.from_user.email} is friends with {self.to_user.email}, status: {self.status}"
 
