@@ -76,6 +76,8 @@
 }
 
 .fd-delete-confirm-button {
+  display: inline-flex;
+  align-items: center;
   background-color: transparent; /* Transparent background */
   color: #1a3dc1; /* Blue text color matching the image */
   padding: 10px 20px; /* Padding for button */
@@ -91,5 +93,7 @@
 .fd-bluex-icon {
   width: 16px;
   height: 16px;
-  
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
 }
