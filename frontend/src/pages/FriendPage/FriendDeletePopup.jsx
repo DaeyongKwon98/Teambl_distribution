@@ -5,7 +5,7 @@ import blueXIcon from "../../assets/Friend/blue_x_icon.svg";
 
 const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
   const [showFinalDelete, setShowFinalDelete] = useState(false);
-  
+
   // Handle clicking outside the popup to close it
   const handleOverlayClick = (e) => {
     if (e.target === e.currentTarget) {
@@ -18,7 +18,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
     setShowFinalDelete(false);
     setIsPopupOpen(false); // Also close the main popup
   };
-  
+
   return (
     <div className="fd-popup-overlay-wrapper" onClick={handleOverlayClick}>
       <div className="fd-popup-overlay">
@@ -29,26 +29,19 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
           <button
             className="fd-delete-confirm-button"
             onClick={() => {
-              setShowFinalDelete(true);
-              setIsPopupOpen(false); // Close popup after deletion
+              setShowFinalDelete(true); // Show the final delete confirmation
             }}
           >
             <img src={blueXIcon} alt="blue x icon" className="fd-bluex-icon" />
             1촌 끊기
           </button>
-          {/* <button
-            className="delete-cancel-button"
-            onClick={() => setIsPopupOpen(false)}
-          >
-            아니오
-          </button> */}
 
           {showFinalDelete && (
             <div className="fd-modal-overlay">
               <div className="fd-withdraw-modal-content">
                 <div className="fd-modal-title">
                   <img
-                    src={WithdrawIcon}
+                    src={blueXIcon} // Use the existing icon for consistency
                     alt="탈퇴 아이콘"
                     className="fd-withdraw-icon"
                   />
@@ -62,7 +55,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
                 <div className="fd-modal-buttons">
                   <button
                     className="fd-modal-button fd-cancel-button"
-                    onClick={closeFriendDeleteModal}
+                    onClick={closeFriendDeleteModal} // Close both modals
                   >
                     취소
                   </button>
@@ -70,7 +63,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
                     className="fd-modal-button fd-confirm-button"
                     onClick={() => {
                       handleDeleteFriend(); // Call delete function
-                      closeWithdrawModal(); // Close modal after deleting
+                      closeFriendDeleteModal(); // Close modals after deleting
                     }}
                   >
                     끊기
@@ -79,7 +72,6 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
               </div>
             </div>
           )}
-          
         </div>
       </div>
     </div>
