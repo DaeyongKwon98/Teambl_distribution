@@ -16,10 +16,6 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
         <div className="fd-popup-top">
           <img src={topBarIcon} alt="popup top bar" />
         </div>
-        <div className="fd-popup-description">
-          <p>이 친구를 삭제하시겠습니까?</p>
-        </div>
-
         <div className="fd-popup-radio-container">
           <button
             className="fd-delete-confirm-button"
