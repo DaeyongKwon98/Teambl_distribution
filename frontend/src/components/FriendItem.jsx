@@ -46,7 +46,6 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
     try {
       const response = await api.delete(`/api/friends/delete/${chon.id}/`);
       if (response.status === 204) {
-        alert("친구가 삭제되었습니다.");
         setIsDeletePopupOpen(false);
         getChons(); // 친구 목록을 다시 불러옴
       } else {
