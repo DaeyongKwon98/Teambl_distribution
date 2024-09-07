@@ -22,7 +22,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
   return (
     <div className="fd-popup-overlay-wrapper" onClick={handleOverlayClick}>
       <div
-        className={`fd-popup-overlay ${showFinalDelete ? "hidden" : ""}`}
+        className={`fd-popup-overlay ${showFinalDelete ? "fd-hidden" : ""}`}
       >
         <div className="fd-popup-top">
           <img src={topBarIcon} alt="popup top bar" />
