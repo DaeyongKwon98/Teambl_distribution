@@ -375,7 +375,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"https://teambl-distribution.vercel.app/welcome?code={unique_code}",
+            link=f"http://localhost:5173/welcome?code={unique_code}",
         )
 
         return Response(
@@ -411,7 +411,7 @@ class WelcomeView(generics.GenericAPIView):
                 )  # 로그 추가
 
                 # 만료 날짜 계산
-                expired_date = invite_link.created_at + timezone.timedelta(minutes=1)
+                expired_date = invite_link.created_at + timezone.timedelta(minutes=10)
                 current_date = timezone.now()
 
                 # 초대 링크가 만료된 경우
