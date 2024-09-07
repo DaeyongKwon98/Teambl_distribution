@@ -164,3 +164,7 @@
   background-color: #fff;
   color: #2546f3;
 }
+
+.hidden {
+  display: none;
+}
