@@ -5,7 +5,7 @@ import acceptIcon from "../assets/Friend/accept.svg";
 import rejectIcon from "../assets/Friend/reject.svg";
 import ProfileDefaultImg from "../assets/default_profile_image.svg";
 import threeDotsImg from "../assets/three_dots.svg";
-import FriendDeletePopup from "../../pages/FriendPage/FriendDeletePopup";
+import FriendDeletePopup from "../pages/FriendPage/FriendDeletePopup";
 import "../styles/Friend.css";
 
 const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
