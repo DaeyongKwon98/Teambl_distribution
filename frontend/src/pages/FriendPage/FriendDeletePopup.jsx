@@ -9,7 +9,7 @@ const FriendDeletePopup = ({ setIsPopupOpen, handleDeleteFriend }) => {
       setIsPopupOpen(false); // Close popup
     }
   };
-
+  
   return (
     <div className="cad-popup-overlay-wrapper" onClick={handleOverlayClick}>
       <div className="cad-popup-overlay">
