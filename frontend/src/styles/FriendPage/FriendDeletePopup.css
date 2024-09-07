@@ -1,0 +1,76 @@
+.fd-popup-overlay-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(18, 18, 18, 0.8); /* #121212 80% 투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end; /* 팝업을 하단에 배치 */
+  z-index: 1000;
+}
+
+.fd-popup-overlay {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  max-width: 284.62px;
+  height: auto;
+  max-height: 80%;
+  background: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 0 -3.85px 7.69px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  padding: 0px 27.4px 27.4px 27.4px;
+  z-index: 101;
+}
+
+.fd-popup-top {
+  width: 100%;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.fd-popup-top img {
+  margin: 16px 0px 17px;
+}
+
+.fd-popup-content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.fd-popup-description {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.fd-popup-description h3 {
+  font-size: 15.428px;
+  font-weight: 600;
+  margin: 0px;
+}
+
+.fd-popup-description p {
+  font-size: 11px;
+  margin: 0px;
+}
+
+.fd-popup-radio-container label {
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 7px;
+  display: flex;
+  align-items: center;
+}
+
+.fd-popup-radio-container input {
+  margin-right: 8px;
+}
