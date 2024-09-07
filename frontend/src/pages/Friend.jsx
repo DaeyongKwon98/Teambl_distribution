@@ -18,7 +18,7 @@ function Friend() {
 
   const navigate = useNavigate();
 
-  // 1촌 삭제 함수는 components/FriendDeletePopup.jsx에 구현
+  // 1촌 삭제 함수는 pages/FriendPage/FriendDeletePopup.jsx에 구현
   
   // 현재 로그인 유저를 가져오는 함수
   const getCurrentUser = () => {
