@@ -383,9 +383,19 @@ function NewSearch() {
               <SearchLoading />
             ) : users.length === 0 ? (
               <div className="no-results-message">
-                키워드에 일치하는 인물이 없습니다.
-                <br />
-                다른 키워드를 활용해 검색해보세요.
+                {searchTerm ? (
+                  <>
+                    키워드에 일치하는 인물이 없습니다.
+                    <br />
+                    다른 키워드를 활용해 검색해보세요.
+                  </>
+                ) : (
+                  <>
+                    1촌이 존재하지 않습니다.
+                    <br />
+                    친구를 팀블에 초대해 1촌을 만들어 보세요!
+                  </>
+                )}
               </div>
             ) : (
               users.map((user, index) => (
