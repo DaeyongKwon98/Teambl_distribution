@@ -24,7 +24,8 @@ const Setting = () => {
   const [inquiryBtnActive, setInquiryBtnActive] = useState(false); // 문의하기 버튼 상태
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showFinalModal, setShowFinalModal] = useState(false);
-  const [showChangePasswordSection, setShowChangePasswordSection] = useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
+  const [showChangePasswordSection, setShowChangePasswordSection] =
+    useState(false); // 비밀번호 변경 섹션의 표시 여부 상태
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
   const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
   const [showPolicySection, setShowPolicySection] = useState(false); // 약관 및 정책 섹션 표시 여부
@@ -242,7 +243,9 @@ const Setting = () => {
       )}
 
       <div className="setting-password-toggle">
-        <span className="setting-section-title" onClick={handleLogout}>로그아웃</span>
+        <span className="setting-section-title" onClick={handleLogout}>
+          로그아웃
+        </span>
         <img
           src={LogoutRightIcon}
           alt="Logout Icon"
@@ -264,7 +267,7 @@ const Setting = () => {
       </div>
       {showInquirySection && (
         <div className="setting-inquiry-section">
-          <p>받는 사람: teambltest@gmail.com</p>
+          <p>받는 사람: info@teambl.net</p>
           <p>보내는 사람: {currentUser.email}</p>
           <div className="setting-input-group">
             <textarea
@@ -374,7 +377,7 @@ const Setting = () => {
           </div>
         </div>
       )}
-      
+
       <div
         className="setting-password-toggle"
         onClick={() => setShowPolicySection(!showPolicySection)}
@@ -408,9 +411,8 @@ const Setting = () => {
           </p>
         </div>
       )}
-      
+
       {/* <h2 className="setting-section-title">회원 탈퇴</h2> */}
-      
     </div>
   );
 };
