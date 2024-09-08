@@ -308,7 +308,7 @@ class SendCodeView(View):
         send_mail(
             "Your verification code",
             f"Your verification code is {code}",
-            "from@example.com",
+            "info@teambl.net",
             [email],
             fail_silently=False,
         )
@@ -332,8 +332,8 @@ class SendEmailView(View):
         send_mail(
             "문의 메일",  # 이메일 제목
             f"From: {from_email}\n\n{body}",  # 이메일 본문
-            "teambltest@gmail.com",  # 발신자 이메일 주소
-            ["teambltest@gmail.com"],  # 수신사 이메일 주소 목록
+            "info@teambl.net",  # 발신자 이메일 주소
+            ["info@teambl.net"],  # 수신사 이메일 주소 목록
             fail_silently=False,  # 에러 발생 시 예외 발생 여부
         )
 

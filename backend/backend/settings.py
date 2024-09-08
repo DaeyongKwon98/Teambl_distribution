@@ -172,11 +172,11 @@ CORS_ALLOWED_ORIGINS = [
 
 # 이메일 서버
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "smtp.googlemail.com"
+EMAIL_HOST = "smtp-relay.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = "teambltest@gmail.com"
-EMAIL_HOST_PASSWORD = "mbhb qzxz yinq xyyy"
+EMAIL_HOST_USER = "info@teambl.net"
+EMAIL_HOST_PASSWORD = "endm lmwa jtma wzhh"
 
 # 프로필 이미지를 위한 Media
 # MEDIA_URL은 미디어 파일에 접근할 URL 경로를 지정합니다.
