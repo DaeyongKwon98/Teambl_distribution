@@ -44,7 +44,7 @@ from django.db.models import Q
 import logging
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
-from collections import OrderedDict
+from collections import OrderedDict, deque
 
 logger = logging.getLogger(__name__)
 
@@ -892,3 +892,68 @@ class LatestUserIdView(generics.GenericAPIView):
             return Response(
                 {"error": "No users found"}, status=status.HTTP_404_NOT_FOUND
             )
+
+class GetUserAllPathsAPIView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    lookup_url_kwarg = 'target_user_id'  # user_id로 lookup
+
+    def retrieve(self, request, *args, **kwargs):
+        # 현재 로그인한 유저
+        current_user = request.user
+        target_user_id = self.kwargs.get(self.lookup_url_kwarg)  # URL에서 user_id 가져오기
+
+        # target_user를 user_id로 검색
+        try:
+            target_user = CustomUser.objects.get(id=target_user_id)
+        except CustomUser.DoesNotExist:
+            return Response({"error": "Target user not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # 모든 경로 저장
+        all_paths = []
+        visited = set()
+
+        def dfs(user, path):
+            """재귀적으로 DFS를 이용해 모든 경로 찾기"""
+            if user.id == target_user.id:
+                all_paths.append(list(path))
+                return
+
+            visited.add(user.id)
+
+            friends = Friend.objects.filter(
+                Q(from_user=user) | Q(to_user=user), status="accepted"
+            )
+
+            for friend in friends:
+                next_user = friend.to_user if friend.from_user == user else friend.from_user
+                if next_user.id not in visited:
+                    path.append(next_user)
+                    dfs(next_user, path)
+                    path.pop()
+
+            visited.remove(user.id)
+
+        # DFS 실행하여 모든 경로 탐색
+        dfs(current_user, [current_user])
+
+        # 길이가 5 이상인 경로 필터링
+        valid_paths = [path for path in all_paths if len(path) < 5]
+
+        # 가장 짧은 경로의 길이 계산 후 그 길이의 경로들만 선택
+        if valid_paths:
+            shortest_length = min(len(path) for path in valid_paths)
+            shortest_paths = [path for path in valid_paths if len(path) == shortest_length]
+        else:
+            shortest_paths = []
+
+        # 경로가 없을 경우 빈 리스트 반환
+        if not shortest_paths:
+            return Response({"paths": []}, status=status.HTTP_404_NOT_FOUND)
+
+        # user_id를 user_name으로 변환
+        paths_as_usernames = []
+        for path in shortest_paths:
+            path_usernames = [CustomUser.objects.get(id=u.id).profile.user_name for u in path]
+            paths_as_usernames.append(path_usernames)
+
+        return Response({"paths": paths_as_usernames}, status=status.HTTP_200_OK)

@@ -144,4 +144,5 @@ urlpatterns += [
         views.UserStatisticsDifferenceView.as_view(),
         name="user-statistics-difference",
     ),
+    path('path/<int:target_user_id>/', views.GetUserAllPathsAPIView.as_view(), name='get-all-user-paths'),
 ]
