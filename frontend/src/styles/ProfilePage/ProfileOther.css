@@ -36,12 +36,13 @@
   display: flex; /* profile-image와 profile-detail을 가로로 정렬 */
   align-items: center; /* 수직 정렬을 중앙으로 설정 */
   gap: 20px; /* 이미지와 상세 정보 사이의 간격 */
+  margin-bottom: 24px;
 }
 
 .profileOther-top img {
-  width: 77.14px;
-  height: 77.14px;
-  border-radius: 50%;
+  width: 90px;
+  height: 120px;
+  border-radius: 5px;
   object-fit: cover;
 }
 
@@ -54,6 +55,7 @@
 .profileOther-profile-row1 {
   display: flex; /* name과 one_degree_count를 가로로 정렬 */
   gap: 8px; /* 이름과 1촌 정보 사이의 간격 */
+  align-items: center;
 }
 
 .profileOther-profile-name {
@@ -62,19 +64,30 @@
   color: #121212;
 }
 
+.profileOther-profile-relationshipDegree {
+  font-size: 13.714px;
+  font-weight: 400;
+}
+
+.profileOther-oneDegree-button {
+  background-color: #2546f3;
+  color: white;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: #2546f3;
+}
+
 .profileOther-profile-one_degree_count {
   display: flex;
   font-size: 13.714px; /* 1촌 정보 텍스트 크기 */
   color: #0923a9; /* 텍스트 색상 */
-}
-
-.profileOther-profile-one_degree_count-icon img {
-  width: 20px;
-  height: 20px;
+  font-weight: 500;
 }
 
 .profileOther-profile-row2,
-.profileOther-profile-row3 {
+.profileOther-profile-row3,
+.profileOther-profile-row4 {
   font-size: 13.714px; /* 학력 정보 및 전공 텍스트 크기 */
   color: #121212; /* 텍스트 색상 */
 }
@@ -97,55 +110,50 @@
   align-items: center; /* 내용물이 수직으로 중앙 정렬되도록 함 */
 }
 
-.profileOther-title {
+.profileOther-title,
+.profileOther-experiences-title,
+.profileOther-tools-title {
   color: #121212;
   font-size: 13.714px;
   font-weight: 700;
-  margin-bottom: 12px;
+  width: 44px;
+}
+
+.profileOther-keyword-title,
+.profileOther-introduction-title,
+.profileOther-portfolioLinks-title {
+  color: #121212;
+  font-size: 13.714px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.profileOther-flexbox {
+  display: flex;
+}
+
+.profileOther-gray-separator {
+  width: 2px;
+  height: 23px;
+  margin: 0px 12px 0px 0px;
+  background-color: #d9d9d9;
 }
 
 .profileOther-list-element {
   font-size: 13.714px;
-  background-color: #f5f5f5;
-  width: 100%;
-  padding: 12px 16px;
-  box-sizing: border-box; /* 패딩이 포함된 전체 너비 계산 */
+  background: none;
+  padding: 0px;
   margin-bottom: 0; /* 리스트 사이 간격 제거 */
-  position: relative; /* ::after 가상 요소 위치 설정을 위한 상대 위치 */
 }
 
-.profileOther-experiences .profileOther-list-element:first-of-type,
-.profileOther-tools .profileOther-list-element:first-of-type,
-.profileOther-introduction .profileOther-list-element:first-of-type,
-.profileOther-protfolioLinks .profileOther-list-element:first-of-type {
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
-}
-
-.profileOther-experiences .profileOther-list-element:last-of-type,
-.profileOther-tools .profileOther-list-element:last-of-type,
-.profileOther-introduction .profileOther-list-element:last-of-type,
-.profileOther-protfolioLinks .profileOther-list-element:last-of-type {
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-}
-
-.profileOther-list-element:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  left: 12px;
-  right: 12px;
-  bottom: 0;
-  height: 1px;
-  background-color: #d9d9d9;
-}
-
-.profileOther-list-element:last-child::after {
-  display: none;
+.profileOther-row {
+  display: flex; /* 한 줄(row)로 구분선과 경험을 정렬 */
+  align-items: center; /* 수직 가운데 정렬 */
 }
 
 .profileOther-experiences {
   margin-bottom: 24px;
+  display: block;
 }
 
 .profileOther-tools {
@@ -154,6 +162,14 @@
 
 .profileOther-introduction {
   margin-bottom: 24px;
+}
+
+.profileOther-introduction-body {
+  margin-top: 16px;
+  font-size: 13.714px;
+  background: none;
+  padding: 0px;
+  white-space: pre-wrap;
 }
 
 .profileOther-portfolioLinks {
