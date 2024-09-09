@@ -22,17 +22,15 @@ const ProfileOther = ({ userId }) => {
     experiences: [],
     portfolio_links: [],
   });
+  const [paths, setPaths] = useState([]); // 여러 경로 상태 추가
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 오류 상태 추가
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchProfile(userId);
+    fetchUserPaths(userId);
   }, [userId]);
-
-  const handleBackButton = () => {
-    navigate("/");
-  };
 
   const fetchProfile = async (userId) => {
     try {
@@ -50,6 +48,16 @@ const ProfileOther = ({ userId }) => {
     }
   };
 
+  // 모든 경로를 가져오는 함수
+  const fetchUserPaths = async (userId) => {
+    try {
+      const response = await api.get(`/api/path/${userId}/`);
+      setPaths(response.data.paths);
+    } catch (error) {
+      console.error("유저 경로를 불러오는 중 오류가 발생했습니다.", error);
+    }
+  };
+  
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -108,6 +116,19 @@ const ProfileOther = ({ userId }) => {
           </div>
         </div>
 
+        <div className="profileOther-title">경로</div>
+        <div className="profileOther-path">
+          {paths.length === 0 ? (
+            <div>경로를 찾을 수 없습니다.</div>
+          ) : (
+            paths.map((path, index) => (
+              <div key={index}>
+                경로 {index + 1}: {path.join(" → ")}
+              </div>
+            ))
+          )}
+        </div>
+        
         <div className="profileOther-keywords">
           {profile.keywords.map((keyword, index) => (
             <div className="profileOther-keyword" key={index}>
