@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import api from "../api";
 import pendingIcon from "../assets/Friend/pending.svg";
 import acceptIcon from "../assets/Friend/accept.svg";
@@ -9,6 +10,7 @@ import FriendDeletePopup from "../pages/FriendPage/FriendDeletePopup";
 import "../styles/Friend.css";
 
 const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
+  const navigate = useNavigate();
   const user =
     chon.from_user.id === currentUser.id ? chon.to_user : chon.from_user;
   const otherUserProfile = user.profile;
@@ -89,13 +91,24 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   return (
     <>
       {activeTab === "myChons" && (
-        <div className="friend-team-member" key={user.id}>
+        <div
+          className="friend-team-member"
+          key={user.id}
+          onClick={() => {
+            if (!isDeletePopupOpen) {
+              navigate(`/profile/${user.id}`);
+            }
+          }}
+        >
           {renderFriendDetails()}
           <img
             src={threeDotsImg}
             alt="three dots image"
             className="friend-threedots-image"
-            onClick={() => setIsDeletePopupOpen(true)}
+            onClick={(e) => {
+              e.stopPropagation(); // Prevents the parent div's onClick from firing
+              setIsDeletePopupOpen(true);
+            }}
           />
           {isDeletePopupOpen && (
             <FriendDeletePopup
