@@ -29,7 +29,22 @@ const ProfileOther = ({ userId }) => {
 
   const scrollRef = useRef(null);
 
+  const [relationshipDegree, setRelationshipDegree] = useState(null);
+
+  // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
+  const getRelationshipDegree = async (targetUserId) => {
+    try {
+      const response = await api.get(`/api/get-user-distance/${targetUserId}/`);
+      const degree = response.data.distance;
+      setRelationshipDegree(degree);
+    } catch (error) {
+      console.error("Error fetching relationship degree:", error);
+      return null;
+    }
+  };
+
   useEffect(() => {
+    getRelationshipDegree(userId);
     fetchProfile(userId);
     fetchUserPaths(userId);
   }, [userId]);
@@ -106,11 +121,13 @@ const ProfileOther = ({ userId }) => {
                 {profile.user_name}
               </div>
               <div className="profileOther-profile-relationshipDegree">
-                ・ 2촌
+                ・ {relationshipDegree ? relationshipDegree : "?"}촌
               </div>
-              <button className="profileOther-oneDegree-button">
-                1촌 신청
-              </button>
+              {relationshipDegree !== 1 && (
+                <button className="profileOther-oneDegree-button">
+                  1촌 신청
+                </button>
+              )}
             </div>
             <div className="profileOther-profile-row2">
               {profile.school} | {profile.current_academic_degree} |{" "}

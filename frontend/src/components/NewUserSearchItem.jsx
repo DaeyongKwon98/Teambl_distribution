@@ -92,7 +92,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
             </strong>
             <span className="newSearch-member-relation">
               {" "}
-              · {relationshipDegree}촌
+              · {relationshipDegree ? relationshipDegree : "?"}촌
             </span>
           </p>
           <p className="newSearch-member-details">
@@ -107,7 +107,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
             {user.profile.keywords.join(" / ")}
           </p>
         </div>
-        <button
+        {/* <button
           className={`newSearch-add-button ${
             relationshipDegree === 1 ? "checked" : ""
           }`}
@@ -123,7 +123,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
               className="newSearch-check-icon"
             />
           )}
-        </button>
+        </button> */}
       </div>
   
       {showFriendAdd && (

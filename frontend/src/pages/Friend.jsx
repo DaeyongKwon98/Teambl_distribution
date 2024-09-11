@@ -127,12 +127,12 @@ function Friend() {
         >
           나의 1촌
         </div>
-        <div
+        {/* <div
           className={`friend-tab ${activeTab === "addChons" ? "active" : ""}`}
           onClick={() => setActiveTab("addChons")}
         >
           1촌 추가
-        </div>
+        </div> */}
         <div
           className={`friend-tab ${
             activeTab === "requestsToMe" ? "active" : ""
@@ -145,7 +145,25 @@ function Friend() {
 
       {activeTab === "myChons" && (
         <div className="friend-myChons-content">
-          <p className="friend-total-count">{myAcceptedChons.length}명</p>
+          <p className="friend-total-count">{myAcceptedChons.length+myChonsRequests.length}명</p>
+          <div className="friend-team-member-results">
+            {myChonsRequests.map((chon) => {
+              const otherUser =
+                chon.from_user.id === currentUser.id
+                  ? chon.to_user
+                  : chon.from_user;
+
+              return (
+                <FriendItem
+                  activeTab={"addChons"}
+                  chon={chon}
+                  currentUser={currentUser}
+                  getChons={getChons}
+                  key={chon.id}
+                ></FriendItem>
+              );
+            })}
+          </div>
           <div className="friend-team-member-results">
             {myAcceptedChons.map((chon) => {
               return (
@@ -162,7 +180,7 @@ function Friend() {
         </div>
       )}
 
-      {activeTab === "addChons" && (
+      {/* {activeTab === "addChons" && (
         <div className="friend-addChons-content">
           <div className="friend-addChons-form">
             <input
@@ -200,7 +218,7 @@ function Friend() {
             })}
           </div>
         </div>
-      )}
+      )} */}
 
       {activeTab === "requestsToMe" && (
         <div className="friend-requestsToMe-content">
