@@ -44,10 +44,7 @@ const ProfileOther = ({ userId }) => {
   };
 
   useEffect(() => {
-    getRelationshipDegree(user.id);
-  }, [user.id]);
-
-  useEffect(() => {
+    getRelationshipDegree(userId);
     fetchProfile(userId);
     fetchUserPaths(userId);
   }, [userId]);

@@ -121,7 +121,15 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       )}
 
       {activeTab === "addChons" && (
-        <div className="friend-team-member" key={user.id}>
+        <div 
+          className="friend-team-member" 
+          key={user.id}
+          onClick={() => {
+            if (!isDeletePopupOpen) {
+              navigate(`/profile/${user.id}`);
+            }
+          }}
+        >
           {renderFriendDetails()}
           <div className="friend-wait-acceptance">
             <img src={pendingIcon}></img>
@@ -130,7 +138,15 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       )}
 
       {activeTab === "requestsToMe" && (
-        <div className="friend-team-member" key={user.id}>
+        <div 
+          className="friend-team-member" 
+          key={user.id}
+          onClick={() => {
+            if (!isDeletePopupOpen) {
+              navigate(`/profile/${user.id}`);
+            }
+          }}
+        >
           {renderFriendDetails()}
           <div className="friend-action-buttons">
             <button
