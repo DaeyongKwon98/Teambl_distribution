@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import profileDefaultImg from "../../assets/ProfileOther/defaultProfile.svg";
 import backIcon from "../../assets/ProfileOther/left-arrow.svg";
@@ -26,6 +26,8 @@ const ProfileOther = ({ userId }) => {
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 오류 상태 추가
   const navigate = useNavigate();
+
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     fetchProfile(userId);
@@ -128,16 +130,41 @@ const ProfileOther = ({ userId }) => {
           </div>
         </div>
 
-        <div className="profileOther-title">경로</div>
+        <div className="profileOther-title-path">나와의 관계</div>
         <div className="profileOther-path">
           {paths.length === 0 ? (
-            <div>경로를 찾을 수 없습니다.</div>
-          ) : (
-            paths.map((path, index) => (
-              <div key={index}>
-                경로 {index + 1}: {path.join(" → ")}
+            <div className="profileOther-path-container">
+              <div className="profileOther-path-title">
+                <span className="profileOther-path-title-number">3명 이상</span>
+                <span className="profileOther-path-title-text">을 거쳐야 하므로 관계도를 표시하지 않습니다.</span>
               </div>
-            ))
+            </div>
+          ) : (
+            <div className="profileOther-path-container">
+              <div className="profileOther-path-title">
+                <span className="profileOther-path-title-name">{paths[0][0]}</span>
+                <span className="profileOther-path-title-text">님과 </span>
+                <span className="profileOther-path-title-name">{paths[0][paths[0].length-1]}</span>
+                <span className="profileOther-path-title-text">님은 </span>
+                <span className="profileOther-path-title-number">{paths[0].length-2}명</span>
+                <span className="profileOther-path-title-text">을 거치면 아는 사이입니다.</span>
+              </div>
+              <div className="profileOther-path-content">
+                <div className="profileOther-path-name-end">
+                  {paths[0][0]}
+                </div>
+                <div className="profileOther-scroll-container" ref={scrollRef}>
+                  {paths.map((path, index) => (
+                    <div key={index} className="profileOther-scroll-item">
+                      {path.slice(1, -1).join(" → ")}
+                    </div>
+                  ))}
+                </div>
+                <div className="profileOther-path-name-end">
+                  {paths[0][paths[0].length-1]}
+                </div>
+              </div>
+            </div>
           )}
         </div>
 
