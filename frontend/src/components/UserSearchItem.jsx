@@ -40,11 +40,11 @@ const UserSearchItem = ({ user, onAddRelationShip }) => {
         <p>전공: {user.profile.major}</p>
         <p>키워드: {user.profile.keywords}</p>
       </div>
-      {relationshipDegree !== 1 && (
+      {/* {relationshipDegree !== 1 && (
         <button className="add-relationship-button" onClick={onAddRelationShip}>
           1촌 추가
         </button>
-      )}
+      )} */}
     </div>
   );
 };
