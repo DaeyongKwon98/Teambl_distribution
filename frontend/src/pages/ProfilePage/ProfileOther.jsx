@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import profileDefaultImg from "../../assets/ProfileOther/defaultProfile.svg";
 import backIcon from "../../assets/ProfileOther/left-arrow.svg";
@@ -26,6 +26,8 @@ const ProfileOther = ({ userId }) => {
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 오류 상태 추가
   const navigate = useNavigate();
+
+  const scrollRef = useRef(null);
 
   useEffect(() => {
     fetchProfile(userId);
@@ -57,7 +59,7 @@ const ProfileOther = ({ userId }) => {
       console.error("유저 경로를 불러오는 중 오류가 발생했습니다.", error);
     }
   };
-  
+
   if (loading) {
     return <div>로딩 중...</div>;
   }
@@ -66,7 +68,10 @@ const ProfileOther = ({ userId }) => {
     return (
       <div className="profileOther-body">
         <div className="profileOther-container">
-          <button className="profileOther-backbutton" onClick={() => window.history.back()}>
+          <button
+            className="profileOther-backbutton"
+            onClick={() => window.history.back()}
+          >
             <img src={backIcon} alt="back" />
           </button>
           <div className="profileOther-error">
@@ -80,7 +85,10 @@ const ProfileOther = ({ userId }) => {
   return (
     <div className="profileOther-body">
       <div className="profileOther-container">
-        <button className="profileOther-backbutton" onClick={() => window.history.back()}>
+        <button
+          className="profileOther-backbutton"
+          onClick={() => window.history.back()}
+        >
           <img src={backIcon}></img>
         </button>
 
@@ -97,90 +105,146 @@ const ProfileOther = ({ userId }) => {
               <div className="profileOther-profile-name">
                 {profile.user_name}
               </div>
-              <div className="profileOther-profile-one_degree_count">
-                <div className="profileOther-profile-one_degree_count-icon">
-                  <img src={friendIcon} />
-                </div>
-                <div>1촌 {profile.one_degree_count}명</div>
+              <div className="profileOther-profile-relationshipDegree">
+                ・ 2촌
               </div>
+              <button className="profileOther-oneDegree-button">
+                1촌 신청
+              </button>
             </div>
             <div className="profileOther-profile-row2">
               {profile.school} | {profile.current_academic_degree} |{" "}
-              {profile.year}
-              학번
+              {profile.year % 100} 학번
             </div>
             <div className="profileOther-profile-row3">
               {profile.major1}
-              {profile.major2 && profile.major2.trim() !== "" && `, ${profile.major2}`}
+              {profile.major2 &&
+                profile.major2.trim() !== "" &&
+                ` ・ ${profile.major2}`}
+            </div>
+            <div className="profileOther-profile-row4">
+              <div className="profileOther-profile-one_degree_count">
+                <div>1촌 {profile.one_degree_count}명</div>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="profileOther-title">경로</div>
+        <div className="profileOther-title-path">나와의 관계</div>
         <div className="profileOther-path">
           {paths.length === 0 ? (
-            <div>경로를 찾을 수 없습니다.</div>
-          ) : (
-            paths.map((path, index) => (
-              <div key={index}>
-                경로 {index + 1}: {path.join(" → ")}
+            <div className="profileOther-path-container">
+              <div className="profileOther-path-title">
+                <span className="profileOther-path-title-number">3명 이상</span>
+                <span className="profileOther-path-title-text">을 거쳐야 하므로 관계도를 표시하지 않습니다.</span>
               </div>
-            ))
+            </div>
+          ) : (
+            <div className="profileOther-path-container">
+              <div className="profileOther-path-title">
+                <span className="profileOther-path-title-name">{paths[0][0]}</span>
+                <span className="profileOther-path-title-text">님과 </span>
+                <span className="profileOther-path-title-name">{paths[0][paths[0].length-1]}</span>
+                <span className="profileOther-path-title-text">님은 </span>
+                <span className="profileOther-path-title-number">{paths[0].length-2}명</span>
+                <span className="profileOther-path-title-text">을 거치면 아는 사이입니다.</span>
+              </div>
+              <div className="profileOther-path-content">
+                <div className="profileOther-path-name-end">
+                  {paths[0][0]}
+                </div>
+                <div className="profileOther-scroll-container" ref={scrollRef}>
+                  {paths.map((path, index) => (
+                    <div key={index} className="profileOther-scroll-item">
+                      {path.slice(1, -1).join(" → ")}
+                    </div>
+                  ))}
+                </div>
+                <div className="profileOther-path-name-end">
+                  {paths[0][paths[0].length-1]}
+                </div>
+              </div>
+            </div>
           )}
         </div>
-        
+
+        <div className="profileOther-keyword-title">키워드</div>
         <div className="profileOther-keywords">
-          {profile.keywords.map((keyword, index) => (
-            <div className="profileOther-keyword" key={index}>
-              {keyword}
-            </div>
-          ))}
-        </div>
-
-        <div className="profileOther-title">경험</div>
-        <div className="profileOther-experiences">
-          {profile.experiences.length === 0 ? (
+          {profile.keywords.length === 0 ? (
             <div className="profileOther-list-element">
-              상대방이 경험을 아직 입력하지 않았어요.
+              상대방이 키워드를 아직 입력하지 않았어요.
             </div>
           ) : (
-            profile.experiences.map((experience, index) => (
-              <div className="profileOther-list-element" key={index}>
-                {experience.experience}
+            profile.keywords.map((keyword, index) => (
+              <div className="profileOther-keyword" key={index}>
+                {keyword}
               </div>
             ))
           )}
         </div>
 
-        <div className="profileOther-title">툴</div>
-        <div className="profileOther-tools">
-          {profile.tools.length === 0 ? (
-            <div className="profileOther-list-element">
-              상대방이 툴을 아직 입력하지 않았어요.
-            </div>
-          ) : (
-            profile.tools.map((tool, index) => (
-              <div className="profileOther-list-element" key={index}>
-                {tool.tool}
+        <div className="profileOther-flexbox">
+          <div className="profileOther-experiences-title">경험</div>
+
+          <div className="profileOther-experiences">
+            {profile.experiences.length === 0 ? (
+              <div className="profileOther-row">
+                <div className="profileOther-gray-separator"></div>
+                <div className="profileOther-list-element">
+                  상대방이 경험을 아직 입력하지 않았어요.
+                </div>
               </div>
-            ))
-          )}
+            ) : (
+              profile.experiences.map((experience, index) => (
+                <div className="profileOther-row" key={index}>
+                  <div className="profileOther-gray-separator"></div>
+                  <div className="profileOther-list-element" key={index}>
+                    {experience.experience}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
 
-        <div className="profileOther-title">소개</div>
+        <div className="profileOther-flexbox">
+          <div className="profileOther-tools-title">툴</div>
+
+          <div className="profileOther-tools">
+            {profile.tools.length === 0 ? (
+              <div className="profileOther-row">
+                <div className="profileOther-gray-separator"></div>
+                <div className="profileOther-list-element">
+                  상대방이 툴을 아직 입력하지 않았어요.
+                </div>
+              </div>
+            ) : (
+              profile.tools.map((tool, index) => (
+                <div className="profileOther-row" key={index}>
+                  <div className="profileOther-gray-separator"></div>
+                  <div className="profileOther-list-element" key={index}>
+                    {tool.tool}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
+
+        <div className="profileOther-introduction-title">소개</div>
         <div className="profileOther-introduction">
           {profile.introduction.length === 0 ? (
-            <div className="profileOther-list-element">
+            <div className="profileOther-introduction-body">
               상대방이 소개를 아직 입력하지 않았어요.
             </div>
           ) : (
-            <div className="profileOther-list-element">
+            <div className="profileOther-introduction-body">
               {profile.introduction}
             </div>
           )}
         </div>
 
-        <div className="profileOther-title">포트폴리오</div>
+        <div className="profileOther-portfolioLinks-title">포트폴리오</div>
         <div className="profileOther-protfolioLinks">
           {profile.portfolio_links.length === 0 ? (
             <div className="profileOther-list-element">
