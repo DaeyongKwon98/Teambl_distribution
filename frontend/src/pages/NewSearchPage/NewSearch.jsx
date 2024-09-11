@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "../../styles/NewSearch.css";
 import BackIcon from "../../assets/NewSearch/backIcon.svg";
 import RecentIcon from "../../assets/NewSearch/recentIcon.svg";
@@ -23,6 +23,9 @@ function NewSearch() {
   const [isSearched, setIsSearched] = useState(false); // 사용자가 검색 버튼을 눌렀는지 여부 (true이면 검색 결과창이 보임)
   const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
   const [isSearchLoading, setIsSearchLoading] = useState(false); // 검색 로딩중인지 여부
+  const [isMoreUserLoading, setIsMoreUserLoading] = useState(false);
+  const [nextPage, setNextPage] = useState(null); // 다음 유저 페이지의 api 요청 URL
+  const observerRef = useRef(null); // Intersection Observer 참조용 ref
 
   useEffect(() => {
     // console.log("키워드 가져오기");
@@ -42,11 +45,33 @@ function NewSearch() {
     }
   }, [searchTerm]);
 
+  // Intersection Observer 설정
+  useEffect(() => {
+    if (observerRef.current) {
+      // 옵저버 인스턴스를 생성하고 마지막 요소를 관찰
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && nextPage && !isSearchLoading) {
+          loadMoreUsers(); // 마지막 요소가 화면에 나타나면 다음 페이지 로드
+        }
+      });
+
+      // 옵저버가 마지막 요소를 관찰하도록 설정
+      observer.observe(observerRef.current);
+
+      // 컴포넌트가 언마운트되면 옵저버 해제
+      return () => {
+        if (observer && observer.disconnect) {
+          observer.disconnect();
+        }
+      };
+    }
+  }, [nextPage, isSearchLoading]);
+
   // DB에서 키워드 목록을 가져오는 함수
   const fetchKeywords = async () => {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
-      const keywordStrings = response.data.map((item) => item.keyword);
+      const keywordStrings = response.data.results.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
     } catch (error) {
@@ -58,7 +83,9 @@ function NewSearch() {
   const fetchRecentSearches = async () => {
     try {
       const response = await api.get("/api/search-history/"); // 최근 검색 기록을 가져오는 API 엔드포인트
-      const recentSearchTerms = response.data.map((item) => item.keyword);
+      const recentSearchTerms = response.data.results.map(
+        (item) => item.keyword
+      );
       setRecentSearches(recentSearchTerms); // 가져온 검색 기록을 recentSearches 변수에 저장
     } catch (error) {
       console.error("Failed to fetch recent searches:", error);
@@ -82,10 +109,35 @@ function NewSearch() {
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
       });
-      setUsers(response.data);
+      console.log(response.data);
+      setUsers(response.data.results);
+      setNextPage(response.data.next);
       setIsSearchLoading(false);
     } catch (error) {
       console.error("검색 중 오류가 발생했습니다.", error);
+    }
+  };
+
+  // 추가 유저 페이지 데이터를 불러오는 함수
+  const loadMoreUsers = async () => {
+    if (!nextPage || isSearchLoading) return; // 더 이상 불러올 페이지가 없거나 이미 로딩 중이면 중단
+    setIsMoreUserLoading(true);
+
+    try {
+      const response = await api.post(nextPage, {
+        q: searchTerm,
+        degree: filters.relationshipDegree,
+        majors: filters.majors.flat(),
+      });
+
+      console.log(response.data);
+
+      setUsers((prevUsers) => [...prevUsers, ...response.data.results]); // 기존 사용자에 추가
+      setNextPage(response.data.next); // 다음 페이지 URL 업데이트
+      setIsMoreUserLoading(false);
+    } catch (error) {
+      console.error("추가 데이터를 불러오는 중 오류가 발생했습니다.", error);
+      setIsMoreUserLoading(false);
     }
   };
 
@@ -143,7 +195,7 @@ function NewSearch() {
   const handleDelete = async (termToDelete) => {
     try {
       const response = await api.get("/api/search-history/");
-      const searchItem = response.data.find(
+      const searchItem = response.data.results.find(
         (item) => item.keyword === termToDelete
       );
       if (searchItem) {
@@ -398,13 +450,17 @@ function NewSearch() {
                 )}
               </div>
             ) : (
-              users.map((user, index) => (
-                <NewUserSearchItem
-                  user={user}
-                  onAddRelationShip={() => {}}
-                  key={index}
-                />
-              ))
+              <>
+                {users.map((user, index) => (
+                  <NewUserSearchItem
+                    user={user}
+                    onAddRelationShip={() => {}}
+                    key={index}
+                  />
+                ))}
+                {/* 마지막 유저 다음에 빈 div를 추가하고 ref 연결 */}
+                <div ref={observerRef} style={{ height: "1px" }}></div>
+              </>
             )}
           </div>
         </>

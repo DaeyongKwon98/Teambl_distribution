@@ -1,5 +1,6 @@
 from rest_framework import generics, permissions, status, serializers
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.pagination import PageNumberPagination
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .models import (
     CustomUser,
@@ -606,6 +607,7 @@ class GetUserDistanceAPIView(generics.RetrieveAPIView):
 class SearchUsersAPIView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = PageNumberPagination
 
     # 변수를 쿼리가 아닌 JSON 형식으로 전달받기 위해 POST 요청으로 변경
     # GET 요청 시 쿼리를 포함한 url이 너무 길어져서 반려.
@@ -620,8 +622,8 @@ class SearchUsersAPIView(generics.ListAPIView):
             print("Received Degrees:", degrees)
             print("Majors:", majors)
 
-            # 전체 프로필을 가져옵니다.
-            filtered_profiles = Profile.objects.all()
+            # 현재 사용자의 프로필을 제외한 전체 프로필을 가져옵니다.
+            filtered_profiles = Profile.objects.exclude(user=request.user)
 
             # 1. 검색 쿼리로 필터링
             if query != "":
@@ -641,12 +643,10 @@ class SearchUsersAPIView(generics.ListAPIView):
                     Q(major1__in=majors) | Q(major2__in=majors)
                 )
             print("Profiles after major filtering:", filtered_profiles)
-            # 3. 촌수 필터링 (비어있는 경우 1, 2, 3촌 다 포함)
-            if not degrees:
-                degrees = [1, 2, 3]
+
+            # 3. 촌수 필터링 (촌수 필터가 비어있는 경우 모든 촌수 유저 포함)
             degrees = list(map(int, degrees))
             user = self.request.user
-            degree_filtered_profiles = []
             profile_with_distances = []
 
             print("Filtered Degrees:", degrees)
@@ -654,23 +654,14 @@ class SearchUsersAPIView(generics.ListAPIView):
             for profile in filtered_profiles:
                 target_user = profile.user
                 distance = get_user_distance(user, target_user)
-                if distance is not None and distance in degrees:
+                if len(degrees) == 0 or distance in degrees:
                     # 촌수와 프로필을 함께 저장
                     profile_with_distances.append((profile, distance))
 
-            # 촌수 오름차순으로 정렬
-            profile_with_distances.sort(key=lambda x: x[1])
-
-            # # 정렬된 프로필 목록 추출
-            # degree_filtered_profiles = [
-            #     profile for profile, distance in profile_with_distances
-            # ]
-
-            # # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
-            # sorted_custom_users = [
-            #     CustomUser.objects.get(profile=profile)
-            #     for profile, _ in profile_with_distances
-            # ]
+            # 촌수 오름차순으로 정렬 (None 값을 float('inf')로 처리)
+            profile_with_distances.sort(
+                key=lambda x: float("inf") if x[1] is None else x[1]
+            )
 
             # 중복된 유저를 제거하기 위해 OrderedDict 사용 (유저 ID를 기준으로 중복 제거)
             unique_users = OrderedDict()
@@ -682,13 +673,18 @@ class SearchUsersAPIView(generics.ListAPIView):
             # 정렬된 프로필 목록 추출
             unique_profiles = list(unique_users.values())
 
+            # 페이지네이션 적용
+            paginator = self.pagination_class()
+            paginated_profiles = paginator.paginate_queryset(unique_profiles, request)
+
             # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
             sorted_custom_users = [
-                CustomUser.objects.get(profile=profile) for profile in unique_profiles
+                CustomUser.objects.get(profile=profile)
+                for profile in paginated_profiles
             ]
 
             serializer = self.get_serializer(sorted_custom_users, many=True)
-            return Response(serializer.data)
+            return paginator.get_paginated_response(serializer.data)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -893,20 +889,25 @@ class LatestUserIdView(generics.GenericAPIView):
                 {"error": "No users found"}, status=status.HTTP_404_NOT_FOUND
             )
 
+
 class GetUserAllPathsAPIView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
-    lookup_url_kwarg = 'target_user_id'  # user_id로 lookup
+    lookup_url_kwarg = "target_user_id"  # user_id로 lookup
 
     def retrieve(self, request, *args, **kwargs):
         # 현재 로그인한 유저
         current_user = request.user
-        target_user_id = self.kwargs.get(self.lookup_url_kwarg)  # URL에서 user_id 가져오기
+        target_user_id = self.kwargs.get(
+            self.lookup_url_kwarg
+        )  # URL에서 user_id 가져오기
 
         # target_user를 user_id로 검색
         try:
             target_user = CustomUser.objects.get(id=target_user_id)
         except CustomUser.DoesNotExist:
-            return Response({"error": "Target user not found."}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Target user not found."}, status=status.HTTP_404_NOT_FOUND
+            )
 
         # 모든 경로 저장
         all_paths = []
@@ -925,7 +926,9 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
             )
 
             for friend in friends:
-                next_user = friend.to_user if friend.from_user == user else friend.from_user
+                next_user = (
+                    friend.to_user if friend.from_user == user else friend.from_user
+                )
                 if next_user.id not in visited:
                     path.append(next_user)
                     dfs(next_user, path)
@@ -942,7 +945,9 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
         # 가장 짧은 경로의 길이 계산 후 그 길이의 경로들만 선택
         if valid_paths:
             shortest_length = min(len(path) for path in valid_paths)
-            shortest_paths = [path for path in valid_paths if len(path) == shortest_length]
+            shortest_paths = [
+                path for path in valid_paths if len(path) == shortest_length
+            ]
         else:
             shortest_paths = []
 
@@ -953,7 +958,9 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
         # user_id를 user_name으로 변환
         paths_as_usernames = []
         for path in shortest_paths:
-            path_usernames = [CustomUser.objects.get(id=u.id).profile.user_name for u in path]
+            path_usernames = [
+                CustomUser.objects.get(id=u.id).profile.user_name for u in path
+            ]
             paths_as_usernames.append(path_usernames)
 
         return Response({"paths": paths_as_usernames}, status=status.HTTP_200_OK)
