@@ -147,19 +147,6 @@ function Friend() {
         <div className="friend-myChons-content">
           <p className="friend-total-count">{myAcceptedChons.length+myChonsRequests.length}명</p>
           <div className="friend-team-member-results">
-            {myAcceptedChons.map((chon) => {
-              return (
-                <FriendItem
-                  activeTab={"myChons"}
-                  chon={chon}
-                  currentUser={currentUser}
-                  getChons={getChons}
-                  key={chon.id}
-                ></FriendItem>
-              );
-            })}
-          </div>
-          <div className="friend-team-member-results">
             {myChonsRequests.map((chon) => {
               const otherUser =
                 chon.from_user.id === currentUser.id
@@ -169,6 +156,19 @@ function Friend() {
               return (
                 <FriendItem
                   activeTab={"addChons"}
+                  chon={chon}
+                  currentUser={currentUser}
+                  getChons={getChons}
+                  key={chon.id}
+                ></FriendItem>
+              );
+            })}
+          </div>
+          <div className="friend-team-member-results">
+            {myAcceptedChons.map((chon) => {
+              return (
+                <FriendItem
+                  activeTab={"myChons"}
                   chon={chon}
                   currentUser={currentUser}
                   getChons={getChons}
