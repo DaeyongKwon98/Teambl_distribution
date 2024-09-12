@@ -21,7 +21,7 @@ const Notification = ({ updateUnreadCount }) => {
     try {
       const response = await api.get("/api/notifications/");
       console.log(response.data);
-      setNotifications(response.data);
+      setNotifications(response.data.results);
     } catch (error) {
       console.error("Failed to fetch notifications", error);
     }
@@ -54,7 +54,7 @@ const Notification = ({ updateUnreadCount }) => {
 
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
-          notification.id === id ? response.data : notification
+          notification.id === id ? response.data.results : notification
         )
       );
 
