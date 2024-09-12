@@ -71,7 +71,6 @@ function NewSearch() {
   const fetchKeywords = async () => {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
-      console.log("response from /api/keywords/", response.data);
       const keywordStrings = response.data.results.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
@@ -84,7 +83,6 @@ function NewSearch() {
   const fetchRecentSearches = async () => {
     try {
       const response = await api.get("/api/search-history/"); // 최근 검색 기록을 가져오는 API 엔드포인트
-      console.log("response.data from /api/search-history/", response.data);
       const recentSearchTerms = response.data.results.map(
         (item) => item.keyword
       );
@@ -111,7 +109,6 @@ function NewSearch() {
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
       });
-      console.log(response.data);
       setUsers(response.data.results);
       setNextPage(response.data.next);
       setIsSearchLoading(false);
@@ -131,8 +128,6 @@ function NewSearch() {
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
       });
-
-      console.log(response.data);
 
       setUsers((prevUsers) => [...prevUsers, ...response.data]); // 기존 사용자에 추가
       setNextPage(response.data.next); // 다음 페이지 URL 업데이트
@@ -177,7 +172,7 @@ function NewSearch() {
     try {
       // 먼저 서버에서 모든 검색 기록을 가져옵니다.
       const response = await api.get("/api/search-history/");
-      const searchHistoryItems = response.data;
+      const searchHistoryItems = response.data.results;
 
       // 검색 기록의 ID를 이용해 각각의 기록을 삭제합니다.
       await Promise.all(
@@ -197,7 +192,7 @@ function NewSearch() {
   const handleDelete = async (termToDelete) => {
     try {
       const response = await api.get("/api/search-history/");
-      const searchItem = response.data.find(
+      const searchItem = response.data.results.find(
         (item) => item.keyword === termToDelete
       );
       if (searchItem) {
