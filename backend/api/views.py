@@ -625,8 +625,6 @@ class SearchUsersAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
-    # 변수를 쿼리가 아닌 JSON 형식으로 전달받기 위해 POST 요청으로 변경
-    # GET 요청 시 쿼리를 포함한 url이 너무 길어져서 반려.
     def post(self, request, *args, **kwargs):
         serializer = SearchSerializer(data=request.data)
         if serializer.is_valid():
