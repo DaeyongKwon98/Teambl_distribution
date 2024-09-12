@@ -54,7 +54,7 @@ const Notification = ({ updateUnreadCount }) => {
 
       setNotifications((prevNotifications) =>
         prevNotifications.map((notification) =>
-          notification.id === id ? response.data.results : notification
+          notification.id === id ? response.data : notification
         )
       );
 
