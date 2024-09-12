@@ -71,7 +71,7 @@ function NewSearch() {
   const fetchKeywords = async () => {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
-      const keywordStrings = response.data.results.map((item) => item.keyword);
+      const keywordStrings = response.data.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
     } catch (error) {
@@ -83,7 +83,7 @@ function NewSearch() {
   const fetchRecentSearches = async () => {
     try {
       const response = await api.get("/api/search-history/"); // 최근 검색 기록을 가져오는 API 엔드포인트
-      const recentSearchTerms = response.data.results.map(
+      const recentSearchTerms = response.data.map(
         (item) => item.keyword
       );
       setRecentSearches(recentSearchTerms); // 가져온 검색 기록을 recentSearches 변수에 저장
@@ -110,7 +110,7 @@ function NewSearch() {
         majors: filters.majors.flat(),
       });
       console.log(response.data);
-      setUsers(response.data.results);
+      setUsers(response.data);
       setNextPage(response.data.next);
       setIsSearchLoading(false);
     } catch (error) {
@@ -132,7 +132,7 @@ function NewSearch() {
 
       console.log(response.data);
 
-      setUsers((prevUsers) => [...prevUsers, ...response.data.results]); // 기존 사용자에 추가
+      setUsers((prevUsers) => [...prevUsers, ...response.data]); // 기존 사용자에 추가
       setNextPage(response.data.next); // 다음 페이지 URL 업데이트
       setIsMoreUserLoading(false);
     } catch (error) {
@@ -195,7 +195,7 @@ function NewSearch() {
   const handleDelete = async (termToDelete) => {
     try {
       const response = await api.get("/api/search-history/");
-      const searchItem = response.data.results.find(
+      const searchItem = response.data.find(
         (item) => item.keyword === termToDelete
       );
       if (searchItem) {
