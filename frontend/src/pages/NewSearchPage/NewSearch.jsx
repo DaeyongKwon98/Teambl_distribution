@@ -72,7 +72,7 @@ function NewSearch() {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
       console.log("response from /api/keywords/", response.data);
-      const keywordStrings = response.data.map((item) => item.keyword);
+      const keywordStrings = response.data.results.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
     } catch (error) {
@@ -84,7 +84,8 @@ function NewSearch() {
   const fetchRecentSearches = async () => {
     try {
       const response = await api.get("/api/search-history/"); // 최근 검색 기록을 가져오는 API 엔드포인트
-      const recentSearchTerms = response.data.map(
+      console.log("response.data from /api/search-history/", response.data);
+      const recentSearchTerms = response.data.results.map(
         (item) => item.keyword
       );
       setRecentSearches(recentSearchTerms); // 가져온 검색 기록을 recentSearches 변수에 저장
