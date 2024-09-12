@@ -129,7 +129,7 @@ function NewSearch() {
         majors: filters.majors.flat(),
       });
 
-      setUsers((prevUsers) => [...prevUsers, ...response.data]); // 기존 사용자에 추가
+      setUsers((prevUsers) => [...prevUsers, ...response.data.results]); // 기존 사용자에 추가
       setNextPage(response.data.next); // 다음 페이지 URL 업데이트
       setIsMoreUserLoading(false);
     } catch (error) {
