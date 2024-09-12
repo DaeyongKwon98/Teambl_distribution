@@ -1,6 +1,6 @@
 .newSearch-body {
   margin: 0;
-  font-family: 'Pretendard';
+  font-family: "Pretendard";
   font-style: normal;
   background-color: #ffffff;
 }
@@ -286,7 +286,7 @@ li {
   font-size: 12.3px;
   border: none;
   border-radius: 3.85px;
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   outline: none;
 }
 
@@ -299,6 +299,7 @@ li {
 .newSearch-major-popup-body {
   flex: 1;
   /* max-height: 50%; */
+  width: 90%;
   max-height: 100px;
   padding: 7.69px;
   overflow-y: auto;
@@ -372,7 +373,7 @@ li {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #EEF4FF;
+  background-color: #eef4ff;
   border-radius: 15.38px;
   padding: 5px 10px;
   font-size: 12.3px;
@@ -385,10 +386,10 @@ li {
 .newSearch-remove-major {
   background: none;
   border: none;
-  color: #A8A8A8;
+  color: #a8a8a8;
   font-size: 16px;
   cursor: pointer;
-  padding: 0;
+  padding: 0px;
   margin-left: 5px; /* 왼쪽 여백 5px 추가 */
 }
 
@@ -399,16 +400,16 @@ li {
   font-size: 20px;
   cursor: pointer;
   margin-left: auto;
-  display: flex;         /* 플렉스 박스를 사용하여 내용물 정렬 */
+  display: flex; /* 플렉스 박스를 사용하여 내용물 정렬 */
   justify-content: flex-end; /* 내부 내용물을 오른쪽으로 정렬 */
-  align-items: center;   /* 수직 가운데 정렬 */
-  padding: 0;            /* 여백 없이 오른쪽에 붙이기 */
+  align-items: center; /* 수직 가운데 정렬 */
+  padding: 0; /* 여백 없이 오른쪽에 붙이기 */
 }
 
 .newSearch-major-search-container {
   display: flex;
   align-items: center;
-  background-color: #F6F6F6;
+  background-color: #f6f6f6;
   border-radius: 5px;
   padding: 5px; /* 내부 여백 설정 */
   margin: 0px; /* 좌우 여백 설정 */
@@ -431,12 +432,12 @@ li {
 }
 
 .newSearch-major-search-container input::placeholder {
-  color: #F6F6F6; /* placeholder 텍스트 색상 설정 */
+  color: #f6f6f6; /* placeholder 텍스트 색상 설정 */
 }
 
 /* 검색창에서 전공 필터 표시용으로 추가 */
 .selected-major {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
   padding: 5px 10px;
   border-radius: 15px;
   display: inline-flex;
@@ -454,6 +455,7 @@ li {
   display: flex;
   align-items: center;
   margin-left: 5px;
+  padding: 0px;
 }
 
 .no-results-message {

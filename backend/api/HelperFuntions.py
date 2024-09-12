@@ -5,6 +5,8 @@ from django.db.models import Q
 
 def get_user_distance(user, target_user):
     """BFS를 사용하여 user와 target_user 사이의 촌수를 계산합니다."""
+    """Target_user와의 거리가 4촌 이상인 경우 None을 return"""
+
     queue = deque([(user, 0)])
     visited = {user}
 

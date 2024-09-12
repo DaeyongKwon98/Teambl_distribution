@@ -151,13 +151,19 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           <div className="friend-action-buttons">
             <button
               className="friend-reject-button"
-              onClick={() => updateFriendStatus(chon.id, "rejected")}
+              onClick={(e) => {
+                e.stopPropagation(); // Stops event propagation to parent div
+                updateFriendStatus(chon.id, "rejected");
+              }}
             >
               <img src={rejectIcon}></img>
             </button>
             <button
               className="friend-accept-button"
-              onClick={() => updateFriendStatus(chon.id, "accepted")}
+              onClick={(e) => {
+                e.stopPropagation(); // Stops event propagation to parent div
+                updateFriendStatus(chon.id, "accepted");
+              }}
             >
               <img src={acceptIcon}></img>
             </button>

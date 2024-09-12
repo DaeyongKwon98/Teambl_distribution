@@ -24,7 +24,7 @@ function Invite() {
   const fetchLinks = async () => {
     try {
       const response = await api.get("/api/invitation-links/");
-      const sortedLinks = response.data.sort(
+      const sortedLinks = response.data.results.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
       setLinks(sortedLinks);
@@ -56,12 +56,12 @@ function Invite() {
       alert("이름을 입력해 주세요.");
       return;
     }
-  
+
     if (invitesLeft <= 0) {
       alert("더 이상 초대할 수 없습니다.");
       return;
     }
-  
+
     try {
       const response = await api.post("/api/create-invitation-link/", {
         name,
@@ -135,7 +135,7 @@ function Invite() {
     // linkObj.created_at이 Date 객체라고 가정
     const expiredDate = new Date(
       //createdDate.getTime() + 7 * 24 * 60 * 60 * 1000
-      createdDate.getTime() + 60*1000
+      createdDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
@@ -144,7 +144,7 @@ function Invite() {
     const currentDate = new Date();
     const expiredDate = new Date(
       //currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
-      currentDate.getTime() + 60*1000
+      currentDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
@@ -164,25 +164,25 @@ function Invite() {
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
-      case '1촌':
+      case "1촌":
         navigate("/friends");
         break;
-      case '홈':
+      case "홈":
         navigate("/home");
         break;
-      case '설정':
+      case "설정":
         navigate("/setting");
         break;
       default:
         break;
     }
   };
-  
+
   return (
     <div className="container">
       <Header />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
-      
+
       <header className="header">
         <div className="header-content">
           <div className="title-container">
@@ -219,84 +219,90 @@ function Invite() {
         </button>
       </div>
       <h2 className="invite-status-title">초대 현황</h2>
-  {links.length > 0 ? (
-  links.map((linkObj, index) => {
-    const expiredDate = getExpiredDate(linkObj);
+      {links.length > 0 ? (
+        links.map((linkObj, index) => {
+          const expiredDate = getExpiredDate(linkObj);
 
-    const currentTime = new Date();
-    const isExpired = currentTime > expiredDate;
-    
-    return (
-      <div className="invite-status" key={index}>
-        <div className={`invite-card ${linkObj.status !== "accepted" ? '' : 'accepted'}`}>
-          <div className="invite-card-header">
-            <p className="invitee-name">{linkObj.invitee_name}</p>
-            {linkObj.status !== "accepted" ? (
-              <>
-                {/* {console.log("Status is not accepted, showing revoke button.")} */}
-                <button
-                  className="revoke-invite-button"
-                  onClick={() => handleRevokeInvite(linkObj)}
-                >
-                  초대 회수
-                </button>
-              </>
-            ) : (
-              // console.log("Status is accepted, hiding revoke button.")
-              null
-            )}
-          </div>
-          <div className="expiration-container">
-            {linkObj.status === "accepted" ? (
-              <>
-                <p className="invite-accepted">가입완료</p>
-                <button
-                  className="view-profile-button"
-                  onClick={() =>
-                    (window.location.href = `/profile/${linkObj.invitee_id}`)
-                  }
-                >
-                  프로필 확인
-                </button>
-              </>
-            ) : (
-              <>
-                <div className="expiration-info">
-                  <p className="expiration-title">링크 유효 기간</p>
-                  <p className="expiration-date">
-                    {isExpired ? "미가입 기간 만료" : `${formatDate(expiredDate)}까지`}
-                  </p>
+          const currentTime = new Date();
+          const isExpired = currentTime > expiredDate;
+
+          return (
+            <div className="invite-status" key={index}>
+              <div
+                className={`invite-card ${
+                  linkObj.status !== "accepted" ? "" : "accepted"
+                }`}
+              >
+                <div className="invite-card-header">
+                  <p className="invitee-name">{linkObj.invitee_name}</p>
+                  {linkObj.status !== "accepted" ? (
+                    <>
+                      {/* {console.log("Status is not accepted, showing revoke button.")} */}
+                      <button
+                        className="revoke-invite-button"
+                        onClick={() => handleRevokeInvite(linkObj)}
+                      >
+                        초대 회수
+                      </button>
+                    </>
+                  ) : // console.log("Status is accepted, hiding revoke button.")
+                  null}
                 </div>
-                <button
-                  className={`copy-link-button ${
-                    isExpired ? "disabled" : ""
-                  }`}
-                  onClick={() => !isExpired && handleCopyLink(linkObj.link)}
-                  disabled={isExpired}
-                >
-                  <img
-                    src={CopyIcon}
-                    alt="복사 아이콘"
-                    className="copy-icon"
-                  />
-                  <p className="copy-link-title">
-                    {/* {isExpired ? "재생성" : "링크 복사"} */}
-                    링크 복사
-                  </p>
-                </button>
-              </>
-            )}
-          </div>
+                <div className="expiration-container">
+                  {linkObj.status === "accepted" ? (
+                    <>
+                      <p className="invite-accepted">가입완료</p>
+                      <button
+                        className="view-profile-button"
+                        onClick={() =>
+                          (window.location.href = `/profile/${linkObj.invitee_id}`)
+                        }
+                      >
+                        프로필 확인
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <div className="expiration-info">
+                        <p className="expiration-title">링크 유효 기간</p>
+                        <p className="expiration-date">
+                          {isExpired
+                            ? "미가입 기간 만료"
+                            : `${formatDate(expiredDate)}까지`}
+                        </p>
+                      </div>
+                      <button
+                        className={`copy-link-button ${
+                          isExpired ? "disabled" : ""
+                        }`}
+                        onClick={() =>
+                          !isExpired && handleCopyLink(linkObj.link)
+                        }
+                        disabled={isExpired}
+                      >
+                        <img
+                          src={CopyIcon}
+                          alt="복사 아이콘"
+                          className="copy-icon"
+                        />
+                        <p className="copy-link-title">
+                          {/* {isExpired ? "재생성" : "링크 복사"} */}
+                          링크 복사
+                        </p>
+                      </button>
+                    </>
+                  )}
+                </div>
+              </div>
+            </div>
+          );
+        })
+      ) : (
+        <div className="init-invite-status">
+          <p>아직 초대한 사람이 없네요!</p>
+          <p>주위를 둘러보며 팀블에 함께할 지인을 찾아보세요.</p>
         </div>
-      </div>
-        );
-      })
-    ) : (
-      <div className="init-invite-status">
-        <p>아직 초대한 사람이 없네요!</p>
-        <p>주위를 둘러보며 팀블에 함께할 지인을 찾아보세요.</p>
-      </div>
-    )}
+      )}
 
       {showRevokeModal && (
         <div className="modal-overlay">

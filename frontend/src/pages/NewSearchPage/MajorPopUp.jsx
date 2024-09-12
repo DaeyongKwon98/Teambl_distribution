@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "../../styles/NewSearch.css";
-import majorEdit from '../../assets/Profile/majorEdit.svg';
+import majorEdit from "../../assets/Profile/majorEdit.svg";
 
 // 필터에서 선택 가능한 전공 목록
 const majors = [
@@ -58,8 +58,10 @@ const MajorPopUp = ({
   doSearchUsers,
   buttonText,
 }) => {
-  const [selectedMajors, setSelectedMajors] = useState(userSelectedMajors || []);
-  const [majorSearchTerm, setMajorSearchTerm] = useState("");  // 전공 검색어 상태 추가
+  const [selectedMajors, setSelectedMajors] = useState(
+    userSelectedMajors || []
+  );
+  const [majorSearchTerm, setMajorSearchTerm] = useState(""); // 전공 검색어 상태 추가
 
   // 전공 선택 및 해제 함수
   const toggleMajorSelection = (major) => {
@@ -73,16 +75,27 @@ const MajorPopUp = ({
       }
     }
   };
-  
+
   const saveSelectedMajors = () => {
     handleMajorChange(selectedMajors);
     setIsMajorPopupOpen(false);
   };
 
   // 전공 검색 필터링 함수
-  const filteredMajors = majors.filter((major) =>
-    major.includes(majorSearchTerm)
-  );
+  const filteredMajors = useMemo(() => {
+    return majors.filter((major) => {
+      // majorSearchTerm이 비어 있을 경우 모든 선택된 전공을 보여줌
+      if (majorSearchTerm.length === 0) {
+        return selectedMajors.includes(major); // 선택된 전공이면 true 반환
+      }
+
+      // majorSearchTerm이 있을 경우 검색어에 맞는 전공 또는 이미 선택된 전공을 보여줌
+      return (
+        major.toLowerCase().includes(majorSearchTerm.toLowerCase()) ||
+        selectedMajors.includes(major)
+      );
+    });
+  }, [majorSearchTerm, selectedMajors]);
 
   const removeMajor = (major) => {
     setSelectedMajors(selectedMajors.filter((m) => m !== major));
@@ -115,24 +128,24 @@ const MajorPopUp = ({
               className="newSearch-major-search-input"
             />
           </div>
-          
+
           <div className="newSearch-major-popup-body">
             <ul>
-              {majorSearchTerm && filteredMajors.length > 0 ? (
-                filteredMajors.map((major, index) => (
-                  <li
-                    key={index}
-                    className={`newSearch-major-item ${
-                      selectedMajors.includes(major) ? "selected" : ""
-                    }`}
-                    onClick={() => {toggleMajorSelection(major)}}
-                  >
-                    {major}
-                  </li>
-                ))
-              ) : (
-                majorSearchTerm && <p>검색된 전공이 없습니다.</p>
-              )}
+              {filteredMajors.length > 0
+                ? filteredMajors.map((major, index) => (
+                    <li
+                      key={index}
+                      className={`newSearch-major-item ${
+                        selectedMajors.includes(major) ? "selected" : ""
+                      }`}
+                      onClick={() => {
+                        toggleMajorSelection(major);
+                      }}
+                    >
+                      {major}
+                    </li>
+                  ))
+                : majorSearchTerm && <p>검색된 전공이 없습니다.</p>}
             </ul>
           </div>
 

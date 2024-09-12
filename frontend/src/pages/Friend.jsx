@@ -9,7 +9,9 @@ import FriendItem from "../components/FriendItem";
 function Friend() {
   const location = useLocation();
   const [currentUser, setCurrentUser] = useState(null);
-  const [activeTab, setActiveTab] = useState(location.state?.activeTab || 'myChons');
+  const [activeTab, setActiveTab] = useState(
+    location.state?.activeTab || "myChons"
+  );
   const [myAcceptedChons, setMyAcceptedChons] = useState([]); // 나의 1촌
   const [myChonsRequests, setMyChonsRequests] = useState([]); // 1촌 추가
   const [requestsToMe, setRequestsToMe] = useState([]); // 내게 신청한
@@ -19,7 +21,7 @@ function Friend() {
   const navigate = useNavigate();
 
   // 1촌 삭제 함수는 pages/FriendPage/FriendDeletePopup.jsx에 구현
-  
+
   // 현재 로그인 유저를 가져오는 함수
   const getCurrentUser = () => {
     api
@@ -40,13 +42,13 @@ function Friend() {
         console.log(data);
 
         // 1촌 중 accept인 경우 나의 1촌
-        const myAcceptedChons = data.filter(
+        const myAcceptedChons = data.results.filter(
           (friend) => friend.status === "accepted"
         );
         setMyAcceptedChons(myAcceptedChons);
 
         // 1촌 중 from_user가 current_user인 경우
-        const myChonsRequests = data.filter(
+        const myChonsRequests = data.results.filter(
           (friend) =>
             friend.status === "pending" &&
             friend.from_user.id === currentUser.id
@@ -54,7 +56,7 @@ function Friend() {
         setMyChonsRequests(myChonsRequests);
 
         // 1촌 중 to_user가 current_user인 경우
-        const requestsToMe = data.filter(
+        const requestsToMe = data.results.filter(
           (friend) =>
             friend.status === "pending" && friend.to_user.id === currentUser.id
         );
@@ -88,7 +90,7 @@ function Friend() {
       }
     }
   };
-  
+
   const handleNavClick = (item) => {
     setActiveNav(item);
     switch (item) {
@@ -145,7 +147,9 @@ function Friend() {
 
       {activeTab === "myChons" && (
         <div className="friend-myChons-content">
-          <p className="friend-total-count">{myAcceptedChons.length+myChonsRequests.length}명</p>
+          <p className="friend-total-count">
+            {myAcceptedChons.length + myChonsRequests.length}명
+          </p>
           <div className="friend-team-member-results">
             {myChonsRequests.map((chon) => {
               const otherUser =

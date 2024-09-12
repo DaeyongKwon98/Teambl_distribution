@@ -17,7 +17,7 @@ function ProfileSelf() {
   const location = useLocation();
 
   const [initialProfile, setInitialProfile] = useState(null); // 초기 프로필 상태 저장 (비교용)
-  
+
   // 처음에 receivedProfile을 받아옴
   const [receivedProfile, setReceivedProfile] = useState(
     location.state?.profile || null
@@ -52,7 +52,7 @@ function ProfileSelf() {
   const [isSaveButtonActivate, setIsSaveButtonActivate] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [showSuccessPopup, setShowSuccessPopup] = useState(false); // 성공 팝업 상태
-  
+
   const onDrop = (acceptedFiles) => {
     const file = acceptedFiles[0];
     setNewImage(file);
@@ -67,7 +67,7 @@ function ProfileSelf() {
     // 저장 버튼 활성화
     setIsSaveButtonActivate(true);
   };
-  
+
   useEffect(() => {
     if (receivedProfile) {
       // receivedProfile을 사용하여 초기 상태를 설정
@@ -80,7 +80,7 @@ function ProfileSelf() {
 
       // 초기 프로필을 저장
       setInitialProfile(receivedProfile);
-      
+
       // receivedProfile을 사용 후 null로 설정
       setReceivedProfile(null);
 
@@ -95,13 +95,16 @@ function ProfileSelf() {
   useEffect(() => {
     if (profile && initialProfile) {
       // 프로필이 변경된 경우에만 저장 버튼을 활성화
-      if (JSON.stringify(profile) !== JSON.stringify(initialProfile) || newImage) {
+      if (
+        JSON.stringify(profile) !== JSON.stringify(initialProfile) ||
+        newImage
+      ) {
         setIsSaveButtonActivate(true);
       } else {
         setIsSaveButtonActivate(false);
       }
     }
-  
+
     if (profile.keywords.length >= 5) {
       setKeywordFull(true);
     } else {
@@ -161,7 +164,7 @@ function ProfileSelf() {
     try {
       const response = await api.get("/api/friends/");
       // console.log(response.data);
-      const friendList = await response.data;
+      const friendList = await response.data.results;
 
       // 상태가 "accepted"인 항목들만 필터링
       const acceptedFriendList = friendList.filter(
@@ -289,7 +292,7 @@ function ProfileSelf() {
       JSON.stringify(profile) !== JSON.stringify(initialProfile) || newImage;
     setIsSaveButtonActivate(isProfileChanged);
   };
-  
+
   // 서버에 프로필 정보를 업로드하는 코드
   const handleSave = async (e) => {
     e.preventDefault();
@@ -316,10 +319,16 @@ function ProfileSelf() {
       keywords: profile.keywords,
     };
 
-    console.log("ProfileSelf.jsx: profileDataWithoutImage", profileDataWithoutImage);
+    console.log(
+      "ProfileSelf.jsx: profileDataWithoutImage",
+      profileDataWithoutImage
+    );
 
     try {
-      const response1 = await api.put("/api/profile/update/", profileDataWithoutImage); // 이미지 이외 데이터 업로드
+      const response1 = await api.put(
+        "/api/profile/update/",
+        profileDataWithoutImage
+      ); // 이미지 이외 데이터 업로드
       console.log("프로필 이미지 이외의 데이터 업로드 완료:", response1.data);
       const response2 = await api.put("/api/profile/update/", imageData); // 이미지 업로드
       const updatedProfile = response2.data;
@@ -333,7 +342,10 @@ function ProfileSelf() {
           // 포트폴리오 링크 관련 오류인 경우
           setErrorMessage("올바르지 않은 링크 형식입니다.");
         } else {
-          setErrorMessage("프로필 업데이트 실패: " + error.response.data.message || "알 수 없는 오류 발생");
+          setErrorMessage(
+            "프로필 업데이트 실패: " + error.response.data.message ||
+              "알 수 없는 오류 발생"
+          );
         }
       } else {
         setErrorMessage("프로필 업데이트 실패");
@@ -400,7 +412,9 @@ function ProfileSelf() {
       <div className="profile-tags">
         <div className="profile-tags-title">
           키워드
-          <label className="profile-tags-definition">본인을 나타내는 키워드를 입력해보세요. (최대 5개)</label>
+          <label className="profile-tags-definition">
+            본인을 나타내는 키워드를 입력해보세요. (최대 5개)
+          </label>
         </div>
         <div className="profile-tag-container">
           <div className="profile-tags-list">
@@ -460,7 +474,7 @@ function ProfileSelf() {
             </div>
           ))}
           <input
-            maxLength="20"
+            maxLength="30"
             type="text"
             placeholder="본인의 경험을 추가해보세요."
             className="profile-input"
@@ -556,19 +570,23 @@ function ProfileSelf() {
       </div>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
-      
+
       {showSuccessPopup && (
         <div className="popup-overlay">
           <div className="popup-content">
             <p>저장되었습니다.</p>
-            <button onClick={() => {
-              setShowSuccessPopup(false);
-              setIsSaveButtonActivate(false);
-            }}>확인</button>
+            <button
+              onClick={() => {
+                setShowSuccessPopup(false);
+                setIsSaveButtonActivate(false);
+              }}
+            >
+              확인
+            </button>
           </div>
         </div>
       )}
-      
+
       <button
         type="submit"
         className="profile-submitBtn"
