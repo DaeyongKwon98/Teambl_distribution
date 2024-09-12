@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # "backend.api",
     "api",
     "rest_framework",
     "corsheaders",
@@ -94,6 +95,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "backend.wsgi.application"
+
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
