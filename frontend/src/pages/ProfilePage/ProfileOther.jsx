@@ -25,6 +25,7 @@ const ProfileOther = ({ userId }) => {
   const [paths, setPaths] = useState([]); // 여러 경로 상태 추가
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 오류 상태 추가
+  const [currentUserId, setCurrentUserId] = useState("");
   const navigate = useNavigate();
 
   const scrollRef = useRef(null);
@@ -65,10 +66,44 @@ const ProfileOther = ({ userId }) => {
     }
   };
 
+  // 1촌을 추가하는 함수 (userId를 사용)
+  const addFriend = async (e) => {
+    e.preventDefault();
+    try {
+      const userResponse = await api.get(`/api/profile/${currentUserId}/`); 
+      const oneDegreeCount = userResponse.data.one_degree_count;
+
+      if (oneDegreeCount >= 50) {
+        alert("1촌 수가 50명을 초과하여 더 이상 일촌 추가가 불가능합니다.");
+        return; // 친구 추가 중단
+      }
+
+      const response = await api.post("/api/friends/", {
+        to_user_id: userId, // Ensure this is the correct field
+      });
+      console.log(response);
+
+      if (response.status === 201) {
+        alert("친구 추가 완료!");
+        // getChons(); // 친구 목록 갱신
+      }
+    } catch (error) {
+      console.error("Error in addFriend:", error.response ? error.response.data : error.message);
+
+      // 서버로부터 받은 에러 메시지를 표시
+      if (error.response && error.response.data) {
+        alert(`${error.response.data.detail || "친구 추가 중 오류가 발생했습니다."}`);
+      } else {
+        alert("친구 추가 중 오류가 발생했습니다.");
+      }
+    }
+  };
+
   // 모든 경로를 가져오는 함수
   const fetchUserPaths = async (userId) => {
     try {
       const response = await api.get(`/api/path/${userId}/`);
+      setCurrentUserId(response.data.current_user_id);
       setPaths(response.data.paths);
     } catch (error) {
       console.error("유저 경로를 불러오는 중 오류가 발생했습니다.", error);
@@ -124,7 +159,10 @@ const ProfileOther = ({ userId }) => {
                 ・ {relationshipDegree ? relationshipDegree : "?"}촌
               </div>
               {relationshipDegree !== 1 && (
-                <button className="profileOther-oneDegree-button">
+                <button
+                  className="profileOther-oneDegree-button"
+                  onClick={addFriend}
+                  >
                   1촌 신청
                 </button>
               )}

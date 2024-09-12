@@ -308,9 +308,9 @@ class InvitationLinkSerializer(serializers.ModelSerializer):
 
 
 class FriendCreateSerializer(serializers.ModelSerializer):
-    to_user_email = serializers.EmailField(
-        write_only=True,
-        error_messages={"invalid": "유효한 이메일 주소를 입력해주세요."},
+    to_user_id = serializers.IntegerField(
+        write_only=True, 
+        error_messages={"invalid": "유효한 사용자 ID를 입력해주세요."}
     )
     from_user = CustomUserSerializer(read_only=True)
     to_user = CustomUserSerializer(read_only=True)
@@ -318,19 +318,19 @@ class FriendCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Friend
-        fields = ["id", "from_user", "to_user", "status", "to_user_email"]
+        fields = ["id", "from_user", "to_user", "status", "to_user_id"]
         read_only_fields = ["id", "from_user", "to_user"]
 
     def validate(self, attrs):
         from_user = self.context["request"].user
-        to_user_email = attrs.get("to_user_email")
+        to_user_id = attrs.get("to_user_id")
 
         # 이메일에 해당하는 사용자가 있는지 확인
         try:
-            to_user = CustomUser.objects.get(email=to_user_email)
+            to_user = CustomUser.objects.get(id=to_user_id)
         except CustomUser.DoesNotExist:
             raise serializers.ValidationError(
-                {"message": "해당 이메일의 유저가 없습니다."}
+                {"message": "해당 ID의 유저가 없습니다."}
             )
 
         # 자신에게 1촌 신청하는지 확인

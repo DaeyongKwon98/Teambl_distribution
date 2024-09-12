@@ -510,12 +510,26 @@ class ListCreateFriendView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         from_user = self.request.user
         to_user_id = serializer.validated_data.get("to_user").id
+
         try:
             to_user = CustomUser.objects.get(id=to_user_id)
-            logger.info(
-                f"Creating friendship: from_user={from_user.email}, to_user={to_user.email}"
-            )
-            serializer.save(from_user=from_user, to_user=to_user, status="accepted")
+
+            # 기존 친구 관계 확인
+            existing_friendship = Friend.objects.filter(
+                Q(from_user=from_user, to_user=to_user) |
+                Q(from_user=to_user, to_user=from_user)
+            ).first()
+
+            if existing_friendship:
+                if existing_friendship.status == "pending":
+                    # 친구 요청이 진행 중인 경우: 에러 반환
+                    raise ValidationError({"detail": "이미 친구 요청이 진행 중입니다."})
+                elif existing_friendship.status == "accepted":
+                    # 이미 친구 관계인 경우: 에러 반환
+                    raise ValidationError({"detail": "이미 친구 관계입니다."})
+
+            # 새로운 친구 관계 생성 (pending)
+            Friend.create_or_replace_friendship(from_user, to_user)
 
             # 친구 추가 요청 알림 생성
             user_profile = Profile.objects.get(user=from_user)
@@ -525,13 +539,12 @@ class ListCreateFriendView(generics.ListCreateAPIView):
                 notification_type="friend_request",
             )
 
-            # Profile의 one_degree_count도 같이 업데이트
+            # Profile의 one_degree_count도 업데이트
             update_profile_one_degree_count(from_user)
             update_profile_one_degree_count(to_user)
 
         except CustomUser.DoesNotExist:
-            logger.error(f"User with id {to_user_id} does not exist")
-            raise ValidationError("해당 아이디를 가진 사용자가 존재하지 않습니다.")
+            raise ValidationError({"detail": "해당 아이디를 가진 사용자가 존재하지 않습니다."})
 
 
 class FriendUpdateView(generics.UpdateAPIView):
@@ -543,8 +556,11 @@ class FriendUpdateView(generics.UpdateAPIView):
         return Friend.objects.filter(Q(from_user=user) | Q(to_user=user))
 
     def perform_update(self, serializer):
-        friend = serializer.save()
         status = serializer.validated_data.get("status")
+        friend = serializer.instance
+        friend.status = status
+        friend.save()
+        
         from_user = friend.from_user
         to_user = friend.to_user
 
@@ -953,7 +969,7 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
 
         # 경로가 없을 경우 빈 리스트 반환
         if not shortest_paths:
-            return Response({"paths": []}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"paths": [], "current_user_id": current_user.id}, status=status.HTTP_404_NOT_FOUND)
 
         # user_id를 user_name으로 변환
         paths_as_usernames = []
@@ -963,4 +979,4 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
             ]
             paths_as_usernames.append(path_usernames)
 
-        return Response({"paths": paths_as_usernames}, status=status.HTTP_200_OK)
+        return Response({"paths": paths_as_usernames, "current_user_id": current_user.id}, status=status.HTTP_200_OK)

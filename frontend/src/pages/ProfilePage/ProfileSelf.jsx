@@ -164,7 +164,7 @@ function ProfileSelf() {
     try {
       const response = await api.get("/api/friends/");
       // console.log(response.data);
-      const friendList = await response.data;
+      const friendList = await response.data.results;
 
       // 상태가 "accepted"인 항목들만 필터링
       const acceptedFriendList = friendList.filter(

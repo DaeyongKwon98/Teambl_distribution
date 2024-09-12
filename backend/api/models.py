@@ -6,7 +6,6 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -322,16 +321,21 @@ class Friend(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 
     class Meta:
-        unique_together = ("to_user", "from_user")
+        unique_together = ("to_user", "from_user", "status")
 
     @classmethod
     def create_or_replace_friendship(cls, from_user, to_user):
         # 거절된 상태의 친구 관계가 있는지 확인
-        rejected_friendship = cls.objects.filter(from_user=from_user, to_user=to_user, status="rejected").first()
+        rejected_friendship = cls.objects.filter(
+            models.Q(from_user=from_user, to_user=to_user) |
+            models.Q(from_user=to_user, to_user=from_user),
+            status="rejected"
+        ).first()
         
         # 거절된 관계가 있으면 삭제
         if rejected_friendship:
             rejected_friendship.delete()
+            print("rejected friendship deleted!")
         
         # 새로운 친구 관계 생성 (pending 상태로)
         new_friendship = cls.objects.create(from_user=from_user, to_user=to_user, status="pending")
