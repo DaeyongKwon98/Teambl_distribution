@@ -19,6 +19,8 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = Path(__file__).resolve().parent
 
+print("BASE_DIR:", BASE_DIR)
+
 # load_dotenv()
 load_dotenv(os.path.join(BASE_DIR, "../frontend/.env"))
 
@@ -166,11 +168,11 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-CORS_ALLOW_ALL_ORIGINS = False
-CORS_ALLOWS_CREDENTIALS = True
-CORS_ALLOWED_ORIGINS = [
-    "https://teambl-distribution.vercel.app",  # 다른 허용할 도메인이 있으면 추가
-]
+CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOWED_ORIGINS = [
+#     "https://teambl-distribution.vercel.app",  # 다른 허용할 도메인이 있으면 추가
+# ]
 
 # 이메일 서버
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
