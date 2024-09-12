@@ -125,7 +125,7 @@ function ProfileSelf() {
   const fetchProfile = async () => {
     try {
       const response = await api.get("/api/current-user/");
-      const fetchedProfile = response.data.results.profile;
+      const fetchedProfile = response.data.profile;
       const oneDegreeCount = await fetchFriendCount();
 
       const completeProfile = {
