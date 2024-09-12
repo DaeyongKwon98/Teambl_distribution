@@ -629,79 +629,70 @@ class SearchUsersAPIView(generics.ListAPIView):
     # GET 요청 시 쿼리를 포함한 url이 너무 길어져서 반려.
     def post(self, request, *args, **kwargs):
         serializer = SearchSerializer(data=request.data)
-        print("request data:", request.data)
         if serializer.is_valid():
-            query = serializer.validated_data.get("q", "")
-            degrees = serializer.validated_data.get("degree", [])
-            majors = serializer.validated_data.get("majors", [])
+            try:
+                query = serializer.validated_data.get("q", "")
+                degrees = serializer.validated_data.get("degree", [])
+                majors = serializer.validated_data.get("majors", [])
 
-            print("Received Degrees:", degrees)
-            print("Majors:", majors)
+                filtered_profiles = Profile.objects.exclude(user=request.user)
 
-            # 현재 사용자의 프로필을 제외한 전체 프로필을 가져옵니다.
-            filtered_profiles = Profile.objects.exclude(user=request.user)
+                if query:
+                    filtered_profiles = filtered_profiles.filter(
+                        Q(keywords__keyword__icontains=query) |
+                        Q(user_name__icontains=query) |
+                        Q(school__icontains=query) |
+                        Q(current_academic_degree__icontains=query) |
+                        Q(major1__icontains=query) |
+                        Q(major2__icontains=query)
+                    )
 
-            # 1. 검색 쿼리로 필터링
-            if query != "":
-                filtered_profiles = filtered_profiles.filter(
-                    Q(keywords__keyword__icontains=query)  # 키워드 필터링
-                    | Q(user_name__icontains=query)  # 이름 필터링
-                    | Q(school__icontains=query)  # 학교 필터링
-                    | Q(current_academic_degree__icontains=query)  # 학력 필터링
-                    | Q(major1__icontains=query)  # 전공1 필터링
-                    | Q(major2__icontains=query)  # 전공2 필터링
+                if majors:
+                    filtered_profiles = filtered_profiles.filter(
+                        Q(major1__in=majors) | Q(major2__in=majors)
+                    )
+
+                degrees = list(map(int, degrees))
+                user = self.request.user
+                profile_with_distances = []
+
+                for profile in filtered_profiles:
+                    target_user = profile.user
+                    distance = get_user_distance(user, target_user)
+                    if not degrees or distance in degrees:
+                        profile_with_distances.append((profile, distance))
+
+                profile_with_distances.sort(
+                    key=lambda x: float("inf") if x[1] is None else x[1]
                 )
 
-            # 2. 전공 필터링
-            print("Majors for filtering:", majors)
-            if majors:
-                filtered_profiles = filtered_profiles.filter(
-                    Q(major1__in=majors) | Q(major2__in=majors)
-                )
-            print("Profiles after major filtering:", filtered_profiles)
+                unique_users = OrderedDict()
+                for profile, distance in profile_with_distances:
+                    user_id = profile.user.id
+                    if user_id not in unique_users:
+                        unique_users[user_id] = profile
 
-            # 3. 촌수 필터링 (촌수 필터가 비어있는 경우 모든 촌수 유저 포함)
-            degrees = list(map(int, degrees))
-            user = self.request.user
-            profile_with_distances = []
+                unique_profiles = list(unique_users.values())
+                print("Unique profiles:", unique_profiles)
 
-            print("Filtered Degrees:", degrees)
+                paginator = self.pagination_class()
+                paginated_profiles = paginator.paginate_queryset(unique_profiles, request)
+                print("Paginated profiles:", paginated_profiles)
 
-            for profile in filtered_profiles:
-                target_user = profile.user
-                distance = get_user_distance(user, target_user)
-                if len(degrees) == 0 or distance in degrees:
-                    # 촌수와 프로필을 함께 저장
-                    profile_with_distances.append((profile, distance))
+                if paginated_profiles is None:
+                    return JsonResponse({'error': 'Pagination error'}, status=500)
 
-            # 촌수 오름차순으로 정렬 (None 값을 float('inf')로 처리)
-            profile_with_distances.sort(
-                key=lambda x: float("inf") if x[1] is None else x[1]
-            )
+                sorted_custom_users = [
+                    CustomUser.objects.get(profile=profile)
+                    for profile in paginated_profiles
+                ]
 
-            # 중복된 유저를 제거하기 위해 OrderedDict 사용 (유저 ID를 기준으로 중복 제거)
-            unique_users = OrderedDict()
-            for profile, distance in profile_with_distances:
-                user_id = profile.user.id
-                if user_id not in unique_users:
-                    unique_users[user_id] = profile
+                serializer = self.get_serializer(sorted_custom_users, many=True)
+                return paginator.get_paginated_response(serializer.data)
 
-            # 정렬된 프로필 목록 추출
-            unique_profiles = list(unique_users.values())
-
-            # 페이지네이션 적용
-            paginator = self.pagination_class()
-            paginated_profiles = paginator.paginate_queryset(unique_profiles, request)
-
-            # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
-            sorted_custom_users = [
-                CustomUser.objects.get(profile=profile)
-                for profile in paginated_profiles
-            ]
-
-            serializer = self.get_serializer(sorted_custom_users, many=True)
-            return paginator.get_paginated_response(serializer.data)
-
+            except Exception as e:
+                print(f"Error: {e}")
+                return JsonResponse({'error': 'An error occurred'}, status=500)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
