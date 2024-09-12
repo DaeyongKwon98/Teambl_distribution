@@ -110,7 +110,7 @@ function NewSearch() {
         majors: filters.majors.flat(),
       });
       console.log(response.data);
-      setUsers(response.data);
+      setUsers(response.data.results);
       setNextPage(response.data.next);
       setIsSearchLoading(false);
     } catch (error) {
