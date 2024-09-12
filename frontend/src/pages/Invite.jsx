@@ -24,7 +24,7 @@ function Invite() {
   const fetchLinks = async () => {
     try {
       const response = await api.get("/api/invitation-links/");
-      const sortedLinks = response.data.results.sort(
+      const sortedLinks = response.data.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
       setLinks(sortedLinks);
