@@ -42,13 +42,13 @@ function Friend() {
         console.log(data);
 
         // 1촌 중 accept인 경우 나의 1촌
-        const myAcceptedChons = data.results.filter(
+        const myAcceptedChons = data.filter(
           (friend) => friend.status === "accepted"
         );
         setMyAcceptedChons(myAcceptedChons);
 
         // 1촌 중 from_user가 current_user인 경우
-        const myChonsRequests = data.results.filter(
+        const myChonsRequests = data.filter(
           (friend) =>
             friend.status === "pending" &&
             friend.from_user.id === currentUser.id
@@ -56,7 +56,7 @@ function Friend() {
         setMyChonsRequests(myChonsRequests);
 
         // 1촌 중 to_user가 current_user인 경우
-        const requestsToMe = data.results.filter(
+        const requestsToMe = data.filter(
           (friend) =>
             friend.status === "pending" && friend.to_user.id === currentUser.id
         );
