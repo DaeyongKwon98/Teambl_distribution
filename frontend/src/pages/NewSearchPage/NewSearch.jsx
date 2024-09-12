@@ -71,6 +71,7 @@ function NewSearch() {
   const fetchKeywords = async () => {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
+      console.log("response from /api/keywords/", response.data);
       const keywordStrings = response.data.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
