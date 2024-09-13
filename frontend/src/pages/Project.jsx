@@ -20,7 +20,7 @@ function Project() {
       .get("/api/projects/")
       .then((res) => res.data)
       .then((data) => {
-        setProjects(data);
+        setProjects(data.results);
         console.log(data);
       })
       .catch((err) => alert(err));
