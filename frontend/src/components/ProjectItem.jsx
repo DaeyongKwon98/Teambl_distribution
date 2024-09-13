@@ -193,6 +193,7 @@ function ProjectItem({ project, onDelete, currentUser }) {
                 // 댓글 수정 중일 때
                 <div>
                   <textarea
+                    className="comment-textarea"
                     value={editContent}
                     onChange={(e) => setEditContent(e.target.value)}
                   />
