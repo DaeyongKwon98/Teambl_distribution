@@ -191,3 +191,21 @@ MEDIA_URL = "/media/"
 
 # MEDIA_ROOT는 실제 파일이 저장될 서버의 디렉토리 경로를 지정합니다.
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
+# 세션 엔진: 데이터베이스에 세션 저장
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+
+# 세션 만료 시간 (2시간)
+SESSION_COOKIE_AGE = 7200  # 2 hour
+
+# 브라우저가 닫힐 때 세션이 만료되지 않도록 설정
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
+# 세션이 수정된 경우에만 저장하도록 설정
+SESSION_SAVE_EVERY_REQUEST = False
+
+# 세션 쿠키에 HTTPOnly 속성 추가 (클라이언트 측 자바스크립트에서 접근하지 못하도록 함)
+SESSION_COOKIE_HTTPONLY = True
+
+# 보안 설정 (HTTPS에서만 세션 쿠키를 전송)
+SESSION_COOKIE_SECURE = True  # HTTPS를 사용할 경우 True로 설정
