@@ -423,7 +423,7 @@ function Profile() {
             maxLength="100"
             type="text"
             placeholder="관심 있는 분야, 이루고자 하는 목표, 전문성을 쌓기 위해 하고 있는 활동 등 본인을 설명하는 글을 자유롭게 작성해 보세요."
-            className="profile-input intro-input"
+            className="profile-input intro-input intro-textarea"
             value={introduction || (isOwner ? "" : "-")}
             onChange={(e) => setIntroduction(e.target.value)}
             disabled={!isOwner}
