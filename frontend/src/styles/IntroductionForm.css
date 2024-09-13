@@ -19,8 +19,8 @@
   flex-direction: column;
 }
 
-.intro-textarea {
-  min-height: 130px !important;
+.saved-introduction textarea {
+  min-height: 130px;
   margin: 5px 0px;
   padding: 5px;
   border: 1px solid #ddd;
@@ -28,7 +28,7 @@
   resize: none;
 }
 
-.intro-textarea::placeholder {
+.saved-introduction textarea::placeholder {
   color: #999;
 }
 

@@ -109,7 +109,6 @@ function NewSearch() {
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
       });
-      console.log(response.data);
       setUsers(response.data.results);
       setNextPage(response.data.next);
       setIsSearchLoading(false);
@@ -129,8 +128,6 @@ function NewSearch() {
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
       });
-
-      console.log(response.data);
 
       setUsers((prevUsers) => [...prevUsers, ...response.data.results]); // 기존 사용자에 추가
       setNextPage(response.data.next); // 다음 페이지 URL 업데이트
@@ -175,7 +172,7 @@ function NewSearch() {
     try {
       // 먼저 서버에서 모든 검색 기록을 가져옵니다.
       const response = await api.get("/api/search-history/");
-      const searchHistoryItems = response.data;
+      const searchHistoryItems = response.data.results;
 
       // 검색 기록의 ID를 이용해 각각의 기록을 삭제합니다.
       await Promise.all(

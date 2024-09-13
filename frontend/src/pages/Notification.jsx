@@ -20,6 +20,7 @@ const Notification = ({ updateUnreadCount }) => {
   const fetchNotifications = async () => {
     try {
       const response = await api.get("/api/notifications/");
+      console.log(response.data);
       setNotifications(response.data.results);
     } catch (error) {
       console.error("Failed to fetch notifications", error);

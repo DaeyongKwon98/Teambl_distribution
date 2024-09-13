@@ -105,7 +105,7 @@
   background-color: #0056b3;
 }
 
-.comment textarea {
+.comment-textarea {
   width: 100%;
   font-size: 0.9rem;
   padding: 10px;
@@ -118,7 +118,7 @@
   margin-top: 20px;
 }
 
-.comment-input textarea {
+.comment-input-textarea {
   width: 100%;
   font-size: 0.9rem;
   padding: 12px;
