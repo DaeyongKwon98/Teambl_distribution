@@ -4,6 +4,9 @@
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
+  max-width: 300px; /* 최대 너비를 300px로 제한 */
+  width: 100%; /* 반응형 너비를 위해 100%로 설정 */
+  box-sizing: border-box; /* 패딩과 보더를 포함한 너비 계산 */
 }
 
 .project-title {
@@ -39,7 +42,7 @@
 }
 
 .delete-button {
-  background-color: #f44336; /* Red */
+  background-color: #f44336;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -49,5 +52,108 @@
 }
 
 .delete-button:hover {
-  background-color: #d32f2f; /* Darker red */
+  background-color: #d32f2f;
+}
+
+.like-button {
+  background-color: #ff4081;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  margin-right: 10px;
+}
+
+.like-button:hover {
+  background-color: #e91e63;
+}
+
+.comments-section {
+  margin-top: 20px;
+}
+
+.comment {
+  padding: 10px;
+  border-top: 1px solid #ddd;
+  margin-top: 10px;
+}
+
+.comment p {
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.comment strong {
+  font-weight: bold;
+  color: #333;
+}
+
+.comment button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 5px;
+  font-size: 0.9rem;
+}
+
+.comment button:hover {
+  background-color: #0056b3;
+}
+
+.comment textarea {
+  width: 100%;
+  font-size: 0.9rem;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.comment-input {
+  margin-top: 20px;
+}
+
+.comment-input textarea {
+  width: 100%;
+  font-size: 0.9rem;
+  padding: 12px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.comment-input button {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.comment-input button:hover {
+  background-color: #218838;
+}
+
+.project-keywords span {
+  background-color: #e0e0e0;
+  color: #333;
+  padding: 3px 8px;
+  border-radius: 12px;
+  margin-right: 5px;
+  font-size: 0.8rem;
+  display: inline-block;
+}
+
+/* 반응형 지원을 위해 모바일에서는 너비가 줄어들도록 설정 */
+@media (max-width: 300px) {
+  .project-container {
+    width: 100%; /* 300px 이하 화면에서는 100% 너비를 유지 */
+  }
 }
