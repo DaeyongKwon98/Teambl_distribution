@@ -19,8 +19,8 @@
   flex-direction: column;
 }
 
-textarea {
-  min-height: 130px;
+.intro-textarea {
+  min-height: 130px !important;
   margin: 5px 0px;
   padding: 5px;
   border: 1px solid #ddd;
@@ -28,7 +28,7 @@ textarea {
   resize: none;
 }
 
-textarea::placeholder {
+.intro-textarea::placeholder {
   color: #999;
 }
 
