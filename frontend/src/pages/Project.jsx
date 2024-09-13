@@ -5,6 +5,7 @@ import "../styles/Project.css";
 import React from "react";
 
 function Project() {
+  const [currentUser, setCurrentUser] = useState(null);  // 로그인한 사용자 정보
   const [projects, setProjects] = useState([]);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
@@ -12,12 +13,22 @@ function Project() {
   const [keywords, setKeywords] = useState([]);
 
   useEffect(() => {
+    getCurrentUser();
     getProjects();
   }, []);
 
+  // 현재 로그인한 사용자 정보 가져오기
+  const getCurrentUser = () => {
+    api
+      .get("/api/current-user/")  // 'current-user' 엔드포인트 호출
+      .then((res) => setCurrentUser(res.data))  // 사용자 정보 상태에 저장
+      .catch((err) => alert("Failed to fetch current user info."));
+  };
+
   const getProjects = () => {
     api
-      .get("/api/projects/")
+      // .get("/api/projects/")
+      .get("/api/projects/every/")
       .then((res) => res.data)
       .then((data) => {
         setProjects(data.results);
@@ -96,6 +107,7 @@ function Project() {
             project={project}
             onDelete={deleteProject}
             key={project.project_id}
+            currentUser={currentUser}
           />
         ))}
       </div>
