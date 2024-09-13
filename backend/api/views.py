@@ -12,6 +12,8 @@ from .models import (
     Notification,
     Inquiry,
     SearchHistory,
+    Like,
+    Comment,
 )
 from .serializers import (
     CustomUserSerializer,
@@ -29,6 +31,8 @@ from .serializers import (
     SecondDegreeProfileSerializer,
     InquirySerializer,
     SearchHistorySerializer,
+    LikeSerializer,
+    CommentSerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -277,6 +281,40 @@ class ProjectListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+# 모든 User의 Project를 보여주는 View
+class ProjectEveryListCreate(generics.ListCreateAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Project.objects.all()  # 모든 유저의 프로젝트 반환
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+        else:
+            print(serializer.errors)
+
+# 프로젝트 수정 뷰
+class ProjectUpdateView(generics.UpdateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        keywords_data = self.request.data.get('keywords', [])
+        
+        # Project 인스턴스를 먼저 업데이트
+        project = serializer.save()
+
+        # 키워드를 업데이트
+        keyword_objs = []
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            keyword_objs.append(keyword_obj)
+        
+        project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
+        project.save()
 
 class ProjectDelete(generics.DestroyAPIView):
     serializer_class = ProjectSerializer
@@ -285,6 +323,30 @@ class ProjectDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Project.objects.filter(user=user)  # user가 user인 project만 필터
+
+
+class ProjectLikeToggleView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project_id = kwargs.get("project_id")
+        project = get_object_or_404(Project, pk=project_id)
+        user = request.user
+
+        # 이미 좋아요를 눌렀는지 확인
+        like, created = Like.objects.get_or_create(user=user, project=project)
+
+        if not created:
+            # 이미 좋아요를 눌렀다면 좋아요를 취소하고 레코드를 삭제
+            like.delete()
+            project.like_count -= 1
+            project.save()
+            return Response({"message": "Project unliked", "like_count": project.like_count}, status=status.HTTP_200_OK)
+        else:
+            # 좋아요를 처음 눌렀다면
+            project.like_count += 1
+            project.save()
+            return Response({"message": "Project liked", "like_count": project.like_count}, status=status.HTTP_200_OK)
 
 
 class KeywordListView(generics.ListAPIView):
@@ -980,3 +1042,49 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
             paths_as_usernames.append(path_usernames)
 
         return Response({"paths": paths_as_usernames, "current_user_id": current_user.id}, status=status.HTTP_200_OK)
+
+# 댓글 작성
+class CommentCreateView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        project_id = self.kwargs.get('project_id')
+        project = get_object_or_404(Project, pk=project_id)
+        print("comment create for project", project)
+        serializer.save(user=self.request.user, project=project)
+
+
+# 댓글 목록
+class CommentListView(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs.get('project_id')
+        return Comment.objects.filter(project_id=project_id)
+
+
+# 댓글 수정
+class CommentUpdateView(generics.UpdateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_update(self, serializer):
+        comment = self.get_object()
+        if comment.user != self.request.user:
+            return Response({'error': 'You are not allowed to edit this comment'}, status=status.HTTP_403_FORBIDDEN)
+        serializer.save()
+
+
+# 댓글 삭제
+class CommentDeleteView(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            return Response({'error': 'You are not allowed to delete this comment'}, status=status.HTTP_403_FORBIDDEN)
+        super().perform_destroy(instance)

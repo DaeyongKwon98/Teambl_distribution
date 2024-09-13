@@ -138,9 +138,35 @@ class Project(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword, blank=True)
+    like_count = models.IntegerField(default=0)
+    image = models.ImageField(upload_to="project_images/", blank=True, null=True)
+    people_list = models.ManyToManyField(CustomUser, related_name="participating_projects", blank=True)
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comments")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="comments")
+    content = models.CharField(max_length=30)
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Comment by {self.user.email} on {self.project.title}"
+    
+
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="likes")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="likes")
+    created_at = models.DateTimeField(auto_now_add=True)  # 좋아요 누른 시간
+
+    class Meta:
+        unique_together = ("user", "project")  # 같은 유저가 같은 프로젝트에 여러 번 좋아요 누르지 못하게 함
+
+    def __str__(self):
+        return f"{self.user.email} likes {self.project.title}"
 
 
 class Profile(models.Model):

@@ -13,6 +13,8 @@ from .models import (
     Notification,
     Inquiry,
     SearchHistory,
+    Like,
+    Comment,
 )
 import os
 
@@ -203,11 +205,6 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
-    # first_degree_count = serializers.SerializerMethodField()
-    # second_degree_count = serializers.SerializerMethodField()
-    # second_degree_ids = serializers.SerializerMethodField()
-    # second_degree_connections = serializers.SerializerMethodField()
-    # related_users = serializers.SerializerMethodField()
 
     class Meta:
         model = CustomUser
@@ -261,10 +258,13 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
     keywords = serializers.SerializerMethodField()
+    people_list = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=CustomUser.objects.all(), required=False
+    )
 
     class Meta:
         model = Project
-        fields = ["project_id", "user", "title", "content", "created_at", "keywords"]
+        fields = ["project_id", "user", "title", "content", "created_at", "keywords", "like_count", "image", "people_list"]
         extra_kwargs = {"user": {"read_only": True}}
 
     def get_keywords(self, obj):
@@ -273,6 +273,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         # 키워드를 initial_data에서 추출
         keywords_data = self.initial_data.get("keywords", [])
+        people_list_data = validated_data.pop("people_list", [])
 
         # keywords 필드를 validated_data에서 제거
         validated_data.pop("keywords", None)
@@ -288,9 +289,15 @@ class ProjectSerializer(serializers.ModelSerializer):
 
         # set() 메서드를 사용하여 Many-to-Many 관계 설정
         project.keywords.set(keyword_objs)
+        project.people_list.set(people_list_data)
 
         return project
 
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ['user', 'project', 'created_at']
 
 class InvitationLinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -425,3 +432,11 @@ class SearchHistorySerializer(serializers.ModelSerializer):
         model = SearchHistory
         fields = ["id", "user", "keyword", "created_at"]
         read_only_fields = ["id", "user", "created_at"]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(source='user.profile.user_name', read_only=True)  # 댓글 작성자 이름 추가
+    class Meta:
+        model = Comment
+        fields = ['id', 'user', 'user_name', 'project', 'content', 'created_at', 'likes']
+        read_only_fields = ['user', 'project', 'created_at', 'likes']
