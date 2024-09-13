@@ -221,6 +221,7 @@ function ProjectItem({ project, onDelete, currentUser }) {
 
       <div className="comment-input">
         <textarea
+          className="comment-input-textarea"
           value={newComment}
           onChange={(e) => setNewComment(e.target.value)}
           placeholder="댓글 쓰기"
