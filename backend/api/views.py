@@ -12,6 +12,8 @@ from .models import (
     Notification,
     Inquiry,
     SearchHistory,
+    Like,
+    Comment,
 )
 from .serializers import (
     CustomUserSerializer,
@@ -29,6 +31,8 @@ from .serializers import (
     SecondDegreeProfileSerializer,
     InquirySerializer,
     SearchHistorySerializer,
+    LikeSerializer,
+    CommentSerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -277,6 +281,40 @@ class ProjectListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+# 모든 User의 Project를 보여주는 View
+class ProjectEveryListCreate(generics.ListCreateAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Project.objects.all()  # 모든 유저의 프로젝트 반환
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+        else:
+            print(serializer.errors)
+
+# 프로젝트 수정 뷰
+class ProjectUpdateView(generics.UpdateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        keywords_data = self.request.data.get('keywords', [])
+        
+        # Project 인스턴스를 먼저 업데이트
+        project = serializer.save()
+
+        # 키워드를 업데이트
+        keyword_objs = []
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            keyword_objs.append(keyword_obj)
+        
+        project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
+        project.save()
 
 class ProjectDelete(generics.DestroyAPIView):
     serializer_class = ProjectSerializer
@@ -285,6 +323,30 @@ class ProjectDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Project.objects.filter(user=user)  # user가 user인 project만 필터
+
+
+class ProjectLikeToggleView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project_id = kwargs.get("project_id")
+        project = get_object_or_404(Project, pk=project_id)
+        user = request.user
+
+        # 이미 좋아요를 눌렀는지 확인
+        like, created = Like.objects.get_or_create(user=user, project=project)
+
+        if not created:
+            # 이미 좋아요를 눌렀다면 좋아요를 취소하고 레코드를 삭제
+            like.delete()
+            project.like_count -= 1
+            project.save()
+            return Response({"message": "Project unliked", "like_count": project.like_count}, status=status.HTTP_200_OK)
+        else:
+            # 좋아요를 처음 눌렀다면
+            project.like_count += 1
+            project.save()
+            return Response({"message": "Project liked", "like_count": project.like_count}, status=status.HTTP_200_OK)
 
 
 class KeywordListView(generics.ListAPIView):
@@ -625,72 +687,83 @@ class SearchUsersAPIView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     pagination_class = PageNumberPagination
 
+    # 변수를 쿼리가 아닌 JSON 형식으로 전달받기 위해 POST 요청으로 변경
+    # GET 요청 시 쿼리를 포함한 url이 너무 길어져서 반려.
     def post(self, request, *args, **kwargs):
         serializer = SearchSerializer(data=request.data)
+        print("request data:", request.data)
         if serializer.is_valid():
-            try:
-                query = serializer.validated_data.get("q", "")
-                degrees = serializer.validated_data.get("degree", [])
-                majors = serializer.validated_data.get("majors", [])
+            query = serializer.validated_data.get("q", "")
+            degrees = serializer.validated_data.get("degree", [])
+            majors = serializer.validated_data.get("majors", [])
 
-                filtered_profiles = Profile.objects.exclude(user=request.user)
+            print("Received Degrees:", degrees)
+            print("Majors:", majors)
 
-                if query:
-                    filtered_profiles = filtered_profiles.filter(
-                        Q(keywords__keyword__icontains=query) |
-                        Q(user_name__icontains=query) |
-                        Q(school__icontains=query) |
-                        Q(current_academic_degree__icontains=query) |
-                        Q(major1__icontains=query) |
-                        Q(major2__icontains=query)
-                    )
+            # 현재 사용자의 프로필을 제외한 전체 프로필을 가져옵니다.
+            filtered_profiles = Profile.objects.exclude(user=request.user)
 
-                if majors:
-                    filtered_profiles = filtered_profiles.filter(
-                        Q(major1__in=majors) | Q(major2__in=majors)
-                    )
-
-                degrees = list(map(int, degrees))
-                user = self.request.user
-                profile_with_distances = []
-
-                for profile in filtered_profiles:
-                    target_user = profile.user
-                    distance = get_user_distance(user, target_user)
-                    if not degrees or distance in degrees:
-                        profile_with_distances.append((profile, distance))
-
-                profile_with_distances.sort(
-                    key=lambda x: float("inf") if x[1] is None else x[1]
+            # 1. 검색 쿼리로 필터링
+            if query != "":
+                filtered_profiles = filtered_profiles.filter(
+                    Q(keywords__keyword__icontains=query)  # 키워드 필터링
+                    | Q(user_name__icontains=query)  # 이름 필터링
+                    | Q(school__icontains=query)  # 학교 필터링
+                    | Q(current_academic_degree__icontains=query)  # 학력 필터링
+                    | Q(major1__icontains=query)  # 전공1 필터링
+                    | Q(major2__icontains=query)  # 전공2 필터링
                 )
 
-                unique_users = OrderedDict()
-                for profile, distance in profile_with_distances:
-                    user_id = profile.user.id
-                    if user_id not in unique_users:
-                        unique_users[user_id] = profile
+            # 2. 전공 필터링
+            print("Majors for filtering:", majors)
+            if majors:
+                filtered_profiles = filtered_profiles.filter(
+                    Q(major1__in=majors) | Q(major2__in=majors)
+                )
+            print("Profiles after major filtering:", filtered_profiles)
 
-                unique_profiles = list(unique_users.values())
-                print("Unique profiles:", unique_profiles)
+            # 3. 촌수 필터링 (촌수 필터가 비어있는 경우 모든 촌수 유저 포함)
+            degrees = list(map(int, degrees))
+            user = self.request.user
+            profile_with_distances = []
 
-                paginator = self.pagination_class()
-                paginated_profiles = paginator.paginate_queryset(unique_profiles, request)
-                print("Paginated profiles:", paginated_profiles)
+            print("Filtered Degrees:", degrees)
 
-                if paginated_profiles is None:
-                    return JsonResponse({'error': 'Pagination error'}, status=500)
+            for profile in filtered_profiles:
+                target_user = profile.user
+                distance = get_user_distance(user, target_user)
+                if len(degrees) == 0 or distance in degrees:
+                    # 촌수와 프로필을 함께 저장
+                    profile_with_distances.append((profile, distance))
 
-                sorted_custom_users = [
-                    CustomUser.objects.get(profile=profile)
-                    for profile in paginated_profiles
-                ]
+            # 촌수 오름차순으로 정렬 (None 값을 float('inf')로 처리)
+            profile_with_distances.sort(
+                key=lambda x: float("inf") if x[1] is None else x[1]
+            )
 
-                serializer = self.get_serializer(sorted_custom_users, many=True)
-                return paginator.get_paginated_response(serializer.data)
+            # 중복된 유저를 제거하기 위해 OrderedDict 사용 (유저 ID를 기준으로 중복 제거)
+            unique_users = OrderedDict()
+            for profile, distance in profile_with_distances:
+                user_id = profile.user.id
+                if user_id not in unique_users:
+                    unique_users[user_id] = profile
 
-            except Exception as e:
-                print(f"Error: {e}")
-                return JsonResponse({'error': 'An error occurred'}, status=500)
+            # 정렬된 프로필 목록 추출
+            unique_profiles = list(unique_users.values())
+
+            # 페이지네이션 적용
+            paginator = self.pagination_class()
+            paginated_profiles = paginator.paginate_queryset(unique_profiles, request)
+
+            # 정렬된 프로필을 기반으로 CustomUser를 수동으로 정렬
+            sorted_custom_users = [
+                CustomUser.objects.get(profile=profile)
+                for profile in paginated_profiles
+            ]
+
+            serializer = self.get_serializer(sorted_custom_users, many=True)
+            return paginator.get_paginated_response(serializer.data)
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -969,3 +1042,49 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
             paths_as_usernames.append(path_usernames)
 
         return Response({"paths": paths_as_usernames, "current_user_id": current_user.id}, status=status.HTTP_200_OK)
+
+# 댓글 작성
+class CommentCreateView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        project_id = self.kwargs.get('project_id')
+        project = get_object_or_404(Project, pk=project_id)
+        print("comment create for project", project)
+        serializer.save(user=self.request.user, project=project)
+
+
+# 댓글 목록
+class CommentListView(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs.get('project_id')
+        return Comment.objects.filter(project_id=project_id)
+
+
+# 댓글 수정
+class CommentUpdateView(generics.UpdateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_update(self, serializer):
+        comment = self.get_object()
+        if comment.user != self.request.user:
+            return Response({'error': 'You are not allowed to edit this comment'}, status=status.HTTP_403_FORBIDDEN)
+        serializer.save()
+
+
+# 댓글 삭제
+class CommentDeleteView(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            return Response({'error': 'You are not allowed to delete this comment'}, status=status.HTTP_403_FORBIDDEN)
+        super().perform_destroy(instance)
