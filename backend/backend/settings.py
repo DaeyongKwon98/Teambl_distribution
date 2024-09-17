@@ -196,11 +196,11 @@ EMAIL_HOST_USER = "info@teambl.net"
 EMAIL_HOST_PASSWORD = "endm lmwa jtma wzhh"
 
 # 프로필 이미지를 위한 Media
-# MEDIA_URL은 미디어 파일에 접근할 URL 경로를 지정합니다.
-MEDIA_URL = "/media/"
+# 미디어 파일 URL (HTTPS로 변경)
+MEDIA_URL = 'https://teambl.net/media/'
 
-# MEDIA_ROOT는 실제 파일이 저장될 서버의 디렉토리 경로를 지정합니다.
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+# MEDIA_ROOT는 기존과 동일하게 파일이 저장될 서버 경로를 유지
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 # 세션 엔진: 데이터베이스에 세션 저장
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
