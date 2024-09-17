@@ -438,7 +438,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"https://teambl-distribution.vercel.app/welcome?code={unique_code}",
+            link=f"https://teambl.net/welcome?code={unique_code}",
         )
 
         return Response(

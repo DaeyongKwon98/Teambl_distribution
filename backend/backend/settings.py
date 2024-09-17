@@ -15,6 +15,11 @@ from datetime import timedelta
 from dotenv import load_dotenv
 import os
 
+# mysql 호환용
+import pymysql
+pymysql.install_as_MySQLdb()
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 # BASE_DIR = Path(__file__).resolve().parent
@@ -114,13 +119,17 @@ WSGI_APPLICATION = "backend.wsgi.application"
 
 DATABASES = {
     "default": {
-        "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": 'django.db.backends.mysql',
         "NAME": os.getenv("DB_NAME"),
         "USER": os.getenv("DB_USER"),
         "PASSWORD": os.getenv("DB_PASSWORD"),
         "HOST": os.getenv("DB_HOST"),
-        "PORT": os.getenv("DB_PORT", "5432"),  # 기본값으로 5432 사용
+        "PORT": os.getenv("DB_PORT", "3306"),
+        'OPTIONS':{
+            'init_command' : "SET sql_mode='STRICT_TRANS_TABLES'"
+        },
     }
+    
 }
 
 print("DB_NAME:", os.getenv("DB_NAME"))
@@ -173,9 +182,10 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
-# CORS_ALLOWED_ORIGINS = [
-#     "https://teambl-distribution.vercel.app",  # 다른 허용할 도메인이 있으면 추가
-# ]
+CORS_ALLOWED_ORIGINS = [
+    "https://teambl.net",
+    "http://13.124.123.223",
+]
 
 # 이메일 서버
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
