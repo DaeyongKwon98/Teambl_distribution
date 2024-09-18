@@ -155,7 +155,7 @@ const Notification = ({ updateUnreadCount }) => {
             }
             break;
         case 'friend_request':
-            navigate("/friends");
+            navigate("/friends", { state: { activeTab: "requestsToMe" } });
             break;
         default:
             break;
