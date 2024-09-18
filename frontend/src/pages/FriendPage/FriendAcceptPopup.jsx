@@ -24,13 +24,17 @@ const FriendAcceptPopup = ({ setIsPopupOpen, handleConfirmAccept, friendName }) 
           <div className="fd-modal-buttons">
             <button
               className="fd-modal-button fd-cancel-button"
-              onClick={() => setIsPopupOpen(false)}
+              onClick={(e) => {
+                e.stopPropagation(); // 부모로의 이벤트 전파 막기
+                setIsPopupOpen(false);
+              }}
             >
               취소
             </button>
             <button
               className="fd-modal-button fd-confirm-button"
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation(); // 부모로의 이벤트 전파 막기
                 handleConfirmAccept(); // 수락 처리
                 setIsPopupOpen(false); // 팝업 닫기
               }}
