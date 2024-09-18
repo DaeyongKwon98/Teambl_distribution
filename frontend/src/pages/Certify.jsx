@@ -49,6 +49,10 @@ function Certify() {
     }
   };
 
+  const checkIsKaistEmail = () => {
+    return email.endsWith("@kaist.ac.kr");
+  };
+
   useEffect(() => {
     if (password === pwCheck && password !== "") {
       setIsChecked(true);
@@ -73,9 +77,15 @@ function Certify() {
 
   const handleSendCode = async () => {
     const isEmailExists = await checkEmailExists(); // 이메일 중복 체크
+    const isKaistEmail = checkIsKaistEmail();
 
     if (isEmailExists) {
       alert("이미 가입된 이메일입니다."); // 중복일 경우 경고 메시지
+      return; // 중복일 경우 코드 전송 중단
+    }
+
+    if (!isKaistEmail) {
+      alert("Kaist 유저만 가입이 가능합니다."); // 중복일 경우 경고 메시지
       return; // 중복일 경우 코드 전송 중단
     }
 
