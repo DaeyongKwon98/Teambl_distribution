@@ -28,12 +28,18 @@ const ProfileOther = ({ userId }) => {
   const [error, setError] = useState(null); // 오류 상태 추가
   const [currentUserId, setCurrentUserId] = useState("");
   const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업 상태 추가
+  const [showFinalDelete, setShowFinalDelete] = useState(false); // 최종 확인 팝업 상태 추가
   const navigate = useNavigate();
 
   const scrollRef = useRef(null);
 
   const [relationshipDegree, setRelationshipDegree] = useState(null);
 
+  const closeFriendDeleteModal = () => {
+    setShowFinalDelete(false);
+    setIsPopupOpen(false); // 모든 팝업 닫기
+  };
+  
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
     try {
@@ -175,8 +181,45 @@ const ProfileOther = ({ userId }) => {
             {isPopupOpen && (
               <FriendRequestPopup
                 setIsPopupOpen={setIsPopupOpen}
-                handleConfirm={addFriend}
+                handleConfirm={() => setShowFinalDelete(true)} // 최종 확인 팝업 열기
               />
+            )}
+
+            {showFinalDelete && (
+              <div className="fd-modal-overlay">
+                <div className="fd-withdraw-modal-content">
+                  <div className="fd-modal-title">
+                    <img
+                      src={backIcon} // 동일한 아이콘 사용
+                      alt="탈퇴 아이콘"
+                      className="fd-withdraw-icon"
+                    />
+                    <p>1촌 신청</p>
+                  </div>
+                  <p className="fd-modal-description">
+                    {profile.user_name}님과 1촌을 신청하시겠습니까?
+                    <br />
+                    신중히 결정해주세요.
+                  </p>
+                  <div className="fd-modal-buttons">
+                    <button
+                      className="fd-modal-button fd-cancel-button"
+                      onClick={closeFriendDeleteModal}
+                    >
+                      취소
+                    </button>
+                    <button
+                      className="fd-modal-button fd-confirm-button"
+                      onClick={() => {
+                        addFriend(); // 1촌 신청 함수 호출
+                        closeFriendDeleteModal(); // 모든 팝업 닫기
+                      }}
+                    >
+                      신청
+                    </button>
+                  </div>
+                </div>
+              </div>
             )}
             
             <div className="profileOther-profile-row2">
