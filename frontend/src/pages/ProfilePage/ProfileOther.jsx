@@ -5,7 +5,7 @@ import backIcon from "../../assets/ProfileOther/left-arrow.svg";
 import friendIcon from "../../assets/ProfileOther/friend.svg";
 import "../../styles/ProfilePage/ProfileOther.css";
 import api from "../../api";
-import FriendRequestPopup from "./FriendRequestPopup";
+import FriendRequestPopup from "../FriendPage/FriendRequestPopup";
 
 const ProfileOther = ({ userId }) => {
   const [profile, setProfile] = useState({
