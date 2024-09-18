@@ -37,7 +37,13 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
     api
       .patch(`/api/friends/update/${id}/`, { status })
       .then((response) => {
-        // alert("친구 업데이트 완료");
+        if (status === "accepted") {
+          alert("1촌 신청 수락 완료");
+        } else if (status == "rejected") {
+          alert("1촌 신청 거절 완료");
+        } else {
+          alert("친구 업데이트 완료");
+        }
         getChons();
       })
       .catch((error) => {
