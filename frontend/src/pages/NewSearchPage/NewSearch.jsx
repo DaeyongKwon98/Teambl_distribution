@@ -3,11 +3,8 @@ import "../../styles/NewSearch.css";
 import BackIcon from "../../assets/NewSearch/backIcon.svg";
 import RecentIcon from "../../assets/NewSearch/recentIcon.svg";
 import SearchIcon from "../../assets/NewSearch/searchIcon.svg";
-import MajorIcon from "../../assets/NewSearch/majorIcon.svg";
-import NoMajorIcon from "../../assets/NewSearch/nomajorIcon.svg";
 import api from "../../api";
 import NewUserSearchItem from "../../components/NewUserSearchItem";
-import MajorPopUpForSearch from "./MajorPopUpForSearch";
 import SearchLoading from "./SearchLoading";
 
 function NewSearch() {
@@ -21,7 +18,6 @@ function NewSearch() {
     majors: [],
   }); // 사용자가 선택한 검색 필터
   const [isSearched, setIsSearched] = useState(false); // 사용자가 검색 버튼을 눌렀는지 여부 (true이면 검색 결과창이 보임)
-  const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
   const [isSearchLoading, setIsSearchLoading] = useState(false); // 검색 로딩중인지 여부
   const [isMoreUserLoading, setIsMoreUserLoading] = useState(false);
   const [nextPage, setNextPage] = useState(null); // 다음 유저 페이지의 api 요청 URL
@@ -234,16 +230,6 @@ function NewSearch() {
     });
   };
 
-  // // 전공 필터를 추가 및 제거하는 함수
-  // const handleMajorChange = (major) => {
-  //   setFilters((prev) => {
-  //     const newMajor = prev.majors.includes(major)
-  //       ? prev.majors.filter((item) => item !== major)
-  //       : [...prev.majors, major];
-  //     return { ...prev, majors: newMajor };
-  //   });
-  // };
-
   // 전공 필터를 추가 및 제거하는 함수
   const handleMajorChange = (newMajors) => {
     setFilters((prev) => {
@@ -384,47 +370,6 @@ function NewSearch() {
             >
               3촌
             </button>
-            <button
-              className={`newSearch-filter-button ${
-                isMajorPopupOpen || filters.majors.length > 0 ? "active" : ""
-              }`}
-              onClick={() => setIsMajorPopupOpen(true)}
-            >
-              {filters.majors.length > 0
-                ? filters.majors.length > 1
-                  ? `전공 ${filters.majors.length} `
-                  : filters.majors[0] + " "
-                : "전공 "}
-              {filters.majors.length > 0 || isMajorPopupOpen ? (
-                <img
-                  src={MajorIcon}
-                  alt="전공 아이콘"
-                  className="newSearch-major-icon"
-                />
-              ) : (
-                <img
-                  src={NoMajorIcon}
-                  alt="0전공 아이콘"
-                  className="newSearch-nomajor-icon"
-                />
-              )}
-            </button>
-          </div>
-
-          <div className="newSearch-selected-majors">
-            {filters.majors.map((major, index) => (
-              <span key={index} className="selected-major">
-                {major}
-                <button
-                  className="remove-major"
-                  onClick={() =>
-                    handleMajorChange(filters.majors.filter((m) => m !== major))
-                  }
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
           </div>
 
           <div className="newSearch-team-member-results">
@@ -460,22 +405,6 @@ function NewSearch() {
               </>
             )}
           </div>
-        </>
-      )}
-
-      {isMajorPopupOpen && (
-        <>
-          <div
-            className="newSearch-overlay"
-            onClick={() => setIsMajorPopupOpen(false)}
-          ></div>
-          <MajorPopUpForSearch
-            userSelectedMajors={filters.majors}
-            handleMajorChange={handleMajorChange}
-            setIsMajorPopupOpen={setIsMajorPopupOpen}
-            doSearchUsers={doSearchUsers}
-            buttonText="결과 보기"
-          />
         </>
       )}
     </div>
