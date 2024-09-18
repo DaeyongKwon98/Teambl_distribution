@@ -27,13 +27,17 @@ const ProfileOther = ({ userId }) => {
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 오류 상태 추가
   const [currentUserId, setCurrentUserId] = useState("");
-  const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업 상태 추가
+  const [showFinalDelete, setShowFinalDelete] = useState(false); // 최종 확인 팝업 상태 추가
   const navigate = useNavigate();
 
   const scrollRef = useRef(null);
 
   const [relationshipDegree, setRelationshipDegree] = useState(null);
 
+  const closeFriendDeleteModal = () => {
+    setShowFinalDelete(false);
+  };
+  
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
     try {
@@ -86,17 +90,19 @@ const ProfileOther = ({ userId }) => {
       console.log(response);
 
       if (response.status === 201) {
-        alert("친구 추가 완료!");
+        alert("1촌 신청 완료!");
+        setShowFinalDelete(false); // 팝업 닫기
         // getChons(); // 친구 목록 갱신
+        
       }
     } catch (error) {
       console.error("Error in addFriend:", error.response ? error.response.data : error.message);
 
       // 서버로부터 받은 에러 메시지를 표시
       if (error.response && error.response.data) {
-        alert(`${error.response.data.detail || "친구 추가 중 오류가 발생했습니다."}`);
+        alert(`${error.response.data.detail || "1촌 신청 중 오류가 발생했습니다."}`);
       } else {
-        alert("친구 추가 중 오류가 발생했습니다.");
+        alert("1촌 신청 중 오류가 발생했습니다.");
       }
     }
   };
@@ -165,19 +171,20 @@ const ProfileOther = ({ userId }) => {
               ) : (
                 <button
                   className="profileOther-oneDegree-button"
-                  onClick={() => setIsPopupOpen(true)} // 버튼 클릭 시 팝업 열기
-                  >
+                  onClick={() => setShowFinalDelete(true)} // 버튼 클릭 시 팝업 열기
+                >
                   1촌 신청
                 </button>
               )}
-            </div>
 
-            {isPopupOpen && (
-              <FriendRequestPopup
-                setIsPopupOpen={setIsPopupOpen}
-                handleConfirm={addFriend}
-              />
-            )}
+              {showFinalDelete && (
+                <FriendRequestPopup
+                  profile={profile}
+                  closeFriendDeleteModal={closeFriendDeleteModal}
+                  addFriend={addFriend}
+                />
+              )}
+            </div>
             
             <div className="profileOther-profile-row2">
               {profile.school} | {profile.current_academic_degree} |{" "}
