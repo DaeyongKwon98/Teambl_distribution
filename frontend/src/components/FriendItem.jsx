@@ -37,7 +37,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
     api
       .patch(`/api/friends/update/${id}/`, { status })
       .then((response) => {
-        alert("친구 업데이트 완료");
+        // alert("친구 업데이트 완료");
         getChons();
       })
       .catch((error) => {
