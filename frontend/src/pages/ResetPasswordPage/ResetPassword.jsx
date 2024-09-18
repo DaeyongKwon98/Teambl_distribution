@@ -53,7 +53,7 @@ function ResetPassword() {
       await api.post("/api/send_code/", { email, code });
       setIsCodeRequested(true); // 인증코드 요청 상태 변경
       setVerificationMessage(""); // 초기화
-      alert(`인증 코드가 이메일로 전송되었습니다.\n 인증코드는: ${code}`);
+      alert(`인증 코드가 이메일로 전송되었습니다.`);
     } catch (error) {
       console.error(error);
       alert("인증 코드 전송 실패");
@@ -72,15 +72,15 @@ function ResetPassword() {
   };
 
   const handleVerifyCode = () => {
-      if (verificationCode === generatedCode) {
-          setIsCodeVerified(true);
-          setVerificationMessage("");
-          alert("이메일 인증 성공");
-      } else {
-          setIsCodeVerified(false);
-          setVerificationMessage("인증코드가 일치하지 않습니다.");
-          alert("인증 코드가 일치하지 않습니다.");
-      }
+    if (verificationCode === generatedCode) {
+      setIsCodeVerified(true);
+      setVerificationMessage("");
+      alert("이메일 인증 성공");
+    } else {
+      setIsCodeVerified(false);
+      setVerificationMessage("인증코드가 일치하지 않습니다.");
+      alert("인증 코드가 일치하지 않습니다.");
+    }
   };
 
   const handleResetPassword = async () => {
