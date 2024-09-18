@@ -95,7 +95,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
             </strong>
             <span className="newSearch-member-relation">
               {" "}
-              · {relationshipDegree ? relationshipDegree : "?"}촌
+              · {relationshipDegree ? `${relationshipDegree}촌` : "4촌 이상"}
             </span>
           </p>
           <p className="newSearch-member-details">
