@@ -24,10 +24,10 @@ const FriendRequestPopup = ({ setIsPopupOpen, handleConfirm }) => {
           <div className="fd-popup-buttons">
             <button
               className="fd-delete-confirm-button"
-              onClick={handleConfirm}
+              onClick={handleConfirm} // 최종 확인 팝업으로 이동
             >
               <img src={blueXIcon} alt="blue x icon" className="fd-bluex-icon" />
-                1촌 신청
+              1촌 신청
             </button>
             <button
               className="fd-cancel-button"
@@ -40,7 +40,6 @@ const FriendRequestPopup = ({ setIsPopupOpen, handleConfirm }) => {
       </div>
     </div>
   );
-
 };
 
 export default FriendRequestPopup;
