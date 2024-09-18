@@ -199,7 +199,7 @@ const Notification = ({ updateUnreadCount }) => {
         <>
           <strong>{parts[0]}</strong>님의 일촌 신청이 도착했습니다.
           <br />
-          <span><strong>{parts[0]}</strong>님의 일촌 리스트에서 확인해보세요!</span>
+          <span>일촌 리스트에서 확인해보세요!</span>
         </>
       );
     } else if (message.includes("일촌 신청을 거절")) {
