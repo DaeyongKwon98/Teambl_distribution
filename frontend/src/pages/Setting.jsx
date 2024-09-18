@@ -29,6 +29,8 @@ const Setting = () => {
   const [showWithdrawSection, setShowWithdrawSection] = useState(false); // 회원 탈퇴 섹션의 표시 여부 상태
   const [showInquirySection, setShowInquirySection] = useState(false); // 문의하기 섹션의 표시 여부 상태
   const [showPolicySection, setShowPolicySection] = useState(false); // 약관 및 정책 섹션 표시 여부
+  const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
+  const userId = localStorage.getItem("userId");
 
   useEffect(() => {
     setChangeBtnActive(
@@ -184,9 +186,28 @@ const Setting = () => {
     }
   };
 
+  // 프로필 이미지 가져오기
+  const fetchProfileImage = async () => {
+    try {
+      const response = await api.get(`/api/profile/${userId}/`);
+      setProfileImage(response.data.image); // Assuming the image field is 'image'
+    } catch (error) {
+      console.error("Failed to fetch profile image:", error);
+    }
+  };
+
+    
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchProfileImage();
+    };
+    fetchData();
+  }, []);
+
+
   return (
     <div className="setting-container">
-      <Header />
+      <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
       {/* <h2 className="setting-section-title">비밀번호 변경</h2> */}

@@ -20,6 +20,10 @@ function Invite() {
   const [copyMessage, setCopyMessage] = useState("");
   const [activeNav, setActiveNav] = useState("초대");
 
+  
+  const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
+  const userId = localStorage.getItem("userId");
+
   // 백엔드에서 유저의 link를 가져오는 메소드
   const fetchLinks = async () => {
     try {
@@ -178,9 +182,26 @@ function Invite() {
     }
   };
 
+  // 프로필 이미지 가져오기
+  const fetchProfileImage = async () => {
+    try {
+      const response = await api.get(`/api/profile/${userId}/`);
+      setProfileImage(response.data.image); // Assuming the image field is 'image'
+    } catch (error) {
+      console.error("Failed to fetch profile image:", error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchProfileImage();
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="container">
-      <Header />
+      <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
       <header className="header">

@@ -20,6 +20,10 @@ function Friend() {
 
   const navigate = useNavigate();
 
+  const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
+  const userId = localStorage.getItem("userId");
+
+
   // 1촌 삭제 함수는 pages/FriendPage/FriendDeletePopup.jsx에 구현
 
   // 현재 로그인 유저를 가져오는 함수
@@ -108,6 +112,17 @@ function Friend() {
     }
   };
 
+  // 프로필 이미지 가져오기
+  const fetchProfileImage = async () => {
+    try {
+      const response = await api.get(`/api/profile/${userId}/`);
+      setProfileImage(response.data.image); // Assuming the image field is 'image'
+    } catch (error) {
+      console.error("Failed to fetch profile image:", error);
+    }
+  };
+
+
   useEffect(() => {
     getCurrentUser();
   }, []);
@@ -118,9 +133,17 @@ function Friend() {
     }
   }, [currentUser]);
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchProfileImage();
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="friend-container">
-      <Header />
+      <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
       <div className="friend-tabs">
         <div

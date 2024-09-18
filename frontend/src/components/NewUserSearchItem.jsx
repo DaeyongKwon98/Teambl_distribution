@@ -84,7 +84,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
     <div>
       <div className="newSearch-team-member" onClick={handleProfileClick}>
         <img
-          src={user.image ? user.image : ProfileDefaultImg}
+          src={user.profile.image ? user.profile.image : ProfileDefaultImg}
           alt={user.profile.user_name}
           className="newSearch-profile-image"
         />
