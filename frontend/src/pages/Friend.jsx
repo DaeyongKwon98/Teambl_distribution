@@ -137,6 +137,12 @@ function Friend() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    if (location.state?.activeTab) {
+      setActiveTab(location.state.activeTab);
+    }
+  }, [location.state?.activeTab]);
+  
   return (
     <div className="friend-container">
       <Header profileImage={profileImage} />
@@ -148,12 +154,6 @@ function Friend() {
         >
           나의 1촌
         </div>
-        {/* <div
-          className={`friend-tab ${activeTab === "addChons" ? "active" : ""}`}
-          onClick={() => setActiveTab("addChons")}
-        >
-          1촌 추가
-        </div> */}
         <div
           className={`friend-tab ${
             activeTab === "requestsToMe" ? "active" : ""
