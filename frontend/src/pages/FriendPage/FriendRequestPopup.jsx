@@ -29,8 +29,7 @@ const FriendRequestPopup = ({ profile, closeFriendDeleteModal, addFriend }) => {
           <button
             className="fd-modal-button fd-confirm-button"
             onClick={(e) => {
-              e.preventDefault(); // 이벤트 객체 전달
-              addFriend(); // 1촌 신청 함수 호출
+              addFriend(e); // 이벤트 객체 전달
               closeFriendDeleteModal(); // 모든 팝업 닫기
             }}
           >
