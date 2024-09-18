@@ -1,6 +1,6 @@
 import "../styles/Certify.css";
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import api from "../api";
 import greenNotiIcon from "../assets/green_noti_icon.svg";
 import redNotiIcon from "../assets/red_noti_icon.svg";
@@ -9,6 +9,8 @@ function Certify() {
   const labelRef1 = useRef(null);
   const labelRef2 = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
+  const inviteeName = location.state?.invitee_name || "";
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -71,6 +73,7 @@ function Certify() {
       state: {
         email: email,
         password: password,
+        inviteeName: inviteeName,
       },
     });
   }
@@ -91,6 +94,8 @@ function Certify() {
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
+    console.log(email);
+
     try {
       await api.post("/api/send_code/", { email, code });
       setCodeSent(true);

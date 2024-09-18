@@ -13,7 +13,7 @@ function Register() {
   const current_year = new Date().getFullYear();
   const [email, setEmail] = useState(userInfo.email);
   const [password, setPassword] = useState(userInfo.password);
-  const [user_name, setUserName] = useState("");
+  const [user_name, setUserName] = useState(userInfo.inviteeName);
   const [school, setSchool] = useState("카이스트");
   const [current_academic_degree, setCurrentAcademicDegree] = useState("학사");
   const [year, setYear] = useState(current_year);
