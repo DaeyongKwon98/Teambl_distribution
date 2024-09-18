@@ -20,9 +20,8 @@ function Friend() {
 
   const navigate = useNavigate();
 
-  const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
+  const [profileImage, setProfileImage] = useState(""); // 프로필 이미지
   const userId = localStorage.getItem("userId");
-
 
   // 1촌 삭제 함수는 pages/FriendPage/FriendDeletePopup.jsx에 구현
 
@@ -82,7 +81,7 @@ function Friend() {
       });
       console.log(response);
 
-      if (response.status === 201) alert("친구 추가 완료!");
+      if (response.status === 201) alert("1촌 신청 완료!");
       getChons();
       setInputEmail("");
     } catch (error) {
@@ -122,7 +121,6 @@ function Friend() {
     }
   };
 
-
   useEffect(() => {
     getCurrentUser();
   }, []);
@@ -132,7 +130,6 @@ function Friend() {
       getChons();
     }
   }, [currentUser]);
-
 
   useEffect(() => {
     const fetchData = async () => {
