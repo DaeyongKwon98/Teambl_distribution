@@ -1,5 +1,6 @@
 import React from "react";
 import "../../styles/FriendPage/FriendDeletePopup.css"; // 기존 스타일 가져오기
+import topBarIcon from "../../assets/popUpTopBar.svg";
 
 const FriendRequestPopup = ({ setIsPopupOpen, handleConfirm }) => {
   const handleOverlayClick = (e) => {
