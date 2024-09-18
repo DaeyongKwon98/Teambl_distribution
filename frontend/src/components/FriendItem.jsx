@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 import pendingIcon from "../assets/Friend/pending.svg";
 import acceptIcon from "../assets/Friend/accept.svg";
@@ -16,7 +16,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   const otherUserProfile = user.profile;
   const [relationshipDegree, setRelationshipDegree] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
-  
+
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
     try {
@@ -35,7 +35,13 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
     api
       .patch(`/api/friends/update/${id}/`, { status })
       .then((response) => {
-        alert("친구 업데이트 완료");
+        if (status === "accepted") {
+          alert("1촌 신청 수락 완료");
+        } else if (status == "rejected") {
+          alert("1촌 신청 거절 완료");
+        } else {
+          alert("친구 업데이트 완료");
+        }
         getChons();
       })
       .catch((error) => {
@@ -71,10 +77,14 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           <strong className="friend-member-name">
             {otherUserProfile.user_name}
           </strong>
-          <span className="friend-member-relation"> · {relationshipDegree}촌</span>
+          <span className="friend-member-relation">
+            {" "}
+            · {relationshipDegree}촌
+          </span>
         </p>
         <p className="friend-member-details">
-          {otherUserProfile.school} | {otherUserProfile.current_academic_degree} | {otherUserProfile.year % 100}학번
+          {otherUserProfile.school} | {otherUserProfile.current_academic_degree}{" "}
+          | {otherUserProfile.year % 100}학번
         </p>
         <p className="friend-member-details">
           {otherUserProfile.major1}
@@ -83,7 +93,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       </div>
     </>
   );
-  
+
   useEffect(() => {
     getRelationshipDegree(user.id);
   }, [user]);
@@ -121,8 +131,8 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       )}
 
       {activeTab === "addChons" && (
-        <div 
-          className="friend-team-member" 
+        <div
+          className="friend-team-member"
           key={user.id}
           onClick={() => {
             if (!isDeletePopupOpen) {
@@ -138,8 +148,8 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       )}
 
       {activeTab === "requestsToMe" && (
-        <div 
-          className="friend-team-member" 
+        <div
+          className="friend-team-member"
           key={user.id}
           onClick={() => {
             if (!isDeletePopupOpen) {
