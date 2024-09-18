@@ -1,6 +1,7 @@
 import React from "react";
 import "../../styles/FriendPage/FriendDeletePopup.css"; // 기존 스타일 가져오기
 import topBarIcon from "../../assets/popUpTopBar.svg";
+import blueXIcon from "../../assets/Friend/blue_x_icon.svg";
 
 const FriendRequestPopup = ({ setIsPopupOpen, handleConfirm }) => {
   const handleOverlayClick = (e) => {
@@ -16,25 +17,30 @@ const FriendRequestPopup = ({ setIsPopupOpen, handleConfirm }) => {
           <img src={topBarIcon} alt="popup top bar" />
         </div>
         <div className="fd-popup-radio-container">
-          <p>정말로 1촌을 신청하시겠습니까?</p>
+          <p>
+            1촌은 최대 50명까지만 신청할 수 있습니다.<br />
+            함께하는 신뢰 커뮤니티를 위해 신중하게 결정해 주세요.
+          </p>
           <div className="fd-popup-buttons">
+            <button
+              className="fd-delete-confirm-button"
+              onClick={handleConfirm}
+            >
+              <img src={blueXIcon} alt="blue x icon" className="fd-bluex-icon" />
+                1촌 신청
+            </button>
             <button
               className="fd-cancel-button"
               onClick={() => setIsPopupOpen(false)}
             >
               취소
             </button>
-            <button
-              className="fd-confirm-button"
-              onClick={handleConfirm}
-            >
-              확인
-            </button>
           </div>
         </div>
       </div>
     </div>
   );
+
 };
 
 export default FriendRequestPopup;
