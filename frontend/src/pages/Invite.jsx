@@ -19,7 +19,9 @@ function Invite() {
   const [showRevokeModal, setShowRevokeModal] = useState(false);
   const [copyMessage, setCopyMessage] = useState("");
   const [activeNav, setActiveNav] = useState("초대");
-  const [profileImage, setProfileImage] = useState(""); // 프로필 이미지
+
+  
+  const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
   const userId = localStorage.getItem("userId");
 
   // 백엔드에서 유저의 link를 가져오는 메소드
@@ -48,13 +50,6 @@ function Invite() {
       return () => clearTimeout(timer);
     }
   }, [copyMessage]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await fetchProfileImage();
-    };
-    fetchData();
-  }, []);
 
   const handleNameChange = (e) => {
     setName(e.target.value);
@@ -143,7 +138,8 @@ function Invite() {
     const createdDate = new Date(linkObj.created_at);
     // linkObj.created_at이 Date 객체라고 가정
     const expiredDate = new Date(
-      createdDate.getTime() + 7 * 24 * 60 * 60 * 1000
+      createdDate.getTime() + 7 * 24 * 60 * 60 * 1000 // 1주일
+      //createdDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
@@ -151,7 +147,8 @@ function Invite() {
   const getExpiredDateFromCurrentDate = () => {
     const currentDate = new Date();
     const expiredDate = new Date(
-      currentDate.getTime() + 7 * 24 * 60 * 60 * 1000
+      currentDate.getTime() + 7 * 24 * 60 * 60 * 1000 // 1주일
+      //currentDate.getTime() + 60 * 1000
     );
     return expiredDate;
   };
@@ -195,9 +192,16 @@ function Invite() {
     }
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchProfileImage();
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="container">
-      <Header />
+      <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
 
       <header className="header">
