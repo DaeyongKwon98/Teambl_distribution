@@ -55,30 +55,39 @@ function EditProfile() {
       alert("최소 1개의 전공을 선택해야 합니다.");
       return;
     }
-    
+
     const updatedProfile = {
-        ...newProfile,
+      ...newProfile,
+      user_name: newUser_name,
+      school: newSchool,
+      current_academic_degree: newCurrent_academic_degree,
+      year: newYear,
+      major1: newMajors[0],
+      major2: newMajors[1] || "",
+    };
+
+    try {
+      const response = await api.put(`/api/profile/update/`, {
         user_name: newUser_name,
         school: newSchool,
         current_academic_degree: newCurrent_academic_degree,
         year: newYear,
         major1: newMajors[0],
         major2: newMajors[1] || "",
-    };
-
-    try {
-        const response = await api.put(`/api/profile/update/`, updatedProfile);
-        console.log("Profile updated successfully:", response.data);
-        setNewProfile(updatedProfile);
-        setShowSuccessPopup(true);
+      });
+      console.log("Profile updated successfully:", response.data);
+      setNewProfile(updatedProfile);
+      setShowSuccessPopup(true);
     } catch (error) {
-        console.error("Failed to update profile:", error);
-        alert("프로필 업데이트 실패");
+      console.error("Failed to update profile:", error);
+      alert("프로필 업데이트 실패");
     }
   };
 
   const handleRemoveMajor = (majorToRemove) => {
-    setNewMajors((prevMajors) => prevMajors.filter(major => major !== majorToRemove));
+    setNewMajors((prevMajors) =>
+      prevMajors.filter((major) => major !== majorToRemove)
+    );
   };
 
   const handleMajorChange = (selectedMajors) => {
@@ -88,7 +97,7 @@ function EditProfile() {
       alert("전공은 최대 2개까지 선택할 수 있습니다.");
     }
   };
-  
+
   return (
     <div className="edit">
       <div className="edit-back">
@@ -157,7 +166,7 @@ function EditProfile() {
 
           {newMajors.length === 0 ? (
             <span className="placeholder-text">전공 검색</span>
-          ) : (          
+          ) : (
             newMajors.map((major, index) => (
               <div
                 key={index}
@@ -194,19 +203,21 @@ function EditProfile() {
           <div className="popup-content">
             <p>저장되었습니다.</p>
             <button
-              onClick={() => navigate(`/profile/${currentUser.id}`, {
-                state: {
-                  profile: newProfile,
-                  EditProfile: true,
-                },
-              })}
+              onClick={() =>
+                navigate(`/profile/${currentUser.id}`, {
+                  state: {
+                    profile: newProfile,
+                    EditProfile: true,
+                  },
+                })
+              }
             >
               확인
             </button>
           </div>
         </div>
       )}
-      
+
       {isCADPopUp && (
         <>
           <div
