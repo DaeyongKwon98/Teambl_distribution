@@ -5,6 +5,7 @@ import backIcon from "../../assets/ProfileOther/left-arrow.svg";
 import friendIcon from "../../assets/ProfileOther/friend.svg";
 import "../../styles/ProfilePage/ProfileOther.css";
 import api from "../../api";
+import FriendRequestPopup from "./FriendRequestPopup";
 
 const ProfileOther = ({ userId }) => {
   const [profile, setProfile] = useState({
@@ -26,6 +27,7 @@ const ProfileOther = ({ userId }) => {
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
   const [error, setError] = useState(null); // 오류 상태 추가
   const [currentUserId, setCurrentUserId] = useState("");
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업 상태 추가
   const navigate = useNavigate();
 
   const scrollRef = useRef(null);
@@ -163,12 +165,20 @@ const ProfileOther = ({ userId }) => {
               ) : (
                 <button
                   className="profileOther-oneDegree-button"
-                  onClick={addFriend}
+                  onClick={() => setIsPopupOpen(true)} // 버튼 클릭 시 팝업 열기
                   >
                   1촌 신청
                 </button>
               )}
             </div>
+
+            {isPopupOpen && (
+              <FriendRequestPopup
+                setIsPopupOpen={setIsPopupOpen}
+                handleConfirm={addFriend}
+              />
+            )}
+            
             <div className="profileOther-profile-row2">
               {profile.school} | {profile.current_academic_degree} |{" "}
               {profile.year % 100} 학번
