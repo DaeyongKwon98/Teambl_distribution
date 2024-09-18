@@ -80,7 +80,7 @@ function Friend() {
       });
       console.log(response);
 
-      if (response.status === 201) alert("친구 추가 완료!");
+      if (response.status === 201) alert("1촌 신청 완료!");
       getChons();
       setInputEmail("");
     } catch (error) {
@@ -142,7 +142,7 @@ function Friend() {
       setActiveTab(location.state.activeTab);
     }
   }, [location.state?.activeTab]);
-  
+
   return (
     <div className="friend-container">
       <Header profileImage={profileImage} />

@@ -54,7 +54,7 @@ const Welcome = () => {
   }, [code]);
 
   const handleRegister = () => {
-    navigate("/certify");
+    navigate("/certify", { state: { invitee_name: inviteeName } });
   };
 
   function handleLogin() {

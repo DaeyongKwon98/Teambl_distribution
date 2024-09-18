@@ -62,6 +62,10 @@
   font-size: 17.14px;
   font-weight: 700;
   color: #121212;
+  white-space: nowrap; /* 줄바꿈 방지 */
+  overflow: hidden; /* 넘친 내용을 숨김 */
+  text-overflow: ellipsis; /* 너무 긴 텍스트를 생략 부호(...)로 표시 */
+  max-width: 60px;
 }
 
 .profileOther-profile-relationshipDegree {
@@ -76,6 +80,7 @@
   padding: 6px 12px;
   border-radius: 5px;
   border: #2546f3;
+  min-width: 50px;
 }
 
 .profileOther-profile-one_degree_count {
@@ -177,14 +182,10 @@
   margin-bottom: 24px;
 }
 
-
-
-
-
 .profileOther-path {
   border-radius: 5px;
   margin-bottom: 24px;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .profileOther-path-container {
@@ -197,12 +198,12 @@
   font-size: 13px;
 }
 
-.profileOther-path-title-name{
+.profileOther-path-title-name {
   font-weight: bold;
 }
 
-.profileOther-path-title-number{
-  color: #2546F3;
+.profileOther-path-title-number {
+  color: #2546f3;
   font-weight: bold;
 }
 
@@ -224,14 +225,14 @@
   scroll-snap-type: y mandatory;
 }
 
-.profileOther-path-name-end{
+.profileOther-path-name-end {
   color: #121212;
   font-size: 13px;
   font-weight: bold;
 }
 
 .profileOther-scroll-item {
-  color: #2546F3;
+  color: #2546f3;
   font-size: 13px;
   font-weight: bold;
   height: 40px; /* 스크롤 아이템의 높이 설정 */
@@ -243,5 +244,5 @@
 }
 
 .profileOther-scroll-container::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
