@@ -134,6 +134,10 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
         new_image = validated_data.get("image", None)
         old_image = instance.image
 
+        # 새로운 이미지가 있으면 현재 이미지를 업데이트
+        if new_image:
+            instance.image = new_image
+
         # tools 추출
         tools_data = validated_data.pop("tools", None)
 
@@ -153,13 +157,8 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
 
-        # Update basic fields only if they are provided in the validated_data
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-
         # 기존 이미지 삭제 (새 이미지가 업로드된 경우)
-        if new_image and old_image and old_image != new_image:
+        if new_image and old_image:
             if os.path.isfile(old_image.path):
                 os.remove(old_image.path)
 
