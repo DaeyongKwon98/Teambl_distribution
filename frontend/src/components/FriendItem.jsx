@@ -7,6 +7,7 @@ import rejectIcon from "../assets/Friend/reject.svg";
 import ProfileDefaultImg from "../assets/default_profile_image.svg";
 import threeDotsImg from "../assets/three_dots.svg";
 import FriendDeletePopup from "../pages/FriendPage/FriendDeletePopup";
+import FriendAcceptPopup from "../pages/FriendPage/FriendAcceptPopup";
 import "../styles/Friend.css";
 
 const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
@@ -16,6 +17,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   const otherUserProfile = user.profile;
   const [relationshipDegree, setRelationshipDegree] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
+  const [isAcceptPopupOpen, setIsAcceptPopupOpen] = useState(false);
   
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
@@ -161,13 +163,21 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
             <button
               className="friend-accept-button"
               onClick={(e) => {
-                e.stopPropagation(); // Stops event propagation to parent div
-                updateFriendStatus(chon.id, "accepted");
+                e.stopPropagation(); // 팝업 외부 클릭 방지
+                setIsAcceptPopupOpen(true); // 수락 팝업 열기
               }}
             >
               <img src={acceptIcon}></img>
             </button>
           </div>
+
+          {isAcceptPopupOpen && (
+            <FriendAcceptPopup
+              setIsPopupOpen={setIsAcceptPopupOpen}
+              handleConfirmAccept={() => updateFriendStatus(chon.id, "accepted")} // 수락 처리 함수 호출
+              friendName={otherUserProfile.user_name}
+            />
+          )}
         </div>
       )}
     </>
