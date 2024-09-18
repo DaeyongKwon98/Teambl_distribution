@@ -90,17 +90,19 @@ const ProfileOther = ({ userId }) => {
       console.log(response);
 
       if (response.status === 201) {
-        alert("친구 추가 완료!");
+        alert("1촌 신청 완료!");
+        setShowFinalDelete(false); // 팝업 닫기
         // getChons(); // 친구 목록 갱신
+        
       }
     } catch (error) {
       console.error("Error in addFriend:", error.response ? error.response.data : error.message);
 
       // 서버로부터 받은 에러 메시지를 표시
       if (error.response && error.response.data) {
-        alert(`${error.response.data.detail || "친구 추가 중 오류가 발생했습니다."}`);
+        alert(`${error.response.data.detail || "1촌 신청 중 오류가 발생했습니다."}`);
       } else {
-        alert("친구 추가 중 오류가 발생했습니다.");
+        alert("1촌 신청 중 오류가 발생했습니다.");
       }
     }
   };
