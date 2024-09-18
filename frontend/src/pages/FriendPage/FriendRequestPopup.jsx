@@ -7,11 +7,11 @@ const FriendRequestPopup = ({ profile, closeFriendDeleteModal, addFriend }) => {
     <div className="fd-modal-overlay">
       <div className="fd-withdraw-modal-content">
         <div className="fd-modal-title">
-          <img
+          {/* <img
             src={blueXIcon} // 동일한 아이콘 사용
             alt="탈퇴 아이콘"
             className="fd-withdraw-icon"
-          />
+          /> */}
           <p>1촌 신청</p>
         </div>
         <p className="fd-modal-description">
