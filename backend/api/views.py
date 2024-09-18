@@ -12,6 +12,8 @@ from .models import (
     Notification,
     Inquiry,
     SearchHistory,
+    Like,
+    Comment,
 )
 from .serializers import (
     CustomUserSerializer,
@@ -29,6 +31,8 @@ from .serializers import (
     SecondDegreeProfileSerializer,
     InquirySerializer,
     SearchHistorySerializer,
+    LikeSerializer,
+    CommentSerializer,
 )
 import json
 from django.core.mail import send_mail
@@ -277,6 +281,40 @@ class ProjectListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+# 모든 User의 Project를 보여주는 View
+class ProjectEveryListCreate(generics.ListCreateAPIView):
+    serializer_class = ProjectSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Project.objects.all()  # 모든 유저의 프로젝트 반환
+
+    def perform_create(self, serializer):
+        if serializer.is_valid():
+            serializer.save(user=self.request.user)
+        else:
+            print(serializer.errors)
+
+# 프로젝트 수정 뷰
+class ProjectUpdateView(generics.UpdateAPIView):
+    queryset = Project.objects.all()
+    serializer_class = ProjectSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_update(self, serializer):
+        keywords_data = self.request.data.get('keywords', [])
+        
+        # Project 인스턴스를 먼저 업데이트
+        project = serializer.save()
+
+        # 키워드를 업데이트
+        keyword_objs = []
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            keyword_objs.append(keyword_obj)
+        
+        project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
+        project.save()
 
 class ProjectDelete(generics.DestroyAPIView):
     serializer_class = ProjectSerializer
@@ -285,6 +323,30 @@ class ProjectDelete(generics.DestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         return Project.objects.filter(user=user)  # user가 user인 project만 필터
+
+
+class ProjectLikeToggleView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        project_id = kwargs.get("project_id")
+        project = get_object_or_404(Project, pk=project_id)
+        user = request.user
+
+        # 이미 좋아요를 눌렀는지 확인
+        like, created = Like.objects.get_or_create(user=user, project=project)
+
+        if not created:
+            # 이미 좋아요를 눌렀다면 좋아요를 취소하고 레코드를 삭제
+            like.delete()
+            project.like_count -= 1
+            project.save()
+            return Response({"message": "Project unliked", "like_count": project.like_count}, status=status.HTTP_200_OK)
+        else:
+            # 좋아요를 처음 눌렀다면
+            project.like_count += 1
+            project.save()
+            return Response({"message": "Project liked", "like_count": project.like_count}, status=status.HTTP_200_OK)
 
 
 class KeywordListView(generics.ListAPIView):
@@ -376,7 +438,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"http://localhost:5173/welcome?code={unique_code}",
+            link=f"https://teambl-distribution.vercel.app/welcome?code={unique_code}",
         )
 
         return Response(
@@ -510,12 +572,26 @@ class ListCreateFriendView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         from_user = self.request.user
         to_user_id = serializer.validated_data.get("to_user").id
+
         try:
             to_user = CustomUser.objects.get(id=to_user_id)
-            logger.info(
-                f"Creating friendship: from_user={from_user.email}, to_user={to_user.email}"
-            )
-            serializer.save(from_user=from_user, to_user=to_user, status="accepted")
+
+            # 기존 친구 관계 확인
+            existing_friendship = Friend.objects.filter(
+                Q(from_user=from_user, to_user=to_user) |
+                Q(from_user=to_user, to_user=from_user)
+            ).first()
+
+            if existing_friendship:
+                if existing_friendship.status == "pending":
+                    # 친구 요청이 진행 중인 경우: 에러 반환
+                    raise ValidationError({"detail": "이미 친구 요청이 진행 중입니다."})
+                elif existing_friendship.status == "accepted":
+                    # 이미 친구 관계인 경우: 에러 반환
+                    raise ValidationError({"detail": "이미 친구 관계입니다."})
+
+            # 새로운 친구 관계 생성 (pending)
+            Friend.create_or_replace_friendship(from_user, to_user)
 
             # 친구 추가 요청 알림 생성
             user_profile = Profile.objects.get(user=from_user)
@@ -525,13 +601,12 @@ class ListCreateFriendView(generics.ListCreateAPIView):
                 notification_type="friend_request",
             )
 
-            # Profile의 one_degree_count도 같이 업데이트
+            # Profile의 one_degree_count도 업데이트
             update_profile_one_degree_count(from_user)
             update_profile_one_degree_count(to_user)
 
         except CustomUser.DoesNotExist:
-            logger.error(f"User with id {to_user_id} does not exist")
-            raise ValidationError("해당 아이디를 가진 사용자가 존재하지 않습니다.")
+            raise ValidationError({"detail": "해당 아이디를 가진 사용자가 존재하지 않습니다."})
 
 
 class FriendUpdateView(generics.UpdateAPIView):
@@ -543,8 +618,11 @@ class FriendUpdateView(generics.UpdateAPIView):
         return Friend.objects.filter(Q(from_user=user) | Q(to_user=user))
 
     def perform_update(self, serializer):
-        friend = serializer.save()
         status = serializer.validated_data.get("status")
+        friend = serializer.instance
+        friend.status = status
+        friend.save()
+        
         from_user = friend.from_user
         to_user = friend.to_user
 
@@ -953,7 +1031,7 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
 
         # 경로가 없을 경우 빈 리스트 반환
         if not shortest_paths:
-            return Response({"paths": []}, status=status.HTTP_404_NOT_FOUND)
+            return Response({"paths": [], "current_user_id": current_user.id}, status=status.HTTP_404_NOT_FOUND)
 
         # user_id를 user_name으로 변환
         paths_as_usernames = []
@@ -963,4 +1041,50 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
             ]
             paths_as_usernames.append(path_usernames)
 
-        return Response({"paths": paths_as_usernames}, status=status.HTTP_200_OK)
+        return Response({"paths": paths_as_usernames, "current_user_id": current_user.id}, status=status.HTTP_200_OK)
+
+# 댓글 작성
+class CommentCreateView(generics.CreateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        project_id = self.kwargs.get('project_id')
+        project = get_object_or_404(Project, pk=project_id)
+        print("comment create for project", project)
+        serializer.save(user=self.request.user, project=project)
+
+
+# 댓글 목록
+class CommentListView(generics.ListAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs.get('project_id')
+        return Comment.objects.filter(project_id=project_id)
+
+
+# 댓글 수정
+class CommentUpdateView(generics.UpdateAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_update(self, serializer):
+        comment = self.get_object()
+        if comment.user != self.request.user:
+            return Response({'error': 'You are not allowed to edit this comment'}, status=status.HTTP_403_FORBIDDEN)
+        serializer.save()
+
+
+# 댓글 삭제
+class CommentDeleteView(generics.DestroyAPIView):
+    serializer_class = CommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Comment.objects.all()
+
+    def perform_destroy(self, instance):
+        if instance.user != self.request.user:
+            return Response({'error': 'You are not allowed to delete this comment'}, status=status.HTTP_403_FORBIDDEN)
+        super().perform_destroy(instance)

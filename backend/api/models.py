@@ -6,7 +6,6 @@ from django.contrib.auth.models import (
     PermissionsMixin,
 )
 
-
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         if not email:
@@ -139,9 +138,35 @@ class Project(models.Model):
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword, blank=True)
+    like_count = models.IntegerField(default=0)
+    image = models.ImageField(upload_to="project_images/", blank=True, null=True)
+    people_list = models.ManyToManyField(CustomUser, related_name="participating_projects", blank=True)
 
     def __str__(self):
         return self.title
+
+
+class Comment(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comments")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="comments")
+    content = models.CharField(max_length=30)
+    created_at = models.DateTimeField(auto_now_add=True)
+    likes = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Comment by {self.user.email} on {self.project.title}"
+    
+
+class Like(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="likes")
+    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="likes")
+    created_at = models.DateTimeField(auto_now_add=True)  # 좋아요 누른 시간
+
+    class Meta:
+        unique_together = ("user", "project")  # 같은 유저가 같은 프로젝트에 여러 번 좋아요 누르지 못하게 함
+
+    def __str__(self):
+        return f"{self.user.email} likes {self.project.title}"
 
 
 class Profile(models.Model):
@@ -322,16 +347,21 @@ class Friend(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
 
     class Meta:
-        unique_together = ("to_user", "from_user")
+        unique_together = ("to_user", "from_user", "status")
 
     @classmethod
     def create_or_replace_friendship(cls, from_user, to_user):
         # 거절된 상태의 친구 관계가 있는지 확인
-        rejected_friendship = cls.objects.filter(from_user=from_user, to_user=to_user, status="rejected").first()
+        rejected_friendship = cls.objects.filter(
+            models.Q(from_user=from_user, to_user=to_user) |
+            models.Q(from_user=to_user, to_user=from_user),
+            status="rejected"
+        ).first()
         
         # 거절된 관계가 있으면 삭제
         if rejected_friendship:
             rejected_friendship.delete()
+            print("rejected friendship deleted!")
         
         # 새로운 친구 관계 생성 (pending 상태로)
         new_friendship = cls.objects.create(from_user=from_user, to_user=to_user, status="pending")

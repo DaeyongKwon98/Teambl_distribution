@@ -92,7 +92,7 @@ function Form({ route, method }) {
           로그인
         </button>
         <div className="links">
-          <span onClick={() => ('/password-reset')}>비밀번호 재설정</span>
+          <span onClick={() => navigate('/password-reset')}>비밀번호 재설정</span>
         </div>
       </div>
     </div>

@@ -37,14 +37,14 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
     navigate(`/profile/${user.id}`);
   };
 
-  const handleAddButtonClick = (e) => {
-    e.stopPropagation(); // 클릭 이벤트가 부모 div로 전파되는 것을 방지
-    if (relationshipDegree === 1) {
-      return;
-    }
-    // navigate("/friends", { state: { activeTab: 'addChons' } });
-    setShowFriendAdd(true); // 친구 추가 팝업 열기
-  };
+  // const handleAddButtonClick = (e) => {
+  //   e.stopPropagation(); // 클릭 이벤트가 부모 div로 전파되는 것을 방지
+  //   if (relationshipDegree === 1) {
+  //     return;
+  //   }
+  //   // navigate("/friends", { state: { activeTab: 'addChons' } });
+  //   setShowFriendAdd(true); // 친구 추가 팝업 열기
+  // };
 
   const closeFriendAddModal = () => {
     setShowFriendAdd(false); // 팝업창 닫기
@@ -128,8 +128,8 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
           )}
         </button> */}
       </div>
-
-      {showFriendAdd && (
+  
+      {/* {showFriendAdd && (
         <div className="newsearch-addfriend-modal-overlay">
           <div className="newsearch-addfriend-add-modal-content">
             <div className="newsearch-addfriend-modal-title">
@@ -161,9 +161,9 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
             </div>
           </div>
         </div>
-      )}
+      )} */}
     </div>
-  );
+  );  
 };
 
 export default NewUserSearchItem;

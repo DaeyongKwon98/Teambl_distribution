@@ -25,10 +25,21 @@ urlpatterns += [
 # Project
 urlpatterns += [
     path("projects/", views.ProjectListCreate.as_view(), name="project-list"),
+    path("projects/every/", views.ProjectEveryListCreate.as_view(), name='project-every-list'),
+    path(
+        "projects/<int:pk>/edit/",
+        views.ProjectUpdateView.as_view(),
+        name="project-edit",
+    ),
     path(
         "projects/delete/<int:pk>/",
         views.ProjectDelete.as_view(),
         name="delete-project",
+    ),
+    path(
+        'projects/<int:project_id>/like-toggle/',
+        views.ProjectLikeToggleView.as_view(),
+        name='project-like-toggle'
     ),
 ]
 
@@ -127,6 +138,14 @@ urlpatterns += [
 urlpatterns += [
     path("search-history/", views.SearchHistoryListCreateView.as_view(), name="search-history-list-create"),
     path('search-history/<int:pk>/', views.SearchHistoryDeleteView.as_view(), name='search-history-delete'),
+]
+
+# Comment
+urlpatterns += [
+    path('projects/<int:project_id>/comments/', views.CommentListView.as_view(), name='comment-list'),
+    path('projects/<int:project_id>/comments/create/', views.CommentCreateView.as_view(), name='comment-create'),
+    path('comments/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='comment-edit'),
+    path('comments/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
 ]
 
 # Others
