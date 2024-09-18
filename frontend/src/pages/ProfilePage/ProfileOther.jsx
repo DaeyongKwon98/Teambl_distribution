@@ -70,7 +70,7 @@ const ProfileOther = ({ userId }) => {
   const addFriend = async (e) => {
     e.preventDefault();
     try {
-      const userResponse = await api.get(`/api/profile/${currentUserId}/`); 
+      const userResponse = await api.get(`/api/profile/${currentUserId}/`);
       const oneDegreeCount = userResponse.data.one_degree_count;
 
       if (oneDegreeCount >= 50) {
@@ -88,11 +88,16 @@ const ProfileOther = ({ userId }) => {
         // getChons(); // 친구 목록 갱신
       }
     } catch (error) {
-      console.error("Error in addFriend:", error.response ? error.response.data : error.message);
+      console.error(
+        "Error in addFriend:",
+        error.response ? error.response.data : error.message
+      );
 
       // 서버로부터 받은 에러 메시지를 표시
       if (error.response && error.response.data) {
-        alert(`${error.response.data.detail || "친구 추가 중 오류가 발생했습니다."}`);
+        alert(
+          `${error.response.data.detail || "친구 추가 중 오류가 발생했습니다."}`
+        );
       } else {
         alert("친구 추가 중 오류가 발생했습니다.");
       }
@@ -158,11 +163,13 @@ const ProfileOther = ({ userId }) => {
               <div className="profileOther-profile-relationshipDegree">
                 ・ {relationshipDegree ? relationshipDegree : "?"}촌
               </div>
-              {relationshipDegree !== 1 && (
+              {relationshipDegree === 1 ? (
+                <span></span>
+              ) : (
                 <button
                   className="profileOther-oneDegree-button"
                   onClick={addFriend}
-                  >
+                >
                   1촌 신청
                 </button>
               )}
@@ -191,23 +198,46 @@ const ProfileOther = ({ userId }) => {
             <div className="profileOther-path-container">
               <div className="profileOther-path-title">
                 <span className="profileOther-path-title-number">3명 이상</span>
-                <span className="profileOther-path-title-text">을 거쳐야 하므로 관계도를 표시하지 않습니다.</span>
+                <span className="profileOther-path-title-text">
+                  을 거쳐야 하므로 관계도를 표시하지 않습니다.
+                </span>
+              </div>
+            </div>
+          ) : paths.length === 1 ? (
+            <div className="profileOther-path-container">
+              <div className="profileOther-path-title">
+                <span className="profileOther-path-title-name">
+                  {paths[0][0]}
+                </span>
+                <span className="profileOther-path-title-text">님과 </span>
+                <span className="profileOther-path-title-name">
+                  {paths[0][paths[0].length - 1]}
+                </span>
+                <span className="profileOther-path-title-text">님은 </span>
+                <span className="profileOther-path-title-number">1촌</span>
+                <span className="profileOther-path-title-text">입니다.</span>
               </div>
             </div>
           ) : (
             <div className="profileOther-path-container">
               <div className="profileOther-path-title">
-                <span className="profileOther-path-title-name">{paths[0][0]}</span>
+                <span className="profileOther-path-title-name">
+                  {paths[0][0]}
+                </span>
                 <span className="profileOther-path-title-text">님과 </span>
-                <span className="profileOther-path-title-name">{paths[0][paths[0].length-1]}</span>
+                <span className="profileOther-path-title-name">
+                  {paths[0][paths[0].length - 1]}
+                </span>
                 <span className="profileOther-path-title-text">님은 </span>
-                <span className="profileOther-path-title-number">{paths[0].length-2}명</span>
-                <span className="profileOther-path-title-text">을 거치면 아는 사이입니다.</span>
+                <span className="profileOther-path-title-number">
+                  {paths[0].length - 2}명
+                </span>
+                <span className="profileOther-path-title-text">
+                  을 거치면 아는 사이입니다.
+                </span>
               </div>
               <div className="profileOther-path-content">
-                <div className="profileOther-path-name-end">
-                  {paths[0][0]}
-                </div>
+                <div className="profileOther-path-name-end">{paths[0][0]}</div>
                 <div className="profileOther-scroll-container" ref={scrollRef}>
                   {paths.map((path, index) => (
                     <div key={index} className="profileOther-scroll-item">
@@ -216,7 +246,7 @@ const ProfileOther = ({ userId }) => {
                   ))}
                 </div>
                 <div className="profileOther-path-name-end">
-                  {paths[0][paths[0].length-1]}
+                  {paths[0][paths[0].length - 1]}
                 </div>
               </div>
             </div>

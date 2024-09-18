@@ -3,11 +3,8 @@ import "../../styles/NewSearch.css";
 import BackIcon from "../../assets/NewSearch/backIcon.svg";
 import RecentIcon from "../../assets/NewSearch/recentIcon.svg";
 import SearchIcon from "../../assets/NewSearch/searchIcon.svg";
-import MajorIcon from "../../assets/NewSearch/majorIcon.svg";
-import NoMajorIcon from "../../assets/NewSearch/nomajorIcon.svg";
 import api from "../../api";
 import NewUserSearchItem from "../../components/NewUserSearchItem";
-import MajorPopUpForSearch from "./MajorPopUpForSearch";
 import SearchLoading from "./SearchLoading";
 
 function NewSearch() {
@@ -234,35 +231,6 @@ function NewSearch() {
     });
   };
 
-  // // 전공 필터를 추가 및 제거하는 함수
-  // const handleMajorChange = (major) => {
-  //   setFilters((prev) => {
-  //     const newMajor = prev.majors.includes(major)
-  //       ? prev.majors.filter((item) => item !== major)
-  //       : [...prev.majors, major];
-  //     return { ...prev, majors: newMajor };
-  //   });
-  // };
-
-  // 전공 필터를 추가 및 제거하는 함수
-  const handleMajorChange = (newMajors) => {
-    setFilters((prev) => {
-      // majors 배열을 평탄화하여 중첩 배열을 방지
-      const flatMajors = prev.majors.flat(Infinity);
-
-      // 새로 선택한 전공이 배열인지 아닌지 확인하고 평탄화
-      let normalizedNewMajors = Array.isArray(newMajors)
-        ? newMajors.flat()
-        : [newMajors];
-
-      // 새로 선택한 전공 목록을 기준으로 필터링
-      const updatedMajors = [...new Set(normalizedNewMajors)];
-
-      // 업데이트된 필터를 반환
-      return { ...prev, majors: updatedMajors };
-    });
-  };
-
   return (
     <div className="newSearch-container">
       <div className="newSearch-top-bar">
@@ -384,47 +352,6 @@ function NewSearch() {
             >
               3촌
             </button>
-            <button
-              className={`newSearch-filter-button ${
-                isMajorPopupOpen || filters.majors.length > 0 ? "active" : ""
-              }`}
-              onClick={() => setIsMajorPopupOpen(true)}
-            >
-              {filters.majors.length > 0
-                ? filters.majors.length > 1
-                  ? `전공 ${filters.majors.length} `
-                  : filters.majors[0] + " "
-                : "전공 "}
-              {filters.majors.length > 0 || isMajorPopupOpen ? (
-                <img
-                  src={MajorIcon}
-                  alt="전공 아이콘"
-                  className="newSearch-major-icon"
-                />
-              ) : (
-                <img
-                  src={NoMajorIcon}
-                  alt="0전공 아이콘"
-                  className="newSearch-nomajor-icon"
-                />
-              )}
-            </button>
-          </div>
-
-          <div className="newSearch-selected-majors">
-            {filters.majors.map((major, index) => (
-              <span key={index} className="selected-major">
-                {major}
-                <button
-                  className="remove-major"
-                  onClick={() =>
-                    handleMajorChange(filters.majors.filter((m) => m !== major))
-                  }
-                >
-                  &times;
-                </button>
-              </span>
-            ))}
           </div>
 
           <div className="newSearch-team-member-results">
@@ -460,22 +387,6 @@ function NewSearch() {
               </>
             )}
           </div>
-        </>
-      )}
-
-      {isMajorPopupOpen && (
-        <>
-          <div
-            className="newSearch-overlay"
-            onClick={() => setIsMajorPopupOpen(false)}
-          ></div>
-          <MajorPopUpForSearch
-            userSelectedMajors={filters.majors}
-            handleMajorChange={handleMajorChange}
-            setIsMajorPopupOpen={setIsMajorPopupOpen}
-            doSearchUsers={doSearchUsers}
-            buttonText="결과 보기"
-          />
         </>
       )}
     </div>

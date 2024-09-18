@@ -281,6 +281,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+
 # 모든 User의 Project를 보여주는 View
 class ProjectEveryListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
@@ -295,6 +296,7 @@ class ProjectEveryListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+
 # 프로젝트 수정 뷰
 class ProjectUpdateView(generics.UpdateAPIView):
     queryset = Project.objects.all()
@@ -302,8 +304,8 @@ class ProjectUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_update(self, serializer):
-        keywords_data = self.request.data.get('keywords', [])
-        
+        keywords_data = self.request.data.get("keywords", [])
+
         # Project 인스턴스를 먼저 업데이트
         project = serializer.save()
 
@@ -312,9 +314,10 @@ class ProjectUpdateView(generics.UpdateAPIView):
         for keyword in keywords_data:
             keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
             keyword_objs.append(keyword_obj)
-        
+
         project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
         project.save()
+
 
 class ProjectDelete(generics.DestroyAPIView):
     serializer_class = ProjectSerializer
@@ -341,12 +344,18 @@ class ProjectLikeToggleView(generics.GenericAPIView):
             like.delete()
             project.like_count -= 1
             project.save()
-            return Response({"message": "Project unliked", "like_count": project.like_count}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "Project unliked", "like_count": project.like_count},
+                status=status.HTTP_200_OK,
+            )
         else:
             # 좋아요를 처음 눌렀다면
             project.like_count += 1
             project.save()
-            return Response({"message": "Project liked", "like_count": project.like_count}, status=status.HTTP_200_OK)
+            return Response(
+                {"message": "Project liked", "like_count": project.like_count},
+                status=status.HTTP_200_OK,
+            )
 
 
 class KeywordListView(generics.ListAPIView):
@@ -474,7 +483,7 @@ class WelcomeView(generics.GenericAPIView):
                 )  # 로그 추가
 
                 # 만료 날짜 계산
-                expired_date = invite_link.created_at + timezone.timedelta(minutes=10)
+                expired_date = invite_link.created_at + timezone.timedelta(days=7)
                 current_date = timezone.now()
 
                 # 초대 링크가 만료된 경우
@@ -578,8 +587,8 @@ class ListCreateFriendView(generics.ListCreateAPIView):
 
             # 기존 친구 관계 확인
             existing_friendship = Friend.objects.filter(
-                Q(from_user=from_user, to_user=to_user) |
-                Q(from_user=to_user, to_user=from_user)
+                Q(from_user=from_user, to_user=to_user)
+                | Q(from_user=to_user, to_user=from_user)
             ).first()
 
             if existing_friendship:
@@ -606,7 +615,9 @@ class ListCreateFriendView(generics.ListCreateAPIView):
             update_profile_one_degree_count(to_user)
 
         except CustomUser.DoesNotExist:
-            raise ValidationError({"detail": "해당 아이디를 가진 사용자가 존재하지 않습니다."})
+            raise ValidationError(
+                {"detail": "해당 아이디를 가진 사용자가 존재하지 않습니다."}
+            )
 
 
 class FriendUpdateView(generics.UpdateAPIView):
@@ -622,7 +633,7 @@ class FriendUpdateView(generics.UpdateAPIView):
         friend = serializer.instance
         friend.status = status
         friend.save()
-        
+
         from_user = friend.from_user
         to_user = friend.to_user
 
@@ -1031,7 +1042,10 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
 
         # 경로가 없을 경우 빈 리스트 반환
         if not shortest_paths:
-            return Response({"paths": [], "current_user_id": current_user.id}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"paths": [], "current_user_id": current_user.id},
+                status=status.HTTP_404_NOT_FOUND,
+            )
 
         # user_id를 user_name으로 변환
         paths_as_usernames = []
@@ -1041,7 +1055,11 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
             ]
             paths_as_usernames.append(path_usernames)
 
-        return Response({"paths": paths_as_usernames, "current_user_id": current_user.id}, status=status.HTTP_200_OK)
+        return Response(
+            {"paths": paths_as_usernames, "current_user_id": current_user.id},
+            status=status.HTTP_200_OK,
+        )
+
 
 # 댓글 작성
 class CommentCreateView(generics.CreateAPIView):
@@ -1049,7 +1067,7 @@ class CommentCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        project_id = self.kwargs.get('project_id')
+        project_id = self.kwargs.get("project_id")
         project = get_object_or_404(Project, pk=project_id)
         print("comment create for project", project)
         serializer.save(user=self.request.user, project=project)
@@ -1061,7 +1079,7 @@ class CommentListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        project_id = self.kwargs.get('project_id')
+        project_id = self.kwargs.get("project_id")
         return Comment.objects.filter(project_id=project_id)
 
 
@@ -1074,7 +1092,10 @@ class CommentUpdateView(generics.UpdateAPIView):
     def perform_update(self, serializer):
         comment = self.get_object()
         if comment.user != self.request.user:
-            return Response({'error': 'You are not allowed to edit this comment'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "You are not allowed to edit this comment"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         serializer.save()
 
 
@@ -1086,5 +1107,8 @@ class CommentDeleteView(generics.DestroyAPIView):
 
     def perform_destroy(self, instance):
         if instance.user != self.request.user:
-            return Response({'error': 'You are not allowed to delete this comment'}, status=status.HTTP_403_FORBIDDEN)
+            return Response(
+                {"error": "You are not allowed to delete this comment"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         super().perform_destroy(instance)

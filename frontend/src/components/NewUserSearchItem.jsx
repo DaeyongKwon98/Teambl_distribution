@@ -84,7 +84,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
     <div>
       <div className="newSearch-team-member" onClick={handleProfileClick}>
         <img
-          src={user.image ? user.image : ProfileDefaultImg}
+          src={user.profile.image ? user.profile.image : ProfileDefaultImg}
           alt={user.profile.user_name}
           className="newSearch-profile-image"
         />
@@ -128,7 +128,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
           )}
         </button> */}
       </div>
-  
+
       {/* {showFriendAdd && (
         <div className="newsearch-addfriend-modal-overlay">
           <div className="newsearch-addfriend-add-modal-content">
@@ -163,7 +163,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
         </div>
       )} */}
     </div>
-  );  
+  );
 };
 
 export default NewUserSearchItem;

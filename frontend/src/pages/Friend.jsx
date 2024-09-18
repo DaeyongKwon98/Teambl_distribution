@@ -17,6 +17,8 @@ function Friend() {
   const [requestsToMe, setRequestsToMe] = useState([]); // 내게 신청한
   const [inputEmail, setInputEmail] = useState("");
   const [activeNav, setActiveNav] = useState("1촌");
+  const [profileImage, setProfileImage] = useState(""); // 프로필 이미지
+  const userId = localStorage.getItem("userId");
 
   const navigate = useNavigate();
 
@@ -108,6 +110,16 @@ function Friend() {
     }
   };
 
+  // 프로필 이미지 가져오기
+  const fetchProfileImage = async () => {
+    try {
+      const response = await api.get(`/api/profile/${userId}/`);
+      setProfileImage(response.data.image); // Assuming the image field is 'image'
+    } catch (error) {
+      console.error("Failed to fetch profile image:", error);
+    }
+  };
+
   useEffect(() => {
     getCurrentUser();
   }, []);
@@ -118,9 +130,16 @@ function Friend() {
     }
   }, [currentUser]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      await fetchProfileImage();
+    };
+    fetchData();
+  }, []);
+
   return (
     <div className="friend-container">
-      <Header />
+      <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
       <div className="friend-tabs">
         <div
