@@ -223,7 +223,6 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "password": {"write_only": True},
             "last_login": {"read_only": True},
             "is_superuser": {"read_only": True},
-            "is_staff": {"read_only": True},
             "is_active": {"read_only": True},
             "date_joined": {"read_only": True},
         }
@@ -234,7 +233,9 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
         # CustomUser 인스턴스 생성
         user = CustomUser.objects.create_user(
-            email=validated_data["email"], password=validated_data["password"]
+            email=validated_data["email"],
+            password=validated_data["password"],
+            is_staff=validated_data.get("is_staff", False),
         )
 
         # Profile 인스턴스 생성 및 CustomUser와 연결
@@ -263,7 +264,17 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Project
-        fields = ["project_id", "user", "title", "content", "created_at", "keywords", "like_count", "image", "people_list"]
+        fields = [
+            "project_id",
+            "user",
+            "title",
+            "content",
+            "created_at",
+            "keywords",
+            "like_count",
+            "image",
+            "people_list",
+        ]
         extra_kwargs = {"user": {"read_only": True}}
 
     def get_keywords(self, obj):
@@ -296,7 +307,8 @@ class ProjectSerializer(serializers.ModelSerializer):
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ['user', 'project', 'created_at']
+        fields = ["user", "project", "created_at"]
+
 
 class InvitationLinkSerializer(serializers.ModelSerializer):
     class Meta:
@@ -315,8 +327,7 @@ class InvitationLinkSerializer(serializers.ModelSerializer):
 
 class FriendCreateSerializer(serializers.ModelSerializer):
     to_user_id = serializers.IntegerField(
-        write_only=True, 
-        error_messages={"invalid": "유효한 사용자 ID를 입력해주세요."}
+        write_only=True, error_messages={"invalid": "유효한 사용자 ID를 입력해주세요."}
     )
     from_user = CustomUserSerializer(read_only=True)
     to_user = CustomUserSerializer(read_only=True)
@@ -335,9 +346,7 @@ class FriendCreateSerializer(serializers.ModelSerializer):
         try:
             to_user = CustomUser.objects.get(id=to_user_id)
         except CustomUser.DoesNotExist:
-            raise serializers.ValidationError(
-                {"message": "해당 ID의 유저가 없습니다."}
-            )
+            raise serializers.ValidationError({"message": "해당 ID의 유저가 없습니다."})
 
         # 자신에게 1촌 신청하는지 확인
         if from_user == to_user:
@@ -346,7 +355,9 @@ class FriendCreateSerializer(serializers.ModelSerializer):
             )
 
         # 이미 1촌인 유저인지 확인
-        if Friend.objects.filter(from_user=from_user, to_user=to_user, status="accepted").exists():
+        if Friend.objects.filter(
+            from_user=from_user, to_user=to_user, status="accepted"
+        ).exists():
             raise serializers.ValidationError({"message": "이미 1촌인 유저입니다."})
 
         # 검증 완료 후 attrs에 추가
@@ -434,8 +445,19 @@ class SearchHistorySerializer(serializers.ModelSerializer):
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    user_name = serializers.CharField(source='user.profile.user_name', read_only=True)  # 댓글 작성자 이름 추가
+    user_name = serializers.CharField(
+        source="user.profile.user_name", read_only=True
+    )  # 댓글 작성자 이름 추가
+
     class Meta:
         model = Comment
-        fields = ['id', 'user', 'user_name', 'project', 'content', 'created_at', 'likes']
-        read_only_fields = ['user', 'project', 'created_at', 'likes']
+        fields = [
+            "id",
+            "user",
+            "user_name",
+            "project",
+            "content",
+            "created_at",
+            "likes",
+        ]
+        read_only_fields = ["user", "project", "created_at", "likes"]
