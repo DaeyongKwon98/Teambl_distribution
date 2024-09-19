@@ -81,7 +81,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           </strong>
           <span className="friend-member-relation">
             {" "}
-            · {relationshipDegree}촌
+            · {relationshipDegree ? `${relationshipDegree}촌` : "4촌 이상"}
           </span>
         </p>
         <p className="friend-member-details">
