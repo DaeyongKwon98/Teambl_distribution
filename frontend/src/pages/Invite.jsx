@@ -27,12 +27,22 @@ function Invite() {
   // 백엔드에서 유저의 link를 가져오는 메소드
   const fetchLinks = async () => {
     try {
+      // 먼저 유저 정보를 가져와서 is_staff 값을 확인
+      const userResponse = await api.get("/api/current-user/");
+      const isStaff = userResponse.data.is_staff;
+      
       const response = await api.get("/api/invitation-links/");
       const sortedLinks = response.data.results.sort(
         (a, b) => new Date(b.created_at) - new Date(a.created_at)
       );
       setLinks(sortedLinks);
-      setInvitesLeft(5 - sortedLinks.length);
+      
+      // is_staff가 true인 경우 무제한으로 설정, 그렇지 않으면 최대 5회
+      if (isStaff) {
+        setInvitesLeft(Infinity); // 무제한 초대
+      } else {
+        setInvitesLeft(5 - sortedLinks.length);
+      }
       console.log(sortedLinks);
     } catch (error) {
       console.error("Failed to fetch invite links:", error);
@@ -61,7 +71,7 @@ function Invite() {
       return;
     }
 
-    if (invitesLeft <= 0) {
+    if (invitesLeft <= 0 && invitesLeft !== Infinity) {
       alert("더 이상 초대할 수 없습니다.");
       return;
     }
@@ -217,7 +227,7 @@ function Invite() {
           <div className="remaining-invites">
             <span className="remaining-text">남은 횟수</span>
             <div className="count-box">
-              <span className="count-number">{invitesLeft}</span>
+              <span className="count-number">{invitesLeft === Infinity ? "무한" : invitesLeft}</span>
               <span className="count-unit">회</span>
             </div>
           </div>
