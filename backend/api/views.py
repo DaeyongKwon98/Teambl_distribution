@@ -1053,7 +1053,7 @@ class GetUserAllPathsAPIView(generics.RetrieveAPIView):
         if not shortest_paths:
             return Response(
                 {"paths": [], "current_user_id": current_user.id},
-                status=status.HTTP_404_NOT_FOUND,
+                status=status.HTTP_200_OK,
             )
 
         # user_id를 user_name으로 변환
