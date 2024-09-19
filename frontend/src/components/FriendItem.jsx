@@ -79,7 +79,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           <strong className="friend-member-name">
             {otherUserProfile.user_name}
           </strong>
-          <span className="friend-member-relation"> · {relationshipDegree}촌</span>
+          <span className="friend-member-relation"> · {relationshipDegree ? `${relationshipDegree}촌` : "4촌 이상"}촌</span>
         </p>
         <p className="friend-member-details">
           {otherUserProfile.school} | {otherUserProfile.current_academic_degree} | {otherUserProfile.year % 100}학번
