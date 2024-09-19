@@ -58,6 +58,9 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+from staff_emails import STAFF_EMAILS
+
+
 class CreateUserView(generics.CreateAPIView):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
@@ -65,9 +68,11 @@ class CreateUserView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         code = self.request.data.get("code")
+        email = serializer.validated_data.get("email")  # 이메일을 가져옴
+        invitation = None  # 초기 값으로 초대가 되지 않았다고 가정.
 
         # code를 통해 db에서 해당 invite link 찾기
-        if code:
+        if code or len(code) > 0:
             invitation = InvitationLink.objects.filter(link__contains=code).first()
             if not invitation:
                 raise ValidationError("Invalid invitation code.")
@@ -75,7 +80,14 @@ class CreateUserView(generics.CreateAPIView):
         else:
             inviter_id = None
 
-        user = serializer.save()
+        # 이메일이 STAFF_EMAILS 리스트에 포함되면 is_staff 필드를 True로 설정
+        print(STAFF_EMAILS)
+        print(email)
+        print(email in STAFF_EMAILS)
+        if email in STAFF_EMAILS:
+            user = serializer.save(is_staff=True)
+        else:
+            user = serializer.save()
 
         # 회원가입에 성공한 경우 Friend 추가
         if inviter_id:
