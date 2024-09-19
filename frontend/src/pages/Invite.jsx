@@ -20,7 +20,6 @@ function Invite() {
   const [copyMessage, setCopyMessage] = useState("");
   const [activeNav, setActiveNav] = useState("초대");
 
-  
   const [profileImage, setProfileImage] = useState(''); // 프로필 이미지
   const userId = localStorage.getItem("userId");
 
@@ -28,7 +27,7 @@ function Invite() {
   const fetchLinks = async () => {
     try {
       // 먼저 유저 정보를 가져와서 is_staff 값을 확인
-      const userResponse = await api.get(`/api/profile/${userId}/`);
+      const userResponse = await api.get("/api/current-user/");
       const isStaff = userResponse.data.is_staff;
      
       const response = await api.get("/api/invitation-links/");
