@@ -168,7 +168,7 @@ const ProfileOther = ({ userId }) => {
                 {profile.user_name}
               </div>
               <div className="profileOther-profile-relationshipDegree">
-                ・ {relationshipDegree ? relationshipDegree : "?"}촌
+                ・ {relationshipDegree ? `${relationshipDegree}촌` : "4촌 이상"}
               </div>
               {relationshipDegree === 1 ? (
                 <span></span>
