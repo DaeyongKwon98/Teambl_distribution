@@ -51,8 +51,21 @@ const ProfileOther = ({ userId }) => {
     }
   };
 
+  /* 프로필 유저의 일촌 수를 최신으로 업데이트 해주는 함수 */
+  const updateOneDegreeCount = async (targetUserId) => {
+    try {
+      const response = await api.post(
+        `/api/profile/updateOneDegreeCount/${targetUserId}/`
+      );
+      const one_degree_count = response.data.one_degree_count;
+    } catch (error) {
+      console.error("Error updating one_degree_count:", error);
+    }
+  };
+
   useEffect(() => {
     getRelationshipDegree(userId);
+    updateOneDegreeCount(userId);
     fetchProfile(userId);
     fetchUserPaths(userId);
   }, [userId]);
@@ -71,27 +84,28 @@ const ProfileOther = ({ userId }) => {
         setError("사용자 정보를 불러오지 못했습니다.");
       }
     }
-    
+
     /* 현재 일촌 신청 대기 여부 확인 */
     api
-    .get("/api/friends/")
-    .then((res) => res.data)
-    .then(async (data) => {
-      let friendList = data['results'];
-      let isPending = false;
-      for (let i=0 ; i<friendList.length ; i++) {
-        if (friendList[i]["to_user"]["id"] == userId) { // str & integer comparision
-          isPending = friendList[i]["status"] === "pending";
+      .get("/api/friends/")
+      .then((res) => res.data)
+      .then(async (data) => {
+        let friendList = data["results"];
+        let isPending = false;
+        for (let i = 0; i < friendList.length; i++) {
+          if (friendList[i]["to_user"]["id"] == userId) {
+            // str & integer comparision
+            isPending = friendList[i]["status"] === "pending";
+          }
         }
-      }
-      await setIsFriendRequestPending(isPending);
-    })
-    .catch((err) => {
-      alert(err);
-    })
-    .finally(async () => {
-      await setLoading(false);
-    });
+        await setIsFriendRequestPending(isPending);
+      })
+      .catch((err) => {
+        alert(err);
+      })
+      .finally(async () => {
+        await setLoading(false);
+      });
   };
 
   // 1촌을 추가하는 함수 (userId를 사용)
@@ -202,10 +216,7 @@ const ProfileOther = ({ userId }) => {
                 <button
                   className={
                     "profileOther-oneDegree-button" +
-                    (isFriendRequestPending ?
-                    " to-disabled-button"
-                    :
-                    "")
+                    (isFriendRequestPending ? " to-disabled-button" : "")
                   }
                   onClick={() => {
                     if (!isFriendRequestPending) {
@@ -213,12 +224,7 @@ const ProfileOther = ({ userId }) => {
                     }
                   }} // 버튼 클릭 시 팝업 열기
                 >
-                  {
-                    isFriendRequestPending ?
-                      "수락 대기"
-                      :
-                      "1촌 신청"
-                  }
+                  {isFriendRequestPending ? "수락 대기" : "1촌 신청"}
                 </button>
               )}
 
