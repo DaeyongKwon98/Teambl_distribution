@@ -964,7 +964,7 @@ class UpdateOneDegreeCountView(generics.GenericAPIView):
         user = request.user
 
         # 전달된 user_id가 있다면 해당 사용자의 프로필을 업데이트
-        user_id = request.data.get("user_id", None)
+        user_id = kwargs.get("user_id")
         if user_id:
             user = get_object_or_404(CustomUser, id=user_id)
 

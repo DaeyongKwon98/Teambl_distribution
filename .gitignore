@@ -1,2 +1,6 @@
 # .pyc 파일 무시
 *.pyc
+
+# 파이썬 가상환경 파일 무시
+appleEnv/
+serverEnv/
