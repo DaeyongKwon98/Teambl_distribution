@@ -59,7 +59,7 @@
 }
 
 .profileOther-profile-name {
-  font-size: 17.14px;
+  font-size: 17px;
   font-weight: 700;
   color: #121212;
   white-space: nowrap; /* 줄바꿈 방지 */
@@ -69,18 +69,19 @@
 }
 
 .profileOther-profile-relationshipDegree {
-  font-size: 13.714px;
+  font-size: 11px;
   font-weight: 400;
 }
 
 .profileOther-oneDegree-button {
   background-color: #2546f3;
   color: white;
+  font-size: 10px;
   font-weight: 600;
   padding: 6px 12px;
   border-radius: 5px;
   border: #2546f3;
-  min-width: 50px;
+  min-width: 40px;
 }
 
 .profileOther-profile-one_degree_count {
@@ -88,6 +89,11 @@
   font-size: 13.714px; /* 1촌 정보 텍스트 크기 */
   color: #0923a9; /* 텍스트 색상 */
   font-weight: 500;
+}
+
+.to-disabled-button {
+  background-color: #a8a8a8;
+  border: #a8a8a8;
 }
 
 .profileOther-profile-row2,
