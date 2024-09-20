@@ -23,6 +23,11 @@ export default function FriendOther() {
 
       const friend_list = response.data.results
         .map((friend) => {
+          // "accept"이 아닌 상태는 제외
+          if (friend.status !== "accepted") {
+            return null;
+          }
+
           // from_user와 to_user 중 프로필 유저와 ID가 다른 유저만 선택
           if (friend.from_user.id !== Number(id)) {
             return friend.from_user;
