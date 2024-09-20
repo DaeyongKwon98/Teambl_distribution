@@ -117,6 +117,9 @@ const ProfileOther = ({ userId }) => {
       const response = await api.get(`/api/path/${userId}/`);
       setCurrentUserId(response.data.current_user_id);
       setPaths(response.data.paths);
+      console.log(response.data.paths);
+      console.log(response.data.paths[0]);
+      console.log(`촌수는: ${response.data.paths[0].length - 1}`);
     } catch (error) {
       console.error("유저 경로를 불러오는 중 오류가 발생했습니다.", error);
     }
