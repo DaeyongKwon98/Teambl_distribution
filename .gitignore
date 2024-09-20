@@ -1,8 +1,9 @@
 # .pyc 파일 무시
 *.pyc
 
-# 서버 python 가상환경 파일 무시
+# python 가상환경 파일 무시
 serverEnv/
+appleEnv/
 
 # 서버 프로필 사진 무시
 backend/media/profile_images/
