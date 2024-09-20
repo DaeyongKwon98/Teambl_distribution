@@ -28,6 +28,7 @@ const ProfileOther = ({ userId }) => {
   const [error, setError] = useState(null); // 오류 상태 추가
   const [currentUserId, setCurrentUserId] = useState("");
   const [showFinalDelete, setShowFinalDelete] = useState(false); // 최종 확인 팝업 상태 추가
+  const [isFriendRequestPending, setIsFriendRequestPending] = useState(false); // 현재 일촌 신청 대기 여부
   const navigate = useNavigate();
 
   const scrollRef = useRef(null);
@@ -56,6 +57,8 @@ const ProfileOther = ({ userId }) => {
     fetchUserPaths(userId);
   }, [userId]);
 
+  /* 해당 사용자의 정보를 가져오는 함수 */
+  /* 정보 수신이 완료되면, 일촌 신청 대기 여부를 확인(일촌 리스트 수신) */
   const fetchProfile = async (userId) => {
     try {
       const response = await api.get(`/api/user/${userId}/`);
@@ -67,9 +70,28 @@ const ProfileOther = ({ userId }) => {
       } else {
         setError("사용자 정보를 불러오지 못했습니다.");
       }
-    } finally {
-      setLoading(false); // 로딩 상태 종료
     }
+
+    /* 현재 일촌 신청 대기 여부 확인 */
+    api
+    .get("/api/friends/")
+    .then((res) => res.data)
+    .then(async (data) => {
+      let friendList = data['results'];
+      let isPending = false;
+      for (let i=0 ; i<friendList.length ; i++) {
+        if (friendList[i]["to_user"]["id"] == userId) { // str & integer comparision
+          isPending = friendList[i]["status"] === "pending";
+        }
+      }
+      await setIsFriendRequestPending(isPending);
+    })
+    .catch((err) => {
+      alert(err);
+    })
+    .finally(async () => {
+      await setLoading(false);
+    });
   };
 
   // 1촌을 추가하는 함수 (userId를 사용)
@@ -177,10 +199,25 @@ const ProfileOther = ({ userId }) => {
                 <span></span>
               ) : (
                 <button
-                  className="profileOther-oneDegree-button"
-                  onClick={() => setShowFinalDelete(true)} // 버튼 클릭 시 팝업 열기
+                  className={
+                    "profileOther-oneDegree-button" +
+                    (isFriendRequestPending ?
+                    " to-disabled-button"
+                    :
+                    "")
+                  }
+                  onClick={() => {
+                    if (!isFriendRequestPending) {
+                      setShowFinalDelete(true);
+                    }
+                  }} // 버튼 클릭 시 팝업 열기
                 >
-                  1촌 신청
+                  {
+                    isFriendRequestPending ?
+                      "수락 대기"
+                      :
+                      "1촌 신청"
+                  }
                 </button>
               )}
 

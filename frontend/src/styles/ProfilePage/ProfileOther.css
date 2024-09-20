@@ -83,6 +83,11 @@
   min-width: 50px;
 }
 
+.to-disabled-button {
+  background-color: #a8a8a8;
+  border: #a8a8a8;
+}
+
 .profileOther-profile-one_degree_count {
   display: flex;
   font-size: 13.714px; /* 1촌 정보 텍스트 크기 */
