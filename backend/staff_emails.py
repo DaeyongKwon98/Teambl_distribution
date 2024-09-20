@@ -6,6 +6,6 @@ STAFF_EMAILS = [
     "itoyplay@kaist.ac.kr",  # 김희수
     "gyuwon@kaist.ac.kr",  # 이규원
     "sbigstar0310@kaist.ac.kr",  # 성대규
-    # "박수민님의 이메일",  # 박수민
+    "amy06209@gmail.com",  # 박수민
     "rnjsdn1003@kaist.ac.kr",  # 유권우
 ]
