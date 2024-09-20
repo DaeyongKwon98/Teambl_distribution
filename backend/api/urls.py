@@ -6,7 +6,7 @@ urlpatterns = [
     path("current-user/", views.CurrentUserView.as_view(), name="current-user"),
     path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
     path("user/<int:id>/", views.OtherUserView.as_view(), name="other-user"),
-    path('latest-user-id/', views.LatestUserIdView.as_view(), name='latest-user-id'),
+    path("latest-user-id/", views.LatestUserIdView.as_view(), name="latest-user-id"),
 ]
 
 # Profile
@@ -25,7 +25,11 @@ urlpatterns += [
 # Project
 urlpatterns += [
     path("projects/", views.ProjectListCreate.as_view(), name="project-list"),
-    path("projects/every/", views.ProjectEveryListCreate.as_view(), name='project-every-list'),
+    path(
+        "projects/every/",
+        views.ProjectEveryListCreate.as_view(),
+        name="project-every-list",
+    ),
     path(
         "projects/<int:pk>/edit/",
         views.ProjectUpdateView.as_view(),
@@ -37,9 +41,9 @@ urlpatterns += [
         name="delete-project",
     ),
     path(
-        'projects/<int:project_id>/like-toggle/',
+        "projects/<int:project_id>/like-toggle/",
         views.ProjectLikeToggleView.as_view(),
-        name='project-like-toggle'
+        name="project-like-toggle",
     ),
 ]
 
@@ -63,6 +67,11 @@ urlpatterns += [
 # Friends
 urlpatterns += [
     path("friends/", views.ListCreateFriendView.as_view(), name="friend-list"),
+    path(
+        "friends/<int:user_id>/",
+        views.ListFriendView.as_view(),
+        name="friend-list-with-userId",
+    ),
     path(
         "friends/update/<int:pk>/",
         views.FriendUpdateView.as_view(),
@@ -136,16 +145,40 @@ urlpatterns += [
 
 # Search History
 urlpatterns += [
-    path("search-history/", views.SearchHistoryListCreateView.as_view(), name="search-history-list-create"),
-    path('search-history/<int:pk>/', views.SearchHistoryDeleteView.as_view(), name='search-history-delete'),
+    path(
+        "search-history/",
+        views.SearchHistoryListCreateView.as_view(),
+        name="search-history-list-create",
+    ),
+    path(
+        "search-history/<int:pk>/",
+        views.SearchHistoryDeleteView.as_view(),
+        name="search-history-delete",
+    ),
 ]
 
 # Comment
 urlpatterns += [
-    path('projects/<int:project_id>/comments/', views.CommentListView.as_view(), name='comment-list'),
-    path('projects/<int:project_id>/comments/create/', views.CommentCreateView.as_view(), name='comment-create'),
-    path('comments/<int:pk>/edit/', views.CommentUpdateView.as_view(), name='comment-edit'),
-    path('comments/<int:pk>/delete/', views.CommentDeleteView.as_view(), name='comment-delete'),
+    path(
+        "projects/<int:project_id>/comments/",
+        views.CommentListView.as_view(),
+        name="comment-list",
+    ),
+    path(
+        "projects/<int:project_id>/comments/create/",
+        views.CommentCreateView.as_view(),
+        name="comment-create",
+    ),
+    path(
+        "comments/<int:pk>/edit/",
+        views.CommentUpdateView.as_view(),
+        name="comment-edit",
+    ),
+    path(
+        "comments/<int:pk>/delete/",
+        views.CommentDeleteView.as_view(),
+        name="comment-delete",
+    ),
 ]
 
 # Others
@@ -163,5 +196,9 @@ urlpatterns += [
         views.UserStatisticsDifferenceView.as_view(),
         name="user-statistics-difference",
     ),
-    path('path/<int:target_user_id>/', views.GetUserAllPathsAPIView.as_view(), name='get-all-user-paths'),
+    path(
+        "path/<int:target_user_id>/",
+        views.GetUserAllPathsAPIView.as_view(),
+        name="get-all-user-paths",
+    ),
 ]
