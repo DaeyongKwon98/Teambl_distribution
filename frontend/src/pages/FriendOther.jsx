@@ -16,13 +16,30 @@ export default function FriendOther() {
   const [userInfo, setUserInfo] = useState({});
   const [friendList, setFriendList] = useState([]);
 
+  /** fetch current user information (no state diff) */
+  const fetchCurrentUser = async (callback) => {
+    try {
+      const res = await api.get("/api/current-user/");
+      await callback(res.data?.id);
+    } catch (error) {
+      await setIsOnError(true);
+      await setIsLoading(false);
+      console.error("Failed to fetch current user:", error);
+    }
+  };
+
   /** fetch friend list of the user */
-  const fetchFriendList = async () => {
+  const fetchFriendList = async (currentUserId) => {
     try {
       const response = await api.get(`/api/friends/${id}/`, {});
 
       const friend_list = response.data.results
         .map((friend) => {
+          // "accept"이 아닌 상태는 제외
+          if (friend.status !== "accepted") {
+            return null;
+          }
+
           // from_user와 to_user 중 프로필 유저와 ID가 다른 유저만 선택
           if (friend.from_user.id !== Number(id)) {
             return friend.from_user;
@@ -33,9 +50,24 @@ export default function FriendOther() {
         })
         .filter((user) => user !== null); // null 값을 필터링하여 제거
 
-      console.log(friend_list);
+      /** 본인이 포함된 경우 맨 앞으로 순서 변경 */
+      const withoutMeList = friend_list.filter((friendData) => {
+        if (friendData['id'] === currentUserId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+      const withMeList = friend_list.filter((friendData) => {
+        if (friendData['id'] === currentUserId) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      const new_friend_list = [...withMeList, ...withoutMeList];
 
-      await setFriendList(friend_list);
+      await setFriendList(new_friend_list);
       await setIsLoading(false);
     } catch (e) {
       console.error(e);
@@ -60,7 +92,7 @@ export default function FriendOther() {
   };
 
   useEffect(() => {
-    fetchUserInfo(fetchFriendList);
+    fetchUserInfo(() => fetchCurrentUser(fetchFriendList));
   }, []);
 
   /** loading */
