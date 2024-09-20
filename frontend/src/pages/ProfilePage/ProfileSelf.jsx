@@ -454,10 +454,18 @@ function ProfileSelf() {
                 value={newKeyword}
                 onChange={(e) => setNewKeyword(e.target.value)}
               />
-              <button type="button" onClick={handleAddKeyword}>
+              <button
+                type="button"
+                className="profile-addKeywordBtn"
+                onClick={handleAddKeyword}
+              >
                 추가
               </button>
-              <button type="button" onClick={handleCancelKeyword}>
+              <button
+                type="button"
+                className="profile-cancelKeywordBtn"
+                onClick={handleCancelKeyword}
+              >
                 삭제
               </button>
             </div>

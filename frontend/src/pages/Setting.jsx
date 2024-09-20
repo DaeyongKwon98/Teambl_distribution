@@ -6,6 +6,7 @@ import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import WithdrawIcon from "../assets/withdrawIcon.svg";
 import ArrowDownIcon from "../assets/arrowDownIcon.svg";
+import ArrowRightIcon from "../assets/arrowRightIcon.svg";
 import LogoutRightIcon from "../assets/logout_right_icon.svg";
 
 const Setting = () => {
@@ -215,7 +216,7 @@ const Setting = () => {
       >
         <span className="setting-section-title">비밀번호 변경</span>
         <img
-          src={ArrowDownIcon}
+          src={showChangePasswordSection ? ArrowDownIcon : ArrowRightIcon}
           alt="Toggle Password Change Section"
           className={`setting-arrow-icon ${
             showChangePasswordSection ? "rotate" : ""
@@ -279,7 +280,7 @@ const Setting = () => {
       >
         <span className="setting-section-title">문의하기</span>
         <img
-          src={ArrowDownIcon}
+          src={showInquirySection ? ArrowDownIcon : ArrowRightIcon}
           alt="Toggle Inquiry Section"
           className={`setting-arrow-icon ${showInquirySection ? "rotate" : ""}`}
         />
@@ -312,7 +313,7 @@ const Setting = () => {
       >
         <span className="setting-section-title">회원 탈퇴</span>
         <img
-          src={ArrowDownIcon}
+          src={showWithdrawSection ? ArrowDownIcon : ArrowRightIcon}
           alt="Toggle Withdraw Section"
           className={`setting-arrow-icon ${
             showWithdrawSection ? "rotate" : ""
@@ -403,7 +404,7 @@ const Setting = () => {
       >
         <span className="setting-section-title">약관 및 정책</span>
         <img
-          src={ArrowDownIcon}
+          src={showPolicySection ? ArrowDownIcon : ArrowRightIcon}
           alt="Toggle Policy Section"
           className={`setting-arrow-icon ${showPolicySection ? "rotate" : ""}`}
         />
