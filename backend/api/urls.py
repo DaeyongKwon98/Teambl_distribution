@@ -15,6 +15,11 @@ urlpatterns += [
     path(
         "profile/<int:userid>/", views.CurrentProfileView.as_view(), name="user-profile"
     ),
+     path(
+        "profile/updateOneDegreeCount/<int:user_id>/",
+        views.UpdateOneDegreeCountView.as_view(),
+        name="update-profile-one-degree-count",
+    ),
 ]
 
 # Keyword
