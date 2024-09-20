@@ -91,6 +91,11 @@
   font-weight: 500;
 }
 
+.to-disabled-button {
+  background-color: #a8a8a8;
+  border: #a8a8a8;
+}
+
 .profileOther-profile-row2,
 .profileOther-profile-row3,
 .profileOther-profile-row4 {

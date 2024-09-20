@@ -1,0 +1,115 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
+
+.friendOther-body {
+  margin: 0;
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+    "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+  font-weight: 400;
+  background-color: #ffffff;
+}
+
+.friendOther-container {
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  padding: 0px 20px;
+}
+
+.friendOther-toparea-container {
+  width: 100%;
+  padding: 20px 0px 0px 0px;
+  background-color: white;
+}
+
+.friendOther-title-container {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  background-color: white;
+}
+
+.friendOther-error-container {
+  width: 100%;
+  text-align: center;
+}
+
+.friendOther-loader-container {
+  width: 100%;
+  padding-top: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.friendOther-friend-number-container {
+  width: 100%;
+  text-align: left;
+  margin-top: 10px;
+  background-color: white;
+}
+
+.friendOther-item-container {
+  width: 100%;
+  height: auto;
+  background-color: white;
+}
+
+.friendOther-friend-number {
+  font-size: 14px;
+  font-weight: 400;
+  color: #595959;
+}
+
+.friendOther-backbutton {
+  border: none;
+  margin: 10px 0px;
+  background-color: transparent;
+}
+  
+.friendOther-backbutton img {
+  width: 20px;
+  height: 16px;
+}
+
+.friendOther-backbutton:hover {
+  cursor: pointer;
+}
+
+.friendOther-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: #121212;
+}
+
+.margin-left-15px {
+  margin-left: 15px;
+}
+
+.top-sticky {
+  position: sticky;
+}
+
+.top-0px {
+  top: 0px;
+}
+
+.friendOther-loader {
+  width: 50px;
+  aspect-ratio: 1;
+  --_c:no-repeat radial-gradient(farthest-side,#2546F3 92%,#0000);
+  background: 
+    var(--_c) top,
+    var(--_c) left,
+    var(--_c) right,
+    var(--_c) bottom;
+  background-size: 12px 12px;
+  animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
