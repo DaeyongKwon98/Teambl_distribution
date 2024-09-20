@@ -28,6 +28,7 @@ const ProfileOther = ({ userId }) => {
   const [error, setError] = useState(null); // 오류 상태 추가
   const [currentUserId, setCurrentUserId] = useState("");
   const [showFinalDelete, setShowFinalDelete] = useState(false); // 최종 확인 팝업 상태 추가
+  const [isFriendRequestPending, setIsFriendRequestPending] = useState(false); // 현재 일촌 신청 대기 여부
   const navigate = useNavigate();
 
   const scrollRef = useRef(null);
@@ -56,6 +57,8 @@ const ProfileOther = ({ userId }) => {
     fetchUserPaths(userId);
   }, [userId]);
 
+  /* 해당 사용자의 정보를 가져오는 함수 */
+  /* 정보 수신이 완료되면, 일촌 신청 대기 여부를 확인(일촌 리스트 수신) */
   const fetchProfile = async (userId) => {
     try {
       const response = await api.get(`/api/user/${userId}/`);
@@ -67,9 +70,28 @@ const ProfileOther = ({ userId }) => {
       } else {
         setError("사용자 정보를 불러오지 못했습니다.");
       }
-    } finally {
-      setLoading(false); // 로딩 상태 종료
     }
+
+    /* 현재 일촌 신청 대기 여부 확인 */
+    api
+    .get("/api/friends/")
+    .then((res) => res.data)
+    .then(async (data) => {
+      let friendList = data['results'];
+      let isPending = false;
+      for (let i=0 ; i<friendList.length ; i++) {
+        if (friendList[i]["to_user"]["id"] == userId) { // str & integer comparision
+          isPending = friendList[i]["status"] === "pending";
+        }
+      }
+      await setIsFriendRequestPending(isPending);
+    })
+    .catch((err) => {
+      alert(err);
+    })
+    .finally(async () => {
+      await setLoading(false);
+    });
   };
 
   // 1촌을 추가하는 함수 (userId를 사용)
@@ -92,6 +114,7 @@ const ProfileOther = ({ userId }) => {
       if (response.status === 201) {
         alert("1촌 신청 완료!");
         setShowFinalDelete(false); // 팝업 닫기
+        fetchProfile(userId); // 정보 갱신
         // getChons(); // 친구 목록 갱신
       }
     } catch (error) {
@@ -117,9 +140,9 @@ const ProfileOther = ({ userId }) => {
       const response = await api.get(`/api/path/${userId}/`);
       setCurrentUserId(response.data.current_user_id);
       setPaths(response.data.paths);
-      console.log(response.data.paths);
-      console.log(response.data.paths[0]);
-      console.log(`촌수는: ${response.data.paths[0].length - 1}`);
+      // console.log(response.data.paths);
+      // console.log(response.data.paths[0]);
+      // console.log(`촌수는: ${response.data.paths[0].length - 1}`);
     } catch (error) {
       console.error("유저 경로를 불러오는 중 오류가 발생했습니다.", error);
     }
@@ -177,10 +200,25 @@ const ProfileOther = ({ userId }) => {
                 <span></span>
               ) : (
                 <button
-                  className="profileOther-oneDegree-button"
-                  onClick={() => setShowFinalDelete(true)} // 버튼 클릭 시 팝업 열기
+                  className={
+                    "profileOther-oneDegree-button" +
+                    (isFriendRequestPending ?
+                    " to-disabled-button"
+                    :
+                    "")
+                  }
+                  onClick={() => {
+                    if (!isFriendRequestPending) {
+                      setShowFinalDelete(true);
+                    }
+                  }} // 버튼 클릭 시 팝업 열기
                 >
-                  1촌 신청
+                  {
+                    isFriendRequestPending ?
+                      "수락 대기"
+                      :
+                      "1촌 신청"
+                  }
                 </button>
               )}
 
@@ -204,7 +242,14 @@ const ProfileOther = ({ userId }) => {
                 ` ・ ${profile.major2}`}
             </div>
             <div className="profileOther-profile-row4">
-              <div className="profileOther-profile-one_degree_count">
+              <div
+                className="profileOther-profile-one_degree_count"
+                onClick={() => {
+                  if (profile.one_degree_count > 0) {
+                    navigate(`/profile/${userId}/friends`);
+                  }
+                }}
+              >
                 <div>1촌 {profile.one_degree_count}명</div>
               </div>
             </div>
