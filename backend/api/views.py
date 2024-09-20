@@ -629,6 +629,27 @@ class ListCreateFriendView(generics.ListCreateAPIView):
             )
 
 
+class ListFriendView(generics.ListAPIView):
+    serializer_class = FriendCreateSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        user_id = self.kwargs.get("user_id")
+
+        # target_user를 user_id로 검색
+        try:
+            target_user = CustomUser.objects.get(id=user_id)
+            return Friend.objects.filter(
+                Q(from_user=target_user) | Q(to_user=target_user)
+            )
+
+        # 해당 id의 유저를 못 찾은 경우 404 오류 반환.
+        except CustomUser.DoesNotExist:
+            return Response(
+                {"error": "Target user not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+
+
 class FriendUpdateView(generics.UpdateAPIView):
     serializer_class = FriendUpdateSerializer
     permission_classes = [IsAuthenticated]
