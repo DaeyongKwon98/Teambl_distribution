@@ -387,8 +387,8 @@ class SendCodeView(View):
             return JsonResponse({"error": "Email and code are required"}, status=400)
 
         send_mail(
-            "Your verification code",
-            f"Your verification code is {code}",
+            "[Teambl] 인증코드",
+            f"안녕하세요. 팀블입니다.\n\n인증코드는 다음과 같습니다.\n\n  {code}\n\n만약 인증코드를 요청하지 않으셨다면, 이 이메일을 무시하셔도 됩니다.\n\n감사합니다. 팀블 드림.",
             "info@teambl.net",
             [email],
             fail_silently=False,
