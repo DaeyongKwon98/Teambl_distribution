@@ -16,8 +16,20 @@ export default function FriendOther() {
   const [userInfo, setUserInfo] = useState({});
   const [friendList, setFriendList] = useState([]);
 
+  /** fetch current user information (no state diff) */
+  const fetchCurrentUser = async (callback) => {
+    try {
+      const res = await api.get("/api/current-user/");
+      await callback(res.data?.id);
+    } catch (error) {
+      await setIsOnError(true);
+      await setIsLoading(false);
+      console.error("Failed to fetch current user:", error);
+    }
+  };
+
   /** fetch friend list of the user */
-  const fetchFriendList = async () => {
+  const fetchFriendList = async (currentUserId) => {
     try {
       const response = await api.get(`/api/friends/${id}/`, {});
 
@@ -38,9 +50,24 @@ export default function FriendOther() {
         })
         .filter((user) => user !== null); // null 값을 필터링하여 제거
 
-      console.log(friend_list);
+      /** 본인이 포함된 경우 맨 앞으로 순서 변경 */
+      const withoutMeList = friend_list.filter((friendData) => {
+        if (friendData['id'] === currentUserId) {
+          return false;
+        } else {
+          return true;
+        }
+      });
+      const withMeList = friend_list.filter((friendData) => {
+        if (friendData['id'] === currentUserId) {
+          return true;
+        } else {
+          return false;
+        }
+      });
+      const new_friend_list = [...withMeList, ...withoutMeList];
 
-      await setFriendList(friend_list);
+      await setFriendList(new_friend_list);
       await setIsLoading(false);
     } catch (e) {
       console.error(e);
@@ -65,7 +92,7 @@ export default function FriendOther() {
   };
 
   useEffect(() => {
-    fetchUserInfo(fetchFriendList);
+    fetchUserInfo(() => fetchCurrentUser(fetchFriendList));
   }, []);
 
   /** loading */
