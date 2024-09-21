@@ -51,7 +51,7 @@ const ProfileOther = ({ userId }) => {
     }
   };
 
-  /* 프로필 유저의 일촌 수를 최신으로 업데이트 해주는 함수*/
+  /* 프로필 유저의 일촌 수를 최신으로 업데이트 해주는 함수 */
   const updateOneDegreeCount = async (targetUserId) => {
     try {
       const response = await api.post(
