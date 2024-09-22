@@ -11,14 +11,17 @@ body {
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
-  padding: 20px;
+}
+
+.home-incontainer {
+  padding: 0px 0px 0px 10px;
 }
 
 .home-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 40px;
+  margin-top: 60px;
 }
 
 .home-search {
@@ -114,6 +117,10 @@ body {
 .home-view-all, .home-sub-header-num {
   font-size: 12px;
   color: #2546f3;
+}
+
+.home-view-all{
+  margin-right: 20px;
 }
 
 .home-friends-list {
