@@ -6,6 +6,7 @@ import friendIcon from "../../assets/ProfileOther/friend.svg";
 import "../../styles/ProfilePage/ProfileOther.css";
 import api from "../../api";
 import FriendRequestPopup from "../FriendPage/FriendRequestPopup";
+import RelationView from '../../components/RelationView';
 
 const ProfileOther = ({ userId }) => {
   const [profile, setProfile] = useState({
@@ -29,15 +30,54 @@ const ProfileOther = ({ userId }) => {
   const [currentUserId, setCurrentUserId] = useState("");
   const [showFinalDelete, setShowFinalDelete] = useState(false); // 최종 확인 팝업 상태 추가
   const [isFriendRequestPending, setIsFriendRequestPending] = useState(false); // 현재 일촌 신청 대기 여부
+  const [isPathLoading, setIsPathLoading] = useState(true);
+  const [currentUserInfo, setCurrentUserInfo] = useState({});
+  const [isFriend, setIsFriend] = useState(false);
   const navigate = useNavigate();
-
-  const scrollRef = useRef(null);
 
   const [relationshipDegree, setRelationshipDegree] = useState(null);
 
   const closeFriendDeleteModal = () => {
     setShowFinalDelete(false);
   };
+
+  /** 현재 사용자의 정보를 가져오는 메소드 */
+  const getCurrentUserInfo = async (currId) => {
+    try {
+      const res = await api.get(`/api/current-user/`);
+      await setCurrentUserInfo(res.data);
+      await setIsPathLoading(false);
+      await setError(false);
+    } catch (e) {
+      await setError(true);
+      console.log(e);
+    }
+  };
+
+  /* path 리스트를 가공하는 유틸 메소드 */
+  const formatPath = (pathList) => {
+    if (pathList.length > 0) {
+      if (pathList[0].length === 3) {
+        /* 2 chon */
+        let newList = [];
+        for (let i=0 ; i<pathList.length ; i++) {
+          newList.push(pathList[i][1]);
+        }
+        return newList;
+      } else if (pathList[0].length === 4) {
+        /* 3 chon */
+        let newList = [];
+        for (let i=0 ; i<pathList.length ; i++) {
+          let tempList = [...pathList[i]];
+          tempList.splice(0, 1);
+          tempList.splice(2, 1);
+          newList.push(tempList);
+        }
+        return newList;
+      }
+    }
+    return [];
+  }
 
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
@@ -86,6 +126,8 @@ const ProfileOther = ({ userId }) => {
     }
 
     /* 현재 일촌 신청 대기 여부 확인 */
+    await setIsFriendRequestPending(false);
+    await setIsFriend(false);
     api
       .get("/api/friends/")
       .then((res) => res.data)
@@ -96,6 +138,13 @@ const ProfileOther = ({ userId }) => {
           if (friendList[i]["to_user"]["id"] == userId) {
             // str & integer comparision
             isPending = friendList[i]["status"] === "pending";
+          }
+          /* 일촌 여부를 확인 */
+          if ((friendList[i]["to_user"]["id"] == userId)
+            || (friendList[i]["from_user"]["id"] == userId)) {
+              if (friendList[i]["status"] === "accepted") {
+                await setIsFriend(true);
+              }
           }
         }
         await setIsFriendRequestPending(isPending);
@@ -123,7 +172,6 @@ const ProfileOther = ({ userId }) => {
       const response = await api.post("/api/friends/", {
         to_user_id: userId, // Ensure this is the correct field
       });
-      console.log(response);
 
       if (response.status === 201) {
         alert("1촌 신청 완료!");
@@ -151,14 +199,17 @@ const ProfileOther = ({ userId }) => {
   // 모든 경로를 가져오는 함수
   const fetchUserPaths = async (userId) => {
     try {
+      await setIsPathLoading(true);
       const response = await api.get(`/api/path/${userId}/`);
       setCurrentUserId(response.data.current_user_id);
       setPaths(response.data.paths);
-      // console.log(response.data.paths);
-      // console.log(response.data.paths[0]);
-      // console.log(`촌수는: ${response.data.paths[0].length - 1}`);
+      getCurrentUserInfo();
+      await setIsPathLoading(false);
+      await setError(false);
     } catch (error) {
       console.error("유저 경로를 불러오는 중 오류가 발생했습니다.", error);
+      await setIsPathLoading(false);
+      await setError(true);
     }
   };
 
@@ -186,7 +237,12 @@ const ProfileOther = ({ userId }) => {
 
   return (
     <div className="profileOther-body">
-      <div className="profileOther-container">
+      <div
+        className="profileOther-container"
+        style={{
+            paddingBottom: '0px'
+        }}
+      >
         <button
           className="profileOther-backbutton"
           onClick={() => window.history.back()}
@@ -261,68 +317,70 @@ const ProfileOther = ({ userId }) => {
             </div>
           </div>
         </div>
-
-        <div className="profileOther-title-path">나와의 관계</div>
-        <div className="profileOther-path">
-          {paths.length === 0 ? (
-            <div className="profileOther-path-container">
-              <div className="profileOther-path-title">
-                <span className="profileOther-path-title-number">3명 이상</span>
-                <span className="profileOther-path-title-text">
-                  을 거쳐야 하므로 관계도를 표시하지 않습니다.
-                </span>
-              </div>
-            </div>
-          ) : paths[0].length - 1 === 1 ? (
-            <div className="profileOther-path-container">
-              <div className="profileOther-path-title">
-                <span className="profileOther-path-title-name">
-                  {paths[0][0]}
-                </span>
-                <span className="profileOther-path-title-text">님과 </span>
-                <span className="profileOther-path-title-name">
-                  {paths[0][paths[0].length - 1]}
-                </span>
-                <span className="profileOther-path-title-text">님은 </span>
-                <span className="profileOther-path-title-number">1촌</span>
-                <span className="profileOther-path-title-text">입니다.</span>
-              </div>
-            </div>
-          ) : (
-            <div className="profileOther-path-container">
-              <div className="profileOther-path-title">
-                <span className="profileOther-path-title-name">
-                  {paths[0][0]}
-                </span>
-                <span className="profileOther-path-title-text">님과 </span>
-                <span className="profileOther-path-title-name">
-                  {paths[0][paths[0].length - 1]}
-                </span>
-                <span className="profileOther-path-title-text">님은 </span>
-                <span className="profileOther-path-title-number">
-                  {paths[0].length - 2}명
-                </span>
-                <span className="profileOther-path-title-text">
-                  을 거치면 아는 사이입니다.
-                </span>
-              </div>
-              <div className="profileOther-path-content">
-                <div className="profileOther-path-name-end">{paths[0][0]}</div>
-                <div className="profileOther-scroll-container" ref={scrollRef}>
-                  {paths.map((path, index) => (
-                    <div key={index} className="profileOther-scroll-item">
-                      {path.slice(1, -1).join(" → ")}
-                    </div>
-                  ))}
-                </div>
-                <div className="profileOther-path-name-end">
-                  {paths[0][paths[0].length - 1]}
-                </div>
-              </div>
-            </div>
-          )}
+      </div>
+      {
+        (!isFriend) &&
+        <div
+          className="profileOther-container"
+          style={{
+            paddingTop: '0px'
+        }}
+        >
+          <div className="profileOther-title-path">나와의 관계</div>
+          {/** no relationship : over 3 chon */}
+          {
+            (paths.length === 0) &&
+            <RelationView
+              fromName={currentUserInfo?.profile?.user_name}
+              toName={profile['user_name']}
+              relationList={[]}
+              chon={99}
+              isLoading={isPathLoading}
+            />
+          }
+          {/** 2 chon */}
+          {
+            (paths.length > 0) &&
+            (paths[0].length === 3) &&
+            <RelationView
+              fromName={currentUserInfo?.profile?.user_name}
+              toName={profile['user_name']}
+              relationList={formatPath(paths)}
+              chon={2}
+              isLoading={isPathLoading}
+            />
+          }
+          {/** 3 chon */}
+          {
+            (paths.length > 0) &&
+            (paths[0].length === 4) &&
+            <RelationView
+              fromName={currentUserInfo?.profile?.user_name}
+              toName={profile['user_name']}
+              relationList={formatPath(paths)}
+              chon={3}
+              isLoading={isPathLoading}
+            />
+          }
         </div>
-
+      }
+      {
+        !isFriend &&
+        <div className="profileOther-middle-margin">
+          {/* no content */}
+        </div>
+      }
+      <div
+        className="profileOther-container"
+        style={
+          isFriend ?
+          {
+            paddingTop: '0px'
+          }
+          :
+          {} 
+        }
+      >
         <div className="profileOther-keyword-title">키워드</div>
         <div className="profileOther-keywords">
           {profile.keywords.length === 0 ? (

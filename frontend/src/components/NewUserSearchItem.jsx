@@ -128,7 +128,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
           )}
         </button> */}
       </div>
-
+  
       {/* {showFriendAdd && (
         <div className="newsearch-addfriend-modal-overlay">
           <div className="newsearch-addfriend-add-modal-content">
@@ -163,7 +163,7 @@ const NewUserSearchItem = ({ user, onAddRelationShip }) => {
         </div>
       )} */}
     </div>
-  );
+  );  
 };
 
 export default NewUserSearchItem;

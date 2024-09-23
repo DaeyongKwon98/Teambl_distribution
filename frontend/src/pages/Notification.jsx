@@ -135,37 +135,31 @@ const Notification = ({ updateUnreadCount }) => {
     }
     
     switch (notification.notification_type) {
-      case "invitation_register":
-        if (notification.related_user_id) {
-          console.log(
-            "Navigating to profile with ID: ",
-            notification.related_user_id
-          );
-          navigate(`/profile/${notification.related_user_id}`);
-        } else {
-          console.error("No related_user_id found for this notification");
-        }
-        break;
-      case "invitation_expired":
-        navigate("/invite");
-        break;
-      case "friend_accept":
-        if (notification.related_user_id) {
-          console.log(
-            "Navigating to profile with ID: ",
-            notification.related_user_id
-          );
-          navigate(`/profile/${notification.related_user_id}`);
-        } else {
-          console.error("No related_user_id found for this notification");
-        }
-        break;
-      case "friend_request":
-        navigate("/friends", { state: { activeTab: "requestsToMe" } });
-        break;
-      default:
-        break;
-    }
+        case 'invitation_register':
+            if (notification.related_user_id) {
+                console.log("Navigating to profile with ID: ", notification.related_user_id);
+                navigate(`/profile/${notification.related_user_id}`);
+            } else {
+                console.error("No related_user_id found for this notification");
+            }
+            break;
+        case 'invitation_expired':
+            navigate("/invite");
+            break;
+        case 'friend_accept':
+            if (notification.related_user_id) {
+                console.log("Navigating to profile with ID: ", notification.related_user_id);
+                navigate(`/profile/${notification.related_user_id}`);
+            } else {
+                console.error("No related_user_id found for this notification");
+            }
+            break;
+        case 'friend_request':
+            navigate("/friends");
+            break;
+        default:
+            break;
+      }
   };
 
   // 메시지 줄바꿈 처리, 유저이름 굵게 표시하는 함수 (하드코딩)
@@ -219,7 +213,7 @@ const Notification = ({ updateUnreadCount }) => {
       return <>{message}</>;
     }
   };
-
+  
   return (
     <div className="notification-container">
       <div className="notification-back">
@@ -231,8 +225,8 @@ const Notification = ({ updateUnreadCount }) => {
           <img src={backIcon}></img>
         </button>
       </div>
-
-      <h1>알림</h1>
+      
+      <h1>알림</h1>  
       <div>
         {/* <h2>Notification List</h2> */}
         <ul className="notification-list">
@@ -242,18 +236,16 @@ const Notification = ({ updateUnreadCount }) => {
               className={notification.is_read ? "read" : "unread"}
               onClick={() => {
                 if (!notification.is_read) {
-                  updateNotification({
-                    id: notification.id,
-                    isReadButtonClicked: true,
-                  });
+                    updateNotification({
+                        id: notification.id,
+                        isReadButtonClicked: true,
+                    });
                 }
                 handleNotificationClick(notification);
-              }}
-            >
-              <div className="notification-header">
-                <span className="message">
-                  {formatMessage(notification.message)}
-                </span>
+            }}
+            > 
+            <div className="notification-header">
+              <span className="message">{formatMessage(notification.message)}</span>
                 <button
                   className="delete"
                   onClick={(e) => {
@@ -262,9 +254,7 @@ const Notification = ({ updateUnreadCount }) => {
                   }}
                 ></button>
               </div>
-              <div className="created-at">
-                {timeAgo(notification.created_at)}
-              </div>
+              <div className="created-at">{timeAgo(notification.created_at)}</div>
             </li>
           ))}
         </ul>
