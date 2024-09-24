@@ -3,9 +3,7 @@ import "../styles/ProjectItem.css";
 import api from "../api";
 
 function ProjectItem({ project, onDelete, currentUser }) {
-  const formattedDate = new Date(project.created_at).toLocaleDateString(
-    "en-US"
-  );
+  const formattedDate = new Date(project.created_at).toLocaleDateString("en-US");
   const [likeCount, setLikeCount] = useState(project.like_count); // 프로젝트의 초기 좋아요 수를 상태로 설정
   const [liked, setLiked] = useState(false); // 사용자가 좋아요를 눌렀는지 추적하는 상태
   const [comments, setComments] = useState([]); // 댓글 목록 상태
@@ -18,12 +16,29 @@ function ProjectItem({ project, onDelete, currentUser }) {
   const [editContentProject, setEditContentProject] = useState(project.content); // 수정된 내용
   const [editKeywords, setEditKeywords] = useState(Array.isArray(project.keywords) ? project.keywords : []); // 수정된 키워드
   const [newKeyword, setNewKeyword] = useState(""); // 새로 추가할 키워드
+  const [editImage, setEditImage] = useState(null);
 
   useEffect(() => { // 프로젝트의 댓글 목록을 불러오는 함수
     api.get(`/api/projects/${project.project_id}/comments/`)
       .then((res) => setComments(res.data.results))
       .catch((err) => console.error(err));
+
+    // 좋아요 여부를 백엔드에서 불러오는 함수
+    const fetchLikedStatus = async () => {
+      try {
+        const response = await api.get(`/api/projects/${project.project_id}/liked-status/`);
+        setLiked(response.data.liked);
+      } catch (error) {
+        console.error("Failed to fetch liked status", error);
+      }
+    };
+    fetchLikedStatus();
   }, [project.project_id]);
+
+  // Handle image selection
+  const handleImageChange = (e) => {
+    setEditImage(e.target.files[0]);
+  };
 
   // 키워드 삭제
   const removeKeyword = (index) => {
@@ -93,22 +108,30 @@ function ProjectItem({ project, onDelete, currentUser }) {
   };
 
   // 프로젝트 수정 저장 함수
-  const saveProject = () => {  
-    api.patch(`/api/projects/${project.project_id}/edit/`, {
-      title: editTitle,
-      content: editContentProject,
-      keywords: editKeywords, // 배열로 서버에 전송
+  const saveProject = () => {
+    const formData = new FormData();
+    formData.append("title", editTitle);
+    formData.append("content", editContentProject);
+    editKeywords.forEach((keyword) => {
+      formData.append("keywords[]", keyword);
+    });
+    
+    // Add the image to formData if a new image was selected
+    if (editImage) {
+      formData.append("image", editImage);
+    }
+
+    api.patch(`/api/projects/${project.project_id}/edit/`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
     })
       .then((res) => {
-        setIsEditingProject(false); // 수정 모드 종료
-        setEditTitle(res.data.title); // 수정된 제목 반영
-        setEditContentProject(res.data.content); // 수정된 내용 반영
-        setEditKeywords(res.data.keywords); // 수정된 키워드 반영
-
-        // project 객체 자체를 업데이트
-        project.title = res.data.title;
-        project.content = res.data.content;
-        project.keywords = res.data.keywords; // 업데이트된 키워드를 다시 배열로 저장
+        setIsEditingProject(false);
+        setEditTitle(res.data.title);
+        setEditContentProject(res.data.content);
+        setEditKeywords(res.data.keywords);
+        project.image = res.data.image; // Update the project's image
       })
       .catch((err) => console.error("Failed to update project", err));
   };
@@ -126,6 +149,16 @@ function ProjectItem({ project, onDelete, currentUser }) {
             value={editContentProject}
             onChange={(e) => setEditContentProject(e.target.value)}
           />
+          <div className="image-edit-section">
+            <label htmlFor="image">Edit Image:</label>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </div>
           <div className="keyword-edit-section">
             {editKeywords.map((keyword, index) => (
               <div key={index} className="keyword-item">
@@ -148,6 +181,13 @@ function ProjectItem({ project, onDelete, currentUser }) {
       ) : (
         <div>
           <p className="project-title">{project.title}</p>
+          {project.image && (
+            <img
+              src={project.image}
+              alt={project.title}
+              className="project-image"
+            />
+          )}
           <p className="project-content">{project.content}</p>
           <p className="project-keywords">
             {editKeywords.map((keyword, index) => (
