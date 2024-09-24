@@ -438,7 +438,7 @@ class SendCodeView(View):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
-class SendEmailView(View):
+class SendInquiryEmailView(View):
     def post(self, request, *args, **kwargs):
         try:
             data = json.loads(request.body)
@@ -459,6 +459,30 @@ class SendEmailView(View):
         )
 
         return JsonResponse({"message": "Verification code sent"}, status=200)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
+class SendEmailView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            title = data.get("title")
+            to_email = data.get("to_email")
+            body = data.get("body")
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+        if not title or not to_email or not body:
+            return JsonResponse(
+                {"error": "제목, 수신자, 내용이 누락되었습니다."}, status=400
+            )
+        send_mail(
+            f"{title}",  # 이메일 제목
+            f"{body}",  # 이메일 본문
+            "info@teambl.net",  # 발신자 이메일 주소
+            [to_email],  # 수신사 이메일 주소 목록
+            fail_silently=False,  # 에러 발생 시 예외 발생 여부
+        )
+        return JsonResponse({"message": "메일 전송 성공"}, status=200)
 
 
 class InvitationLinkList(generics.ListAPIView):
@@ -659,6 +683,13 @@ class ListCreateFriendView(generics.ListCreateAPIView):
                 message=f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n일촌 리스트에서 확인해보세요!",
                 notification_type="friend_request",
             )
+            send_mail(
+                f"[팀블] {user_profile.user_name}님의 일촌 신청이 도착했습니다.",  # 이메일 제목
+                f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n 팀블 일촌 리스트에서 확인해보세요!",  # 이메일 본문
+                "info@teambl.net",  # 발신자 이메일 주소
+                [to_user.email],  # 수신사 이메일 주소 목록
+                fail_silently=False,  # 에러 발생 시 예외 발생 여부
+            )
 
             # Profile의 one_degree_count도 업데이트
             update_profile_one_degree_count(from_user)
@@ -718,12 +749,27 @@ class FriendUpdateView(generics.UpdateAPIView):
                 notification_type="friend_accept",
                 related_user_id=to_user.id,
             )
+            send_mail(
+                f"[팀블] {user_profile.user_name}님이 일촌 신청을 수락했습니다.",  # 이메일 제목
+                f"{user_profile.user_name}님이 일촌 신청을 수락했습니다.\n{user_profile.user_name}님의 프로필을 확인해보세요!",  # 이메일 본문
+                "info@teambl.net",  # 발신자 이메일 주소
+                [from_user.email],  # 수신사 이메일 주소 목록
+                fail_silently=False,  # 에러 발생 시 예외 발생 여부
+            )
+
         elif status == "rejected":
             # 친구 요청 거절 시 알림 생성
             Notification.objects.create(
                 user=from_user,
                 message=f"{user_profile.user_name}님이 일촌 신청을 거절했습니다.",
                 notification_type="friend_reject",
+            )
+            send_mail(
+                f"[팀블] {user_profile.user_name}님이 일촌 신청을 거절했습니다.",  # 이메일 제목
+                f"{user_profile.user_name}님이 일촌 신청을 거절했습니다.",  # 이메일 본문
+                "info@teambl.net",  # 발신자 이메일 주소
+                [from_user.email],  # 수신사 이메일 주소 목록
+                fail_silently=False,  # 에러 발생 시 예외 발생 여부
             )
 
         # Profile의 one_degree_count 업데이트

@@ -65,7 +65,7 @@ const Setting = () => {
   // 문의하기 제출 처리 로직
   const handleInquirySubmit = async () => {
     try {
-      const response = await api.post("/api/send_email/", {
+      const response = await api.post("/api/send-inquiry-email/", {
         from_email: currentUser.email,
         body: inquiryText,
       });
@@ -212,7 +212,9 @@ const Setting = () => {
         {/* <h2 className="setting-section-title">비밀번호 변경</h2> */}
         <div
           className="setting-password-toggle"
-          onClick={() => setShowChangePasswordSection(!showChangePasswordSection)}
+          onClick={() =>
+            setShowChangePasswordSection(!showChangePasswordSection)
+          }
         >
           <span className="setting-section-title">비밀번호 변경</span>
           <img
@@ -282,7 +284,9 @@ const Setting = () => {
           <img
             src={showInquirySection ? ArrowDownIcon : ArrowRightIcon}
             alt="Toggle Inquiry Section"
-            className={`setting-arrow-icon ${showInquirySection ? "rotate" : ""}`}
+            className={`setting-arrow-icon ${
+              showInquirySection ? "rotate" : ""
+            }`}
           />
         </div>
         {showInquirySection && (
@@ -406,7 +410,9 @@ const Setting = () => {
           <img
             src={showPolicySection ? ArrowDownIcon : ArrowRightIcon}
             alt="Toggle Policy Section"
-            className={`setting-arrow-icon ${showPolicySection ? "rotate" : ""}`}
+            className={`setting-arrow-icon ${
+              showPolicySection ? "rotate" : ""
+            }`}
           />
         </div>
         {showPolicySection && (
