@@ -140,7 +140,7 @@ class Project(models.Model):
     keywords = models.ManyToManyField(Keyword, blank=True)
     like_count = models.IntegerField(default=0)
     image = models.ImageField(upload_to="project_images/", blank=True, null=True)
-    people_list = models.ManyToManyField(CustomUser, related_name="participating_projects", blank=True)
+    tagged_users = models.ManyToManyField(CustomUser, related_name="participating_projects", blank=True)
 
     def __str__(self):
         return self.title
@@ -414,4 +414,3 @@ class SearchHistory(models.Model):
 
     def __str__(self):
         return f'Search by {self.user.username} for "{self.keyword}" at {self.created_at}'
-
