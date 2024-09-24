@@ -139,6 +139,11 @@ class OtherUserView(generics.RetrieveAPIView):
 User = get_user_model()
 
 
+class AllUsersView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -315,6 +320,16 @@ class ProjectLikedStatusView(generics.RetrieveAPIView):
         liked = Like.objects.filter(user=user, project=project).exists()
 
         return Response({"liked": liked})
+
+# 특정 Project에 태그된 유저들을 보여주는 View
+class ProjectTaggedUsersListView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        project = Project.objects.get(pk=project_id)
+        return project.tagged_users.all()
 
 
 # 모든 User의 Project를 보여주는 View

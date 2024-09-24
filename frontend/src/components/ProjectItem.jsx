@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/ProjectItem.css";
 import api from "../api";
 
-function ProjectItem({ project, onDelete, currentUser }) {
+function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const formattedDate = new Date(project.created_at).toLocaleDateString("en-US");
   const [likeCount, setLikeCount] = useState(project.like_count); // 프로젝트의 초기 좋아요 수를 상태로 설정
   const [liked, setLiked] = useState(false); // 사용자가 좋아요를 눌렀는지 추적하는 상태
@@ -17,6 +17,11 @@ function ProjectItem({ project, onDelete, currentUser }) {
   const [editKeywords, setEditKeywords] = useState(Array.isArray(project.keywords) ? project.keywords : []); // 수정된 키워드
   const [newKeyword, setNewKeyword] = useState(""); // 새로 추가할 키워드
   const [editImage, setEditImage] = useState(null);
+
+  const [allUsers, setAllUsers] = useState([]); // All available users for tagging
+  const [editTaggedUsers, setEditTaggedUsers] = useState(Array.isArray(project.tagged_users) ? project.tagged_users : []);
+  const [selectedUser, setSelectedUser] = useState("");
+  const [originalTaggedUsers, setOriginalTaggedUsers] = useState([]);
 
   useEffect(() => { // 프로젝트의 댓글 목록을 불러오는 함수
     api.get(`/api/projects/${project.project_id}/comments/`)
@@ -33,7 +38,51 @@ function ProjectItem({ project, onDelete, currentUser }) {
       }
     };
     fetchLikedStatus();
+
+    // Fetch all users for tagging
+    const fetchUsers = () => {
+      api.get("/api/users/")
+        .then((res) => setAllUsers(res.data.results))
+        .catch((err) => console.error("Failed to fetch users", err));
+    };
+    fetchUsers();
+
+    setOriginalTaggedUsers([...project.tagged_users]);
+    setEditTaggedUsers([...project.tagged_users]);
+
   }, [project.project_id]);
+
+  // Displaying Tagged Users
+  const displayTaggedUsers = () => {
+    if (project.tagged_users && project.tagged_users.length > 0) {
+      return (
+        <ul>
+          {project.tagged_users.map((user) => (
+            <li key={user.id}>
+              {user.user_name ? user.user_name : "Unknown User"}
+            </li>
+          ))}
+        </ul>
+      );
+    } else {
+      return <p>No tagged users.</p>;
+    }
+  };
+
+  // Add a tagged user
+  const addTaggedUser = () => {
+    if (selectedUser && !editTaggedUsers.some(user => user.id === selectedUser)) {
+      const userObj = allUsers.find(user => user.id === Number(selectedUser));
+      setEditTaggedUsers([...editTaggedUsers, userObj]);
+      setSelectedUser("");
+    }
+  };
+
+  // Remove a tagged user
+  const removeTaggedUser = (userId) => {
+    const updatedTaggedUsers = editTaggedUsers.filter(user => user.id !== userId);
+    setEditTaggedUsers(updatedTaggedUsers);
+  };
 
   // Handle image selection
   const handleImageChange = (e) => {
@@ -115,7 +164,10 @@ function ProjectItem({ project, onDelete, currentUser }) {
     editKeywords.forEach((keyword) => {
       formData.append("keywords[]", keyword);
     });
-    
+    editTaggedUsers.forEach((user) => {
+      formData.append("tagged_users", user.id);
+    });
+
     // Add the image to formData if a new image was selected
     if (editImage) {
       formData.append("image", editImage);
@@ -131,9 +183,23 @@ function ProjectItem({ project, onDelete, currentUser }) {
         setEditTitle(res.data.title);
         setEditContentProject(res.data.content);
         setEditKeywords(res.data.keywords);
-        project.image = res.data.image; // Update the project's image
+        setEditTaggedUsers(res.data.tagged_users);
+        setOriginalTaggedUsers(res.data.tagged_users);
+        project.image = res.data.image;
+
+        if (refreshProjects) {
+          refreshProjects();
+        }
       })
       .catch((err) => console.error("Failed to update project", err));
+  };
+
+  const cancelEdit = () => {
+    setIsEditingProject(false);
+    setEditTitle(project.title);
+    setEditContentProject(project.content);
+    setEditKeywords(project.keywords);
+    setEditTaggedUsers(originalTaggedUsers);
   };
 
   return (
@@ -175,8 +241,35 @@ function ProjectItem({ project, onDelete, currentUser }) {
             />
             <button onClick={addKeyword}>Add Keyword</button>
           </div>
+          <div className="tagged-users-section">
+            <h4>Edit Tagged Users:</h4>
+            <select
+              value={selectedUser}
+              onChange={(e) => setSelectedUser(e.target.value)}
+            >
+              <option value="">Select a user</option>
+              {allUsers.map(user => (
+                <option key={user.id} value={user.id}>
+                  {user.user_name}
+                </option>
+              ))}
+            </select>
+            <button type="button" onClick={addTaggedUser}>
+              Add Tagged User
+            </button>
+            <ul>
+              {editTaggedUsers.map((user) => (
+                <li key={user.id}>
+                  {user.user_name}
+                  <button type="button" onClick={() => removeTaggedUser(user.id)}>
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
           <button onClick={saveProject}>Save</button>
-          <button onClick={() => setIsEditingProject(false)}>Cancel</button>
+          <button onClick={cancelEdit}>Cancel</button>
         </div>
       ) : (
         <div>
@@ -200,6 +293,11 @@ function ProjectItem({ project, onDelete, currentUser }) {
             작성자: {project.user && project.user.profile ? project.user.profile.user_name : "Unknown User"}
           </p>
           <p className="project-date">작성일: {formattedDate}</p>
+
+          <div className="tagged-users">
+            <h4>Tagged Users:</h4>
+            {displayTaggedUsers()}
+          </div>
         </div>
       )}
 

@@ -153,11 +153,6 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
             setattr(instance, attr, value)
         instance.save()
 
-        # Update basic fields only if they are provided in the validated_data
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
-        instance.save()
-
         # 기존 이미지 삭제 (새 이미지가 업로드된 경우)
         if new_image and old_image and old_image != new_image:
             if os.path.isfile(old_image.path):
@@ -205,6 +200,7 @@ class ProfileUpdateSerializer(serializers.ModelSerializer):
 class CustomUserSerializer(serializers.ModelSerializer):
     profile = ProfileCreateSerializer()
     code = serializers.CharField(write_only=True, required=False)
+    user_name = serializers.CharField(source='profile.user_name', read_only=True)
 
     class Meta:
         model = CustomUser
@@ -219,6 +215,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "date_joined",
             "profile",
             "code",
+            "user_name",
         ]
         extra_kwargs = {
             "password": {"write_only": True},
@@ -259,7 +256,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
     keywords = serializers.SerializerMethodField()
-    people_list = serializers.PrimaryKeyRelatedField(
+    tagged_users = serializers.PrimaryKeyRelatedField(
         many=True, queryset=CustomUser.objects.all(), required=False
     )
 
@@ -274,35 +271,69 @@ class ProjectSerializer(serializers.ModelSerializer):
             "keywords",
             "like_count",
             "image",
-            "people_list",
+            "tagged_users",
         ]
         extra_kwargs = {"user": {"read_only": True}}
 
     def get_keywords(self, obj):
         return [keyword.keyword for keyword in obj.keywords.all()]
 
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['tagged_users'] = CustomUserSerializer(instance.tagged_users.all(), many=True).data
+        return representation
+
     def create(self, validated_data):
-        # 키워드를 initial_data에서 추출
+        # Extract keywords and tagged users
         keywords_data = self.initial_data.get("keywords", [])
-        people_list_data = validated_data.pop("people_list", [])
+        tagged_users_data = validated_data.pop("tagged_users", [])
 
-        # keywords 필드를 validated_data에서 제거
-        validated_data.pop("keywords", None)
-
-        # Project 인스턴스 생성
+        # Create the Project instance
         project = Project.objects.create(**validated_data)
 
-        # 키워드를 프로젝트와 연결
+        # Set keywords
         keyword_objs = []
         for keyword in keywords_data:
             keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
             keyword_objs.append(keyword_obj)
-
-        # set() 메서드를 사용하여 Many-to-Many 관계 설정
         project.keywords.set(keyword_objs)
-        project.people_list.set(people_list_data)
+
+        # Set tagged users
+        if tagged_users_data:
+            project.tagged_users.set(tagged_users_data)
 
         return project
+
+    def update(self, instance, validated_data):
+        # Extract keywords and tagged users
+        keywords_data = self.initial_data.get("keywords", [])
+        tagged_users_data = validated_data.pop("tagged_users", [])
+
+        # Update basic fields
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        if 'image' in validated_data:
+            instance.image = validated_data['image']
+
+        instance.save()
+
+        # Update keywords
+        if keywords_data:
+            keyword_objs = []
+            for keyword in keywords_data:
+                keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+                keyword_objs.append(keyword_obj)
+            instance.keywords.set(keyword_objs)
+        else:
+            instance.keywords.clear()
+
+        # Update tagged users
+        if tagged_users_data:
+            instance.tagged_users.set(tagged_users_data)
+        else:
+            instance.tagged_users.clear()
+
+        return instance
 
 
 class LikeSerializer(serializers.ModelSerializer):

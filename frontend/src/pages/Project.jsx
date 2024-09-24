@@ -12,11 +12,33 @@ function Project() {
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState([]);
   const [image, setImage] = useState(null);
+  const [allUsers, setAllUsers] = useState([]);
+  const [taggedUsers, setTaggedUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState("");
 
   useEffect(() => {
     getCurrentUser();
     getProjects();
+    fetchUsers();
   }, []);
+
+  const fetchUsers = () => {
+    api
+      .get("/api/users/")
+      .then((res) => setAllUsers(res.data.results))
+      .catch((err) => alert("Failed to fetch users."));
+  };
+
+  const addTaggedUser = () => {
+    if (selectedUser && !taggedUsers.includes(selectedUser)) {
+      setTaggedUsers([...taggedUsers, Number(selectedUser)]);
+      setSelectedUser("");
+    }
+  };
+  
+  const removeTaggedUser = (index) => {
+    setTaggedUsers(taggedUsers.filter((_, i) => i !== index));
+  };
 
   // 현재 로그인한 사용자 정보 가져오기
   const getCurrentUser = () => {
@@ -28,7 +50,6 @@ function Project() {
 
   const getProjects = () => {
     api
-      // .get("/api/projects/")
       .get("/api/projects/every/")
       .then((res) => res.data)
       .then((data) => {
@@ -60,7 +81,15 @@ function Project() {
     keywords.forEach((keyword) => {
       formData.append("keywords[]", keyword); // 'keywords[]'로 배열 형태로 전송
     });
-  
+    
+    console.log("Tagged Users in createProject:", taggedUsers);
+
+    if (taggedUsers.length > 0) {
+      taggedUsers.forEach((userId) => {
+          formData.append("tagged_users", userId);
+      });
+  }
+
     if (image) {
       formData.append("image", image); // 이미지가 있을 경우 추가
     }
@@ -78,7 +107,8 @@ function Project() {
         setContent("");
         setTitle("");
         setKeywords([]);
-        setImage(null); // 이미지 상태 초기화
+        setTaggedUsers([]);
+        setImage(null);
       })
       .catch((error) => {
         console.log(error.response);
@@ -119,6 +149,7 @@ function Project() {
             onDelete={deleteProject}
             key={project.project_id}
             currentUser={currentUser}
+            refreshProjects={getProjects}
           />
         ))}
       </div>
@@ -176,6 +207,38 @@ function Project() {
           ))}
         </ul>
         <br />
+        <label htmlFor="taggedUsers">Tag Users:</label>
+        <br />
+        <select
+          id="taggedUsers"
+          name="taggedUsers"
+          value={selectedUser}
+          onChange={(e) => setSelectedUser(e.target.value)}
+        >
+          <option value="">Select a user</option>
+          {allUsers.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.user_name}
+            </option>
+          ))}
+        </select>
+        <button type="button" onClick={addTaggedUser}>
+          Add User
+        </button>
+
+        <ul>
+          {taggedUsers.map((userId, index) => {
+            const user = allUsers.find((u) => u.id === Number(userId)); // Ensure matching IDs are treated as numbers
+            return (
+              <li key={index}>
+                {user ? user.user_name : "Unknown User"}
+                <button type="button" onClick={() => removeTaggedUser(index)}>
+                  Remove
+                </button>
+              </li>
+            );
+          })}
+        </ul>
         <input type="submit" value="Submit" />
       </form>
     </div>
