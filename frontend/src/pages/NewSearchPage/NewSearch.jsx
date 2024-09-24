@@ -118,6 +118,12 @@ function NewSearch() {
     if (!nextPage || isSearchLoading) return; // 더 이상 불러올 페이지가 없거나 이미 로딩 중이면 중단
     setIsMoreUserLoading(true);
 
+    // nextPage가 http로 시작하면 https로 변환
+    let safeNextPage = nextPage;
+    if (nextPage.startsWith("http://")) {
+      safeNextPage = nextPage.replace("http://", "https://");
+    }
+
     try {
       const response = await api.post(nextPage, {
         q: searchTerm,
