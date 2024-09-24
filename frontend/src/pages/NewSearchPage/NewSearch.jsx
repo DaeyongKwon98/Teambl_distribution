@@ -67,7 +67,7 @@ function NewSearch() {
   const fetchKeywords = async () => {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
-      const keywordStrings = response.data.results.map((item) => item.keyword);
+      const keywordStrings = response.data.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
     } catch (error) {
@@ -119,7 +119,7 @@ function NewSearch() {
     setIsMoreUserLoading(true);
 
     // nextPage가 http로 시작하면 https로 변환
-    
+
     let safeNextPage = nextPage;
     if (nextPage.startsWith("http://")) {
       safeNextPage = nextPage.replace("http://", "https://");
