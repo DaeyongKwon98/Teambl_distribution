@@ -163,6 +163,7 @@
   background: none;
   padding: 0px;
   margin-bottom: 0; /* 리스트 사이 간격 제거 */
+  color: #121212;
 }
 
 .profileOther-row {
