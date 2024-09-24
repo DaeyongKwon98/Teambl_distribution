@@ -5,5 +5,5 @@
 serverEnv/
 appleEnv/
 
-# 서버 프로필 사진 무시
-backend/media/profile_images/
+# 서버 사진 무시
+backend/media/
