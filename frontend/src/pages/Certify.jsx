@@ -97,7 +97,7 @@ function Certify() {
     console.log(email);
 
     try {
-      await api.post("/api/send_code/", { email, code });
+      await api.post("/api/send-code-email/", { email, code });
       setCodeSent(true);
       alert(`인증 코드가 이메일로 전송되었습니다.`);
     } catch (error) {

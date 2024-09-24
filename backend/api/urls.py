@@ -51,9 +51,9 @@ urlpatterns += [
         name="project-like-toggle",
     ),
     path(
-        'projects/<int:project_id>/liked-status/', 
-        views.ProjectLikedStatusView.as_view(), 
-        name='project-liked-status'
+        "projects/<int:project_id>/liked-status/",
+        views.ProjectLikedStatusView.as_view(),
+        name="project-liked-status",
     ),
 ]
 
@@ -149,8 +149,13 @@ urlpatterns += [
 
 # Email
 urlpatterns += [
-    path("send_code/", views.SendCodeView.as_view(), name="send_code"),
-    path("send_email/", views.SendEmailView.as_view(), name="send_email"),
+    path("send-code-email/", views.SendCodeView.as_view(), name="send_code"),
+    path(
+        "send-inquiry-email/",
+        views.SendInquiryEmailView.as_view(),
+        name="send_inquiry_email",
+    ),
+    path("send-email/", views.SendEmailView.as_view(), name="send_email"),
 ]
 
 # Search History

@@ -50,7 +50,7 @@ function ResetPassword() {
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
     try {
-      await api.post("/api/send_code/", { email, code });
+      await api.post("/api/send-code-email/", { email, code });
       setIsCodeRequested(true); // 인증코드 요청 상태 변경
       setVerificationMessage(""); // 초기화
       alert(`인증 코드가 이메일로 전송되었습니다.`);
