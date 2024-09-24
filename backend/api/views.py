@@ -408,6 +408,7 @@ class ProjectLikeToggleView(generics.GenericAPIView):
 class KeywordListView(generics.ListAPIView):
     serializer_class = KeywordSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = None
     queryset = Keyword.objects.all()
 
 
