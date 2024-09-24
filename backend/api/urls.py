@@ -50,6 +50,11 @@ urlpatterns += [
         views.ProjectLikeToggleView.as_view(),
         name="project-like-toggle",
     ),
+    path(
+        'projects/<int:project_id>/liked-status/', 
+        views.ProjectLikedStatusView.as_view(), 
+        name='project-liked-status'
+    ),
 ]
 
 # Invitation
