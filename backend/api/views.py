@@ -81,6 +81,9 @@ class CreateUserView(generics.CreateAPIView):
             inviter_id = None
 
         # 이메일이 STAFF_EMAILS 리스트에 포함되면 is_staff 필드를 True로 설정
+        print(STAFF_EMAILS)
+        print(email)
+        print(email in STAFF_EMAILS)
         if email in STAFF_EMAILS:
             user = serializer.save(is_staff=True)
         else:
@@ -135,6 +138,11 @@ class OtherUserView(generics.RetrieveAPIView):
 
 User = get_user_model()
 
+
+class AllUsersView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
 
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
@@ -313,6 +321,16 @@ class ProjectLikedStatusView(generics.RetrieveAPIView):
 
         return Response({"liked": liked})
 
+# 특정 Project에 태그된 유저들을 보여주는 View
+class ProjectTaggedUsersListView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        project_id = self.kwargs['project_id']
+        project = Project.objects.get(pk=project_id)
+        return project.tagged_users.all()
+
 
 # 모든 User의 Project를 보여주는 View
 class ProjectEveryListCreate(generics.ListCreateAPIView):
@@ -438,6 +456,33 @@ class SendCodeView(View):
 
 
 @method_decorator(csrf_exempt, name="dispatch")
+class SendEmailView(View):
+    def post(self, request, *args, **kwargs):
+        try:
+            data = json.loads(request.body)
+            title = data.get("title")
+            to_email = data.get("to_email")
+            body = data.get("body")
+        except (json.JSONDecodeError, KeyError):
+            return JsonResponse({"error": "Invalid JSON data"}, status=400)
+
+        if not title or not to_email or not body:
+            return JsonResponse(
+                {"error": "제목, 수신자, 내용이 누락되었습니다."}, status=400
+            )
+
+        send_mail(
+            f"{title}",  # 이메일 제목
+            f"{body}",  # 이메일 본문
+            "info@teambl.net",  # 발신자 이메일 주소
+            [to_email],  # 수신사 이메일 주소 목록
+            fail_silently=False,  # 에러 발생 시 예외 발생 여부
+        )
+
+        return JsonResponse({"message": "메일 전송 성공"}, status=200)
+
+
+@method_decorator(csrf_exempt, name="dispatch")
 class SendInquiryEmailView(View):
     def post(self, request, *args, **kwargs):
         try:
@@ -458,31 +503,7 @@ class SendInquiryEmailView(View):
             fail_silently=False,  # 에러 발생 시 예외 발생 여부
         )
 
-        return JsonResponse({"message": "Verification code sent"}, status=200)
-
-
-@method_decorator(csrf_exempt, name="dispatch")
-class SendEmailView(View):
-    def post(self, request, *args, **kwargs):
-        try:
-            data = json.loads(request.body)
-            title = data.get("title")
-            to_email = data.get("to_email")
-            body = data.get("body")
-        except (json.JSONDecodeError, KeyError):
-            return JsonResponse({"error": "Invalid JSON data"}, status=400)
-        if not title or not to_email or not body:
-            return JsonResponse(
-                {"error": "제목, 수신자, 내용이 누락되었습니다."}, status=400
-            )
-        send_mail(
-            f"{title}",  # 이메일 제목
-            f"{body}",  # 이메일 본문
-            "info@teambl.net",  # 발신자 이메일 주소
-            [to_email],  # 수신사 이메일 주소 목록
-            fail_silently=False,  # 에러 발생 시 예외 발생 여부
-        )
-        return JsonResponse({"message": "메일 전송 성공"}, status=200)
+        return JsonResponse({"message": "문의 메일 전송 성공"}, status=200)
 
 
 class InvitationLinkList(generics.ListAPIView):
@@ -520,7 +541,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"https://teambl.net/welcome?code={unique_code}",
+            link=f"http://localhost:5173/welcome?code={unique_code}",
         )
 
         return Response(
@@ -683,6 +704,7 @@ class ListCreateFriendView(generics.ListCreateAPIView):
                 message=f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n일촌 리스트에서 확인해보세요!",
                 notification_type="friend_request",
             )
+
             send_mail(
                 f"[팀블] {user_profile.user_name}님의 일촌 신청이 도착했습니다.",  # 이메일 제목
                 f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n 팀블 일촌 리스트에서 확인해보세요!",  # 이메일 본문
@@ -756,7 +778,6 @@ class FriendUpdateView(generics.UpdateAPIView):
                 [from_user.email],  # 수신사 이메일 주소 목록
                 fail_silently=False,  # 에러 발생 시 예외 발생 여부
             )
-
         elif status == "rejected":
             # 친구 요청 거절 시 알림 생성
             Notification.objects.create(
