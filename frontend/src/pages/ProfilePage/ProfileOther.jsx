@@ -33,6 +33,7 @@ const ProfileOther = ({ userId }) => {
   const [isPathLoading, setIsPathLoading] = useState(true);
   const [currentUserInfo, setCurrentUserInfo] = useState({});
   const [isFriend, setIsFriend] = useState(false);
+  const [isFriendRequstLoading, setIsFriendRequstLoading] = useState(false);
   const navigate = useNavigate();
 
   const [relationshipDegree, setRelationshipDegree] = useState(null);
@@ -166,6 +167,7 @@ const ProfileOther = ({ userId }) => {
 
   // 1촌을 추가하는 함수 (userId를 사용)
   const addFriend = async (e) => {
+    setIsFriendRequstLoading(true);
     e.preventDefault();
     try {
       const userResponse = await api.get(`/api/profile/${currentUserId}/`);
@@ -186,6 +188,7 @@ const ProfileOther = ({ userId }) => {
         fetchProfile(userId); // 정보 갱신
         // getChons(); // 친구 목록 갱신
       }
+      setIsFriendRequstLoading(false);
     } catch (error) {
       console.error(
         "Error in addFriend:",
@@ -200,6 +203,8 @@ const ProfileOther = ({ userId }) => {
       } else {
         alert("1촌 신청 중 오류가 발생했습니다.");
       }
+      
+      setIsFriendRequstLoading(false);
     }
   };
 
@@ -250,6 +255,12 @@ const ProfileOther = ({ userId }) => {
           paddingBottom: "0px",
         }}
       >
+        {isFriendRequstLoading && (
+          <div className='profileOther-loader-container'>
+            <div className='profileOther-loader'>
+            </div>
+          </div>
+        )}
         <button
           className="profileOther-backbutton"
           onClick={() => window.history.back()}
