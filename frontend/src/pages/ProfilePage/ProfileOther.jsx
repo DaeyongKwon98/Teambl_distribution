@@ -41,6 +41,11 @@ const ProfileOther = ({ userId }) => {
     setShowFinalDelete(false);
   };
 
+  /** url 새 탭 열기 메소드 */
+  const openUrl = (url) => {
+    window.open(url, "_blank", "noopener, noreferrer");
+  };
+
   /** 현재 사용자의 정보를 가져오는 메소드 */
   const getCurrentUserInfo = async (currId) => {
     try {
@@ -465,7 +470,7 @@ const ProfileOther = ({ userId }) => {
             </div>
           ) : (
             profile.portfolio_links.map((portfolio_links, index) => (
-              <div className="profileOther-list-element" key={index}>
+              <div className="profileOther-list-element" key={index} onClick={() => openUrl(portfolio_links.portfolioLink)}>
                 {portfolio_links.portfolioLink}
               </div>
             ))
