@@ -18,7 +18,6 @@ function NewSearch() {
     majors: [],
   }); // 사용자가 선택한 검색 필터
   const [isSearched, setIsSearched] = useState(false); // 사용자가 검색 버튼을 눌렀는지 여부 (true이면 검색 결과창이 보임)
-  const [isMajorPopupOpen, setIsMajorPopupOpen] = useState(false); // major popup이 보이는지 여부
   const [isSearchLoading, setIsSearchLoading] = useState(false); // 검색 로딩중인지 여부
   const [isMoreUserLoading, setIsMoreUserLoading] = useState(false);
   const [nextPage, setNextPage] = useState(null); // 다음 유저 페이지의 api 요청 URL
@@ -118,6 +117,12 @@ function NewSearch() {
   const loadMoreUsers = async () => {
     if (!nextPage || isSearchLoading) return; // 더 이상 불러올 페이지가 없거나 이미 로딩 중이면 중단
     setIsMoreUserLoading(true);
+
+    // nextPage가 http로 시작하면 https로 변환
+    let safeNextPage = nextPage;
+    if (nextPage.startsWith("http://")) {
+      safeNextPage = nextPage.replace("http://", "https://");
+    }
 
     try {
       const response = await api.post(nextPage, {
@@ -228,6 +233,25 @@ function NewSearch() {
         ? prev.relationshipDegree.filter((item) => item !== degree)
         : [...prev.relationshipDegree, degree];
       return { ...prev, relationshipDegree: newRelationshipDegree };
+    });
+  };
+
+  // 전공 필터를 추가 및 제거하는 함수
+  const handleMajorChange = (newMajors) => {
+    setFilters((prev) => {
+      // majors 배열을 평탄화하여 중첩 배열을 방지
+      const flatMajors = prev.majors.flat(Infinity);
+
+      // 새로 선택한 전공이 배열인지 아닌지 확인하고 평탄화
+      let normalizedNewMajors = Array.isArray(newMajors)
+        ? newMajors.flat()
+        : [newMajors];
+
+      // 새로 선택한 전공 목록을 기준으로 필터링
+      const updatedMajors = [...new Set(normalizedNewMajors)];
+
+      // 업데이트된 필터를 반환
+      return { ...prev, majors: updatedMajors };
     });
   };
 

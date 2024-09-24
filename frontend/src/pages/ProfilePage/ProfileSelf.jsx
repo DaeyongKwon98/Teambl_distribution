@@ -264,18 +264,11 @@ function ProfileSelf() {
   };
 
   const handleAddPortfolio = () => {
-    let newPortfolioLink = newPortfolio
-
-    // 포트폴리오 링크가 http:// or https:// 로 시작하지 않는 경우 자동 추가하기.
-    if (!newPortfolioLink.startsWith("http://") && !newPortfolioLink.startsWith("https://")) {
-      newPortfolioLink = "https://" + newPortfolioLink;
-    }
-
     setProfile((prevProfile) => ({
       ...prevProfile,
       portfolio_links: [
         ...prevProfile.portfolio_links,
-        { portfolioLink: newPortfolioLink },
+        { portfolioLink: newPortfolio },
       ],
     }));
     setNewPortfolio("");

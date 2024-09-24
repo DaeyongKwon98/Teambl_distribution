@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 import api from "../api";
 import pendingIcon from "../assets/Friend/pending.svg";
 import acceptIcon from "../assets/Friend/accept.svg";
@@ -18,7 +18,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   const [relationshipDegree, setRelationshipDegree] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isAcceptPopupOpen, setIsAcceptPopupOpen] = useState(false);
-  
+
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
     try {
@@ -79,10 +79,14 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           <strong className="friend-member-name">
             {otherUserProfile.user_name}
           </strong>
-          <span className="friend-member-relation"> · {relationshipDegree ? `${relationshipDegree}촌` : "4촌 이상"}</span>
+          <span className="friend-member-relation">
+            {" "}
+            · {relationshipDegree ? `${relationshipDegree}촌` : "4촌 이상"}
+          </span>
         </p>
         <p className="friend-member-details">
-          {otherUserProfile.school} | {otherUserProfile.current_academic_degree} | {otherUserProfile.year % 100}학번
+          {otherUserProfile.school} | {otherUserProfile.current_academic_degree}{" "}
+          | {otherUserProfile.year % 100}학번
         </p>
         <p className="friend-member-details">
           {otherUserProfile.major1}
@@ -91,7 +95,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       </div>
     </>
   );
-  
+
   useEffect(() => {
     getRelationshipDegree(user.id);
   }, [user]);
@@ -129,8 +133,8 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       )}
 
       {activeTab === "addChons" && (
-        <div 
-          className="friend-team-member" 
+        <div
+          className="friend-team-member"
           key={user.id}
           onClick={() => {
             if (!isDeletePopupOpen) {
@@ -146,8 +150,8 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       )}
 
       {activeTab === "requestsToMe" && (
-        <div 
-          className="friend-team-member" 
+        <div
+          className="friend-team-member"
           key={user.id}
           onClick={() => {
             if (!isDeletePopupOpen) {
@@ -180,7 +184,9 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           {isAcceptPopupOpen && (
             <FriendAcceptPopup
               setIsPopupOpen={setIsAcceptPopupOpen}
-              handleConfirmAccept={() => updateFriendStatus(chon.id, "accepted")} // 수락 처리 함수 호출
+              handleConfirmAccept={() =>
+                updateFriendStatus(chon.id, "accepted")
+              } // 수락 처리 함수 호출
               friendName={otherUserProfile.user_name}
             />
           )}

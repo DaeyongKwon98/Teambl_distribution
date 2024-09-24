@@ -8,7 +8,10 @@ body {
   width: 100%;
   max-width: 300px;
   margin: 0 auto;
-  padding: 20px;
+}
+
+.friend-incontainer {
+  padding: 0px 10px;
 }
 
 .friend-tabs {
@@ -140,7 +143,7 @@ body {
 }
 
 .friend-instructions {
-  font-size: 12px;
+  font-size: 11px;
   color: #121212;
   background-color: #eef4ff;
   padding: 10px;

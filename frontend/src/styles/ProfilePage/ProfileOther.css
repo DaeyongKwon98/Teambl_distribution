@@ -12,9 +12,16 @@
 
 .profileOther-container {
   width: 100%;
-  max-width: 300px;
-  margin: 0 auto;
+  /* max-width: 300px; */
+  margin: 0;
   padding: 20px;
+  box-sizing: border-box;
+}
+
+.profileOther-middle-margin {
+  width: 100%;
+  height: 4px;
+  background-color: #f5f5f5;
 }
 
 .profileOther-backbutton {
@@ -84,16 +91,16 @@
   min-width: 40px;
 }
 
+.to-disabled-button {
+  background-color: #a8a8a8;
+  border: #a8a8a8;
+}
+
 .profileOther-profile-one_degree_count {
   display: flex;
   font-size: 13.714px; /* 1촌 정보 텍스트 크기 */
   color: #0923a9; /* 텍스트 색상 */
   font-weight: 500;
-}
-
-.to-disabled-button {
-  background-color: #a8a8a8;
-  border: #a8a8a8;
 }
 
 .profileOther-profile-row2,

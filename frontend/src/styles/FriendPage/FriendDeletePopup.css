@@ -108,6 +108,7 @@
   display: flex;
   justify-content: center;
   align-items: center; /* Center the modal vertically and horizontally */
+  z-index: 1000;
 }
 
 .fd-withdraw-modal-content {

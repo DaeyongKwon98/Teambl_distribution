@@ -11,6 +11,7 @@ function Project() {
   const [title, setTitle] = useState("");
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState([]);
+  const [image, setImage] = useState(null);
 
   useEffect(() => {
     getCurrentUser();
@@ -50,27 +51,37 @@ function Project() {
 
   const createProject = (e) => {
     e.preventDefault();
-
-    // 전송할 데이터 로그 확인
-    console.log({ content, title, keywords });
-
+  
+    const formData = new FormData();
+    formData.append("content", content);
+    formData.append("title", title);
+  
+    // 키워드를 배열로 전송할 때는 반복문을 통해 추가해야 함
+    keywords.forEach((keyword) => {
+      formData.append("keywords[]", keyword); // 'keywords[]'로 배열 형태로 전송
+    });
+  
+    if (image) {
+      formData.append("image", image); // 이미지가 있을 경우 추가
+    }
+  
     api
-      .post("/api/projects/", {
-        content,
-        title,
-        keywords,
+      .post("/api/projects/", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((res) => {
         if (res.status === 201) alert("Project created!");
         else alert("Failed to create project.");
         getProjects();
-        setContent(""); // 폼 초기화
-        setTitle(""); // 폼 초기화
-        setKeywords([]); // 폼 초기화
+        setContent("");
+        setTitle("");
+        setKeywords([]);
+        setImage(null); // 이미지 상태 초기화
       })
       .catch((error) => {
         console.log(error.response);
-        console.log(error.message);
         if (error.response) {
           alert(`Failed to create project: ${error.response.data}`);
         } else {
@@ -132,6 +143,16 @@ function Project() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
+        <label htmlFor="image">Image:</label>
+        <br />
+        <input
+          type="file"
+          id="image"
+          name="image"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])} // Update state with selected image
+        />
+        <br />
         <label htmlFor="keywords">Keywords (add up to 3):</label>
         <br />
         <input

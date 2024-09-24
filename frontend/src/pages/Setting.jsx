@@ -208,231 +208,232 @@ const Setting = () => {
     <div className="setting-container">
       <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
-
-      {/* <h2 className="setting-section-title">비밀번호 변경</h2> */}
-      <div
-        className="setting-password-toggle"
-        onClick={() => setShowChangePasswordSection(!showChangePasswordSection)}
-      >
-        <span className="setting-section-title">비밀번호 변경</span>
-        <img
-          src={showChangePasswordSection ? ArrowDownIcon : ArrowRightIcon}
-          alt="Toggle Password Change Section"
-          className={`setting-arrow-icon ${
-            showChangePasswordSection ? "rotate" : ""
-          }`}
-        />
-      </div>
-      {showChangePasswordSection && (
-        <div className="setting-password-change-section">
-          <div className="setting-input-group">
-            <label>현 비밀번호</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-            />
-          </div>
-          <div className="setting-input-group">
-            <label>새 비밀번호</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-            />
-          </div>
-          <div className="setting-input-group">
-            <label>새 비밀번호 확인</label>
-            <input
-              type="password"
-              value={confirmNewPassword}
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
-            />
-          </div>
-          {changePasswordError && (
-            <p className="setting-error">{changePasswordError}</p>
-          )}
-          <button
-            className="setting-change-password-button"
-            onClick={handleChangePassword}
-            disabled={!changeBtnActive}
-          >
-            비밀번호 변경
-          </button>
+      <div className="setting-incontianer">
+        {/* <h2 className="setting-section-title">비밀번호 변경</h2> */}
+        <div
+          className="setting-password-toggle"
+          onClick={() => setShowChangePasswordSection(!showChangePasswordSection)}
+        >
+          <span className="setting-section-title">비밀번호 변경</span>
+          <img
+            src={showChangePasswordSection ? ArrowDownIcon : ArrowRightIcon}
+            alt="Toggle Password Change Section"
+            className={`setting-arrow-icon ${
+              showChangePasswordSection ? "rotate" : ""
+            }`}
+          />
         </div>
-      )}
-
-      <div className="setting-password-toggle">
-        <span className="setting-section-title" onClick={handleLogout}>
-          로그아웃
-        </span>
-        <img
-          src={LogoutRightIcon}
-          alt="Logout Icon"
-          className="setting-logout-icon"
-          onClick={handleLogout}
-        />
-      </div>
-
-      <div
-        className="setting-password-toggle"
-        onClick={() => setShowInquirySection(!showInquirySection)}
-      >
-        <span className="setting-section-title">문의하기</span>
-        <img
-          src={showInquirySection ? ArrowDownIcon : ArrowRightIcon}
-          alt="Toggle Inquiry Section"
-          className={`setting-arrow-icon ${showInquirySection ? "rotate" : ""}`}
-        />
-      </div>
-      {showInquirySection && (
-        <div className="setting-inquiry-section">
-          <p>받는 사람: info@teambl.net</p>
-          <p>보내는 사람: {currentUser.email}</p>
-          <div className="setting-input-group">
-            <textarea
-              value={inquiryText}
-              onChange={(e) => setInquiryText(e.target.value)}
-              className="setting-inquiry-textarea"
-              placeholder="문의 내용을 입력하세요"
-            />
-          </div>
-          <button
-            className="setting-inquiry-button"
-            onClick={handleInquirySubmit}
-            disabled={!inquiryBtnActive}
-          >
-            문의하기
-          </button>
-        </div>
-      )}
-
-      <div
-        className="setting-password-toggle"
-        onClick={() => setShowWithdrawSection(!showWithdrawSection)}
-      >
-        <span className="setting-section-title">회원 탈퇴</span>
-        <img
-          src={showWithdrawSection ? ArrowDownIcon : ArrowRightIcon}
-          alt="Toggle Withdraw Section"
-          className={`setting-arrow-icon ${
-            showWithdrawSection ? "rotate" : ""
-          }`}
-        />
-      </div>
-
-      {showWithdrawSection && (
-        <div className="setting-withdraw-section">
-          <div className="setting-input-group">
-            <label>현 비밀번호</label>
-            <input
-              type="password"
-              value={withdrawPassword}
-              onChange={(e) => setWithdrawPassword(e.target.value)}
-            />
-          </div>
-          {withdrawError && <p className="setting-error">{withdrawError}</p>}
-          <button
-            className="setting-withdraw-button"
-            disabled={!withdrawBtnActive}
-            onClick={handleWithdraw}
-          >
-            회원 탈퇴
-          </button>
-        </div>
-      )}
-
-      {showWithdrawModal && (
-        <div className="setting-modal-overlay">
-          <div className="setting-withdraw-modal-content">
-            <div className="setting-modal-title">
-              <img
-                src={WithdrawIcon}
-                alt="탈퇴 아이콘"
-                className="setting-withdraw-icon"
+        {showChangePasswordSection && (
+          <div className="setting-password-change-section">
+            <div className="setting-input-group">
+              <label>현 비밀번호</label>
+              <input
+                type="password"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
               />
-              <p>정말 탈퇴하시겠어요?</p>
             </div>
-            <p className="setting-modal-description">
-              탈퇴 버튼 선택 시, 계정은
-              <br />
-              삭제되며 복구되지 않습니다.
-            </p>
-            <div className="setting-modal-buttons">
-              <button
-                className="setting-modal-button setting-cancel-button"
-                onClick={closeWithdrawModal}
-              >
-                취소
-              </button>
-              <button
-                className="setting-modal-button setting-confirm-button"
-                onClick={confirmWithdraw}
-              >
-                탈퇴
-              </button>
+            <div className="setting-input-group">
+              <label>새 비밀번호</label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
             </div>
-          </div>
-        </div>
-      )}
-
-      {showFinalModal && (
-        <div className="setting-modal-overlay">
-          <div className="setting-withdraw-modal-content">
-            <p className="setting-final-modal-title">
-              탈퇴 처리가 완료되었습니다.
-            </p>
-            <p className="setting-final-modal-description">
-              이용해 주셔서 감사합니다.
-              <br />
-              앞으로 더 좋은 모습으로 만나뵐 수<br />
-              있도록 노력하겠습니다.
-            </p>
+            <div className="setting-input-group">
+              <label>새 비밀번호 확인</label>
+              <input
+                type="password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+              />
+            </div>
+            {changePasswordError && (
+              <p className="setting-error">{changePasswordError}</p>
+            )}
             <button
-              className="setting-final-confirm-button"
-              onClick={handleFinalConfirmation}
+              className="setting-change-password-button"
+              onClick={handleChangePassword}
+              disabled={!changeBtnActive}
             >
-              확인
+              비밀번호 변경
             </button>
           </div>
-        </div>
-      )}
+        )}
 
-      <div
-        className="setting-password-toggle"
-        onClick={() => setShowPolicySection(!showPolicySection)}
-      >
-        <span className="setting-section-title">약관 및 정책</span>
-        <img
-          src={showPolicySection ? ArrowDownIcon : ArrowRightIcon}
-          alt="Toggle Policy Section"
-          className={`setting-arrow-icon ${showPolicySection ? "rotate" : ""}`}
-        />
+        <div className="setting-password-toggle">
+          <span className="setting-section-title" onClick={handleLogout}>
+            로그아웃
+          </span>
+          <img
+            src={LogoutRightIcon}
+            alt="Logout Icon"
+            className="setting-logout-icon"
+            onClick={handleLogout}
+          />
+        </div>
+
+        <div
+          className="setting-password-toggle"
+          onClick={() => setShowInquirySection(!showInquirySection)}
+        >
+          <span className="setting-section-title">문의하기</span>
+          <img
+            src={showInquirySection ? ArrowDownIcon : ArrowRightIcon}
+            alt="Toggle Inquiry Section"
+            className={`setting-arrow-icon ${showInquirySection ? "rotate" : ""}`}
+          />
+        </div>
+        {showInquirySection && (
+          <div className="setting-inquiry-section">
+            <p>받는 사람: info@teambl.net</p>
+            <p>보내는 사람: {currentUser.email}</p>
+            <div className="setting-input-group">
+              <textarea
+                value={inquiryText}
+                onChange={(e) => setInquiryText(e.target.value)}
+                className="setting-inquiry-textarea"
+                placeholder="문의 내용을 입력하세요"
+              />
+            </div>
+            <button
+              className="setting-inquiry-button"
+              onClick={handleInquirySubmit}
+              disabled={!inquiryBtnActive}
+            >
+              문의하기
+            </button>
+          </div>
+        )}
+
+        <div
+          className="setting-password-toggle"
+          onClick={() => setShowWithdrawSection(!showWithdrawSection)}
+        >
+          <span className="setting-section-title">회원 탈퇴</span>
+          <img
+            src={showWithdrawSection ? ArrowDownIcon : ArrowRightIcon}
+            alt="Toggle Withdraw Section"
+            className={`setting-arrow-icon ${
+              showWithdrawSection ? "rotate" : ""
+            }`}
+          />
+        </div>
+
+        {showWithdrawSection && (
+          <div className="setting-withdraw-section">
+            <div className="setting-input-group">
+              <label>현 비밀번호</label>
+              <input
+                type="password"
+                value={withdrawPassword}
+                onChange={(e) => setWithdrawPassword(e.target.value)}
+              />
+            </div>
+            {withdrawError && <p className="setting-error">{withdrawError}</p>}
+            <button
+              className="setting-withdraw-button"
+              disabled={!withdrawBtnActive}
+              onClick={handleWithdraw}
+            >
+              회원 탈퇴
+            </button>
+          </div>
+        )}
+
+        {showWithdrawModal && (
+          <div className="setting-modal-overlay">
+            <div className="setting-withdraw-modal-content">
+              <div className="setting-modal-title">
+                <img
+                  src={WithdrawIcon}
+                  alt="탈퇴 아이콘"
+                  className="setting-withdraw-icon"
+                />
+                <p>정말 탈퇴하시겠어요?</p>
+              </div>
+              <p className="setting-modal-description">
+                탈퇴 버튼 선택 시, 계정은
+                <br />
+                삭제되며 복구되지 않습니다.
+              </p>
+              <div className="setting-modal-buttons">
+                <button
+                  className="setting-modal-button setting-cancel-button"
+                  onClick={closeWithdrawModal}
+                >
+                  취소
+                </button>
+                <button
+                  className="setting-modal-button setting-confirm-button"
+                  onClick={confirmWithdraw}
+                >
+                  탈퇴
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {showFinalModal && (
+          <div className="setting-modal-overlay">
+            <div className="setting-withdraw-modal-content">
+              <p className="setting-final-modal-title">
+                탈퇴 처리가 완료되었습니다.
+              </p>
+              <p className="setting-final-modal-description">
+                이용해 주셔서 감사합니다.
+                <br />
+                앞으로 더 좋은 모습으로 만나뵐 수<br />
+                있도록 노력하겠습니다.
+              </p>
+              <button
+                className="setting-final-confirm-button"
+                onClick={handleFinalConfirmation}
+              >
+                확인
+              </button>
+            </div>
+          </div>
+        )}
+
+        <div
+          className="setting-password-toggle"
+          onClick={() => setShowPolicySection(!showPolicySection)}
+        >
+          <span className="setting-section-title">약관 및 정책</span>
+          <img
+            src={showPolicySection ? ArrowDownIcon : ArrowRightIcon}
+            alt="Toggle Policy Section"
+            className={`setting-arrow-icon ${showPolicySection ? "rotate" : ""}`}
+          />
+        </div>
+        {showPolicySection && (
+          <div className="setting-policy-section">
+            <p>
+              <a
+                href="https://www.notion.so/Personal-Information-Terms-da10ebf1ada6470780d6ba9ab260916b"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                팀블 개인정보 방침
+              </a>
+            </p>
+            <p>
+              <a
+                href="https://www.notion.so/Service-Terms-and-Condition-5379c333ce1543c895dc0cebe39f4844"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                팀블 서비스 약관
+              </a>
+            </p>
+          </div>
+        )}
+
+        {/* <h2 className="setting-section-title">회원 탈퇴</h2> */}
       </div>
-      {showPolicySection && (
-        <div className="setting-policy-section">
-          <p>
-            <a
-              href="https://www.notion.so/Personal-Information-Terms-da10ebf1ada6470780d6ba9ab260916b"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              팀블 개인정보 방침
-            </a>
-          </p>
-          <p>
-            <a
-              href="https://www.notion.so/Service-Terms-and-Condition-5379c333ce1543c895dc0cebe39f4844"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              팀블 서비스 약관
-            </a>
-          </p>
-        </div>
-      )}
-
-      {/* <h2 className="setting-section-title">회원 탈퇴</h2> */}
     </div>
   );
 };

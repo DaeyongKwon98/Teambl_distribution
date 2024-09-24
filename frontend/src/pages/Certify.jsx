@@ -88,12 +88,14 @@ function Certify() {
     }
 
     if (!isKaistEmail) {
-      alert("Kaist 유저만 가입이 가능합니다.");
-      return;
+      alert("Kaist 유저만 가입이 가능합니다."); // 중복일 경우 경고 메시지
+      return; // 중복일 경우 코드 전송 중단
     }
 
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     setGeneratedCode(code);
+    console.log(email);
+
     try {
       await api.post("/api/send_code/", { email, code });
       setCodeSent(true);

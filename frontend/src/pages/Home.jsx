@@ -213,106 +213,107 @@ function Home() {
     <div className="home-container">
       <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
+      <div className="home-incontainer">
+        <section className="home-friend-recommendation">
+          <div className="home-section-header">
+            <h2>이번주 새로운 2촌</h2>
+            <span
+              className="home-view-all"
+              onClick={() =>
+                openBottomSheet({
+                  friends: SecondDegreeProfiles,
+                  bottomSheetTitle: "이번주 새로운 2촌",
+                })
+              }
+            >
+              모두 보기
+            </span>
+          </div>
+          <div className="home-sub-header">
+            <span className="home-sub-header-text">2촌이 </span>
+            <span className="home-sub-header-num">{secondDegreeDiff}명 </span>
+            <span className="home-sub-header-text">증가했어요!</span>
+          </div>
+          <div className="home-friends-list">
+            {SecondDegreeProfiles.map((friend) => (
+              <FriendCard key={friend.id} friend={friend} />
+            ))}
+          </div>
+        </section>
 
-      <section className="home-friend-recommendation">
-        <div className="home-section-header">
-          <h2>이번주 새로운 2촌</h2>
-          <span
-            className="home-view-all"
-            onClick={() =>
-              openBottomSheet({
-                friends: SecondDegreeProfiles,
-                bottomSheetTitle: "이번주 새로운 2촌",
-            })
-          }
-          >
-            모두 보기
-          </span>
-        </div>
-        <div className="home-sub-header">
-          <span className="home-sub-header-text">2촌이 </span>
-          <span className="home-sub-header-num">{secondDegreeDiff}명 </span>
-          <span className="home-sub-header-text">증가했어요!</span>
-        </div>
-        <div className="home-friends-list">
-          {SecondDegreeProfiles.map((friend) => (
-            <FriendCard key={friend.id} friend={friend} />
-          ))}
-        </div>
-      </section>
+        <section className="home-keyword-recommendation">
+          <div className="home-section-header">
+            <h2>내 키워드와 연관된</h2>
+            <span
+              className="home-view-all"
+              onClick={() =>
+                openBottomSheet({
+                  friends: KeywordProfiles,
+                  bottomSheetTitle: "내 키워드와 연관된 가입자",
+                })
+              }
+            >
+              모두 보기
+            </span>
+          </div>
+          <div className="home-sub-header">
+            <span className="home-sub-header-text">가입자가 </span>
+            <span className="home-sub-header-num">{keywordDiff}명 </span>
+            <span className="home-sub-header-text">증가했어요!</span>
+          </div>
+          <div className="home-friends-list">
+            {KeywordProfiles.map((friend) => (
+              <FriendCard key={friend.id} friend={friend} isKeywordFriend />
+            ))}
+          </div>
+        </section>
 
-      <section className="home-keyword-recommendation">
-        <div className="home-section-header">
-          <h2>내 키워드와 연관된</h2>
-          <span
-            className="home-view-all"
-            onClick={() =>
-              openBottomSheet({
-                friends: KeywordProfiles,
-                bottomSheetTitle: "내 키워드와 연관된 가입자",
-              })
-            }
-          >
-            모두 보기
-          </span>
-        </div>
-        <div className="home-sub-header">
-          <span className="home-sub-header-text">가입자가 </span>
-          <span className="home-sub-header-num">{keywordDiff}명 </span>
-          <span className="home-sub-header-text">증가했어요!</span>
-        </div>
-        <div className="home-friends-list">
-          {KeywordProfiles.map((friend) => (
-            <FriendCard key={friend.id} friend={friend} isKeywordFriend />
-          ))}
-        </div>
-      </section>
-
-      {isBottomSheetOpen && (
-        <div className="home-bottom-sheet-overlay" onClick={closeBottomSheet}>
-          <div
-            className="home-bottom-sheet"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <img
-              src={CloseIcon}
-              alt="닫기"
-              className="home-close-icon"
-              onClick={closeBottomSheet}
-            />
-            <h3>{bottomSheetTitle}</h3>
-            <div className="home-bottom-sheet-content">
-              {bottomSheetFriends.map((friend) => (
-                <FriendCard
-                  key={friend.id}
-                  friend={friend}
-                  isKeywordFriend={!!friend.sametag}
-                />
-              ))}
+        {isBottomSheetOpen && (
+          <div className="home-bottom-sheet-overlay" onClick={closeBottomSheet}>
+            <div
+              className="home-bottom-sheet"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <img
+                src={CloseIcon}
+                alt="닫기"
+                className="home-close-icon"
+                onClick={closeBottomSheet}
+              />
+              <h3>{bottomSheetTitle}</h3>
+              <div className="home-bottom-sheet-content">
+                {bottomSheetFriends.map((friend) => (
+                  <FriendCard
+                    key={friend.id}
+                    friend={friend}
+                    isKeywordFriend={!!friend.sametag}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* <h1>Home Page</h1>
-      <button onClick={goToProjects} className="button1">
-        프로젝트
-      </button>
-      <button onClick={goToFriends} className="button2">
-        일촌
-      </button>
-      <button onClick={goToSearch} className="button3">
-        탐색
-      </button>
-      <button onClick={goToInvite} className="button4">
-        초대
-      </button>
-      <button onClick={goToProfile} className="button5">
-        내 프로필
-      </button>
-      <button onClick={goToNotification} className="button6">
-        알림
-      </button> */}
+        {/* <h1>Home Page</h1>
+        <button onClick={goToProjects} className="button1">
+          프로젝트
+        </button>
+        <button onClick={goToFriends} className="button2">
+          일촌
+        </button>
+        <button onClick={goToSearch} className="button3">
+          탐색
+        </button>
+        <button onClick={goToInvite} className="button4">
+          초대
+        </button>
+        <button onClick={goToProfile} className="button5">
+          내 프로필
+        </button>
+        <button onClick={goToNotification} className="button6">
+          알림
+        </button> */}
+      </div>
     </div>
   );
 }
