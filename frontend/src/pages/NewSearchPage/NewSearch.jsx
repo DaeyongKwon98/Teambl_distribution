@@ -119,13 +119,14 @@ function NewSearch() {
     setIsMoreUserLoading(true);
 
     // nextPage가 http로 시작하면 https로 변환
+    
     let safeNextPage = nextPage;
     if (nextPage.startsWith("http://")) {
       safeNextPage = nextPage.replace("http://", "https://");
     }
 
     try {
-      const response = await api.post(nextPage, {
+      const response = await api.post(safeNextPage, {
         q: searchTerm,
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
