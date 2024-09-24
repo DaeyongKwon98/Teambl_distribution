@@ -34,7 +34,7 @@ export default function FriendOther() {
       /** TODO : MUST be edited after API endpoint is made */
       const response = await api.get(`/api/friends/${id}/`, {});
 
-      const friend_list = response.data.results
+      const friend_list = response.data
         .map((friend) => {
           // "accept"이 아닌 상태는 제외
           if (friend.status !== "accepted") {
@@ -50,17 +50,17 @@ export default function FriendOther() {
           return null;
         })
         .filter((user) => user !== null); // null 값을 필터링하여 제거
-      
+
       /** 본인이 포함된 경우 맨 앞으로 순서 변경 */
       const withoutMeList = friend_list.filter((friendData) => {
-        if (friendData['id'] === currentUserId) {
+        if (friendData["id"] === currentUserId) {
           return false;
         } else {
           return true;
         }
       });
       const withMeList = friend_list.filter((friendData) => {
-        if (friendData['id'] === currentUserId) {
+        if (friendData["id"] === currentUserId) {
           return true;
         } else {
           return false;

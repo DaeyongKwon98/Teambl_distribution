@@ -290,7 +290,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
         if serializer.is_valid():
             project = serializer.save(user=self.request.user)
-            
+
             # 키워드 업데이트
             keyword_objs = []
             for keyword in keywords_data:
@@ -301,19 +301,21 @@ class ProjectListCreate(generics.ListCreateAPIView):
         else:
             print(serializer.errors)
 
+
 # User가 Project에 Like를 눌렀는지 확인하는 View
 class ProjectLikedStatusView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        project_id = self.kwargs.get('project_id')
+        project_id = self.kwargs.get("project_id")
         project = get_object_or_404(Project, pk=project_id)
         user = request.user
 
         # Check if the user has liked this project
         liked = Like.objects.filter(user=user, project=project).exists()
 
-        return Response({'liked': liked})
+        return Response({"liked": liked})
+
 
 # 모든 User의 Project를 보여주는 View
 class ProjectEveryListCreate(generics.ListCreateAPIView):
@@ -328,7 +330,7 @@ class ProjectEveryListCreate(generics.ListCreateAPIView):
 
         if serializer.is_valid():
             project = serializer.save(user=self.request.user)
-            
+
             # 키워드 업데이트
             keyword_objs = []
             for keyword in keywords_data:
@@ -347,9 +349,11 @@ class ProjectUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_update(self, serializer):
-        keywords_data = self.request.data.getlist("keywords[]")  # 'keywords[]'를 배열로 처리
+        keywords_data = self.request.data.getlist(
+            "keywords[]"
+        )  # 'keywords[]'를 배열로 처리
         image = self.request.FILES.get("image")
-        
+
         # Project 인스턴스를 먼저 업데이트
         project = serializer.save()
 
@@ -408,6 +412,7 @@ class ProjectLikeToggleView(generics.GenericAPIView):
 class KeywordListView(generics.ListAPIView):
     serializer_class = KeywordSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = None
     queryset = Keyword.objects.all()
 
 
@@ -618,6 +623,7 @@ def update_profile_one_degree_count(user):
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     def get_queryset(self):
         user = self.request.user
@@ -670,6 +676,7 @@ class ListCreateFriendView(generics.ListCreateAPIView):
 class ListFriendView(generics.ListAPIView):
     serializer_class = FriendCreateSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
 
     def get_queryset(self):
         user_id = self.kwargs.get("user_id")

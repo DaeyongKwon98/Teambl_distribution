@@ -6,7 +6,7 @@ import friendIcon from "../../assets/ProfileOther/friend.svg";
 import "../../styles/ProfilePage/ProfileOther.css";
 import api from "../../api";
 import FriendRequestPopup from "../FriendPage/FriendRequestPopup";
-import RelationView from '../../components/RelationView';
+import RelationView from "../../components/RelationView";
 
 const ProfileOther = ({ userId }) => {
   const [profile, setProfile] = useState({
@@ -65,14 +65,14 @@ const ProfileOther = ({ userId }) => {
       if (pathList[0].length === 3) {
         /* 2 chon */
         let newList = [];
-        for (let i=0 ; i<pathList.length ; i++) {
+        for (let i = 0; i < pathList.length; i++) {
           newList.push(pathList[i][1]);
         }
         return newList;
       } else if (pathList[0].length === 4) {
         /* 3 chon */
         let newList = [];
-        for (let i=0 ; i<pathList.length ; i++) {
+        for (let i = 0; i < pathList.length; i++) {
           let tempList = [...pathList[i]];
           tempList.splice(0, 1);
           tempList.splice(2, 1);
@@ -82,7 +82,7 @@ const ProfileOther = ({ userId }) => {
       }
     }
     return [];
-  }
+  };
 
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
@@ -137,7 +137,7 @@ const ProfileOther = ({ userId }) => {
       .get("/api/friends/")
       .then((res) => res.data)
       .then(async (data) => {
-        let friendList = data["results"];
+        let friendList = data;
         let isPending = false;
         for (let i = 0; i < friendList.length; i++) {
           if (friendList[i]["to_user"]["id"] == userId) {
@@ -145,11 +145,13 @@ const ProfileOther = ({ userId }) => {
             isPending = friendList[i]["status"] === "pending";
           }
           /* 일촌 여부를 확인 */
-          if ((friendList[i]["to_user"]["id"] == userId)
-            || (friendList[i]["from_user"]["id"] == userId)) {
-              if (friendList[i]["status"] === "accepted") {
-                await setIsFriend(true);
-              }
+          if (
+            friendList[i]["to_user"]["id"] == userId ||
+            friendList[i]["from_user"]["id"] == userId
+          ) {
+            if (friendList[i]["status"] === "accepted") {
+              await setIsFriend(true);
+            }
           }
         }
         await setIsFriendRequestPending(isPending);
@@ -245,7 +247,7 @@ const ProfileOther = ({ userId }) => {
       <div
         className="profileOther-container"
         style={{
-            paddingBottom: '0px'
+          paddingBottom: "0px",
         }}
       >
         <button
@@ -323,67 +325,57 @@ const ProfileOther = ({ userId }) => {
           </div>
         </div>
       </div>
-      {
-        (!isFriend) &&
+      {!isFriend && (
         <div
           className="profileOther-container"
           style={{
-            paddingTop: '0px'
-        }}
+            paddingTop: "0px",
+          }}
         >
           <div className="profileOther-title-path">나와의 관계</div>
           {/** no relationship : over 3 chon */}
-          {
-            (paths.length === 0) &&
+          {paths.length === 0 && (
             <RelationView
               fromName={currentUserInfo?.profile?.user_name}
-              toName={profile['user_name']}
+              toName={profile["user_name"]}
               relationList={[]}
               chon={99}
               isLoading={isPathLoading}
             />
-          }
+          )}
           {/** 2 chon */}
-          {
-            (paths.length > 0) &&
-            (paths[0].length === 3) &&
+          {paths.length > 0 && paths[0].length === 3 && (
             <RelationView
               fromName={currentUserInfo?.profile?.user_name}
-              toName={profile['user_name']}
+              toName={profile["user_name"]}
               relationList={formatPath(paths)}
               chon={2}
               isLoading={isPathLoading}
             />
-          }
+          )}
           {/** 3 chon */}
-          {
-            (paths.length > 0) &&
-            (paths[0].length === 4) &&
+          {paths.length > 0 && paths[0].length === 4 && (
             <RelationView
               fromName={currentUserInfo?.profile?.user_name}
-              toName={profile['user_name']}
+              toName={profile["user_name"]}
               relationList={formatPath(paths)}
               chon={3}
               isLoading={isPathLoading}
             />
-          }
+          )}
         </div>
-      }
-      {
-        !isFriend &&
-        <div className="profileOther-middle-margin">
-          {/* no content */}
-        </div>
-      }
+      )}
+      {!isFriend && (
+        <div className="profileOther-middle-margin">{/* no content */}</div>
+      )}
       <div
         className="profileOther-container"
         style={
-          isFriend ?
-          {
-            paddingTop: '0px'
-          }
-          :
-          {} 
+          isFriend
+            ? {
+                paddingTop: "0px",
+              }
+            : {}
         }
       >
         <div className="profileOther-keyword-title">키워드</div>
@@ -470,7 +462,11 @@ const ProfileOther = ({ userId }) => {
             </div>
           ) : (
             profile.portfolio_links.map((portfolio_links, index) => (
-              <div className="profileOther-list-element" key={index} onClick={() => openUrl(portfolio_links.portfolioLink)}>
+              <div
+                className="profileOther-list-element"
+                key={index}
+                onClick={() => openUrl(portfolio_links.portfolioLink)}
+              >
                 {portfolio_links.portfolioLink}
               </div>
             ))
