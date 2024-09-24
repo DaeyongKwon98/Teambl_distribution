@@ -66,3 +66,176 @@ form input[type="submit"] {
 form input[type="submit"]:hover {
   background-color: #0056b3;
 }
+
+/* 대용 추가 */
+/* Container styling */
+.project-container {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  padding: 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Title styling */
+.project-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Image styling */
+.project-image {
+  width: 100%;
+  max-width: 400px; /* Adjust to fit the layout */
+  height: auto;
+  margin: 10px 0;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+/* Content styling */
+.project-content {
+  font-size: 16px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+/* Keywords styling */
+.project-keywords {
+  font-size: 14px;
+  color: #007bff;
+  margin-bottom: 10px;
+}
+
+.keyword-item {
+  display: inline-block;
+  background-color: #e7f3ff;
+  padding: 4px 8px;
+  margin: 2px;
+  border-radius: 4px;
+  color: #007bff;
+}
+
+/* User and date styling */
+.project-user,
+.project-date {
+  font-size: 14px;
+  color: #777;
+}
+
+/* Likes section */
+.project-likes {
+  font-size: 14px;
+  color: #333;
+  margin-top: 10px;
+}
+
+.like-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.like-button:hover {
+  background-color: #0056b3;
+}
+
+/* Edit and delete buttons */
+.delete-button,
+button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.delete-button:hover,
+button:hover {
+  background-color: #cc0000;
+}
+
+.edit-button {
+  background-color: #ffa500;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-left: 5px;
+}
+
+.edit-button:hover {
+  background-color: #cc8400;
+}
+
+/* Comment section */
+.comments-section {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 8px;
+}
+
+.comments-section h4 {
+  color: #333;
+}
+
+.comment {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 4px;
+  margin: 5px 0;
+}
+
+.comment-textarea {
+  width: 100%;
+  padding: 8px;
+  margin: 5px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.comment-input {
+  margin-top: 10px;
+}
+
+.comment-input textarea {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
+
+.comment-input button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.comment-input button:hover {
+  background-color: #0056b3;
+}
+
+/* Buttons for editing and deleting comments */
+button {
+  margin: 5px 2px;
+}
+
+button:hover {
+  opacity: 0.8;
+}
