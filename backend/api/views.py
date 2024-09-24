@@ -286,13 +286,34 @@ class ProjectListCreate(generics.ListCreateAPIView):
         )  # 현재 로그인된 사용자의 프로젝트만 반환
 
     def perform_create(self, serializer):
+        keywords_data = self.request.data.getlist("keywords[]")  # 배열로 키워드 처리
+
         if serializer.is_valid():
-            serializer.save(
-                user=self.request.user
-            )  # serializers.py에서 user가 read_only라서 여기서 해줘야함
+            project = serializer.save(user=self.request.user)
+            
+            # 키워드 업데이트
+            keyword_objs = []
+            for keyword in keywords_data:
+                keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+                keyword_objs.append(keyword_obj)
+
+            project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
         else:
             print(serializer.errors)
 
+# User가 Project에 Like를 눌렀는지 확인하는 View
+class ProjectLikedStatusView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        project_id = self.kwargs.get('project_id')
+        project = get_object_or_404(Project, pk=project_id)
+        user = request.user
+
+        # Check if the user has liked this project
+        liked = Like.objects.filter(user=user, project=project).exists()
+
+        return Response({'liked': liked})
 
 # 모든 User의 Project를 보여주는 View
 class ProjectEveryListCreate(generics.ListCreateAPIView):
@@ -303,8 +324,18 @@ class ProjectEveryListCreate(generics.ListCreateAPIView):
         return Project.objects.all()  # 모든 유저의 프로젝트 반환
 
     def perform_create(self, serializer):
+        keywords_data = self.request.data.getlist("keywords[]")  # 배열로 키워드 처리
+
         if serializer.is_valid():
-            serializer.save(user=self.request.user)
+            project = serializer.save(user=self.request.user)
+            
+            # 키워드 업데이트
+            keyword_objs = []
+            for keyword in keywords_data:
+                keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+                keyword_objs.append(keyword_obj)
+
+            project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
         else:
             print(serializer.errors)
 
@@ -316,8 +347,9 @@ class ProjectUpdateView(generics.UpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_update(self, serializer):
-        keywords_data = self.request.data.get("keywords", [])
-
+        keywords_data = self.request.data.getlist("keywords[]")  # 'keywords[]'를 배열로 처리
+        image = self.request.FILES.get("image")
+        
         # Project 인스턴스를 먼저 업데이트
         project = serializer.save()
 
@@ -326,6 +358,9 @@ class ProjectUpdateView(generics.UpdateAPIView):
         for keyword in keywords_data:
             keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
             keyword_objs.append(keyword_obj)
+
+        if image:
+            project.image = image
 
         project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
         project.save()
