@@ -18,7 +18,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   const [relationshipDegree, setRelationshipDegree] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isAcceptPopupOpen, setIsAcceptPopupOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
