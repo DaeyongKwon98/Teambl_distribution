@@ -67,6 +67,7 @@ function NewSearch() {
   const fetchKeywords = async () => {
     try {
       const response = await api.get("/api/keywords/"); // 키워드 리스트를 가져오는 API 엔드포인트
+      console.log(response.data);
       const keywordStrings = response.data.map((item) => item.keyword);
       setKeywords(keywordStrings); // 키워드 데이터를 keywords 변수에 저장
       console.log(keywordStrings);
@@ -118,15 +119,8 @@ function NewSearch() {
     if (!nextPage || isSearchLoading) return; // 더 이상 불러올 페이지가 없거나 이미 로딩 중이면 중단
     setIsMoreUserLoading(true);
 
-    // nextPage가 http로 시작하면 https로 변환
-
-    let safeNextPage = nextPage;
-    if (nextPage.startsWith("http://")) {
-      safeNextPage = nextPage.replace("http://", "https://");
-    }
-
     try {
-      const response = await api.post(safeNextPage, {
+      const response = await api.post(nextPage, {
         q: searchTerm,
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),

@@ -18,6 +18,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   const [relationshipDegree, setRelationshipDegree] = useState(null);
   const [isDeletePopupOpen, setIsDeletePopupOpen] = useState(false);
   const [isAcceptPopupOpen, setIsAcceptPopupOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // 현재 유저와 타겟 유저의 촌수를 가져오는 메소드
   const getRelationshipDegree = async (targetUserId) => {
@@ -34,6 +35,7 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
 
   // 1촌 리스트를 업데이트 하는 함수 (1촌 요청 수락, 1촌 요청 거절)
   const updateFriendStatus = (id, status) => {
+    setIsLoading(true);
     api
       .patch(`/api/friends/update/${id}/`, { status })
       .then((response) => {
@@ -45,14 +47,17 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
           alert("친구 업데이트 완료");
         }
         getChons();
+        setIsLoading(false);
       })
       .catch((error) => {
         console.error("There was an error updating the friend status!", error);
+        setIsLoading(false);
       });
   };
 
   // 1촌을 삭제하는 함수
   const handleDeleteFriend = async () => {
+    setIsLoading(true);
     try {
       const response = await api.delete(`/api/friends/delete/${chon.id}/`);
       if (response.status === 204) {
@@ -61,8 +66,10 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
       } else {
         alert("친구 삭제 실패");
       }
+      setIsLoading(false);
     } catch (error) {
       console.error("Error deleting friend:", error);
+      setIsLoading(false);
     }
   };
 
@@ -99,6 +106,16 @@ const FriendItem = ({ activeTab, chon, currentUser, getChons }) => {
   useEffect(() => {
     getRelationshipDegree(user.id);
   }, [user]);
+
+
+  if (isLoading) {
+    return (
+      <div className='friend-loader-container'>
+        <div className='friend-loader'>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>

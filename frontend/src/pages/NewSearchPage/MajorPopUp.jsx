@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import "../../styles/NewSearch.css";
 import majorEdit from "../../assets/Profile/majorEdit.svg";
+import topBarIcon from "../../assets/popUpTopBar.svg";
 
 // 필터에서 선택 가능한 전공 목록
 const majors = [
@@ -52,16 +53,42 @@ const majors = [
 ];
 
 const MajorPopUp = ({
+  isMajorPopupOpen,
+  setIsMajorPopupOpen,
   userSelectedMajors, // 유저가 검색 필터로 선택한 전공들
   handleMajorChange,
-  setIsMajorPopupOpen,
   doSearchUsers,
   buttonText,
 }) => {
+
   const [selectedMajors, setSelectedMajors] = useState(
     userSelectedMajors || []
   );
   const [majorSearchTerm, setMajorSearchTerm] = useState(""); // 전공 검색어 상태 추가
+  const [isChanged, setIsChanged] = useState(false);
+
+  /** initialize */
+  useEffect(() => {
+    setSelectedMajors(userSelectedMajors || []);
+    setMajorSearchTerm("");
+    setIsChanged(false);
+  }, [isMajorPopupOpen]);
+
+  useEffect(() => {
+    setIsChanged(!isArraySame(userSelectedMajors, selectedMajors));
+  }, [userSelectedMajors, selectedMajors]);
+  
+  /** array diff checker */
+  const isArraySame = (arr1, arr2) => {
+    console.log(arr1);
+    console.log(arr2);
+    if (arr1.length !== arr2.length) return false;
+
+    const sortedArr1 = [...arr1].sort();
+    const sortedArr2 = [...arr2].sort();
+  
+    return JSON.stringify(sortedArr1) === JSON.stringify(sortedArr2);
+  };
 
   // 전공 선택 및 해제 함수
   const toggleMajorSelection = (major) => {
@@ -83,38 +110,66 @@ const MajorPopUp = ({
 
   // 전공 검색 필터링 함수
   const filteredMajors = useMemo(() => {
-    return majors.filter((major) => {
-      // majorSearchTerm이 비어 있을 경우 모든 선택된 전공을 보여줌
+    let newFilteredMajors = majors.filter((major) => {
+      // majorSearchTerm이 비어 있을 경우 선택된 전공을 보여줌
       if (majorSearchTerm.length === 0) {
-        return selectedMajors.includes(major); // 선택된 전공이면 true 반환
+        return selectedMajors.includes(major);
       }
 
       // majorSearchTerm이 있을 경우 검색어에 맞는 전공 또는 이미 선택된 전공을 보여줌
       return (
-        major.toLowerCase().includes(majorSearchTerm.toLowerCase()) ||
+        major.toLowerCase().includes(majorSearchTerm.replace(" ", "").toLowerCase()) ||
         selectedMajors.includes(major)
       );
     });
+    /** 이미 선택된 전공은 맨 앞으로 이동 */
+    newFilteredMajors = newFilteredMajors.filter(tempMajor => {
+      return !(selectedMajors.includes(tempMajor));
+    });
+    newFilteredMajors = [...selectedMajors, ...newFilteredMajors];
+    return newFilteredMajors;
   }, [majorSearchTerm, selectedMajors]);
 
   const removeMajor = (major) => {
     setSelectedMajors(selectedMajors.filter((m) => m !== major));
   };
 
+  if (!isMajorPopupOpen) {
+    return <></>;
+  }
+
   return (
-    <>
-      <div className="newSearch-major-popup">
-        <div className="newSearch-major-popup-content">
-          <div className="newSearch-major-popup-header">
-            <h3>전공</h3>
-            <button
-              className="newSearch-cancel-button"
-              onClick={() => setIsMajorPopupOpen(false)}
-            >
-              &times;
-            </button>
-          </div>
-          <div className="newSearch-major-search-container">
+    <div
+      className={`newSearch-major-pop-up-overlay-wrapper`}
+      onClick={() => setIsMajorPopupOpen(false)}
+    >
+      <div
+        className="newSearch-major-pop-up-overlay"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="newSearch-pop-up-top">
+          <img
+            style={{
+              margin: '16px 0px 16px 0px'
+            }}
+            src={topBarIcon}
+            alt="top useless bar"
+          />
+        </div>
+        <div className="newSearch-major-pop-up-title-container">
+            <span className="newSearch-major-pop-up-title-lg">
+              {"전공"}
+            </span>
+            <span className="newSearch-major-pop-up-title-sm newSearch-major-pop-up-with-lmargin-16">
+              {"최대 두 개까지 선택할 수 있습니다."}
+            </span>
+        </div>
+        <div
+          className="newSearch-major-search-container"
+          style={{
+            marginTop: '12px'
+          }}
+        >
             <img
               src={majorEdit}
               alt="전공 아이콘"
@@ -122,44 +177,53 @@ const MajorPopUp = ({
             />
             <input
               type="text"
-              placeholder="전공 검색"
+              placeholder={"전공 검색"}
               value={majorSearchTerm}
               onChange={(e) => setMajorSearchTerm(e.target.value)}
               className="newSearch-major-search-input"
             />
           </div>
-
-          <div className="newSearch-major-popup-body">
-            <ul>
+          <div
+            className="newSearch-major-popup-body"
+            style={{
+              marginTop : '16px'
+            }}  
+          >
+            <div className="newSearch-major-popup-item-container">
               {filteredMajors.length > 0
                 ? filteredMajors.map((major, index) => (
-                    <li
+                    <button
                       key={index}
-                      className={`newSearch-major-item ${
-                        selectedMajors.includes(major) ? "selected" : ""
+                      className={`newSearch-major-popup-item ${
+                        selectedMajors.includes(major) ? "major-selected" : ""
                       }`}
                       onClick={() => {
                         toggleMajorSelection(major);
                       }}
                     >
                       {major}
-                    </li>
+                    </button>
                   ))
                 : majorSearchTerm && <p>검색된 전공이 없습니다.</p>}
-            </ul>
+            </div>
           </div>
-
-          <div className="newSearch-major-popup-footer">
-            <button
-              className="newSearch-result-button"
-              onClick={saveSelectedMajors}
-            >
-              {buttonText}
-            </button>
-          </div>
-        </div>
+          {/** save button */}          
+          <button
+            className={
+              "newSearch-major-popup-footer-btn" +
+              (
+                (isChanged &&  (selectedMajors.length > 0)) ?
+                ""
+                :
+                " major-popup-btn-disabled"
+              )
+            }
+            onClick={saveSelectedMajors}
+          >
+            {buttonText}
+          </button>
       </div>
-    </>
+    </div>
   );
 };
 
