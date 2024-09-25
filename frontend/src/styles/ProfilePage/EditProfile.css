@@ -1,8 +1,10 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 .edit {
-  margin: 0 auto;
-  width: 300px;
+  /* margin: 0 auto; */
+  box-sizing: border-box;
+  /* width: 300px; */
+  width: 100%;
   min-width: 300px;
   padding: 20px;
   box-shadow: none;
@@ -11,6 +13,15 @@
     "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
   font-weight: 400;
+}
+
+.edit-profile-title {
+  color: #121212;
+  font-family: Pretendard;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.38px;
+  margin: 20px 0px 32px 0px;
 }
 
 .edit-back button {

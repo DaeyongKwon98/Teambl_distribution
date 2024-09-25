@@ -105,7 +105,7 @@ function EditProfile() {
           <img src={backIcon} alt="뒤로가기"></img>
         </button>
       </div>
-      <h4>프로필 수정</h4>
+      <h4 className="edit-profile-title">프로필 작성하기</h4>
       <div className="edit-container">
         <div className="edit-label">
           <label className="edit-label-title">이름</label>
@@ -152,18 +152,30 @@ function EditProfile() {
           min="1900"
           max={new Date().getFullYear()} // 현재 연도까지 입력 가능
         />
-        <div className="edit-label">
+        <div
+          className="edit-label"
+          style={{
+            marginBottom: '4px'
+          }}
+        >
           <label className="edit-label-title">전공</label>
-          <label className="edit-label-detail">최대 2개까지 입력 가능</label>
         </div>
-        <div className="major-list" onClick={() => setIsMajorPopUp(true)}>
+        <div
+          className="major-list"
+          onClick={() => setIsMajorPopUp(true)}
+          style={{
+            height: '40px',
+            paddingTop: '0px',
+            paddingBottom: '0px',
+            marginTop: '0px'
+          }}
+        >
           <img
             src={majorEdit}
             alt="전공 선택"
             className="edit-addMajorImg"
             onClick={() => setIsMajorPopUp(true)}
           />
-
           {newMajors.length === 0 ? (
             <span className="placeholder-text">전공 검색</span>
           ) : (
@@ -232,21 +244,14 @@ function EditProfile() {
         </>
       )}
 
-      {isMajorPopUp && (
-        <>
-          <div
-            className="editprofile-popup-overlay"
-            onClick={() => setIsMajorPopUp(false)}
-          ></div>
-          <MajorPopUp
-            userSelectedMajors={newMajors}
-            handleMajorChange={handleMajorChange}
-            setIsMajorPopupOpen={setIsMajorPopUp}
-            doSearchUsers={() => {}}
-            buttonText={"선택 완료"}
-          />
-        </>
-      )}
+      <MajorPopUp
+        isMajorPopupOpen={isMajorPopUp}
+        userSelectedMajors={newMajors}
+        handleMajorChange={handleMajorChange}
+        setIsMajorPopupOpen={setIsMajorPopUp}
+        doSearchUsers={() => {}}
+        buttonText={"선택 완료"}
+      />
     </div>
   );
 }

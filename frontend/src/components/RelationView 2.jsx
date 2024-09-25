@@ -126,7 +126,7 @@ function RelationView({ fromName, toName, relationList, chon, isLoading }) {
                             {fromName}
                         </span>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="10" viewBox="0 0 158 2" fill="none" className='with-left-margin-12'>
-                            <path d="M1 1L157 0.999986" stroke="#2546F3" strokeLinecap="round" strokeDasharray="20 20" strokeWidth="4"/>
+                            <path d="M1 1L157 0.999986" stroke="#2546F3" stroke-linecap="round" stroke-dasharray="20 20" stroke-width="4"/>
                         </svg>
                     </div>
                     {/** white area */}
@@ -153,7 +153,7 @@ function RelationView({ fromName, toName, relationList, chon, isLoading }) {
                     </div>
                     <div className='relation-view-name-container'>
                         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="10" viewBox="0 0 158 2" fill="none" className='with-right-margin-12'>
-                            <path d="M1 1L157 0.999986" stroke="#2546F3" strokeLinecap="round" strokeDasharray="20 20" strokeWidth="4"/>
+                            <path d="M1 1L157 0.999986" stroke="#2546F3" stroke-linecap="round" stroke-dasharray="20 20" stroke-width="4"/>
                         </svg>
                         <span className='relation-view-name'>
                             {toName}
@@ -193,7 +193,7 @@ function RelationView({ fromName, toName, relationList, chon, isLoading }) {
                         {fromName}
                     </span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="10" viewBox="0 0 158 2" fill="none" className='with-left-margin-12'>
-                        <path d="M1 1L157 0.999986" stroke="#2546F3" strokeLinecap="round" strokeDasharray="20 20" strokeWidth="4"/>
+                        <path d="M1 1L157 0.999986" stroke="#2546F3" stroke-linecap="round" stroke-dasharray="20 20" stroke-width="4"/>
                     </svg>
                 </div>
                 {/** white area */}
@@ -273,7 +273,7 @@ function RelationView({ fromName, toName, relationList, chon, isLoading }) {
                                                     {}
                                             }
                                         >
-                                            <path d="M1 1H9" stroke="black" strokeLinecap="round"/>
+                                            <path d="M1 1H9" stroke="black" stroke-linecap="round"/>
                                         </svg>
                                         <span>
                                             {relation[1]}
@@ -290,7 +290,7 @@ function RelationView({ fromName, toName, relationList, chon, isLoading }) {
                 </div>
                 <div className='relation-view-name-container'>
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="10" viewBox="0 0 158 2" fill="none" className='with-right-margin-12'>
-                        <path d="M1 1L157 0.999986" stroke="#2546F3" strokeLinecap="round" strokeDasharray="20 20" strokeWidth="4"/>
+                        <path d="M1 1L157 0.999986" stroke="#2546F3" stroke-linecap="round" stroke-dasharray="20 20" stroke-width="4"/>
                     </svg>
                     <span className='relation-view-name'>
                         {toName}
