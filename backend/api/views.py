@@ -144,7 +144,6 @@ class AllUsersView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
 
-
 class ChangePasswordView(generics.UpdateAPIView):
     queryset = User.objects.all()
     permission_classes = [AllowAny]
@@ -322,14 +321,13 @@ class ProjectLikedStatusView(generics.RetrieveAPIView):
 
         return Response({"liked": liked})
 
-
 # 특정 Project에 태그된 유저들을 보여주는 View
 class ProjectTaggedUsersListView(generics.ListAPIView):
     serializer_class = CustomUserSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        project_id = self.kwargs["project_id"]
+        project_id = self.kwargs['project_id']
         project = Project.objects.get(pk=project_id)
         return project.tagged_users.all()
 
@@ -501,7 +499,7 @@ class SendInquiryEmailView(View):
             "문의 메일",  # 이메일 제목
             f"From: {from_email}\n\n{body}",  # 이메일 본문
             "info@teambl.net",  # 발신자 이메일 주소
-            ["teamblkaist@gmail.com"],  # 수신사 이메일 주소 목록
+            ["info@teambl.net"],  # 수신사 이메일 주소 목록
             fail_silently=False,  # 에러 발생 시 예외 발생 여부
         )
 
@@ -543,7 +541,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"https://teambl.net/welcome?code={unique_code}",
+            link=f"http://localhost:5173/welcome?code={unique_code}",
         )
 
         return Response(
@@ -663,6 +661,19 @@ def update_profile_one_degree_count(user):
     ).count()
     profile.save()
 
+# 1촌 친구 목록을 얻는 View
+class OneDegreeFriendsView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        friends = Friend.objects.filter(from_user=user, status="accepted") | Friend.objects.filter(
+            to_user=user, status="accepted"
+        )
+        friend_ids = friends.values_list('to_user', flat=True) if friends.filter(from_user=user).exists() else friends.values_list('from_user', flat=True)
+        
+        return CustomUser.objects.filter(id__in=friend_ids)
 
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer
@@ -700,7 +711,6 @@ class ListCreateFriendView(generics.ListCreateAPIView):
             Friend.create_or_replace_friendship(from_user, to_user)
 
             # 친구 추가 요청 알림 생성
-            to_user_profile = Profile.objects.get(user=to_user)
             user_profile = Profile.objects.get(user=from_user)
             Notification.objects.create(
                 user=to_user,
@@ -709,8 +719,8 @@ class ListCreateFriendView(generics.ListCreateAPIView):
             )
 
             send_mail(
-                f"[팀블 알림] 새로운 일촌 신청이 도착했습니다!",  # 이메일 제목
-                f"안녕하세요, {to_user_profile.user_name}님!\n새로운 일촌 신청이 도착했습니다. '1촌' 탭의 '내게 신청한'을 확인하시고, 새로운 일촌을 맺어보세요!",  # 이메일 본문
+                f"[팀블] {user_profile.user_name}님의 일촌 신청이 도착했습니다.",  # 이메일 제목
+                f"{user_profile.user_name}님의 일촌 신청이 도착했습니다.\n 팀블 일촌 리스트에서 확인해보세요!",  # 이메일 본문
                 "info@teambl.net",  # 발신자 이메일 주소
                 [to_user.email],  # 수신사 이메일 주소 목록
                 fail_silently=False,  # 에러 발생 시 예외 발생 여부
@@ -765,20 +775,18 @@ class FriendUpdateView(generics.UpdateAPIView):
         from_user = friend.from_user
         to_user = friend.to_user
 
-        to_user_profile = Profile.objects.get(user=to_user)
-        from_user_profile = Profile.objects.get(user=from_user)
-
+        user_profile = Profile.objects.get(user=to_user)
         if status == "accepted":
             # 친구 요청 수락 시 알림 생성
             Notification.objects.create(
                 user=from_user,
-                message=f"{to_user_profile.user_name}님이 일촌 신청을 수락했습니다.\n{to_user_profile.user_name}님의 프로필을 확인해보세요!",
+                message=f"{user_profile.user_name}님이 일촌 신청을 수락했습니다.\n{user_profile.user_name}님의 프로필을 확인해보세요!",
                 notification_type="friend_accept",
                 related_user_id=to_user.id,
             )
             send_mail(
-                f"[팀블 알림] 일촌 신청이 수락되었습니다!",  # 이메일 제목
-                f"안녕하세요, {from_user_profile.user_name}님!\n{from_user_profile.user_name}님의 일촌 신청이 성공적으로 수락되었습니다. 앞으로 팀블에서 더 나은 경험을 함께 나눌 수 있기를 기대합니다!",  # 이메일 본문
+                f"[팀블] {user_profile.user_name}님이 일촌 신청을 수락했습니다.",  # 이메일 제목
+                f"{user_profile.user_name}님이 일촌 신청을 수락했습니다.\n{user_profile.user_name}님의 프로필을 확인해보세요!",  # 이메일 본문
                 "info@teambl.net",  # 발신자 이메일 주소
                 [from_user.email],  # 수신사 이메일 주소 목록
                 fail_silently=False,  # 에러 발생 시 예외 발생 여부
@@ -787,12 +795,12 @@ class FriendUpdateView(generics.UpdateAPIView):
             # 친구 요청 거절 시 알림 생성
             Notification.objects.create(
                 user=from_user,
-                message=f"{to_user_profile.user_name}님이 일촌 신청을 거절했습니다.",
+                message=f"{user_profile.user_name}님이 일촌 신청을 거절했습니다.",
                 notification_type="friend_reject",
             )
             send_mail(
-                f"[팀블 알림] 일촌 신청이 거절되었습니다.",  # 이메일 제목
-                f"안녕하세요. {from_user_profile.user_name}님.\n안타깝게도 {from_user_profile.user_name}님의 일촌 신청이 거절되었습니다. 팀블에서 앞으로 더 다양한 인연을 맺을실 수 있기를 응원합니다.",  # 이메일 본문
+                f"[팀블] {user_profile.user_name}님이 일촌 신청을 거절했습니다.",  # 이메일 제목
+                f"{user_profile.user_name}님이 일촌 신청을 거절했습니다.",  # 이메일 본문
                 "info@teambl.net",  # 발신자 이메일 주소
                 [from_user.email],  # 수신사 이메일 주소 목록
                 fail_silently=False,  # 에러 발생 시 예외 발생 여부
