@@ -272,6 +272,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "like_count",
             "image",
             "tagged_users",
+            "contact",
         ]
         extra_kwargs = {"user": {"read_only": True}}
 

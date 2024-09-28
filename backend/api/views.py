@@ -661,6 +661,19 @@ def update_profile_one_degree_count(user):
     ).count()
     profile.save()
 
+# 1촌 친구 목록을 얻는 View
+class OneDegreeFriendsView(generics.ListAPIView):
+    serializer_class = CustomUserSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        friends = Friend.objects.filter(from_user=user, status="accepted") | Friend.objects.filter(
+            to_user=user, status="accepted"
+        )
+        friend_ids = friends.values_list('to_user', flat=True) if friends.filter(from_user=user).exists() else friends.values_list('from_user', flat=True)
+        
+        return CustomUser.objects.filter(id__in=friend_ids)
 
 class ListCreateFriendView(generics.ListCreateAPIView):
     serializer_class = FriendCreateSerializer

@@ -98,6 +98,11 @@ urlpatterns += [
         views.FriendDeleteView.as_view(),
         name="friend-delete",
     ),
+    path(
+        'friends/one-degree/',
+        views.OneDegreeFriendsView.as_view(),
+        name='one-degree-friends'
+    ),
 ]
 
 # Notifications
