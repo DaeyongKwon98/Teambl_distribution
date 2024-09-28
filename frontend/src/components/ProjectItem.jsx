@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/ProjectItem.css";
 import api from "../api";
+import Modal from "./Modal";
 
 function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const formattedDate = new Date(project.created_at).toLocaleDateString("en-US");
@@ -17,11 +18,17 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const [editKeywords, setEditKeywords] = useState(Array.isArray(project.keywords) ? project.keywords : []); // 수정된 키워드
   const [newKeyword, setNewKeyword] = useState(""); // 새로 추가할 키워드
   const [editImage, setEditImage] = useState(null);
+  const [editContact, setEditContact] = useState(project.contact || "");
 
-  const [allUsers, setAllUsers] = useState([]); // All available users for tagging
+  const [allFriends, setAllFriends] = useState([]);
   const [editTaggedUsers, setEditTaggedUsers] = useState(Array.isArray(project.tagged_users) ? project.tagged_users : []);
   const [selectedUser, setSelectedUser] = useState("");
   const [originalTaggedUsers, setOriginalTaggedUsers] = useState([]);
+  
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+  const [filteredFriends, setFilteredFriends] = useState([]);
 
   useEffect(() => { // 프로젝트의 댓글 목록을 불러오는 함수
     api.get(`/api/projects/${project.project_id}/comments/`)
@@ -39,18 +46,54 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
     };
     fetchLikedStatus();
 
-    // Fetch all users for tagging
-    const fetchUsers = () => {
-      api.get("/api/users/")
-        .then((res) => setAllUsers(res.data.results))
-        .catch((err) => console.error("Failed to fetch users", err));
+    const fetchFriends = () => {
+      api.get("/api/friends/one-degree/")
+        .then((res) => setAllFriends(res.data.results))
+        .catch((err) => console.error("Failed to fetch friends", err));
     };
-    fetchUsers();
+    fetchFriends();
 
     setOriginalTaggedUsers([...project.tagged_users]);
     setEditTaggedUsers([...project.tagged_users]);
 
   }, [project.project_id]);
+
+  const openModal = () => {
+    setSearchInput("");
+    setFilteredFriends(allFriends.filter(user => editTaggedUsers.some(taggedUser => taggedUser.id === user.id)));
+    setSelectedUserIds(editTaggedUsers.map(user => user.id)); 
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const input = e.target.value;
+    setSearchInput(input);
+    
+    const filtered = allFriends.filter((user) => 
+      user.user_name.toLowerCase().includes(input.toLowerCase()) ||
+      selectedUserIds.includes(user.id) 
+    );
+
+    setFilteredFriends(filtered);
+  };
+
+  const toggleSelectUser = (userId) => {
+    if (selectedUserIds.includes(userId)) {
+      setSelectedUserIds(selectedUserIds.filter(id => id !== userId));
+    } else {
+      setSelectedUserIds([...selectedUserIds, userId]);
+    }
+  };
+
+  const confirmTaggedUsers = () => {
+    const updatedTaggedUsers = allFriends.filter(user => selectedUserIds.includes(user.id));
+    setEditTaggedUsers(updatedTaggedUsers);
+    setIsModalOpen(false);
+  };
 
   // Displaying Tagged Users
   const displayTaggedUsers = () => {
@@ -72,7 +115,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   // Add a tagged user
   const addTaggedUser = () => {
     if (selectedUser && !editTaggedUsers.some(user => user.id === selectedUser)) {
-      const userObj = allUsers.find(user => user.id === Number(selectedUser));
+      const userObj = allFriends.find(user => user.id === Number(selectedUser));
       setEditTaggedUsers([...editTaggedUsers, userObj]);
       setSelectedUser("");
     }
@@ -161,6 +204,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
     const formData = new FormData();
     formData.append("title", editTitle);
     formData.append("content", editContentProject);
+    formData.append("contact", editContact);
     editKeywords.forEach((keyword) => {
       formData.append("keywords[]", keyword);
     });
@@ -185,6 +229,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
         setEditKeywords(res.data.keywords);
         setEditTaggedUsers(res.data.tagged_users);
         setOriginalTaggedUsers(res.data.tagged_users);
+        setEditContact(res.data.contact);
         project.image = res.data.image;
 
         if (refreshProjects) {
@@ -200,6 +245,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
     setEditContentProject(project.content);
     setEditKeywords(project.keywords);
     setEditTaggedUsers(originalTaggedUsers);
+    setEditContact(project.contact || "");
   };
 
   return (
@@ -214,6 +260,12 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
           <textarea
             value={editContentProject}
             onChange={(e) => setEditContentProject(e.target.value)}
+          />
+          <input
+            type="text"
+            value={editContact}
+            onChange={(e) => setEditContact(e.target.value)}
+            placeholder="Enter contact information"
           />
           <div className="image-edit-section">
             <label htmlFor="image">Edit Image:</label>
@@ -243,19 +295,8 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
           </div>
           <div className="tagged-users-section">
             <h4>Edit Tagged Users:</h4>
-            <select
-              value={selectedUser}
-              onChange={(e) => setSelectedUser(e.target.value)}
-            >
-              <option value="">Select a user</option>
-              {allUsers.map(user => (
-                <option key={user.id} value={user.id}>
-                  {user.user_name}
-                </option>
-              ))}
-            </select>
-            <button type="button" onClick={addTaggedUser}>
-              Add Tagged User
+            <button type="button" onClick={openModal}>
+              Search and Tag Users
             </button>
             <ul>
               {editTaggedUsers.map((user) => (
@@ -282,6 +323,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
             />
           )}
           <p className="project-content">{project.content}</p>
+          <p className="project-contact">Contact: {project.contact || "No contact info provided"}</p>
           <p className="project-keywords">
             {editKeywords.map((keyword, index) => (
               <span key={index} className="keyword-item">
@@ -367,6 +409,31 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
         />
         <button onClick={submitComment}>Submit</button>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h3>Select Users</h3>
+        <input
+          type="text"
+          placeholder="Search for a friend..."
+          value={searchInput}
+          onChange={handleSearchChange}
+        />
+        <ul>
+          {filteredFriends.map((friend) => (
+            <li 
+              key={friend.id} 
+              onClick={() => toggleSelectUser(friend.id)}
+              style={{ 
+                cursor: "pointer", 
+                backgroundColor: selectedUserIds.includes(friend.id) ? "#d3f9d8" : "white" 
+              }}
+            >
+              {friend.user_name}
+            </li>
+          ))}
+        </ul>
+        <button onClick={confirmTaggedUsers}>Done</button>
+      </Modal>
     </div>
   );
 }
