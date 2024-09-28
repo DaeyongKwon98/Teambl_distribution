@@ -7,6 +7,7 @@ urlpatterns = [
     path("delete-user/", views.DeleteUserView.as_view(), name="delete-user"),
     path("user/<int:id>/", views.OtherUserView.as_view(), name="other-user"),
     path("latest-user-id/", views.LatestUserIdView.as_view(), name="latest-user-id"),
+    path('users/', views.AllUsersView.as_view(), name='all-users'),
 ]
 
 # Profile
@@ -55,6 +56,11 @@ urlpatterns += [
         views.ProjectLikedStatusView.as_view(),
         name="project-liked-status",
     ),
+    path(
+        'projects/<int:project_id>/tagged-users/',
+        views.ProjectTaggedUsersListView.as_view(),
+        name='project-tagged-users'
+    ),
 ]
 
 # Invitation
@@ -91,6 +97,11 @@ urlpatterns += [
         "friends/delete/<int:pk>/",
         views.FriendDeleteView.as_view(),
         name="friend-delete",
+    ),
+    path(
+        'friends/one-degree/',
+        views.OneDegreeFriendsView.as_view(),
+        name='one-degree-friends'
     ),
 ]
 
