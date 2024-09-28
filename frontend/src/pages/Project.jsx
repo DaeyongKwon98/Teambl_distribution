@@ -1,39 +1,73 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import api from "../api";
 import ProjectItem from "../components/ProjectItem";
+import Modal from "../components/Modal";
 import "../styles/Project.css";
-import React from "react";
 
 function Project() {
   const [currentUser, setCurrentUser] = useState(null);  // 로그인한 사용자 정보
   const [projects, setProjects] = useState([]);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
+  const [contact, setContact] = useState("");
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState([]);
   const [image, setImage] = useState(null);
-  const [allUsers, setAllUsers] = useState([]);
+  const [allFriends, setAllFriends] = useState([]);
   const [taggedUsers, setTaggedUsers] = useState([]);
-  const [selectedUser, setSelectedUser] = useState("");
+  const [selectedUserIds, setSelectedUserIds] = useState([]);
+
+  const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
+  const [searchInput, setSearchInput] = useState(""); // Search input state
+  const [filteredFriends, setFilteredFriends] = useState([]); // Filtered friends list
 
   useEffect(() => {
     getCurrentUser();
     getProjects();
-    fetchUsers();
+    fetchFriends();
   }, []);
 
-  const fetchUsers = () => {
-    api
-      .get("/api/users/")
-      .then((res) => setAllUsers(res.data.results))
-      .catch((err) => alert("Failed to fetch users."));
+  const openModal = () => {
+    setSearchInput("");
+    setFilteredFriends(allFriends.filter(friend => taggedUsers.includes(friend.id))); // Initially show only tagged users
+    setSelectedUserIds([...taggedUsers]); // Set initial selected users
+    setIsModalOpen(true);
   };
 
-  const addTaggedUser = () => {
-    if (selectedUser && !taggedUsers.includes(selectedUser)) {
-      setTaggedUsers([...taggedUsers, Number(selectedUser)]);
-      setSelectedUser("");
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleSearchChange = (e) => {
+    const input = e.target.value;
+    setSearchInput(input);
+    
+    const filtered = allFriends.filter((friend) => 
+      friend.user_name.toLowerCase().includes(input.toLowerCase()) ||
+      selectedUserIds.includes(friend.id)  // Always include already selected friends
+    );
+
+    setFilteredFriends(filtered);
+  };
+
+  const toggleSelectUser = (userId) => {
+    if (selectedUserIds.includes(userId)) {
+      setSelectedUserIds(selectedUserIds.filter(id => id !== userId)); // Deselect if already selected
+    } else {
+      setSelectedUserIds([...selectedUserIds, userId]); // Select if not already selected
     }
+  };
+
+  const confirmTaggedUsers = () => {
+    setTaggedUsers(selectedUserIds); // Save the selected users as tagged users
+    setIsModalOpen(false);
+  };
+
+  const fetchFriends = () => {
+    api
+      .get("/api/friends/one-degree/")
+      .then((res) => setAllFriends(res.data.results))
+      .catch((err) => alert("Failed to fetch friends list."));
   };
   
   const removeTaggedUser = (index) => {
@@ -76,6 +110,7 @@ function Project() {
     const formData = new FormData();
     formData.append("content", content);
     formData.append("title", title);
+    formData.append("contact", contact);
   
     // 키워드를 배열로 전송할 때는 반복문을 통해 추가해야 함
     keywords.forEach((keyword) => {
@@ -106,6 +141,7 @@ function Project() {
         getProjects();
         setContent("");
         setTitle("");
+        setContact("");
         setKeywords([]);
         setTaggedUsers([]);
         setImage(null);
@@ -174,6 +210,16 @@ function Project() {
           value={content}
           onChange={(e) => setContent(e.target.value)}
         />
+        <label htmlFor="contact">Contact:</label>
+        <br />
+        <input
+          type="text"
+          id="contact"
+          name="contact"
+          value={contact}
+          onChange={(e) => setContact(e.target.value)}
+        />
+        <br />
         <label htmlFor="image">Image:</label>
         <br />
         <input
@@ -207,28 +253,14 @@ function Project() {
           ))}
         </ul>
         <br />
-        <label htmlFor="taggedUsers">Tag Users:</label>
-        <br />
-        <select
-          id="taggedUsers"
-          name="taggedUsers"
-          value={selectedUser}
-          onChange={(e) => setSelectedUser(e.target.value)}
-        >
-          <option value="">Select a user</option>
-          {allUsers.map((user) => (
-            <option key={user.id} value={user.id}>
-              {user.user_name}
-            </option>
-          ))}
-        </select>
-        <button type="button" onClick={addTaggedUser}>
-          Add User
-        </button>
 
+        <label htmlFor="taggedUsers">Tag Users:</label>
+        <button type="button" onClick={openModal}>
+          Search and Tag Users
+        </button>
         <ul>
           {taggedUsers.map((userId, index) => {
-            const user = allUsers.find((u) => u.id === Number(userId)); // Ensure matching IDs are treated as numbers
+            const user = allFriends.find((u) => u.id === userId);
             return (
               <li key={index}>
                 {user ? user.user_name : "Unknown User"}
@@ -241,6 +273,32 @@ function Project() {
         </ul>
         <input type="submit" value="Submit" />
       </form>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <h3>Select a User</h3>
+        <input
+          type="text"
+          placeholder="Search for a friend..."
+          value={searchInput}
+          onChange={handleSearchChange}
+        />
+        <ul>
+          {filteredFriends.map((friend) => (
+            <li 
+              key={friend.id} 
+              onClick={() => toggleSelectUser(friend.id)}
+              style={{ 
+                cursor: "pointer", 
+                backgroundColor: selectedUserIds.includes(friend.id) ? "#d3f9d8" : "white" 
+              }}
+            >
+              {friend.user_name}
+            </li>
+          ))}
+        </ul>
+        <button onClick={confirmTaggedUsers}>Done</button>
+      </Modal>
+
     </div>
   );
 }
