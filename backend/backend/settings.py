@@ -38,6 +38,8 @@ SECRET_KEY = "django-insecure-jd9qaa+@9qbnje0^e2agmrdouf#k$%4s889v0b8k0^om-kc+bo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+TEAMBL_URL = os.getenv('TEAMBL_URL', 'https://teambl.net/')
+
 ALLOWED_HOSTS = ["*", "teambl-distribution.onrender.com"]
 
 REST_FRAMEWORK = {
