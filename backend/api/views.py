@@ -1026,8 +1026,8 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
-# 2촌/같은 키워드 사용자 수의 증가량을 반환
-class UserStatisticsDifferenceView(generics.GenericAPIView):
+# 최근에 가입한 2촌 목록과 연결된 1촌 정보를 반환
+class SecondDegreeFriendsListView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -1040,7 +1040,7 @@ class UserStatisticsDifferenceView(generics.GenericAPIView):
             user.get_friend_counts()
         )
 
-        # 최근 15분 이내에 가입한 2촌 사용자 필터링
+        # 최근 일주일 이내에 가입한 2촌 사용자 필터링
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, date_joined__gte=recent_times
         )
