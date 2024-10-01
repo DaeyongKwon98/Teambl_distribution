@@ -218,9 +218,9 @@ urlpatterns += [
         name="get-user-distance",
     ),
     path(
-        "user-statistics-difference/",
-        views.UserStatisticsDifferenceView.as_view(),
-        name="user-statistics-difference",
+        "second-degree-friends/",
+        views.SecondDegreeFriendsListView.as_view(),
+        name="second-degree-friends",
     ),
     path(
         "path/<int:target_user_id>/",
