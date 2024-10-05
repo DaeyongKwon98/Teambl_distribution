@@ -379,7 +379,7 @@ const ProfileSelf2 = () => {
 					{/** 1-chon */}
 					<div className='profileSelf2-row4-container'>
 						<span className='profileSelf2-row4-info'>
-							{`1촌 ${profile.one_degree_count}명`}
+							{`1촌 ${profile.one_degree_count - 1}명`}
 						</span>
 					</div>
 				</div>

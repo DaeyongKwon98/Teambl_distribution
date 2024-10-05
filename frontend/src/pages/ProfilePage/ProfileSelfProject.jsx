@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/ProfilePage/ProfileSelfProject.css";
 import api from '../../api';
+import { useNavigate } from 'react-router-dom';
 
 const ProfileSelfProject = ({ userId }) => {
+
+    const navigate = useNavigate();
 
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
@@ -12,7 +15,6 @@ const ProfileSelfProject = ({ userId }) => {
     const initializeAll = async () => {
         /** TODO */
     };
-
 
     /** fetch project list */
     const fetchProjectList = async () => {
@@ -66,7 +68,7 @@ const ProfileSelfProject = ({ userId }) => {
                     </button>
                     <button
                         className='profileSelfProject-add-content-button profileSelfProject-mt-32'
-                        onClick={() => alert("준비 중입니다.")}
+                        onClick={() => navigate('/projects/add')}
                     >
                         {"게시물 올리기"}
                     </button>
@@ -75,7 +77,7 @@ const ProfileSelfProject = ({ userId }) => {
             {
                 (projectList.length > 0) &&
                 <>
-                    TODO
+                    {"TODO"}
                 </>
             }
         </div>

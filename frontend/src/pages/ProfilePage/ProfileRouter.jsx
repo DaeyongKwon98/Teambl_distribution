@@ -8,7 +8,7 @@ import ProfileSelf2 from './ProfileSelf2';
 const ProfileRouter = () => {
   const { id } = useParams(); // URL에서 {id}를 가져옴
   const [currentUser, setCurrentUser] = useState(null);
-  const [isProfileSelf, setIsProfileSelf] = useState(false);
+  const [isProfileSelf, setIsProfileSelf] = useState(null);
 
   useEffect(() => {
     fetchCurrentUser();
@@ -25,9 +25,12 @@ const ProfileRouter = () => {
     }
   };
 
-  return (
-    <div>{isProfileSelf ? <ProfileSelf2 /> : <ProfileOther userId={id} />}</div>
-  );
+  if (isProfileSelf != null) {
+    return (
+      <div>{isProfileSelf ? <ProfileSelf2 /> : <ProfileOther userId={id} />}</div>
+    );
+  }
+  
 };
 
 export default ProfileRouter;

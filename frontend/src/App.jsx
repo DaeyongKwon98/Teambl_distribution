@@ -21,6 +21,7 @@ import Setting from "./pages/Setting";
 import ResetPassword from "./pages/ResetPasswordPage/ResetPassword";
 import ResetPasswordConfirm from "./pages/ResetPasswordPage/ResetPasswordConfirm";
 import FriendOther from "./pages/FriendOther";
+import AddProject from "./pages/Project/AddProject";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -101,6 +102,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Project />
+            </ProtectedRoute>
+          }
+        />
+        {/* NEW */}
+        <Route
+          path="/projects/add"
+          element={
+            <ProtectedRoute>
+              <AddProject />
             </ProtectedRoute>
           }
         />
