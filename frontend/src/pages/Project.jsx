@@ -12,10 +12,13 @@ function Project() {
   const [contact, setContact] = useState("");
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState([]);
-  const [image, setImage] = useState(null);
+  // const [image, setImage] = useState(null);
   const [allFriends, setAllFriends] = useState([]);
   const [taggedUsers, setTaggedUsers] = useState([]);
   const [selectedUserIds, setSelectedUserIds] = useState([]);
+  const [images, setImages] = useState([]); // 새로 추가된 이미지 파일 배열
+  const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기 배열
+  const [imagesToDelete, setImagesToDelete] = useState([]); // 삭제할 이미지 ID 배열
 
   const [isModalOpen, setIsModalOpen] = useState(false); // Modal state
   const [searchInput, setSearchInput] = useState(""); // Search input state
@@ -125,9 +128,10 @@ function Project() {
       });
   }
 
-    if (image) {
-      formData.append("image", image); // 이미지가 있을 경우 추가
-    }
+    // 이미지를 배열로 전송
+    images.forEach((image) => {
+      formData.append("images", image);
+    });
   
     api
       .post("/api/projects/", formData, {
@@ -144,7 +148,8 @@ function Project() {
         setContact("");
         setKeywords([]);
         setTaggedUsers([]);
-        setImage(null);
+        setImages([]);
+        setImagePreviews([]);
       })
       .catch((error) => {
         console.log(error.response);
@@ -154,6 +159,33 @@ function Project() {
           alert(`Failed to create project: ${error.message}`);
         }
       });
+  };
+
+  const handleImageChange = (e) => {
+    const files = Array.from(e.target.files);
+
+    // 이미지 최대 3개 제한
+    if (files.length + images.length > 3) {
+      alert("You can only upload up to 3 images.");
+      return;
+    }
+
+    setImages([...images, ...files]);
+
+    // 미리보기 이미지 생성
+    const filePreviews = files.map((file) => URL.createObjectURL(file));
+    setImagePreviews([...imagePreviews, ...filePreviews]);
+  };
+
+  const removeImage = (index) => {
+    const updatedImages = [...images];
+    const updatedPreviews = [...imagePreviews];
+
+    updatedImages.splice(index, 1);
+    updatedPreviews.splice(index, 1);
+
+    setImages(updatedImages);
+    setImagePreviews(updatedPreviews);
   };
 
   const addKeyword = () => {
@@ -220,15 +252,27 @@ function Project() {
           onChange={(e) => setContact(e.target.value)}
         />
         <br />
-        <label htmlFor="image">Image:</label>
+        <label htmlFor="images">Images (Max 3):</label>
         <br />
         <input
           type="file"
-          id="image"
-          name="image"
+          id="images"
+          name="images"
           accept="image/*"
-          onChange={(e) => setImage(e.target.files[0])} // Update state with selected image
+          multiple
+          onChange={handleImageChange}
         />
+        <br />
+        <div className="image-previews">
+          {imagePreviews.map((preview, index) => (
+            <div key={index}>
+              <img src={preview} alt={`Preview ${index}`} width="100" />
+              <button type="button" onClick={() => removeImage(index)}>
+                Remove
+              </button>
+            </div>
+          ))}
+        </div>
         <br />
         <label htmlFor="keywords">Keywords (add up to 3):</label>
         <br />
