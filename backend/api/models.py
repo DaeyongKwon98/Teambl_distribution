@@ -129,6 +129,13 @@ class Keyword(models.Model):
     def __str__(self):
         return self.keyword
 
+class ProjectImage(models.Model):
+    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to="project_images/")
+
+    def __str__(self):
+        return f"Image for {self.project.title}"
+
 class Project(models.Model):
     project_id = models.AutoField(primary_key=True)
     user = models.ForeignKey(
@@ -139,7 +146,7 @@ class Project(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     keywords = models.ManyToManyField(Keyword, blank=True)
     like_count = models.IntegerField(default=0)
-    image = models.ImageField(upload_to="project_images/", blank=True, null=True)
+    # image = models.ImageField(upload_to="project_images/", blank=True, null=True)
     tagged_users = models.ManyToManyField(CustomUser, related_name="participating_projects", blank=True)
     contact = models.TextField(blank=True, null=True)
 
@@ -415,3 +422,4 @@ class SearchHistory(models.Model):
 
     def __str__(self):
         return f'Search by {self.user.username} for "{self.keyword}" at {self.created_at}'
+
