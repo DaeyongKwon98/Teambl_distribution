@@ -7,6 +7,7 @@ from .models import (
     Profile,
     Keyword,
     Project,
+    ProjectImage,
     InvitationLink,
     Friend,
     Notification,
@@ -50,7 +51,6 @@ import logging
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from collections import OrderedDict, deque
-from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -293,6 +293,7 @@ class ProjectListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         keywords_data = self.request.data.getlist("keywords[]")  # 배열로 키워드 처리
+        images = self.request.FILES.getlist('images')  # 다중 이미지 처리
 
         if serializer.is_valid():
             project = serializer.save(user=self.request.user)
@@ -304,6 +305,10 @@ class ProjectListCreate(generics.ListCreateAPIView):
                 keyword_objs.append(keyword_obj)
 
             project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
+            
+            # 이미지 업데이트
+            for image in images:
+                ProjectImage.objects.create(project=project, image=image)
         else:
             print(serializer.errors)
 
@@ -343,6 +348,7 @@ class ProjectEveryListCreate(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         keywords_data = self.request.data.getlist("keywords[]")  # 배열로 키워드 처리
+        images = self.request.FILES.getlist('images')  # 다중 이미지 처리
 
         if serializer.is_valid():
             project = serializer.save(user=self.request.user)
@@ -354,6 +360,10 @@ class ProjectEveryListCreate(generics.ListCreateAPIView):
                 keyword_objs.append(keyword_obj)
 
             project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
+            
+            # 이미지 업데이트
+            for image in images:
+                ProjectImage.objects.create(project=project, image=image)
         else:
             print(serializer.errors)
 
@@ -368,7 +378,10 @@ class ProjectUpdateView(generics.UpdateAPIView):
         keywords_data = self.request.data.getlist(
             "keywords[]"
         )  # 'keywords[]'를 배열로 처리
-        image = self.request.FILES.get("image")
+        images = self.request.FILES.getlist('images')  # 다중 이미지 처리
+
+        # 삭제할 이미지 ID 리스트를 요청에서 받음
+        images_to_delete = self.request.data.getlist('images_to_delete[]')
 
         # Project 인스턴스를 먼저 업데이트
         project = serializer.save()
@@ -378,11 +391,25 @@ class ProjectUpdateView(generics.UpdateAPIView):
         for keyword in keywords_data:
             keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
             keyword_objs.append(keyword_obj)
-
-        if image:
-            project.image = image
-
+            
         project.keywords.set(keyword_objs)  # ManyToMany 관계 설정
+
+        # 기존 이미지 삭제
+        if images_to_delete:
+            for image_id in images_to_delete:
+                try:
+                    image = ProjectImage.objects.get(id=image_id, project=project)
+                    image.delete()  # 이미지 삭제
+                except ProjectImage.DoesNotExist:
+                    pass  # 해당 이미지가 없으면 그냥 넘어감
+
+        # 중복 방지를 위해 새로 추가된 이미지가 있을 때만 저장
+        if images:
+            for image in images:
+                # 이미지가 중복되지 않도록 체크한 후 추가
+                if not ProjectImage.objects.filter(project=project, image=image).exists():
+                    ProjectImage.objects.create(project=project, image=image)
+
         project.save()
 
 
@@ -423,7 +450,6 @@ class ProjectLikeToggleView(generics.GenericAPIView):
                 {"message": "Project liked", "like_count": project.like_count},
                 status=status.HTTP_200_OK,
             )
-
 
 class KeywordListView(generics.ListAPIView):
     serializer_class = KeywordSerializer
@@ -542,7 +568,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"{settings.TEAMBL_URL}welcome?code={unique_code}",
+            link=f"http://localhost:5173/welcome?code={unique_code}",
         )
 
         return Response(
@@ -1026,8 +1052,8 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
-# 최근에 가입한 2촌 목록과 연결된 1촌 정보를 반환
-class SecondDegreeFriendsListView(generics.GenericAPIView):
+# 2촌/같은 키워드 사용자 수의 증가량을 반환
+class UserStatisticsDifferenceView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
@@ -1040,7 +1066,7 @@ class SecondDegreeFriendsListView(generics.GenericAPIView):
             user.get_friend_counts()
         )
 
-        # 최근 일주일 이내에 가입한 2촌 사용자 필터링
+        # 최근 15분 이내에 가입한 2촌 사용자 필터링
         new_second_degree_profiles = CustomUser.objects.filter(
             id__in=second_degree_ids, date_joined__gte=recent_times
         )
