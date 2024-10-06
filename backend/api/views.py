@@ -1053,7 +1053,7 @@ class KeywordBasedUserSimilarityView(generics.GenericAPIView):
 
 
 # 2촌/같은 키워드 사용자 수의 증가량을 반환
-class UserStatisticsDifferenceView(generics.GenericAPIView):
+class SecondDegreeFriendsListView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
