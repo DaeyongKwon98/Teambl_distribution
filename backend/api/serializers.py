@@ -3,6 +3,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import (
     CustomUser,
     Project,
+    ProjectImage,
     Keyword,
     Profile,
     InvitationLink,
@@ -252,6 +253,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
             validated_data.pop("password")
         return super().update(instance, validated_data)
 
+class ProjectImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectImage
+        fields = ['id', 'image']
 
 class ProjectSerializer(serializers.ModelSerializer):
     user = CustomUserSerializer(read_only=True)
@@ -259,6 +264,7 @@ class ProjectSerializer(serializers.ModelSerializer):
     tagged_users = serializers.PrimaryKeyRelatedField(
         many=True, queryset=CustomUser.objects.all(), required=False
     )
+    images = ProjectImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Project
@@ -270,7 +276,7 @@ class ProjectSerializer(serializers.ModelSerializer):
             "created_at",
             "keywords",
             "like_count",
-            "image",
+            "images",
             "tagged_users",
             "contact",
         ]
@@ -278,6 +284,13 @@ class ProjectSerializer(serializers.ModelSerializer):
 
     def get_keywords(self, obj):
         return [keyword.keyword for keyword in obj.keywords.all()]
+    
+    def get_images(self, obj):
+        images = obj.images.all()
+        # 이미지의 URL이 제대로 나오는지 확인
+        image_urls = [image.image.url for image in images if image.image]
+        print(f"Image URLs for {obj.title}: {image_urls}")  # URL이 실제로 출력되는지 확인
+        return image_urls
 
     def to_representation(self, instance):
         representation = super().to_representation(instance)
@@ -288,6 +301,7 @@ class ProjectSerializer(serializers.ModelSerializer):
         # Extract keywords and tagged users
         keywords_data = self.initial_data.get("keywords", [])
         tagged_users_data = validated_data.pop("tagged_users", [])
+        # images_data = self.initial_data.getlist("images", [])
 
         # Create the Project instance
         project = Project.objects.create(**validated_data)
@@ -302,6 +316,10 @@ class ProjectSerializer(serializers.ModelSerializer):
         # Set tagged users
         if tagged_users_data:
             project.tagged_users.set(tagged_users_data)
+            
+        # # Set images
+        # for image in images_data:
+        #     ProjectImage.objects.create(project=project, image=image)
 
         return project
 
@@ -309,12 +327,14 @@ class ProjectSerializer(serializers.ModelSerializer):
         # Extract keywords and tagged users
         keywords_data = self.initial_data.get("keywords", [])
         tagged_users_data = validated_data.pop("tagged_users", [])
+        # images_data = self.initial_data.getlist("images", [])
+        # images_to_delete = self.initial_data.get("images_to_delete", [])
 
         # Update basic fields
         instance.title = validated_data.get('title', instance.title)
         instance.content = validated_data.get('content', instance.content)
-        if 'image' in validated_data:
-            instance.image = validated_data['image']
+        # if 'image' in validated_data:
+        #     instance.image = validated_data['image']
 
         instance.save()
 
@@ -333,9 +353,21 @@ class ProjectSerializer(serializers.ModelSerializer):
             instance.tagged_users.set(tagged_users_data)
         else:
             instance.tagged_users.clear()
+        
+        # # Delete images if needed
+        # if images_to_delete:
+        #     for image_id in images_to_delete:
+        #         try:
+        #             image = ProjectImage.objects.get(id=image_id, project=instance)
+        #             image.delete()
+        #         except ProjectImage.DoesNotExist:
+        #             pass  # 이미지가 존재하지 않을 경우
+
+        # # Add new images
+        # for image in images_data:
+        #     ProjectImage.objects.create(project=instance, image=image)
 
         return instance
-
 
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
