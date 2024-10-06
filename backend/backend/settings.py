@@ -193,7 +193,8 @@ EMAIL_HOST_PASSWORD = "endm lmwa jtma wzhh"
 
 # 프로필 이미지를 위한 Media
 # 미디어 파일 URL (HTTPS로 변경)
-MEDIA_URL = 'https://teambl.net/media/'
+# MEDIA_URL = 'https://teambl.net/media/'
+MEDIA_URL = "/media/"
 
 # MEDIA_ROOT는 기존과 동일하게 파일이 저장될 서버 경로를 유지
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
