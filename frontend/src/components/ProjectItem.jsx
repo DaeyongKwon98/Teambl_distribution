@@ -17,7 +17,10 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const [editContentProject, setEditContentProject] = useState(project.content); // 수정된 내용
   const [editKeywords, setEditKeywords] = useState(Array.isArray(project.keywords) ? project.keywords : []); // 수정된 키워드
   const [newKeyword, setNewKeyword] = useState(""); // 새로 추가할 키워드
-  const [editImage, setEditImage] = useState(null);
+  const [editImages, setEditImages] = useState([]); // 수정된 이미지 배열
+  const [imagePreviews, setImagePreviews] = useState([]); // 이미지 미리보기
+  const [existingImages, setExistingImages] = useState(project.images || []); // 기존에 등록된 이미지 배열
+  const [imagesToDelete, setImagesToDelete] = useState([]); // 삭제할 이미지 ID 배열
   const [editContact, setEditContact] = useState(project.contact || "");
 
   const [allFriends, setAllFriends] = useState([]);
@@ -29,6 +32,12 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [filteredFriends, setFilteredFriends] = useState([]);
+
+  useEffect(() => {
+    // 기존 이미지를 미리보기 설정
+    const existingImagePreviews = project.images.map((image) => image.image_url);
+    setImagePreviews(existingImagePreviews);
+  }, [project.images]);
 
   useEffect(() => { // 프로젝트의 댓글 목록을 불러오는 함수
     api.get(`/api/projects/${project.project_id}/comments/`)
@@ -55,6 +64,10 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
 
     setOriginalTaggedUsers([...project.tagged_users]);
     setEditTaggedUsers([...project.tagged_users]);
+
+    // 기존 이미지를 미리보기 설정
+    const existingImagePreviews = project.images.map((image) => image.image_url);
+    setImagePreviews(existingImagePreviews);
 
   }, [project.project_id]);
 
@@ -127,9 +140,29 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
     setEditTaggedUsers(updatedTaggedUsers);
   };
 
-  // Handle image selection
+  // 이미지 선택 핸들러 (최대 3개)
   const handleImageChange = (e) => {
-    setEditImage(e.target.files[0]);
+    const files = Array.from(e.target.files);
+
+    if (files.length + editImages.length + existingImages.length > 3) {
+      alert("You can only upload up to 3 images.");
+      return;
+    }
+
+    setEditImages([...editImages, ...files]);
+  };
+
+  // 기존 이미지 삭제 함수
+  const removeExistingImage = (imageId) => {
+    setImagesToDelete([...imagesToDelete, imageId]); // image.id를 사용하여 삭제할 이미지 ID 저장
+    setExistingImages(existingImages.filter((image) => image.id !== imageId)); // image.id로 필터링하여 삭제
+  };
+
+  // 새로운 이미지 삭제 함수
+  const removeImage = (index) => {
+    const updatedImages = [...editImages];
+    updatedImages.splice(index, 1);
+    setEditImages(updatedImages);
   };
 
   // 키워드 삭제
@@ -212,10 +245,15 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
       formData.append("tagged_users", user.id);
     });
 
-    // Add the image to formData if a new image was selected
-    if (editImage) {
-      formData.append("image", editImage);
-    }
+    // 새로운 이미지를 추가
+    editImages.forEach((image) => {
+      formData.append("images", image);
+    });
+
+    // 삭제할 기존 이미지 ID 전송
+    imagesToDelete.forEach((imageId) => {
+      formData.append("images_to_delete[]", imageId);
+    });
 
     api.patch(`/api/projects/${project.project_id}/edit/`, formData, {
       headers: {
@@ -230,7 +268,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
         setEditTaggedUsers(res.data.tagged_users);
         setOriginalTaggedUsers(res.data.tagged_users);
         setEditContact(res.data.contact);
-        project.image = res.data.image;
+        setExistingImages(res.data.images);
 
         if (refreshProjects) {
           refreshProjects();
@@ -268,14 +306,51 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
             placeholder="Enter contact information"
           />
           <div className="image-edit-section">
-            <label htmlFor="image">Edit Image:</label>
+            <label htmlFor="image">Edit Images (Max 3):</label>
             <input
               type="file"
               id="image"
               name="image"
               accept="image/*"
+              multiple
               onChange={handleImageChange}
             />
+            <div className="image-previews">
+              {/* 기존 이미지 출력 및 삭제 */}
+              {existingImages.length > 0 && (
+                <div className="existing-images">
+                  {existingImages.map((image, index) => (
+                    <div key={`existing-${image.id || index}`}>
+                      <img
+                        src={image.image}
+                        alt={`Project ${project.title}`}
+                        width="100"
+                      />
+                      <button type="button" onClick={() => removeExistingImage(image.id)}>
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* 새로운 이미지 미리보기 및 삭제 */}
+              {editImages.length > 0 && (
+                <div className="image-previews">
+                  {editImages.map((image, index) => (
+                    <div key={`new-${index}`}>
+                      <img
+                        src={URL.createObjectURL(image)}
+                        alt={`Preview ${index}`}
+                        width="100"
+                      />
+                      <button type="button" onClick={() => removeImage(index)}>
+                        Remove
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
           <div className="keyword-edit-section">
             {editKeywords.map((keyword, index) => (
@@ -315,12 +390,18 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
       ) : (
         <div>
           <p className="project-title">{project.title}</p>
-          {project.image && (
-            <img
-              src={project.image}
-              alt={project.title}
-              className="project-image"
-            />
+          {existingImages.length > 0 && (
+            <div className="existing-images">
+              {existingImages.map((image, index) => (
+                <div key={`existing-${index}-${image || 'default'}`}>
+                  <img
+                    src={image.image} // 이미지가 있을 때만 경로 추가
+                    alt={`Project ${project.title}`}
+                    width="100"
+                  />
+                </div>
+              ))}
+            </div>
           )}
           <p className="project-content">{project.content}</p>
           <p className="project-contact">Contact: {project.contact || "No contact info provided"}</p>
