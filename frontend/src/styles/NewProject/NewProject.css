@@ -1,0 +1,380 @@
+/* 전체 SNS 게시물 컨테이너 */
+.new-project {
+  font-family: 'Pretendard';
+  font-style: normal;
+  width: 300px;
+  margin: 0 auto;
+  padding: 0;
+  border-top: 6px solid #f5f5f5;
+}
+
+/* 프로필 섹션 */
+.project-profile-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin: 12px;
+}
+
+.project-profile-info-container {
+  display: flex;
+  align-items: center;
+}
+
+.project-profile-img {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.project-profile-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-author-name {
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 14px;
+  color: #000000;
+  margin-bottom: 4px;
+}
+
+.project-major-school-date {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #121212;
+}
+
+.project-setting-button {
+  border: none;
+  background-color: transparent;
+}
+
+.project-setting-button-icon {
+  width: 14px;
+  height: 3px;
+}
+
+/* 제목 */
+.project-title {
+  font-weight: 600;
+  font-size: 13px;
+  line-height: 16px;
+  color: #121212;
+  margin: 12px;
+}
+
+/* 태그 섹션 */
+.project-tags-section {
+  margin: 0px 12px;
+}
+
+.project-tag {
+  display: inline-block;
+  background-color: #EEF4FF;
+  color: #2546F3;
+  padding: 5px 8px;
+  margin-right: 8px;
+  border-radius: 24px;
+  font-weight: 600;
+  font-size: 10px;
+  line-height: 12px;
+}
+
+/* 본문 설명 섹션 */
+.project-description-section {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #121212;
+  margin: 0px 12px 12px 12px;
+  white-space: pre-wrap;
+}
+
+.project-gradient-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 18px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.project-expand-button {
+  width: 67px;
+  height: 18px;
+  text-align: right;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 14px;
+  color: #595959;
+  display: block;
+  background: linear-gradient(to left, white 63.5%, rgba(255, 255, 255, 0) 100%);
+  border: none;
+}
+
+/* 연락처 섹션 */
+.project-contact-info-section {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #000000;
+  margin: 0px 12px 12px 12px;
+}
+
+/* 이미지 섹션 */
+.project-image-section {
+  position: relative;
+  width: 100%;
+}
+
+.project-scrollable-image-container {
+  display: flex;
+  overflow-x: scroll;
+  scroll-snap-type: x mandatory;
+}
+
+.project-scrollable-image-container::-webkit-scrollbar {
+  display: none;
+}
+
+.project-post-img {
+  min-width: 100%;
+  object-fit: cover;
+  scroll-snap-align: center;
+}
+
+.project-image-index {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 10px;
+}
+
+/* 반응 섹션 */
+.project-reactions-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-align: start;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #121212;
+  margin: 12px;
+}
+
+.project-participants-container,
+.project-reactions-container {
+  display: flex;
+  align-items: center;
+}
+
+.project-likes-container,
+.project-comments-container {
+  display: flex;
+}
+
+.project-participants-container strong,
+.project-contact-info-section strong {
+  margin-right: 5px;
+}
+
+.project-remaining-participants {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  margin-left: 5px;
+  color: #000000;
+}
+
+.project-likes-container {
+  margin-right: 8px;
+}
+
+.project-likes,
+.project-comments {
+  width: 16px;
+  height: 16px;
+  margin-right: 2px;
+}
+
+/* 참여자 섹션 */
+.project-participant-img {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+}
+
+/* 댓글 섹션 */
+.project-comment-section {
+  margin-bottom: 12px;
+}
+
+.project-add-comment {
+  display: flex;
+  padding: 4px 12px;
+  background-color: #f5f5f5;
+}
+
+.project-my-profile-img {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.project-add-comment input {
+  background: #FFFFFF;
+  border-radius: 18px;
+  height: 22px;
+  width: 100%;
+  border: none;
+  padding-left: 8px;
+  pointer-events: none;
+}
+
+.project-add-comment ::placeholder {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #595959;
+}
+
+.project-comment {
+  display: flex;
+  padding: 12px 12px 0px 12px;
+}
+
+.project-reply {
+  display: flex;
+  padding: 12px 0px 0px 0px;
+}
+
+.project-comment-profile-img,
+.project-reply-profile-img {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+.project-comment-content,
+.project-reply-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-comment-header,
+.project-reply-header {
+  height: 22px;
+  display: flex;
+  align-items: center;
+}
+
+.project-comment-author,
+.project-reply-author {
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 14px;
+  color: #000000;
+  margin-right: 5px;
+}
+
+.project-comment-date,
+.project-reply-date {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #595959;
+}
+
+.project-comment-text,
+.project-reply-text {
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #121212;
+}
+
+.project-comment-text {
+  margin-bottom: 5px;
+}
+
+.project-reply-button {
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 12px;
+  color: #595959;
+  background-color: transparent;
+}
+
+/* 댓글 입력창 오버레이 */
+.project-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  z-index: 1000;
+}
+
+/* 댓글 입력창 스타일 */
+.project-comment-input-container {
+  background-color: white;
+  padding: 8px;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+}
+
+.project-comment-input {
+  font-family: 'Pretendard';
+  font-style: normal;
+  flex: 1;
+  height: 48px;
+  padding: 8px;
+  text-align: start;
+  resize: none;
+  border: none;
+  font-size: 11px;
+  line-height: 14px;
+  box-sizing: border-box;
+}
+
+.project-comment-input::placeholder {
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 11px;
+  line-height: 14px;
+  color: #595959;
+}
+
+.project-send-comment-button {
+  font-family: 'Pretendard';
+  font-style: normal;
+  padding: 8px;
+  background-color: transparent;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 14px;
+  align-items: center;
+  color: #2546F3;
+  border: none;
+}
