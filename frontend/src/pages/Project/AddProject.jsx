@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import "../../styles/Project/AddProject.css";
 import backIcon from "../../assets/Profile/left-arrow.svg";
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +6,8 @@ import majorEdit from "../../assets/Profile/majorEdit.svg";
 import ItemEditor from '../../components/ItemEditor';
 import FriendSelectPopUp from './FriendSelectPopUp';
 import api from '../../api';
+import { useDropzone } from "react-dropzone";
+import MessagePopUp from '../../components/MessagePopUp';
 
 const requestBodyInit = {
     "title" : "",
@@ -30,11 +32,65 @@ const AddProject = () => {
     const [isValid, setIsValid] = useState(false);
     const [isSaveLoading, setIsSaveLoading] = useState(false);
     const [isFriendSelectPopUpOpen, setIsFriendSelectPopUpOpen] = useState(false);
+    const [isImageNumberModalOpen, setIsImageNumberModalOpen] = useState(false);
+    const [imagePreviewList, setImagePreviewList] = useState([]);
+    const [tagList, setTagList] = useState([]);
+    const [isNoticeModalOpen, setIsNoticeModalOpen] = useState(false);
+    const [noticeMessage, setNoticeMessage] = useState("");
+    const [saveRes, setSaveRes] = useState(false);
 
     /** initialize */
     const initialize = async () => {
-        /** TODO */
+        await setMyId(null);
+        await setIsError(false);
+        await setRequestBody(requestBodyInit);
+        await setImageList([]);
+        await setFriendList([]);
+        await setSelectedFriendList([]);
+        await setContactList([]);
+        await setIsValid(false);
+        await setIsSaveLoading(false);
+        await setIsFriendSelectPopUpOpen(false);
+        await setIsImageNumberModalOpen(false);
+        await setImagePreviewList([]);
+        await setTagList([]);
+        await setSaveRes(false);
+        await fetchFriendList();
     };
+
+    /** for image upload */
+	const onDrop = async (acceptedFiles) => {
+        if (acceptedFiles.length === 0) {
+            return;
+        }
+
+        /** filter out already uploaded ones */
+        const filteredFiles = acceptedFiles.filter(file => {
+            return !imageList.some(prevImage => prevImage.name === file.name);
+        });
+
+        /** check length */
+        if ((filteredFiles.length + imageList.length) > 3) {
+            await setIsImageNumberModalOpen(true);
+            return;
+        }
+		
+		/** update profile image */
+		await setImageList(prevImageList => {
+            let newList = [...prevImageList, ...filteredFiles];
+            return newList;
+        });
+	};
+
+    /** image upload dropzone */
+	const { getRootProps, getInputProps } = useDropzone({
+		onDrop
+	});
+
+    /** image upload handler */
+	const handleImageUploadClick = () => {
+		document.getElementById("addProject-fileInput").click();
+	};
 
     /** fetch friend list & my information */
     const fetchFriendList = async () => {
@@ -76,10 +132,51 @@ const AddProject = () => {
 
     /** save */
     const postNewProject = async () => {
-        if (!isValid) {
+        if (!isValid || isSaveLoading) {
             return;
         }
-        /** TODO */
+    
+        try {
+            await setIsSaveLoading(true);
+            await setNoticeMessage("");
+            await setIsNoticeModalOpen(false);
+
+            const formData = new FormData();
+            formData.append("title", requestBody["title"]);
+            formData.append("content", requestBody["content"]);
+            
+            contactList.forEach((contactInfo) => {
+                formData.append("contact", contactInfo);
+            });
+
+            tagList.forEach((tag) => {
+                formData.append("keywords[]", tag);
+            });
+
+            selectedFriendList.forEach((friendInfo) => {
+                formData.append("tagged_users", friendInfo['id']);
+            });
+
+            imageList.forEach((image) => {
+                formData.append("images", image);
+            });
+
+            await api.post('/api/projects/', formData, {
+                headers : {
+                    "Content-Type" : "multipart/form-data"
+                }
+            });
+
+            await setSaveRes(true);
+            await setNoticeMessage("저장되었습니다.");
+
+        } catch(e) {
+            console.log(e);
+            await setNoticeMessage("저장에 실패했습니다.");
+        } finally {
+            await setIsNoticeModalOpen(true);
+            await setIsSaveLoading(false);
+        }
     };
 
     /** utils */
@@ -99,10 +196,52 @@ const AddProject = () => {
         });
     };
 
+    const removeImage = async (index) => {
+        await setImageList(prevList => {
+            let newList = [...prevList];
+            newList.splice(index, 1);
+            return newList;
+        })
+    };
+
     /** effects */
     useEffect(() => {
-        fetchFriendList();
+        initialize();
     }, []);
+
+    useEffect(() => {
+        if (imageList.length === 0) {
+            setImagePreviewList([]);
+        } else {
+            const newPreviewList = [];
+            let filesLoaded = 0;
+
+            imageList.forEach((file, index) => {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    newPreviewList[index] = e.target.result;
+                    filesLoaded += 1;
+
+                    if (filesLoaded === imageList.length) {
+                        setImagePreviewList(newPreviewList);
+                    }
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    }, [imageList]);
+
+    useEffect(() => {
+        if (contactList.length === 0) {
+            setIsValid(false);
+        } else {
+            if ((requestBody['title'] == null) || (requestBody['content'] == null)) {
+                setIsValid(false);
+            } else {
+                setIsValid((requestBody['title'] !== "") && (requestBody['content'] !== ""));
+            }
+        }
+    }, [requestBody, contactList]);
 
     if (isLoading) {
         return (
@@ -178,9 +317,27 @@ const AddProject = () => {
             <div className='addProject-textarea-container addProject-with-mt-12'>
                 <textarea
                     className='addProject-textarea'
-                    placeholder={"게시물와 관련된 내용을 자유롭게 작성해 보세요. 해시태그 작성은 게시물 검색을 용이하게 합니다. 게시물 관련된 링크는 필요시 글에 첨부해 주세요."}
+                    placeholder={"게시물와 관련된 내용을 자유롭게 작성해 보세요. 게시물 관련된 링크는 필요시 글에 첨부해 주세요."}
                     value={requestBody['content']}
                     onChange={async (e) => await updateHelper("content", e.target.value)}
+                />
+            </div>
+            {/** 해시태그 */}
+            <div className='addProject-field-title-container addProject-with-mt-24'>
+                <span className='addProject-field-title'>
+                    {"해시태그"}
+                </span>
+                <span className='addProject-field-subtitle'>
+                    {"최대 3개까지 작성 가능"}
+                </span>
+            </div>
+            <div className='addProject-contact-container addProject-with-mt-12'>
+                <ItemEditor
+                    type={"string"}
+                    currentItemList={tagList}
+                    setCurrentItemList={setTagList}
+                    placeholderMsg={"해시태그 작성은 게시물 검색을 용이하게 합니다."}
+                    maxItemNum={3}
                 />
             </div>
             {/** 이미지 첨부 */}
@@ -189,7 +346,7 @@ const AddProject = () => {
                     {"이미지 첨부"}
                 </span>
                 <span className='addProject-field-subtitle'>
-                    {"이미지는 최대 3개까지 첨부 가능"}
+                    {"최대 3개까지 첨부 가능"}
                 </span>
             </div>
             <div className='addProject-image-container addProject-with-mt-12'>
@@ -198,13 +355,37 @@ const AddProject = () => {
                     (imageList.length === 0) &&
                     <div className='addProject-image-message-container'>
                         <span className='addProject-image-message'>
-                            {"게시물와 관련된 이미지를 첨부해 보세요."}
+                            {"게시물과 관련된 이미지를 첨부해 보세요."}
                         </span>
                     </div>
                 }
                 {
                     (imageList.length > 0) &&
-                    <>TODO</>
+                    <div className='addProject-image-preview-container'>
+                        {
+                            imagePreviewList.map((imageData, index) => {
+                                return (
+                                    <div
+                                        key={imageData}
+                                        className='addProject-image-preview'
+                                    >
+                                        <img
+                                            
+                                            src={imageData}
+                                        />
+                                        <button
+                                            className='addProject-image-preview-cancle-btn'
+                                            onClick={async () => await removeImage(index)}
+                                        >
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
+                                                <path d="M1.5 8.5L8.5 1.5M8.5 8.5L1.5 1.5" stroke="#A8A8A8" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                );
+                            })
+                        }
+                    </div>
                 }
                 {/** horizontal bar */}
                 <div className='addProject-horizontal-bar addProject-with-mt-16'>
@@ -213,6 +394,8 @@ const AddProject = () => {
                 {/** add button */}
                 <div
                     className='addProject-add-button-container'
+                    onClick={handleImageUploadClick}
+                    {...getRootProps()}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" width="13" height="12" viewBox="0 0 13 12" fill="none">
                         <path d="M6.5 1V11" stroke="#A8A8A8" strokeWidth="1.2" strokeLinecap="round"/>
@@ -221,6 +404,13 @@ const AddProject = () => {
                     <span className='addProject-add-button-text addProject-with-ml-8'>
                         {"추가하기"}
                     </span>
+                    <input
+                        {...getInputProps()}
+                        id="addProject-fileInput"
+                        type="file"
+                        style={{ display: "none" }}
+                        multiple
+                    />
                 </div>
             </div>
             {/** 일촌 태그 */}
@@ -233,7 +423,7 @@ const AddProject = () => {
                 className='addProject-friend-container addProject-with-mt-12'
                 onClick={() => {
                     if (friendList.length !== 0) {
-                        setIsFriendSelectPopUpOpen(true)
+                        setIsFriendSelectPopUpOpen(true);
                     }
                 }}
             >
@@ -249,7 +439,7 @@ const AddProject = () => {
                                 (friendList.length === 0) ?
                                     "게시물을 함께할 수 있는 일촌이 없습니다."
                                     :
-                                    "게시물을 함께하는 일촌 태그"
+                                    "게시물을 함께하는 일촌을 태그하세요."
                             }
                         </span>
                     </div>
@@ -275,7 +465,7 @@ const AddProject = () => {
                                         }}
                                     >
                                         <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 10 10" fill="none">
-                                            <path d="M1.5 8.5L8.5 1.5M8.5 8.5L1.5 1.5" stroke="#A8A8A8" strokeWidth="1.2" strokeLinecap="round" stroke-linejoin="round"/>
+                                            <path d="M1.5 8.5L8.5 1.5M8.5 8.5L1.5 1.5" stroke="#A8A8A8" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round"/>
                                         </svg>
                                     </button>
                                 </div>
@@ -314,7 +504,26 @@ const AddProject = () => {
                     maxSelectedNum={999}
                 />
             }
-
+            {/** modals */}
+            {
+                isImageNumberModalOpen &&
+                <MessagePopUp
+                    setIsOpen={setIsImageNumberModalOpen}
+                    message={"이미지는 최대 3장까지 업로드할 수 있습니다."}
+                />
+            }
+            {
+                isNoticeModalOpen &&
+                <MessagePopUp 
+                    setIsOpen={setIsNoticeModalOpen}
+                    message={noticeMessage}
+                    confirmCallback={async () => {
+                        if (saveRes) {
+                            navigate(`/profile/${myId}?deft-route=project`, { defaultInnerRoute: "project" })
+                        }
+                    }}
+                />
+            }
             {/** save button */}
             <button
                 className={
@@ -323,7 +532,7 @@ const AddProject = () => {
                 }
                 onClick={async () => {
                     if (isValid) {
-                        alert("TODO");
+                        await postNewProject();
                     }
                 }}
             >

@@ -1,7 +1,7 @@
 import React from 'react';
 import "../styles/MessagePopUp.css";
 
-const MessagePopUp = ({ setIsOpen, message }) => {
+const MessagePopUp = ({ setIsOpen, message, confirmCallback }) => {
     return (
         <div
             className='messagePopUp-overlay'
@@ -19,7 +19,12 @@ const MessagePopUp = ({ setIsOpen, message }) => {
                 </div>
                 <button
                     className='messagePopUp-confirm-btn'
-                    onClick={() => setIsOpen(false)}
+                    onClick={async () => {
+                        await setIsOpen(false)
+                        if (confirmCallback != null) {
+                            await confirmCallback();
+                        }
+                    }}
                 >
                     {"확인"}
                 </button>

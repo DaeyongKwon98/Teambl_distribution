@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import "../../styles/ProfilePage/ProfileSelf2.css";
 import profileDefaultImg from "../../assets/Profile/defaultProfile.svg";
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import api from "../../api";
 import backIcon from "../../assets/Profile/left-arrow.svg";
 import { useDropzone } from "react-dropzone";
@@ -23,8 +23,9 @@ import ProfileSelfProject from './ProfileSelfProject';
  */
 const ProfileSelf2 = () => {
 
+	const [searchParams] = useSearchParams();
     const navigate = useNavigate();
-    const location = useLocation();
+    const location = useLocation();	
 	const { id } = useParams();
 
     /** meta states */
@@ -40,6 +41,7 @@ const ProfileSelf2 = () => {
     const [profile, setProfile] = useState({});
 	/** nav states */
 	const [selectedNavValue, setSelectedNavValue] = useState("info");
+	
 	/** popups */
 	const [isSaveSuccessPopupOpen, setIsSaveSuccessPopupOpen] = useState(false);
 	const [isSaveFailPopupOpen, setIsSaveFailPopupOpen] = useState(false);
@@ -55,7 +57,7 @@ const ProfileSelf2 = () => {
 		setProfileImage(null);
 		setFixedProfile({});
 		setProfile({});
-		setSelectedNavValue("info");
+		setSelectedNavValue(searchParams.get("deft-route") || "info");
 		setIsSaveSuccessPopupOpen(false);
 		setIsSaveFailPopupOpen(false);
 	};
