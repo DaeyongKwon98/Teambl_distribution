@@ -8,6 +8,70 @@
   border-top: 6px solid #f5f5f5;
 }
 
+/* 바텀 시트 스타일 */
+.project-bottom-sheet-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(18, 18, 18, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 1000;
+}
+
+.project-bottom-sheet {
+  background: #FFFFFF;
+  width: 100%;
+  border-radius: 20px 20px 0px 0px;
+  padding: 20px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.project-bottom-sheet-handle {
+  width: 45px;
+  height: 3px;
+  background: #D9D9D9;
+  border-radius: 2px;
+  margin: 0 auto 10px auto;
+}
+
+.project-bottom-sheet-options {
+  display: flex;
+  justify-content: space-around;
+}
+
+.project-bottom-sheet-link,
+.project-bottom-sheet-report {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border: none;
+  background-color: transparent;
+  font-family: 'Pretendard';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+}
+
+.project-bottom-sheet-link{
+  color: #000000;
+}
+
+.project-bottom-sheet-report {
+  color: #B80000;
+}
+
+.project-bottom-sheet-link-icon,
+.project-bottom-sheet-report-icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 10px;
+}
+
 /* 프로필 섹션 */
 .project-profile-section {
   display: flex;

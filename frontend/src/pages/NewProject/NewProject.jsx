@@ -3,8 +3,37 @@ import "../../styles/NewProject/NewProject.css";
 import projectsettingIcon from "../../assets/NewProject/project_setting_icon.svg";
 import projectcommentsIcon from "../../assets/NewProject/project_comments_icon.svg";
 import projectlikesIcon from "../../assets/NewProject/project_likes_icon.svg";
+import projectlinkIcon from "../../assets/NewProject/project_link_icon.svg"
+import projectreportIcon from "../../assets/NewProject/project_report_icon.svg"
 
-const Profile = ({ profileImage, authorName, major1, major2, school, postDate }) => (
+// 바텀 시트 컴포넌트
+const BottomSheet = ({ onClose, onLinkCopy, onReport }) => {
+  const handleOverlayClick = (event) => {
+    // 바텀 시트 외부 영역을 클릭한 경우에만 onClose 호출
+    if (event.target.classList.contains("project-bottom-sheet-overlay")) {
+      onClose();
+    }
+  };
+  return (
+    <div className="project-bottom-sheet-overlay" onClick={handleOverlayClick}>
+      <div className="project-bottom-sheet">
+        <div className="project-bottom-sheet-handle"></div>
+        <div className="project-bottom-sheet-options">
+          <button className="project-bottom-sheet-link">
+            <img className="project-bottom-sheet-link-icon" src={projectlinkIcon} alt="Link" onClick={onLinkCopy}/>
+            링크 복사
+          </button>
+          <button className="project-bottom-sheet-report">
+            <img className="project-bottom-sheet-report-icon" src={projectreportIcon} alt="Report" onClick={onReport}/>
+            신고
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Profile = ({ profileImage, authorName, major1, major2, school, postDate, onSettingClick }) => (
   <div className="project-profile-section">
     <div className="project-profile-info-container">
       <img src={profileImage} alt="profile" className="project-profile-img" />
@@ -13,7 +42,7 @@ const Profile = ({ profileImage, authorName, major1, major2, school, postDate })
         <div className="project-major-school-date">{major1} {major2}・{school}・{postDate}</div>
       </div>
     </div>
-    <button className="project-setting-button">
+    <button className="project-setting-button" onClick={onSettingClick}>
       <img className="project-setting-button-icon" src={projectsettingIcon} alt="setting"/>
     </button>
   </div>
@@ -246,13 +275,32 @@ const CommentSection = ({ comments, setComments }) => {
 const Project = ({ postData }) => 
   {
     const [commentsVisible, setCommentsVisible] = useState(false);
+    const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
     const [comments, setComments] = useState(postData.commentsData); // 댓글 상태 관리
   
     const toggleComments = () => 
     {
       setCommentsVisible(!commentsVisible);
     };
+
+    const toggleBottomSheet = () => {
+      setBottomSheetVisible(!bottomSheetVisible);
+    };
   
+    const handleLinkCopy = () => {
+      // 링크 복사 기능 구현
+      navigator.clipboard.writeText("복사할 링크").then(() => {
+        alert("링크가 복사되었습니다!");
+      });
+      toggleBottomSheet(); // 바텀 시트 닫기
+    };
+  
+    const handleReport = () => {
+      // 신고 기능 구현
+      alert("신고가 접수되었습니다.");
+      toggleBottomSheet(); // 바텀 시트 닫기
+    };
+
     return (
       <div className="new-project">
         <Profile
@@ -262,6 +310,7 @@ const Project = ({ postData }) =>
           major2={postData.major2}
           school={postData.school}
           postDate={postData.postDate}
+          onSettingClick={toggleBottomSheet}
         />
         <div className="project-title">{postData.title}</div>
         <Tags tags={postData.tags} />
@@ -278,6 +327,13 @@ const Project = ({ postData }) =>
         />
         {commentsVisible && (
           <CommentSection comments={comments} setComments={setComments} />
+        )}
+        {bottomSheetVisible && (
+          <BottomSheet 
+            onClose={toggleBottomSheet} 
+            onLinkCopy={handleLinkCopy} 
+            onReport={handleReport}
+          />
         )}
       </div>
     );
