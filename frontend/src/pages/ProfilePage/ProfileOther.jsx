@@ -429,14 +429,14 @@ const ProfileOther = ({ userId }) => {
         </div>
 
         <div className="profileOther-flexbox">
-          <div className="profileOther-tools-title">툴</div>
+          <div className="profileOther-tools-title">스킬</div>
 
           <div className="profileOther-tools">
             {profile.tools.length === 0 ? (
               <div className="profileOther-row">
                 <div className="profileOther-gray-separator"></div>
                 <div className="profileOther-list-element">
-                  상대방이 툴을 아직 입력하지 않았어요.
+                  상대방이 스킬을 아직 입력하지 않았어요.
                 </div>
               </div>
             ) : (

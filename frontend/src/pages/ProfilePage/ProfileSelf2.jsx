@@ -456,7 +456,7 @@ const ProfileSelf2 = () => {
 					}}
 				>
 					<span className='profileSelf2-config-title'>
-						{"툴"}
+						{"스킬"}
 					</span>
 				</div>
 				<ItemEditor
@@ -465,7 +465,7 @@ const ProfileSelf2 = () => {
 					setCurrentItemList={async (value) => {
 						await updateProfile("tools", value);
 					}}
-					placeholderMsg={"본인이 다룰 수 있는 툴을 추가해보세요."}
+					placeholderMsg={"본인이 다룰 수 있는 스킬을 추가해보세요."}
 					maxItemNum={9999}
 				/>
 				{/** explanation */}
