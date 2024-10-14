@@ -1,7 +1,8 @@
 .gosearch-container {
   font-family: 'Pretendard';
   font-style: normal;
-  width: 300px;
+  /* width: 300px; */
+  width: 100%;
   margin: 0 auto;
   padding: 0;
   border-top: 6px solid #f5f5f5;

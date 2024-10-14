@@ -11,7 +11,6 @@ import postImage from "../assets/NewProject/testimg.png";
 import Gosearch from "../components/Gosearch.jsx";
 
 
-
 // 프로젝트 예시 데이터
 const postData = {
   profileImage: postImage,
