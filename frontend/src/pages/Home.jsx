@@ -2,16 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Home.css";
-import GoSearchIcon from "../assets/gosearchIcon.svg";
-import NotiIcon from "../assets/notiIcon.svg";
-import NotiIconActive from "../assets/notiIconActive.svg";
-import TeamblIcon from "../assets/teamblIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import FriendCard from "../components/FriendCard";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
 import Project from "./NewProject/NewProject.jsx";
 import postImage from "../assets/NewProject/testimg.png";
+import Gosearch from "../components/Gosearch.jsx";
 
 
 
@@ -263,6 +260,7 @@ function Home() {
     <div className="home-container">
       <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
+      <Gosearch/>
       <Project postData={postData} />
       <Project postData={postData} />
       <div className="home-incontainer">
