@@ -22,6 +22,7 @@ import ResetPassword from "./pages/ResetPasswordPage/ResetPassword";
 import ResetPasswordConfirm from "./pages/ResetPasswordPage/ResetPasswordConfirm";
 import FriendOther from "./pages/FriendOther";
 import AddProject from "./pages/Project/AddProject";
+import FloatingButton from "./components/FloatingButton";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -48,6 +49,8 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/** floating button */}
+      <FloatingButton />
       <Routes>
         <Route path="/" element={<Start />} />
         <Route

@@ -1,0 +1,13 @@
+.floatingButton-button {
+    position: fixed;
+    bottom: 22px;
+    right: 22px;
+    width: 48px;
+    height: 48px;
+    flex-shrink: 0;
+    border: none;
+    outline: none;
+    border-radius: 50%;
+    background-color: #2546F3;
+    z-index: 999;
+}
