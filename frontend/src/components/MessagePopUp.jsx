@@ -1,7 +1,7 @@
 import React from 'react';
 import "../styles/MessagePopUp.css";
 
-const MessagePopUp = ({ setIsOpen, message, confirmCallback }) => {
+const MessagePopUp = ({ setIsOpen, message, subMessages, confirmCallback }) => {
     return (
         <div
             className='messagePopUp-overlay'
@@ -17,6 +17,23 @@ const MessagePopUp = ({ setIsOpen, message, confirmCallback }) => {
                 <div className='messagePopUp-message-container'>
                     {message}
                 </div>
+                {
+                    (subMessages != null) &&
+                    <div className='messagePopUp-sub-message-container'>
+                        {
+                            subMessages.map((message, index) => {
+                                return (
+                                    <span
+                                        key={index}
+                                        className='messagePopUp-sub-message'
+                                    >
+                                        {message}
+                                    </span>
+                                );
+                            })
+                        }
+                    </div>
+                }
                 <button
                     className='messagePopUp-confirm-btn'
                     onClick={async () => {

@@ -1,0 +1,36 @@
+.prime-button {
+    outline: none;
+    border: none;
+    width: 350px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: #0923A9;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: -0.304px;
+}
+
+.prime-btn-disabled {
+    background: #A8A8A8;
+}
+
+.prime-btn-loader {
+    position: relative;
+    top: 2px;
+    width: 20px;
+    aspect-ratio: 1;
+    --_c:no-repeat radial-gradient(farthest-side,#fff 92%,#0000);
+    background: 
+      var(--_c) top,
+      var(--_c) left,
+      var(--_c) right,
+      var(--_c) bottom;
+    background-size: 6px 6px;
+    animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}

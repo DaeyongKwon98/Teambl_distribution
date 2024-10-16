@@ -1,0 +1,38 @@
+.content-toggle-title-container {
+    padding: 14px 0px;
+    width: 100%;
+    /* box-sizing: border-box; */
+    height: 20px;
+    display: inline-flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.content-toggle-title {
+    color: #121212;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+}
+
+.content-toggle-button {
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    background: none;
+    border: none;
+    outline: none;
+}
+
+.content-toggle-arrow {    
+    position: relative;
+    top: -2px;
+    transition: transform 0.3s ease;
+    transform: rotate(0deg);
+}
+
+.content-toggle-rotate {
+    transform: rotate(180deg);
+}

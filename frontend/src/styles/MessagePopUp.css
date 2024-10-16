@@ -31,7 +31,23 @@
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
-    margin-bottom: 26px;
+}
+
+.messagePopUp-sub-message-container {
+    margin-top: 12px;
+    width: 100%;
+    text-align: center;
+}
+
+.messagePopUp-sub-message {
+    color: #595959;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -0.228px;
+    display: block;
 }
 
 .messagePopUp-confirm-btn {
@@ -53,4 +69,5 @@
     font-style: normal;
     font-weight: 700;
     letter-spacing: -0.304px;
+    margin-top: 26px;
 }
