@@ -51,6 +51,7 @@ import logging
 from rest_framework.exceptions import ValidationError
 from django.contrib.auth import get_user_model
 from collections import OrderedDict, deque
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -568,7 +569,7 @@ class CreateInvitationLinkView(generics.CreateAPIView):
             inviter=request.user,
             invitee_name=name,
             invitee_id=None,
-            link=f"http://localhost:5173/welcome?code={unique_code}",
+            link=f"{settings.TEAMBL_URL}welcome?code={unique_code}",
         )
 
         return Response(
