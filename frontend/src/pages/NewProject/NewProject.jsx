@@ -5,6 +5,7 @@ import projectcommentsIcon from "../../assets/NewProject/project_comments_icon.s
 import projectlikesIcon from "../../assets/NewProject/project_likes_icon.svg";
 import projectlinkIcon from "../../assets/NewProject/project_link_icon.svg"
 import projectreportIcon from "../../assets/NewProject/project_report_icon.svg"
+import ProfileComponent from "../../components/ProfileComponent";
 
 // 바텀 시트 컴포넌트
 const BottomSheet = ({ onClose, onLinkCopy, onReport }) => {
@@ -278,8 +279,7 @@ const Project = ({ postData }) =>
     const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
     const [comments, setComments] = useState(postData.commentsData); // 댓글 상태 관리
   
-    const toggleComments = () => 
-    {
+    const toggleComments = () => {
       setCommentsVisible(!commentsVisible);
     };
 
@@ -303,7 +303,7 @@ const Project = ({ postData }) =>
 
     return (
       <div className="new-project">
-        <Profile
+        <ProfileComponent
           profileImage={postData.profileImage}
           authorName={postData.authorName}
           major1={postData.major1}
