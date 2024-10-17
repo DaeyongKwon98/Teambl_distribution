@@ -524,5 +524,6 @@ class CommentSerializer(serializers.ModelSerializer):
             "content",
             "created_at",
             "likes",
+            "parent_comment",
         ]
         read_only_fields = ["user", "project", "created_at", "likes"]
