@@ -57,62 +57,25 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
         setReplyingToCommentIndex(null); // 입력 닫기 및 응답 상태 재설정
     };
 
-    // // 댓글 작성 함수
-    // const submitComment = () => {
-    //     if (!commentText.trim()) return;
-    //     api.post(`/api/projects/${project.project_id}/comments/create/`, { content: commentText })
-    //         .then((res) => {
-    //             setComments([...comments, res.data]); // 댓글 목록 업데이트
-    //             setCommentText(""); // 입력 필드 초기화
-    //         })
-    //         .catch((err) => {
-    //             console.error("Failed to submit comment", err);
-    //             console.log("Error response:", err.response.data);
-    //         });
-    // };
-
-    // // 댓글 작성 함수
-    // const submitComment = () => {
-    //     if (!commentText.trim()) return;
-
-    //     // Create the payload with content and parent_comment
-    //     const payload = {
-    //         content: commentText,
-    //         parent_comment: replyingToCommentIndex !== null ? comments[replyingToCommentIndex].id : null,
-    //     };
-
-    //     api.post(`/api/projects/${project.project_id}/comments/create/`, payload)
-    //         .then((res) => {
-    //             setComments((prevComments) => [...prevComments, res.data]); // Update comments list with the new comment
-    //             setCommentText(""); // Clear the input field
-    //             setShowCommentInput(false); // Hide the input field
-    //             setReplyingToCommentIndex(null); // Reset replying state
-    //         })
-    //         .catch((err) => {
-    //             console.error("Failed to submit comment", err);
-    //             console.log("Error response:", err.response.data);
-    //         });
-    // };
-
     // 댓글 작성 함수
     const submitComment = () => {
         if (!commentText.trim()) return;
-
+    
         // Determine the parent comment ID
         let parentCommentId = null;
-        
-        // If replying to a comment, get its ID
+    
+        // If replying to a comment, get its parent or self ID
         if (replyingToCommentIndex !== null) {
-            parentCommentId = comments[replyingToCommentIndex].id; // Set parent_comment to the ID of the comment being replied to
+            const replyingToComment = comments.find(comment => comment.id === replyingToCommentIndex);
+            parentCommentId = getParentCommentId(replyingToComment); // Set parent_comment to the ID of the comment being replied to
         }
-        console.log("ReplyingtoCommentIndex", replyingToCommentIndex);
-        console.log("comments", comments);
+    
         // Create the payload with content and parent_comment
         const payload = {
             content: commentText,
             parent_comment: parentCommentId,
         };
-        console.log("Create comment", payload);
+    
         api.post(`/api/projects/${project.project_id}/comments/create/`, payload)
             .then((res) => {
                 // Update comments list immediately
@@ -137,7 +100,6 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
             })
             .catch((err) => {
                 console.error("Failed to submit comment", err);
-                console.log("Error response:", err.response.data);
             });
     };
 
@@ -211,42 +173,15 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
         }
     };
 
-    // // Helper function to render comments and their replies recursively
-    // const renderComments = (commentList) => {
-    //     return commentList.map((comment, index) => (
-    //         <div key={index} className="project-comment">
-    //             <img src={profileImages[comment.user]} alt={comment.user_name} className="project-comment-profile-img" />
-    //             <div className="project-comment-content">
-    //                 <div className="project-comment-header">
-    //                     <span className="project-comment-author">{comment.user_name}</span>
-    //                     <span className="project-comment-date">{timeAgo(comment.created_at)}</span>
-    //                 </div>
-    //                 <div className="project-comment-text">{comment.content}</div>
-    //                 <div 
-    //                     className="project-reply-button" 
-    //                     onClick={() => 
-    //                         {
-    //                             console.log("index:", index);
-    //                             handleReplyClick(index)
-    //                         }}
-    //                 >
-    //                     답글 달기
-    //                 </div>
-    //                 {/* Render replies recursively */}
-    //                 {comment.replies && comment.replies.length > 0 && (
-    //                     <div className="project-replies">
-    //                         {renderComments(comment.replies)} {/* Recursive call */}
-    //                     </div>
-    //                 )}
-    //             </div>
-    //         </div>
-    //     ));
-    // };
+    const getParentCommentId = (comment) => {
+        console.log("COMMENT:", comment);
+        return comment.parent_comment ? comment.parent_comment : comment.id;
+    };
 
     // Helper function to render comments and their replies recursively
     const renderComments = (commentList) => {
-        return commentList.map((comment, index) => (
-            <div key={index} className="project-comment">
+        return commentList.map((comment) => (
+            <div key={comment.id} className="project-comment">
                 <img src={profileImages[comment.user]} alt={comment.user_name} className="project-comment-profile-img" />
                 <div className="project-comment-content">
                     <div className="project-comment-header">
@@ -281,8 +216,9 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
                         <div 
                             className="project-reply-button" 
                             onClick={() => {
-                                console.log("index:", index);
-                                handleReplyClick(index);
+                                const parentCommentId = getParentCommentId(comment);
+                                console.log("Reply to comment ID:", parentCommentId);
+                                handleReplyClick(parentCommentId);
                             }}
                         >
                             답글 달기
@@ -290,7 +226,7 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
 
                         {currentUser && currentUser.id === comment.user && (
                             <div className="project-comment-buttons">
-                                {/* <button 
+                                <button 
                                     onClick={() => {
                                         setEditingComment(comment.id);
                                         setEditContent(comment.content);
@@ -304,7 +240,7 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
                                     className="project-comment-delete-button"
                                 >
                                     삭제
-                                </button> */}
+                                </button>
                             </div>
                         )}
                     </div>
@@ -319,7 +255,6 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
             </div>
         ));
     };
-
 
     return (
         <div className="project-comment-section">
