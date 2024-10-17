@@ -2,14 +2,61 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api";
 import "../styles/Home.css";
-import GoSearchIcon from "../assets/gosearchIcon.svg";
-import NotiIcon from "../assets/notiIcon.svg";
-import NotiIconActive from "../assets/notiIconActive.svg";
-import TeamblIcon from "../assets/teamblIcon.svg";
 import CloseIcon from "../assets/closeIcon.svg";
 import FriendCard from "../components/FriendCard";
 import Header from "../components/Header";
 import Navbar from "../components/Navbar";
+import Project from "./Project.jsx";
+// import Project from "./NewProject/NewProject.jsx";
+// import postImage from "../assets/NewProject/testimg.png";
+import Gosearch from "../components/Gosearch.jsx";
+
+
+// // 프로젝트 예시 데이터
+// const postData = {
+//   profileImage: postImage,
+//   authorName: "이기동",
+//   major1: "산업디자인",
+//   major2: "산업공학",
+//   school: "카이스트",
+//   postDate: "2024-09-29",
+//   title: "공모전 팀원 모집",
+//   tags: ["공모전", "팀원모집", "기획", "개발", "Figma"],
+//   description: "글로벌 고래 보호하기 챌린지 참가할 팀원 모집합니다.\n평소 환경 문제에 관심 있으셨던 분 많은 참여 부탁 드립니다.\n\n그래픽 디자이너 추가 모집중에 있습니다.\n현재 3명의 인원이 현재 공모전 참여 의사를 밝혀서 참여 중입니다. 공모전은 이러이러한 프로젝트를 제작해서 이때까지 제출해야 합니다.\n관심있으신 분은 아래의 연락처로 문의 주세요!",
+//   contactInfo: "teambl@kaist.ac.kr",
+//   postImages: [postImage, postImage],
+//   likes: 24,
+//   comments: 8,
+//   participants: [
+//     { name: "참여자1", profileImage: postImage },
+//     { name: "참여자2", profileImage: postImage },
+//     { name: "참여자3", profileImage: postImage }
+//   ],
+//   commentsData: [
+//     {
+//       author: "이기동",
+//       text: "안녕하세요.",
+//       date: "5시간 전",
+//       profileImage: postImage,
+//       replies: [
+//         {
+//           author: "김철수",
+//           text: "안녕하세요! 반갑습니다.",
+//           date: "4시간 전",
+//           profileImage: postImage
+//         },
+//       ]
+//     },
+//     {
+//       author: "김철수",
+//       text: "좋은 글이네요!",
+//       date: "3시간 전",
+//       profileImage: postImage,
+//       replies: []
+//     }
+//   ]
+// };
+
 
 function Home() {
   const navigate = useNavigate();
@@ -68,7 +115,7 @@ function Home() {
   const fetchSecondDegreeProfiles = async () => {
     try {
       // 2촌 사용자 정보를 가져오는 API 호출
-      const response = await api.get("/api/second-degree-friends/");
+      const response = await api.get("/api/user-statistics-difference/");
 
       // API로부터 받은 2촌 사용자 정보 목록
       const connections = response.data || [];
@@ -213,6 +260,10 @@ function Home() {
     <div className="home-container">
       <Header profileImage={profileImage} />
       <Navbar activeNav={activeNav} handleNavClick={handleNavClick} />
+      <Gosearch/>
+      <Project/>
+      {/* <Project postData={postData} />
+      <Project postData={postData} /> */}
       <div className="home-incontainer">
         <section className="home-friend-recommendation">
           <div className="home-section-header">

@@ -1,11 +1,12 @@
 .profile {
   /* border: 1px solid black; */
-  width: 300px;
-  margin: 0 auto;
-  min-width: 300px;
+  width: 100%;
+  margin: 0;
+  /* min-width: 300px; */
   display: flex;
   flex-direction: column;
   box-shadow: none;
+  box-sizing: border-box;
 }
 
 .profile-backbutton {
