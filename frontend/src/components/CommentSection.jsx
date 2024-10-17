@@ -290,7 +290,7 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
 
                         {currentUser && currentUser.id === comment.user && (
                             <div className="project-comment-buttons">
-                                <button 
+                                {/* <button 
                                     onClick={() => {
                                         setEditingComment(comment.id);
                                         setEditContent(comment.content);
@@ -304,7 +304,7 @@ const CommentSection = ({ project, comments, setComments, currentUser }) => {
                                     className="project-comment-delete-button"
                                 >
                                     삭제
-                                </button>
+                                </button> */}
                             </div>
                         )}
                     </div>

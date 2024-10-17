@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "../styles/ProjectItem.css";
+// import "../styles/ProjectItem.css";
 import api from "../api";
 import Modal from "./Modal";
 import BottomSheet from "./BottomSheet";
@@ -368,12 +368,12 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
         )} */}
         {currentUser && currentUser.email === project.user.email && (
           <div>
-            <button
+            {/* <button
               className="delete-button"
               onClick={() => onDelete(project.project_id)}
             >
               삭제하기
-            </button>
+            </button> */}
           </div>
         )}
       </div>
@@ -492,9 +492,9 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
           >
             삭제하기
           </button> */}
-          {!isEditingProject && (
+          {/* {!isEditingProject && (
             <button onClick={() => setIsEditingProject(true)}>수정하기</button>
-          )}
+          )} */}
         </div>
       )}
 
