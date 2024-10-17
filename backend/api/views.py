@@ -1248,9 +1248,13 @@ class CommentCreateView(generics.CreateAPIView):
     def perform_create(self, serializer):
         project_id = self.kwargs.get("project_id")
         project = get_object_or_404(Project, pk=project_id)
-        print("comment create for project", project)
-        serializer.save(user=self.request.user, project=project)
-
+        
+        parent_comment_id = self.request.data.get("parent_comment")  # Get parent_comment from request
+        parent_comment = None
+        if parent_comment_id:
+            parent_comment = get_object_or_404(Comment, pk=parent_comment_id)  # Validate the parent comment
+        
+        serializer.save(user=self.request.user, project=project, parent_comment=parent_comment)
 
 # 댓글 목록
 class CommentListView(generics.ListAPIView):
