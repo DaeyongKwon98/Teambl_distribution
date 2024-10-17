@@ -285,6 +285,7 @@ class ProfileUpdateView(generics.UpdateAPIView):
 class ProjectListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
+    pagination_class = None
 
     # queryset = Project.objects.all()
     def get_queryset(self):
@@ -343,7 +344,8 @@ class ProjectTaggedUsersListView(generics.ListAPIView):
 class ProjectEveryListCreate(generics.ListCreateAPIView):
     serializer_class = ProjectSerializer
     permission_classes = [IsAuthenticated]
-
+    pagination_class = None
+    
     def get_queryset(self):
         return Project.objects.all()  # 모든 유저의 프로젝트 반환
 
@@ -1262,6 +1264,7 @@ class CommentCreateView(generics.CreateAPIView):
 class CommentListView(generics.ListAPIView):
     serializer_class = CommentSerializer
     permission_classes = [permissions.IsAuthenticated]
+    pagination_class = None
 
     def get_queryset(self):
         project_id = self.kwargs.get("project_id")

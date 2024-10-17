@@ -73,7 +73,10 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
 
   useEffect(() => { // 프로젝트의 댓글 목록을 불러오는 함수
     api.get(`/api/projects/${project.project_id}/comments/`)
-      .then((res) => setComments(res.data.results))
+      .then((res) => {
+        setComments(res.data);
+        console.log(res.data);
+      })
       .catch((err) => console.error(err));
 
     // 좋아요 여부를 백엔드에서 불러오는 함수

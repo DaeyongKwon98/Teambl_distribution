@@ -123,7 +123,12 @@ function Project() {
       .get("/api/projects/every/")
       .then((res) => res.data)
       .then((data) => {
-        setProjects(data.results);
+        // Assuming each project has a 'created_at' field in ISO string format
+        console.log(data);
+        const sortedProjects = data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+        // Now update the state with the sorted data
+        setProjects(sortedProjects);
         console.log(data);
       })
       .catch((err) => alert(err));

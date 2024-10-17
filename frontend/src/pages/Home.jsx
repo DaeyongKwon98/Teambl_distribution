@@ -115,7 +115,7 @@ function Home() {
   const fetchSecondDegreeProfiles = async () => {
     try {
       // 2촌 사용자 정보를 가져오는 API 호출
-      const response = await api.get("/api/user-statistics-difference/");
+      const response = await api.get("/api/second-degree-friends/");
 
       // API로부터 받은 2촌 사용자 정보 목록
       const connections = response.data || [];
