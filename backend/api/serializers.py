@@ -513,6 +513,7 @@ class CommentSerializer(serializers.ModelSerializer):
     user_name = serializers.CharField(
         source="user.profile.user_name", read_only=True
     )  # 댓글 작성자 이름 추가
+    replies = serializers.SerializerMethodField()
 
     class Meta:
         model = Comment
@@ -524,5 +525,12 @@ class CommentSerializer(serializers.ModelSerializer):
             "content",
             "created_at",
             "likes",
+            "parent_comment",
+            "replies",
         ]
         read_only_fields = ["user", "project", "created_at", "likes"]
+
+    def get_replies(self, obj):
+        # Fetching replies related to the current comment
+        replies = obj.replies.all()
+        return CommentSerializer(replies, many=True).data
