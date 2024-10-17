@@ -1,0 +1,69 @@
+.setting2-body {
+    margin: 0;
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
+      BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+      "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    font-weight: 400;
+    background-color: #ffffff;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.setting2-backward-btn-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white;
+}
+
+.setting2-backbutton {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    background-color: transparent;
+}
+
+.setting2-backbutton img {
+    width: 20px;
+    height: 16px;
+}
+
+.setting2-backbutton:hover {
+    cursor: pointer;
+}
+
+.setting2-title-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px; /* for layout */
+    color: #121212;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.38px;
+}
+
+.setting2-container {
+    width: 100%;
+    margin: 0 auto;
+    padding: auto;
+}
+
+.setting2-mt-22 {
+    margin-top: 22px;
+}
+
+.trans-border {
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    background: none;
+    height: 16px;
+}

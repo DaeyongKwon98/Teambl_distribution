@@ -1,0 +1,166 @@
+.itemEditor-container {
+    padding: 0px 12px 16px 12px;
+    width: 100%;
+    border-radius: 5px;
+    background: var(--05, #F5F5F5);
+    box-sizing: border-box;
+}
+
+.itemEditor-item-row-container {
+    width: 100%;
+    padding-top: 16px;
+}
+
+.itemEditor-item-row {
+    width: 100%;
+    padding: 16px 0px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.itemEditor-row-text {
+    color: var(--00, #121212);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.itemEditor-item-row-delete-button {
+    padding: 0;
+    margin: 0;
+    margin-left: auto;
+    background: none;
+    outline: none;
+    border: none;
+}
+
+.itemEditor-item-tag-container {
+    padding-top: 16px;
+    padding-bottom: 8px;
+    width: 100%;
+}
+
+.itemEditor-item-tag {
+    padding: 4px 8px;
+    border-radius: 5px;
+    background-color: #fff;
+    display: inline-flex;   
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+}
+
+.itemEditor-item-tag-content {
+    color: var(--00, #121212);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.itemEditor-item-tag-delete-button {
+    padding: 0;
+    margin: 0;
+    margin-left: 10px;
+    background: none;
+    outline: none;
+    border: none;
+    line-height: 50%;
+}
+
+.itemEditor-input-container {
+    padding: 16px 0px;
+    width: 100%;
+}
+
+.itemEditor-input {
+    margin: 0;
+    width: 100%;
+    box-sizing: border-box;
+    background: none;
+    border: none;
+    outline: none;
+    color: var(--00, #121212);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.itemEditor-input::placeholder {
+    color: var(--03, #A8A8A8);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.itemEditor-add-button-container {
+    padding: 16px 0px 0px 0px;
+    width: 100%;
+    text-align: center;
+}
+
+.itemEditor-add-button {
+    background: none;
+    border: none;
+    outline: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    line-height: 50%;
+}
+
+.itemEditor-add-button-text {
+    color: #A8A8A8;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: var(--Body-Large-Tracking, 0.5px);
+}
+
+.itemEditor-anon-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.itemEditor-item-with-ml-8 {
+    margin-left: 8px;
+}
+
+.itemEditor-item-with-mt-8 {
+    margin-top: 8px;
+}
+
+.itemEditor-item-with-mr-8 {
+    margin-right: 8px;
+}
+
+.itemEditor-item-with-mb-8 {
+    margin-bottom: 8px;
+}
+
+.itemEditor-item-with-mt-16 {
+    margin-top: 16px;
+}
+
+.itemEditor-item-with-mt-16 {
+    margin-top: 16px;
+}
+
+.itemEditor-horizontal-line {
+    width: 100%;
+    height: 1px;
+    background-color: var(--04, #D9D9D9);
+}
+
+.itemEditor-color-red {
+    color: #B80000;
+}

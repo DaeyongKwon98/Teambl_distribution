@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../api";
 import ProjectItem from "../components/ProjectItem";
 import Modal from "../components/Modal";
-import "../styles/Project.css";
+// import "../styles/Project.css";
 
 import BottomSheet from "../components/BottomSheet";
 import ProfileComponent from "../components/ProfileComponent";
@@ -242,18 +242,15 @@ function Project() {
 
     return (
     <div>
-      <div className="projects-section">
-        <h2>게시물</h2>
-        {projects.map((project) => (
-          <ProjectItem
-            project={project}
-            onDelete={deleteProject}
-            key={project.project_id}
-            currentUser={currentUser}
-            refreshProjects={getProjects}
-          />
-        ))}
-      </div>
+      {projects.map((project) => (
+        <ProjectItem
+          project={project}
+          onDelete={deleteProject}
+          key={project.project_id}
+          currentUser={currentUser}
+          refreshProjects={getProjects}
+        />
+      ))}
 
       {/* <h2>Create a Project</h2>
       <form onSubmit={createProject}>

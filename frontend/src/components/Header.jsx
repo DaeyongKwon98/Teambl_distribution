@@ -1,16 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import GoSearchIcon from "../assets/gosearchIcon.svg";
+import GoSearchIcon from "../assets/header_gosearchIcon.svg";
 import NotiIcon from "../assets/notiIcon.svg";
 import NotiIconActive from "../assets/notiIconActive.svg";
 import TeamblIcon from "../assets/teamblIcon.svg";
 import api from "../api";
 import defaultProfileImage from "../assets/default_profile_image.svg";
+import SideMenu from './SideMenu';
 
 const Header = ({ profileImage }) => {
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
   const [unreadNotifications, setUnreadNotifications] = useState(0); // 읽지 않은 알림 수
+
+  const [isSlideMenuOpen, setIsSlideMenuOpen] = useState(false);
 
   const goToSearch = () => { navigate("/search"); };
   const goToNotification = () => { navigate("/notification"); };
@@ -37,14 +40,6 @@ const Header = ({ profileImage }) => {
   
   return (
     <header className="home-header">
-      <div className="home-search">
-        <img
-          src={GoSearchIcon}
-          alt="검색화면이동"
-          className="home-gosearch-icon"
-          onClick={goToSearch}
-        />
-      </div>
       <div className="home-logo">
         <img
           src={TeamblIcon}
@@ -53,7 +48,13 @@ const Header = ({ profileImage }) => {
           onClick={() => {navigate("/home")}}
         />
       </div>
-      <div className="home-profile-and-notifications">
+      <div className="home-search-noti-profile">
+        <img
+          src={GoSearchIcon}
+          alt="검색화면이동"
+          className="home-gosearch-icon"
+          onClick={goToSearch}
+        />
         <img
           src={unreadNotifications > 0 ? NotiIconActive : NotiIcon} // 조건에 따라 아이콘 변경
           alt="알림"
@@ -64,9 +65,16 @@ const Header = ({ profileImage }) => {
           src={profileImage ? profileImage : defaultProfileImage}
           alt="내 프로필"
           className="home-profile-icon"
-          onClick={goToProfile}
+          onClick={() => setIsSlideMenuOpen(true)}
         />
       </div>
+      {/** side menu */}
+      <SideMenu
+        isOpen={isSlideMenuOpen}
+        setIsOpen={setIsSlideMenuOpen}
+        profileImage={profileImage ? profileImage : defaultProfileImage}
+        userId={userId}
+      />
     </header>
   );
 };

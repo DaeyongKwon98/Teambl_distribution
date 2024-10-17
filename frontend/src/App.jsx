@@ -21,6 +21,9 @@ import Setting from "./pages/Setting";
 import ResetPassword from "./pages/ResetPasswordPage/ResetPassword";
 import ResetPasswordConfirm from "./pages/ResetPasswordPage/ResetPasswordConfirm";
 import FriendOther from "./pages/FriendOther";
+import AddProject from "./pages/Project/AddProject";
+import FloatingButton from "./components/FloatingButton";
+import Setting2 from "./pages/Setting2";
 
 function Logout() {
   localStorage.clear(); // 저장된 token 정보 없애기
@@ -47,6 +50,8 @@ function App() {
 
   return (
     <BrowserRouter>
+      {/** floating button */}
+      <FloatingButton />
       <Routes>
         <Route path="/" element={<Start />} />
         <Route
@@ -101,6 +106,15 @@ function App() {
           element={
             <ProtectedRoute>
               <Project />
+            </ProtectedRoute>
+          }
+        />
+        {/* NEW */}
+        <Route
+          path="/projects/add"
+          element={
+            <ProtectedRoute>
+              <AddProject />
             </ProtectedRoute>
           }
         />
@@ -164,7 +178,7 @@ function App() {
           path="/setting"
           element={
             <ProtectedRoute>
-              <Setting />
+              <Setting2 />
             </ProtectedRoute>
           }
         />

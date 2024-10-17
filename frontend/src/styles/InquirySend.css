@@ -1,0 +1,50 @@
+.inq-send-container {
+    width: 100%;
+    padding: 12px 0px 15px 0px;
+}
+
+.inq-send-email-container {
+    width: 100%;
+    text-align: left;
+    color: var(--01, #595959);
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.inq-send-textarea {
+    resize: none;
+    padding: 16px 12px;
+    width: 100%;
+    height: 160px;
+    border: none;
+    border-radius: 5px;
+    background: #F5F5F5;
+    outline: none;
+    box-sizing: border-box;
+    color: var(--00, #121212);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.inq-send-textarea::placeholder {
+    color: var(--03, #A8A8A8);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.inq-send-with-mt-8 {
+    margin-top: 8px;
+}
+
+.inq-send-with-mt-12 {
+    margin-top: 12px;
+}

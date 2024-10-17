@@ -1,0 +1,29 @@
+.info-msg-container {
+    width: 100%;
+    display: inline-flex;
+    justify-self: flex-start;
+    align-items: center;
+}
+
+.info-msg-icon {
+    margin-right: 4px;
+}
+
+.info-msg-text {
+    position: relative;
+    top: 1px;
+    text-align: center;
+    font-family: "Noto Sans";
+    font-size: 12px;
+    font-style: normal;
+    font-weight: 400;
+    letter-spacing: -0.228px;
+}
+
+.info-msg-good {
+    color: #42A513;
+}
+
+.info-msg-bad {
+    color: #B80000;
+}

@@ -1,0 +1,131 @@
+
+@keyframes slideIn {
+    from {
+      transform: translateX(-100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.2s ease forwards;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.2s ease forwards;
+    opacity: 1;
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.fade-out {
+    animation: fadeOut 0.1s ease forwards;
+    opacity: 0;
+}
+
+.side-menu-container-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1000;
+    background: rgba(18, 18, 18, 0.80);
+}
+
+.side-menu-container {
+    background-color: #fff;
+    width: 65%;
+    max-width: 280px; /** fixed max width */
+    height: 100vh;
+    z-index: 1001;
+    padding: 22px 20px;
+}
+
+.side-menu-top-container {
+    width: 100%;
+    height: 50px;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.side-menu-profile-image {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid var(--Point, #2546F3);
+}
+
+.side-menu-user-name {
+    color: var(--Labels-Primary, #000);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: normal;
+    margin-left: 16px; /* for layout */
+}
+
+.side-menu-mypage-button {
+    border: none;
+    width: 30px;
+    height: 50px;
+    background: none;
+    outline: none;
+    margin-left: auto;
+}
+
+.side-menu-border-bar {
+    width: 100%;
+    height: 1px;
+    background-color: #D9D9D9;
+    margin: 16px 0px 20px 0px;
+}
+
+.side-menu-item-container {
+    width: 100%;
+    padding: 0px;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.side-menu-item-button {
+    color: var(--00, #121212);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    border: none;
+    background: none;
+    outline: none;
+    margin: 0;
+    margin-bottom: 20px;
+}
+
+.slide-menu-hidden {
+    display: none;
+}

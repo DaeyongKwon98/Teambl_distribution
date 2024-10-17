@@ -1,0 +1,335 @@
+.profileSelf2-body {
+    margin: 0;
+    font-family: "Pretendard Variable", Pretendard, -apple-system,
+      BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI",
+      "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji",
+      "Segoe UI Emoji", "Segoe UI Symbol", sans-serif;
+    font-weight: 400;
+    background-color: #ffffff;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.profileSelf2-container {
+    width: 100%;
+    margin: 0 auto;
+}
+
+.profileSelf2-backbutton {
+    border: none;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    background-color: transparent;
+}
+
+.profileSelf2-backbutton img {
+    width: 20px;
+    height: 16px;
+}
+
+.profileSelf2-backbutton:hover {
+    cursor: pointer;
+}
+
+.profileSelf2-title-container {
+    width: 100%;
+    text-align: left;
+    margin-top: 20px; /* for layout */
+    color: #121212;
+    font-family: Pretendard;
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.38px;
+}
+
+.profileSelf2-top-container {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-top: 16px; /* for layout */
+}
+
+.profileSelf2-image-container {
+    width: 90px;
+    height: 120px;
+}
+
+.profileSelf2-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 7px;
+}
+
+.profileSelf2-image-loader-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 7px;
+    background-color: #F5F5F5;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileSelf2-basic-info-container {
+    margin-left: 16px; /* for layout */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.profileSelf2-name-and-pencil {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.profileSelf2-name {
+    color: #121212;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.profileSelf2-pencil {
+    margin-left: 4px; /* for layout */
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    background: url("../../assets/Profile/pencilIcon.svg") #fff 50% / cover no-repeat;
+    position: relative;
+    top: -1px;
+}
+
+.profileSelf2-row2-container {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px; /* for layout */
+}
+
+.profileSelf2-row2-info {
+    color: #121212;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.profileSelf2-row2-wall {
+    color: #121212;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    margin: 0px 9px;
+}
+
+.profileSelf2-row3-container {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 8px; /* for layout */
+}
+
+.profileSelf2-row3-info {
+    color: #121212;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+}
+
+.profileSelf2-row4-container {
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 10px; /* for layout */
+}
+
+.profileSelf2-row4-info {
+    color: var(--Main, #0923A9);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 500;
+}
+
+.profileSelf2-config-title-container {
+    width: 100%;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    margin-bottom: 12px; /* for layout */
+}
+
+.profileSelf2-config-title {
+    color: #121212;
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+}
+
+.profileSelf2-config-title-sm {
+    color: var(--01, #595959);
+    font-feature-settings: 'liga' off, 'clig' off;
+    font-family: Pretendard;
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 400;
+    margin-left: 12px; /* for layout */
+}
+
+.profileSelf2-textarea-container {
+    width: 100%;
+    padding: 16px 12px;
+    background: var(--05, #F5F5F5);
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.profileSelf2-textarea {
+    padding: 0px;
+    height: 214px;
+    width: 100%;
+    background: var(--05, #F5F5F5);
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    color: var(--00, #121212);
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    overflow: auto;
+    resize: none;
+}
+
+.profileSelf2-textarea::placeholder {
+    color: var(--03, #A8A8A8);
+    text-align: justify;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 140%; /* 22.4px */
+}
+
+.profileSelf2-save-button {
+    outline: none;
+    border: none;
+    margin-top: 32px;
+    width: 350px;
+    height: 40px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    background: #0923A9;
+    color: #FFF;
+    text-align: center;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 600;
+    letter-spacing: -0.304px;
+}
+
+.profileSelf2-btn-disabled {
+    background: #A8A8A8;
+}
+
+/* etc */
+
+.profileSelf2-error-container {
+    width: 100%;
+    text-align: center;
+}
+
+.profileSelf2-backward-btn-container {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: white;
+}
+
+.profileSelf2-loader-container {
+    width: 100%;
+    padding-top: 100px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
+
+.profileSelf2-loader {
+    width: 50px;
+    aspect-ratio: 1;
+    --_c:no-repeat radial-gradient(farthest-side,#2546F3 92%,#0000);
+    background: 
+      var(--_c) top,
+      var(--_c) left,
+      var(--_c) right,
+      var(--_c) bottom;
+    background-size: 12px 12px;
+    animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
+
+.profileSelf2-loader-white {
+    width: 50px;
+    aspect-ratio: 1;
+    --_c:no-repeat radial-gradient(farthest-side,#fff 92%,#0000);
+    background: 
+      var(--_c) top,
+      var(--_c) left,
+      var(--_c) right,
+      var(--_c) bottom;
+    background-size: 12px 12px;
+    animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
+
+.profileSelf2-button-loader {
+    width: 20px;
+    aspect-ratio: 1;
+    --_c:no-repeat radial-gradient(farthest-side,#fff 92%,#0000);
+    background: 
+      var(--_c) top,
+      var(--_c) left,
+      var(--_c) right,
+      var(--_c) bottom;
+    background-size: 6px 6px;
+    animation: l7 1s infinite;
+}
+@keyframes l7 {to{transform: rotate(.5turn)}}
+
+.profileSelf2-middle-bar {
+    width: 100%;
+    height: 6px;
+    background: #F5F5F5;
+}
+
+.profileSelf-with-pd-28 {
+    padding-bottom: 28px;
+}

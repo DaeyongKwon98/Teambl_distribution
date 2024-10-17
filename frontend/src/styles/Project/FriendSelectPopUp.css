@@ -1,0 +1,138 @@
+.friendSelectPopUp-overlay-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: rgba(18, 18, 18, 0.8); /* #121212 80% 투명 배경 */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end; /* 팝업을 하단에 배치 */
+    z-index: 1000;
+}
+
+.friendSelectPopUp-overlay {
+    position: relative;
+    bottom: 0;
+    width: 100%;
+    min-height: 35%;
+    /* height: 30%; */
+    background: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    box-shadow: 0 -3.85px 7.69px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 0px 32px 21px 32px;
+    z-index: 100;
+}
+
+.friendSelectPopUp-top {
+    width: 100%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+
+.friendSelectPopUp-title-container {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.friendSelectPopUp-title-lg {
+    color: #000;
+    font-family: Pretendard;
+    font-size: 18px;
+    font-weight: 500;
+}
+
+.friendSelectPopUp-search-container {
+    display: flex;
+    align-items: center;
+    background-color: #f6f6f6;
+    border-radius: 5px;
+    padding: 0px 12px; /* 내부 여백 설정 */
+    margin: 0px; /* 좌우 여백 설정 */
+    height: 40px;
+}
+
+.friendSelectPopUp-search-icon {
+    margin-right: 8px; /* 아이콘과 입력 필드 사이의 간격 조정 */
+    width: 15px; /* 아이콘 너비 설정 */
+    height: 15px; /* 아이콘 높이 설정 */
+}
+
+.friendSelectPopUp-search-input {
+    /* flex: 1; */
+    width: 100%;
+    font-size: 16px;
+    border: none;
+    border-radius: 3.85px;
+    background-color: #f6f6f6;
+    outline: none;
+    padding: 5px;
+}
+
+.friendSelectPopUp-search-input::placeholder {
+    color: #a8a8a8;
+    font-size: 16px;
+    opacity: 1;
+}
+
+.friendSelectPopUp-body {
+    flex: 1;
+    /* max-height: 50%; */
+    width: 90%;
+    max-height: 100px;
+    /* padding: 7.69px; */
+    overflow-y: auto;
+}
+  
+.friendSelectPopUp-body p {
+    color: #121212;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 10px;
+}
+
+.friendSelectPopUp-item-container {
+    width: 100%;
+}
+
+.friendSelectPopUp-item {
+    border-radius: 24px;
+    border: 0.8px solid #595959;
+    color: #595959;
+    background-color: #fff;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 500;
+    padding: 5px 10px;
+    margin-bottom: 5px;
+    margin-right: 8px;
+    transition: all ease-in-out 0.2s;
+}
+
+.friendSelectPopUp-selected {
+    background: #2546F3;
+    border-color: #2546F3;
+    color: #fff;
+}
+
+.friendSelectPopUp-footer-btn {
+    margin-top: auto;
+    width: 100%;
+    height: 40px;
+    background: #0923A9;
+    color: #fff;
+    font-family: Pretendard;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+}
+
+.friendSelectPopUp-btn-disabled {
+    background: #A8A8A8;
+}
