@@ -4,15 +4,22 @@ import ProjectItem from "../components/ProjectItem";
 import Modal from "../components/Modal";
 import "../styles/Project.css";
 
+import BottomSheet from "../components/BottomSheet";
+import ProfileComponent from "../components/ProfileComponent";
+import Tags from "../components/Tags";
+import Description from "../components/Description";
+import ImageSection from "../components/ImageSection";
+import Reactions from "../components/Reactions";
+import CommentSection from "../components/CommentSection";
+
 function Project() {
-  const [currentUser, setCurrentUser] = useState(null);  // 로그인한 사용자 정보
+  const [currentUser, setCurrentUser] = useState(null);
   const [projects, setProjects] = useState([]);
   const [content, setContent] = useState("");
   const [title, setTitle] = useState("");
   const [contact, setContact] = useState("");
   const [keywordInput, setKeywordInput] = useState("");
   const [keywords, setKeywords] = useState([]);
-  // const [image, setImage] = useState(null);
   const [allFriends, setAllFriends] = useState([]);
   const [taggedUsers, setTaggedUsers] = useState([]);
   const [selectedUserIds, setSelectedUserIds] = useState([]);
@@ -24,11 +31,37 @@ function Project() {
   const [searchInput, setSearchInput] = useState(""); // Search input state
   const [filteredFriends, setFilteredFriends] = useState([]); // Filtered friends list
 
+  const [commentsVisible, setCommentsVisible] = useState(false);
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+  const [comments, setComments] = useState([]); // 댓글 상태 관리
+
   useEffect(() => {
     getCurrentUser();
     getProjects();
     fetchFriends();
   }, []);
+
+  const toggleComments = () => {
+    setCommentsVisible(!commentsVisible);
+  };
+
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!bottomSheetVisible);
+  };
+
+  const handleLinkCopy = () => {
+    // 링크 복사 기능 구현
+    navigator.clipboard.writeText("복사할 링크").then(() => {
+      alert("링크가 복사되었습니다!");
+    });
+    toggleBottomSheet(); // 바텀 시트 닫기
+  };
+
+  const handleReport = () => {
+    // 신고 기능 구현
+    alert("신고가 접수되었습니다.");
+    toggleBottomSheet(); // 바텀 시트 닫기
+  };
 
   const openModal = () => {
     setSearchInput("");
@@ -207,10 +240,10 @@ function Project() {
     setKeywords(keywords.filter((_, i) => i !== index));
   };
 
-  return (
+    return (
     <div>
       <div className="projects-section">
-        <h2>Projects</h2>
+        <h2>게시물</h2>
         {projects.map((project) => (
           <ProjectItem
             project={project}
@@ -221,7 +254,8 @@ function Project() {
           />
         ))}
       </div>
-      <h2>Create a Project</h2>
+
+      {/* <h2>Create a Project</h2>
       <form onSubmit={createProject}>
         <label htmlFor="title">Title:</label>
         <br />
@@ -316,7 +350,7 @@ function Project() {
           })}
         </ul>
         <input type="submit" value="Submit" />
-      </form>
+      </form> */}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h3>Select a User</h3>
