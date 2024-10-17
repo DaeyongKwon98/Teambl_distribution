@@ -22,7 +22,7 @@ const ProfileSelfProject = ({ userId }) => {
         await setIsError(false);
         try {
             const res = await api.get('/api/projects/');
-            await setProjectList(res.data.results);
+            await setProjectList(res.data);
         } catch (e) {
             console.log(e);
             await setIsError(true);
