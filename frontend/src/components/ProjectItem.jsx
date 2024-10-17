@@ -2,6 +2,13 @@ import React, { useState, useEffect } from "react";
 import "../styles/ProjectItem.css";
 import api from "../api";
 import Modal from "./Modal";
+import BottomSheet from "./BottomSheet";
+import ProfileComponent from "./ProfileComponent";
+import Tags from "./Tags";
+import Description from "./Description";
+import ImageSection from "./ImageSection";
+import Reactions from "./Reactions";
+import CommentSection from "./CommentSection";
 
 function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const formattedDate = new Date(project.created_at).toLocaleDateString("en-US");
@@ -32,6 +39,31 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchInput, setSearchInput] = useState("");
   const [filteredFriends, setFilteredFriends] = useState([]);
+
+  const [commentsVisible, setCommentsVisible] = useState(false);
+  const [bottomSheetVisible, setBottomSheetVisible] = useState(false);
+
+  const toggleComments = () => {
+    setCommentsVisible(!commentsVisible);
+  };
+
+  const toggleBottomSheet = () => {
+    setBottomSheetVisible(!bottomSheetVisible);
+  };
+
+  const handleLinkCopy = () => {
+    // 링크 복사 기능 구현
+    navigator.clipboard.writeText("복사할 링크").then(() => {
+      alert("링크가 복사되었습니다!");
+    });
+    toggleBottomSheet(); // 바텀 시트 닫기
+  };
+
+  const handleReport = () => {
+    // 신고 기능 구현
+    alert("신고가 접수되었습니다.");
+    toggleBottomSheet(); // 바텀 시트 닫기
+  };
 
   useEffect(() => {
     // 기존 이미지를 미리보기 설정
@@ -230,6 +262,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
         }
       })
       .catch((error) => console.error(error));
+    console.log("likecount", likeCount);
   };
 
   // 프로젝트 수정 저장 함수
@@ -288,7 +321,64 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
 
   return (
     <div className="project-container">
-      {isEditingProject ? (
+
+      <div className="new-project" key={project.project_id}>
+        <ProfileComponent
+          profileImage={project.user.profile.image}
+          authorName={project.user.profile.user_name}
+          major1={project.user.profile.major1}
+          major2={project.user.profile.major2}
+          school={project.user.profile.school}
+          postDate={project.created_at}
+          onSettingClick={toggleBottomSheet}
+        />
+        <div className="project-title">{project.title}</div>
+        <Tags tags={project.keywords} />
+        <Description 
+          description={project.content}
+          contactInfo={project.contact}
+        />
+        <ImageSection postImages={project.images} />
+        <Reactions 
+          participants={project.tagged_users} 
+          likes={likeCount}
+          comments={comments.length}
+          onCommentsClick={toggleComments}
+          likesClick={toggleLike}
+          liked={liked}
+        />
+        {commentsVisible && (
+          <CommentSection project={project} comments={comments} setComments={setComments} currentUser={currentUser}/>
+        )}
+        {bottomSheetVisible && (
+          <BottomSheet 
+            onClose={toggleBottomSheet} 
+            onLinkCopy={handleLinkCopy} 
+            onReport={handleReport}
+          />
+        )}
+
+        {/* {currentUser && (
+          <button
+            className="delete-project-button"
+            onClick={() => deleteProject(project.project_id)}
+          >
+            Delete Project
+          </button>
+        )} */}
+        {currentUser && currentUser.email === project.user.email && (
+          <div>
+            <button
+              className="delete-button"
+              onClick={() => onDelete(project.project_id)}
+            >
+              삭제하기
+            </button>
+          </div>
+        )}
+      </div>
+
+      {isEditingProject && (
         <div>
           <input
             type="text"
@@ -387,63 +477,28 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
           <button onClick={saveProject}>Save</button>
           <button onClick={cancelEdit}>Cancel</button>
         </div>
-      ) : (
-        <div>
-          <p className="project-title">{project.title}</p>
-          {existingImages.length > 0 && (
-            <div className="existing-images">
-              {existingImages.map((image, index) => (
-                <div key={`existing-${index}-${image || 'default'}`}>
-                  <img
-                    src={image.image} // 이미지가 있을 때만 경로 추가
-                    alt={`Project ${project.title}`}
-                    width="100"
-                  />
-                </div>
-              ))}
-            </div>
-          )}
-          <p className="project-content">{project.content}</p>
-          <p className="project-contact">Contact: {project.contact || "No contact info provided"}</p>
-          <p className="project-keywords">
-            {editKeywords.map((keyword, index) => (
-              <span key={index} className="keyword-item">
-                #{keyword}
-              </span>
-            ))}
-          </p>
-          <p className="project-user">
-            작성자: {project.user && project.user.profile ? project.user.profile.user_name : "Unknown User"}
-          </p>
-          <p className="project-date">작성일: {formattedDate}</p>
-
-          <div className="tagged-users">
-            <h4>Tagged Users:</h4>
-            {displayTaggedUsers()}
-          </div>
-        </div>
       )}
 
-      <p className="project-likes">좋아요 수: {likeCount}</p>
+      {/* <p className="project-likes">좋아요 수: {likeCount}</p>
       <button className="like-button" onClick={toggleLike}>
         {liked ? "좋아요 취소" : "좋아요"}
-      </button>
+      </button> */}
 
       {currentUser && currentUser.email === project.user.email && (
         <div>
-          <button
+          {/* <button
             className="delete-button"
             onClick={() => onDelete(project.project_id)}
           >
             삭제하기
-          </button>
+          </button> */}
           {!isEditingProject && (
             <button onClick={() => setIsEditingProject(true)}>수정하기</button>
           )}
         </div>
       )}
 
-      <div className="comments-section">
+      {/* <div className="comments-section">
         <h4>댓글</h4>
         {comments.length === 0 ? (
           <p>아직 댓글이 없어요.</p>
@@ -489,7 +544,7 @@ function ProjectItem({ project, onDelete, currentUser, refreshProjects }) {
           placeholder="댓글 쓰기"
         />
         <button onClick={submitComment}>Submit</button>
-      </div>
+      </div> */}
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <h3>Select Users</h3>
