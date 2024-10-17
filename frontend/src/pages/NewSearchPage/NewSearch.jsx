@@ -119,8 +119,13 @@ function NewSearch() {
     if (!nextPage || isSearchLoading) return; // 더 이상 불러올 페이지가 없거나 이미 로딩 중이면 중단
     setIsMoreUserLoading(true);
 
+    let safeNextPage = nextPage;
+    if (nextPage.startsWith("http://")) {
+      safeNextPage = nextPage.replace("http://", "https://");
+    }
+
     try {
-      const response = await api.post(nextPage, {
+      const response = await api.post(safeNextPage, {
         q: searchTerm,
         degree: filters.relationshipDegree,
         majors: filters.majors.flat(),
