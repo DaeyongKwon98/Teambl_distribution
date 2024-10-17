@@ -1,433 +1,536 @@
-from django.db import models
-from django.db.models import Q
-from django.contrib.auth.models import (
-    AbstractBaseUser,
-    BaseUserManager,
-    PermissionsMixin,
+from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .models import (
+    CustomUser,
+    Project,
+    ProjectImage,
+    Keyword,
+    Profile,
+    InvitationLink,
+    Friend,
+    Tool,
+    Experience,
+    PortfolioLink,
+    Notification,
+    Inquiry,
+    SearchHistory,
+    Like,
+    Comment,
 )
+import os
 
-class CustomUserManager(BaseUserManager):
-    def create_user(self, email, password=None, **extra_fields):
-        if not email:
-            raise ValueError("The Email field must be set")
-        email = self.normalize_email(email)
-        user = self.model(email=email, **extra_fields)
-        user.set_password(password)
-        user.save(using=self._db)
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # JWT 토큰에 userId를 추가
+        token["userId"] = user.id
+
+        return token
+
+    def validate(self, attrs):
+        data = super().validate(attrs)
+
+        # 로그인 응답에 userId 추가
+        data.update({"userId": self.user.id})
+
+        return data
+
+
+class KeywordSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Keyword
+        fields = ["keyword"]
+
+
+class ToolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tool
+        fields = ["id", "tool"]
+
+
+class ExperienceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Experience
+        fields = ["id", "experience"]
+
+
+class PortfolioLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PortfolioLink
+        fields = ["id", "portfolioLink"]
+
+
+class ProfileCreateSerializer(serializers.ModelSerializer):
+    keywords = serializers.SerializerMethodField()
+    tools = ToolSerializer(many=True, required=False)
+    experiences = ExperienceSerializer(many=True, required=False)
+    portfolio_links = PortfolioLinkSerializer(many=True, required=False)
+    image = serializers.ImageField(required=False, allow_null=True)
+
+    class Meta:
+        model = Profile
+        fields = [
+            "user_name",
+            "school",
+            "current_academic_degree",
+            "year",
+            "major1",
+            "major2",
+            "keywords",
+            "one_degree_count",
+            "introduction",
+            "tools",
+            "experiences",
+            "portfolio_links",
+            "image",
+        ]
+
+    def get_keywords(self, obj):
+        return [keyword.keyword for keyword in obj.keywords.all()]
+
+    def create(self, validated_data):
+        profile = Profile.objects.create(**validated_data)
+        return profile
+
+
+class ProfileUpdateSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(required=False)
+    school = serializers.CharField(required=False)
+    current_academic_degree = serializers.CharField(required=False)
+    year = serializers.IntegerField(required=False)
+    major1 = serializers.CharField(required=False)
+    major2 = serializers.CharField(required=False, allow_blank=True)
+    tools = ToolSerializer(many=True, required=False)
+    introduction = serializers.CharField(required=False, allow_blank=True)
+    experiences = ExperienceSerializer(many=True, required=False)
+    portfolio_links = PortfolioLinkSerializer(many=True, required=False)
+    keywords = serializers.SerializerMethodField()
+    image = serializers.ImageField(required=False, allow_null=True)
+
+    class Meta:
+        model = Profile
+        fields = [
+            "user_name",
+            "school",
+            "current_academic_degree",
+            "year",
+            "major1",
+            "major2",
+            "tools",
+            "introduction",
+            "experiences",
+            "portfolio_links",
+            "keywords",
+            "image",
+        ]
+
+    def get_keywords(self, obj):
+        return [keyword.keyword for keyword in obj.keywords.all()]
+
+    def update(self, instance, validated_data):
+        # 이미지 추출 (new_image, old_image )
+        new_image = validated_data.get("image", None)
+        old_image = instance.image
+
+        # tools 추출
+        tools_data = validated_data.pop("tools", None)
+
+        # experiences 추출
+        experiences_data = validated_data.pop("experiences", None)
+
+        # portfolio_links 추출
+        portfolio_links_data = validated_data.pop("portfolio_links", None)
+
+        # 키워드를 initial_data에서 추출
+        keywords_data = self.initial_data.get("keywords", None)
+        # keywords 필드를 validated_data에서 제거
+        validated_data.pop("keywords", None)
+
+        # Update basic fields only if they are provided in the validated_data
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+
+        # 기존 이미지 삭제 (새 이미지가 업로드된 경우)
+        if new_image and old_image and old_image != new_image:
+            if os.path.isfile(old_image.path):
+                os.remove(old_image.path)
+
+        # Update tools
+        if tools_data is not None:
+            instance.tools.all().delete()  # 기존 tools 삭제
+            for tool_data in tools_data:
+                Tool.objects.create(profile=instance, **tool_data)
+
+        # Update experiences
+        if experiences_data is not None:
+            instance.experiences.all().delete()  # 기존 experiences 삭제
+            for experience_data in experiences_data:
+                Experience.objects.create(profile=instance, **experience_data)
+
+        # Update portfolio links
+        if portfolio_links_data is not None:
+            instance.portfolio_links.all().delete()  # 기존 portfolio links 삭제
+            for portfolio_link_data in portfolio_links_data:
+                PortfolioLink.objects.create(profile=instance, **portfolio_link_data)
+
+        # Update keywords
+        if keywords_data is not None:
+            keyword_objs = []
+            for keyword in keywords_data:
+                keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+                keyword_objs.append(keyword_obj)
+
+            # set() 메서드를 사용하여 Many-to-Many 관계 설정
+            instance.keywords.set(keyword_objs)
+
+        return instance
+
+    def to_representation(self, instance):
+        """Return instance data including the keywords as a list of strings."""
+        representation = super().to_representation(instance)
+        representation["keywords"] = [
+            keyword.keyword for keyword in instance.keywords.all()
+        ]
+        return representation
+
+
+class CustomUserSerializer(serializers.ModelSerializer):
+    profile = ProfileCreateSerializer()
+    code = serializers.CharField(write_only=True, required=False)
+    user_name = serializers.CharField(source='profile.user_name', read_only=True)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id",
+            "email",
+            "password",
+            "last_login",
+            "is_superuser",
+            "is_staff",
+            "is_active",
+            "date_joined",
+            "profile",
+            "code",
+            "user_name",
+        ]
+        extra_kwargs = {
+            "password": {"write_only": True},
+            "last_login": {"read_only": True},
+            "is_superuser": {"read_only": True},
+            "is_active": {"read_only": True},
+            "date_joined": {"read_only": True},
+        }
+
+    def create(self, validated_data):
+        profile_data = validated_data.pop("profile", {})
+        keywords_data = profile_data.pop("keywords", [])
+
+        # CustomUser 인스턴스 생성
+        user = CustomUser.objects.create_user(
+            email=validated_data["email"],
+            password=validated_data["password"],
+            is_staff=validated_data.get("is_staff", False),
+        )
+
+        # Profile 인스턴스 생성 및 CustomUser와 연결
+        profile = Profile.objects.create(user=user, **profile_data)
+
+        # Keywords 추가
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            profile.keywords.add(keyword_obj)
+
         return user
 
-    def create_superuser(self, email, password=None, **extra_fields):
-        extra_fields.setdefault("is_staff", True)
-        extra_fields.setdefault("is_superuser", True)
+    def update(self, instance, validated_data):
+        if "password" in validated_data:
+            instance.set_password(validated_data["password"])
+            validated_data.pop("password")
+        return super().update(instance, validated_data)
 
-        return self.create_user(email, password, **extra_fields)
+class ProjectImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProjectImage
+        fields = ['id', 'image']
 
+class ProjectSerializer(serializers.ModelSerializer):
+    user = CustomUserSerializer(read_only=True)
+    keywords = serializers.SerializerMethodField()
+    tagged_users = serializers.PrimaryKeyRelatedField(
+        many=True, queryset=CustomUser.objects.all(), required=False
+    )
+    images = ProjectImageSerializer(many=True, read_only=True)
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(null=True, blank=True)
-    is_superuser = models.BooleanField(default=False)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(auto_now_add=True)
+    class Meta:
+        model = Project
+        fields = [
+            "project_id",
+            "user",
+            "title",
+            "content",
+            "created_at",
+            "keywords",
+            "like_count",
+            "images",
+            "tagged_users",
+            "contact",
+        ]
+        extra_kwargs = {"user": {"read_only": True}}
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = []
-
-    objects = CustomUserManager()
-
-    def __str__(self):
-        return self.email
-
-    def get_friend_counts(self, user_id=None):
-        # user_id가 주어지면 해당 ID 사용, 그렇지 않으면 self.id 사용
-        if user_id is None:
-            user_id = self.id
+    def get_keywords(self, obj):
+        return [keyword.keyword for keyword in obj.keywords.all()]
     
-        # 1촌 친구 목록을 찾습니다.
-        first_degree_friends = Friend.objects.filter(
-            (Q(from_user_id=user_id) | Q(to_user_id=user_id)) & Q(status="accepted")
-        )
-    
-        first_degree_ids = set()
-        for friend in first_degree_friends:
-            if friend.from_user_id == user_id:
-                first_degree_ids.add(friend.to_user.id)
-            else:
-                first_degree_ids.add(friend.from_user.id)
-    
-        # 2촌과 그들을 연결해주는 1촌의 ID 쌍을 저장할 리스트 (중복 제거를 위해 set 사용)
-        second_degree_connections = set()
-    
-        print("1촌 목록:", first_degree_ids)
-        print("현재 사용자 ID:", user_id)  # user_id를 출력해 올바르게 설정되었는지 확인
+    def get_images(self, obj):
+        images = obj.images.all()
+        # 이미지의 URL이 제대로 나오는지 확인
+        image_urls = [image.image.url for image in images if image.image]
+        print(f"Image URLs for {obj.title}: {image_urls}")  # URL이 실제로 출력되는지 확인
+        return image_urls
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['tagged_users'] = CustomUserSerializer(instance.tagged_users.all(), many=True).data
+        return representation
+
+    def create(self, validated_data):
+        # Extract keywords and tagged users
+        keywords_data = self.initial_data.get("keywords", [])
+        tagged_users_data = validated_data.pop("tagged_users", [])
+        # images_data = self.initial_data.getlist("images", [])
+
+        # Create the Project instance
+        project = Project.objects.create(**validated_data)
+
+        # Set keywords
+        keyword_objs = []
+        for keyword in keywords_data:
+            keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+            keyword_objs.append(keyword_obj)
+        project.keywords.set(keyword_objs)
+
+        # Set tagged users
+        if tagged_users_data:
+            project.tagged_users.set(tagged_users_data)
+            
+        # # Set images
+        # for image in images_data:
+        #     ProjectImage.objects.create(project=project, image=image)
+
+        return project
+
+    def update(self, instance, validated_data):
+        # Extract keywords and tagged users
+        keywords_data = self.initial_data.get("keywords", [])
+        tagged_users_data = validated_data.pop("tagged_users", [])
+        # images_data = self.initial_data.getlist("images", [])
+        # images_to_delete = self.initial_data.get("images_to_delete", [])
+
+        # Update basic fields
+        instance.title = validated_data.get('title', instance.title)
+        instance.content = validated_data.get('content', instance.content)
+        # if 'image' in validated_data:
+        #     instance.image = validated_data['image']
+
+        instance.save()
+
+        # Update keywords
+        if keywords_data:
+            keyword_objs = []
+            for keyword in keywords_data:
+                keyword_obj, created = Keyword.objects.get_or_create(keyword=keyword)
+                keyword_objs.append(keyword_obj)
+            instance.keywords.set(keyword_objs)
+        else:
+            instance.keywords.clear()
+
+        # Update tagged users
+        if tagged_users_data:
+            instance.tagged_users.set(tagged_users_data)
+        else:
+            instance.tagged_users.clear()
         
-        # 2촌 찾기
-        for friend_id in first_degree_ids:
-            second_degree_friends = Friend.objects.filter(
-                (Q(from_user_id=friend_id) | Q(to_user_id=friend_id))
-                & Q(status="accepted")
-            ).exclude(Q(from_user_id=user_id) | Q(to_user_id=user_id))
-    
-            print("현재 1촌:", friend_id)
-    
-            for friend in second_degree_friends:
-                print(f"1촌 {friend_id}의 친구 {friend.from_user_id} - {friend.to_user_id} 조사중..")
-    
-                # 2촌 관계에서 나 자신과 1촌들을 제외하고 추가
-                if friend.from_user_id == friend_id:
-                    target_id = friend.to_user_id
-                else:
-                    target_id = friend.from_user_id
-    
-                print(f"비교: target_id = {target_id}, user_id = {user_id}")
-    
-                if target_id not in first_degree_ids and target_id != user_id:
-                    second_degree_connections.add((target_id, friend_id))
-                    print(f"({target_id}, {friend_id}) 추가")
-    
-        # 중복을 제거한 2촌 ID만 반환하기 위해 set을 사용
-        second_degree_ids = {conn[0] for conn in second_degree_connections}
-    
-        print("second degree connections:", list(second_degree_connections))
-    
-        return first_degree_ids, second_degree_ids, list(second_degree_connections)
+        # # Delete images if needed
+        # if images_to_delete:
+        #     for image_id in images_to_delete:
+        #         try:
+        #             image = ProjectImage.objects.get(id=image_id, project=instance)
+        #             image.delete()
+        #         except ProjectImage.DoesNotExist:
+        #             pass  # 이미지가 존재하지 않을 경우
+
+        # # Add new images
+        # for image in images_data:
+        #     ProjectImage.objects.create(project=instance, image=image)
+
+        return instance
+
+class LikeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Like
+        fields = ["user", "project", "created_at"]
 
 
+class InvitationLinkSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = InvitationLink
+        fields = [
+            "id",
+            "inviter",
+            "invitee_name",
+            "invitee_id",
+            "link",
+            "created_at",
+            "status",
+        ]
+        read_only_fields = ["id", "inviter", "created_at"]
 
-    def get_related_users_by_keywords(self):
-        user_keywords = set(self.profile.keywords.values_list("keyword", flat=True))
-        related_profiles = Profile.objects.exclude(user=self)
 
-        user_similarity_list = []
+class FriendCreateSerializer(serializers.ModelSerializer):
+    to_user_id = serializers.IntegerField(
+        write_only=True, error_messages={"invalid": "유효한 사용자 ID를 입력해주세요."}
+    )
+    from_user = CustomUserSerializer(read_only=True)
+    to_user = CustomUserSerializer(read_only=True)
+    id = serializers.IntegerField(read_only=True)
 
-        for profile in related_profiles:
-            other_user_keywords = set(
-                profile.keywords.values_list("keyword", flat=True)
+    class Meta:
+        model = Friend
+        fields = ["id", "from_user", "to_user", "status", "to_user_id"]
+        read_only_fields = ["id", "from_user", "to_user"]
+
+    def validate(self, attrs):
+        from_user = self.context["request"].user
+        to_user_id = attrs.get("to_user_id")
+
+        # 이메일에 해당하는 사용자가 있는지 확인
+        try:
+            to_user = CustomUser.objects.get(id=to_user_id)
+        except CustomUser.DoesNotExist:
+            raise serializers.ValidationError({"message": "해당 ID의 유저가 없습니다."})
+
+        # 자신에게 1촌 신청하는지 확인
+        if from_user == to_user:
+            raise serializers.ValidationError(
+                {"message": "자신에게 1촌 신청할 수 없습니다."}
             )
-            common_keywords = user_keywords.intersection(other_user_keywords)
 
-            if len(common_keywords) > 0:  # 공통 키워드가 있는 경우에만 리스트에 추가
-                user_similarity_list.append(
-                    {
-                        "user": profile.user,
-                        "common_keywords": list(common_keywords),
-                        "similarity": len(
-                            common_keywords
-                        ),  # 공통 키워드 수를 유사도로 사용
-                    }
-                )
-        # 유사도(공통 키워드 수) 기준으로 정렬
-        user_similarity_list.sort(key=lambda x: x["similarity"], reverse=True)
+        # 이미 1촌인 유저인지 확인
+        if Friend.objects.filter(
+            from_user=from_user, to_user=to_user, status="accepted"
+        ).exists():
+            raise serializers.ValidationError({"message": "이미 1촌인 유저입니다."})
 
-        return user_similarity_list
+        # 검증 완료 후 attrs에 추가
+        attrs["from_user"] = from_user
+        attrs["to_user"] = to_user
+        return attrs
 
-class Keyword(models.Model):
-    keyword = models.CharField(max_length=50, unique=True)
-
-    def __str__(self):
-        return self.keyword
-
-class ProjectImage(models.Model):
-    project = models.ForeignKey('Project', on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to="project_images/")
-
-    def __str__(self):
-        return f"Image for {self.project.title}"
-
-class Project(models.Model):
-    project_id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="projects"
-    )  # 다른 곳에서 user.projects하면 Project object를 다 접근할 수 있게 됨
-    title = models.CharField(max_length=100)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    keywords = models.ManyToManyField(Keyword, blank=True)
-    like_count = models.IntegerField(default=0)
-    # image = models.ImageField(upload_to="project_images/", blank=True, null=True)
-    tagged_users = models.ManyToManyField(CustomUser, related_name="participating_projects", blank=True)
-    contact = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.title
+    def create(self, validated_data):
+        from_user = self.context["request"].user
+        to_user = validated_data.pop("to_user")
+        return Friend.objects.create(
+            from_user=from_user, to_user=to_user, status="pending"
+        )
 
 
-class Comment(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="comments")
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="comments")
-    content = models.CharField(max_length=30)
-    created_at = models.DateTimeField(auto_now_add=True)
-    likes = models.IntegerField(default=0)
+class FriendUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Friend
+        fields = ["status"]
 
-    parent_comment = models.ForeignKey(
-        'self', 
-        null=True, 
-        blank=True, 
-        related_name='replies', 
-        on_delete=models.CASCADE
+    def validate_status(self, value):
+        if value not in dict(Friend.STATUS_CHOICES).keys():
+            raise serializers.ValidationError("Invalid status")
+        return value
+
+
+class SearchSerializer(serializers.Serializer):
+    q = serializers.CharField(required=False, allow_blank=True)
+    degree = serializers.ListField(child=serializers.IntegerField(), required=False)
+    majors = serializers.ListField(child=serializers.CharField(), required=False)
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = [
+            "id",
+            "user",
+            "message",
+            "created_at",
+            "is_read",
+            "notification_type",
+            "related_user_id",
+        ]
+        read_only_fields = ["id", "user", "created_at"]
+
+    def validate_notification_type(self, value):
+        if value not in dict(Notification.NOTIFICATION_TYPE_CHOICES).keys():
+            raise serializers.ValidationError("Invalid notification type")
+        return value
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ["id", "email", "profile"]
+
+
+# 사용자와 공통 키워드를 반환
+class RelatedUserSerializer(serializers.Serializer):
+    user = UserDetailSerializer()
+    common_keywords = serializers.ListField(child=serializers.CharField())
+    similarity = serializers.IntegerField()
+
+
+class SecondDegreeProfileSerializer(serializers.Serializer):
+    second_degree_profile_id = serializers.IntegerField(help_text="2촌 사용자의 ID")
+    connector_friend_id = serializers.IntegerField(
+        help_text="2촌과 연결된 1촌 사용자의 ID"
     )
 
-    def __str__(self):
-        return f"Comment by {self.user.email} on {self.project.title}"
-    
 
-class Like(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="likes")
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="likes")
-    created_at = models.DateTimeField(auto_now_add=True)  # 좋아요 누른 시간
+class InquirySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inquiry
+        fields = ["id", "user", "text", "created_at"]
+        read_only_fields = ["id", "user", "created_at"]
+
+
+class SearchHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchHistory
+        fields = ["id", "user", "keyword", "created_at"]
+        read_only_fields = ["id", "user", "created_at"]
+
+
+class CommentSerializer(serializers.ModelSerializer):
+    user_name = serializers.CharField(
+        source="user.profile.user_name", read_only=True
+    )  # 댓글 작성자 이름 추가
+    replies = serializers.SerializerMethodField()
 
     class Meta:
-        unique_together = ("user", "project")  # 같은 유저가 같은 프로젝트에 여러 번 좋아요 누르지 못하게 함
+        model = Comment
+        fields = [
+            "id",
+            "user",
+            "user_name",
+            "project",
+            "content",
+            "created_at",
+            "likes",
+            "parent_comment",
+            "replies",
+        ]
+        read_only_fields = ["user", "project", "created_at", "likes"]
 
-    def __str__(self):
-        return f"{self.user.email} likes {self.project.title}"
-
-
-class Profile(models.Model):
-    MAJOR_CHOICES = [
-        # 자연과학대학
-        #  학사
-        ("물리학과", "물리학과"),
-        ("수리과학과", "수리과학과"),
-        ("화학과", "화학과"),
-        #  석사, 박사
-        ("나노과학기술대학원", "나노과학기술대학원"),
-        ("양자대학원", "양자대학원"),
-        # 생명과학기술대학
-        #  학사
-        ("생명과학과", "생명과학과"),
-        ("뇌인지과학과", "뇌인지과학과"),
-        #  석사, 박사
-        ("의과학대학원", "의과학대학원"),
-        ("공학생물학대학원", "공학생물학대학원"),
-        ("줄기세포및재생생물학대학원", "줄기세포및재생생물학대학원"),
-        # 공과대학
-        #  학사
-        ("기계공학과", "기계공학과"),
-        ("항공우주공학과", "항공우주공학과"),
-        ("전기및전자공학부", "전기및전자공학부"),
-        ("전산학부", "전산학부"),
-        ("건설및환경공학과", "건설및환경공학과"),
-        ("바이오및뇌공학과", "바이오및뇌공학과"),
-        ("산업디자인학과", "산업디자인학과"),
-        ("산업시스템공학과", "산업시스템공학과"),
-        ("생명화학공학과", "생명화학공학과"),
-        ("신소재공학과", "신소재공학과"),
-        ("원자력및양자공학과", "원자력및양자공학과"),
-        ("반도체시스템공학과", "반도체시스템공학과"),
-        #  석사, 박사
-        ("조천식모빌리티대학원", "조천식모빌리티대학원"),
-        ("김재철AI대학원", "김재철AI대학원"),
-        ("녹색성장지속가능대학원", "녹색성장지속가능대학원"),
-        ("반도체공학대학원", "반도체공학대학원"),
-        ("인공지능반도체대학원", "인공지능반도체대학원"),
-        ("메타버스대학원", "메타버스대학원"),
-        ("시스템아키텍트대학원", "시스템아키텍트대학원"),
-        # 인문사회융합과학대학
-        #  학사
-        ("디지털인문사회과학부", "디지털인문사회과학부"),
-        #  석사, 박사
-        ("문화기술대학원", "문화기술대학원"),
-        ("문술미래전략대학원", "문술미래전략대학원"),
-        ("과학기술정책대학원", "과학기술정책대학원"),
-        # 경영대학
-        #  학사
-        ("경영공학부", "경영공학부"),
-        ("기술경영학부", "기술경영학부"),
-        #  석사, 박사
-        ("KAIST경영전문대학원", "KAIST경영전문대학원"),
-        ("금융전문대학원", "금융전문대학원"),
-        ("경영자과정", "경영자과정"),
-        ("기술경영전문대학원", "기술경영전문대학원"),
-        ("글로벌디지털혁신대학원", "글로벌디지털혁신대학원"),
-        ("바이오혁신경영전문대학원", "바이오혁신경영전문대학원"),
-        # 융합인재학부
-        #  학사
-        ("융합인재학부", "융합인재학부"),
-        # 안보융합원
-        #  석사, 박사
-        ("안보과학기술대학원", "안보과학기술대학원"),
-        ("사이버안보기술대학원", "사이버안보기술대학원"),
-        # 새내기과정
-        #  학사
-        ("새내기과정학부", "새내기과정학부"),
-    ]
-
-    user = models.OneToOneField(
-        CustomUser, on_delete=models.CASCADE, related_name="profile", primary_key=True
-    )
-    user_name = models.CharField(max_length=100)  # 이름
-    school = models.CharField(max_length=100)  # 학교
-    current_academic_degree = models.CharField(max_length=10)  # 학력
-    year = models.IntegerField()  # 입학연도
-    major1 = models.CharField(
-        max_length=100,
-        choices=MAJOR_CHOICES,
-        default="pending",
-    )  # 전공 1
-    major2 = models.CharField(
-        max_length=100,
-        choices=MAJOR_CHOICES,
-        default="pending",
-        blank=True,
-        null=True,
-    )  # 전공 2
-    keywords = models.ManyToManyField(Keyword, blank=True)  # 키워드
-    one_degree_count = models.IntegerField(default=0)  # 1촌 수
-    introduction = models.TextField(default="", blank=True, max_length=1000)  # 소개
-    image = models.ImageField(
-        upload_to="profile_images/", blank=True, null=True
-    )  # 프로필 이미지
-
-    def __str__(self):
-        return self.user_name
-
-
-# 툴 (프로필과 1:N)
-class Tool(models.Model):
-    tool = models.CharField(max_length=100)
-    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name="tools")
-
-    def __str__(self):
-        return self.name
-
-
-# 경험 (프로필과 1:N)
-class Experience(models.Model):
-    experience = models.TextField()
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="experiences"
-    )
-
-    def __str__(self):
-        return self.description[:50]  # 첫 50자를 보여줌
-
-
-# 포트폴리오 링크 (프로필과 1:N)
-class PortfolioLink(models.Model):
-    portfolioLink = models.URLField()
-    profile = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, related_name="portfolio_links"
-    )
-
-    def __str__(self):
-        return self.urls
-
-
-class InvitationLink(models.Model):
-    STATUS_CHOICES = [
-        ("pending", "Pending"),
-        ("accepted", "Accepted"),
-        ("expired", "Expired"),
-    ]
-
-    inviter = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="invitation_links"
-    )
-    invitee_name = models.CharField(max_length=255)
-    invitee_id = models.IntegerField(
-        null=True, blank=True
-    )  # 나중에 다시 unique=True 해야됨
-    link = models.CharField(max_length=255, unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(
-        max_length=10,
-        choices=STATUS_CHOICES,
-        default="pending",
-    )
-
-    class Meta:
-        unique_together = ("inviter", "link")
-
-    def __str__(self):
-        return self.link
-
-
-# user A가 user B에게 1촌 신청해서 수락 된 경우. from_user: A, to_user: B
-class Friend(models.Model):
-    # 좌: db 저장 형태, 우: 실제 표시 형태
-    STATUS_CHOICES = [
-        ("pending", "Pending"),
-        ("accepted", "Accepted"),
-        ("rejected", "Rejected"),
-    ]
-    from_user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="friends_from"
-    )
-    to_user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="friends_to"
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default="pending")
-
-    class Meta:
-        unique_together = ("to_user", "from_user", "status")
-
-    @classmethod
-    def create_or_replace_friendship(cls, from_user, to_user):
-        # 거절된 상태의 친구 관계가 있는지 확인
-        rejected_friendship = cls.objects.filter(
-            models.Q(from_user=from_user, to_user=to_user) |
-            models.Q(from_user=to_user, to_user=from_user),
-            status="rejected"
-        ).first()
-        
-        # 거절된 관계가 있으면 삭제
-        if rejected_friendship:
-            rejected_friendship.delete()
-            print("rejected friendship deleted!")
-        
-        # 새로운 친구 관계 생성 (pending 상태로)
-        new_friendship = cls.objects.create(from_user=from_user, to_user=to_user, status="pending")
-        return new_friendship
-    
-    def __str__(self):
-        return f"{self.from_user.email} is friends with {self.to_user.email}, status: {self.status}"
-
-
-class Notification(models.Model):
-    NOTIFICATION_TYPE_CHOICES = [
-        ("invitation_register", "Invitation Register"),
-        ("invitation_expired", "Invitation Expired"),
-        ("friend_accept", "Friend Accept"),
-        ("friend_reject", "Friend Reject"),
-        ("friend_request", "Friend Request"),
-    ]
-
-    user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="notifications"
-    )
-    message = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
-    notification_type = models.CharField(
-        max_length=30, choices=NOTIFICATION_TYPE_CHOICES
-    )
-    related_user_id = models.IntegerField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Notification for {self.user.email} - {self.message}"
-
-
-class Inquiry(models.Model):
-    user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="inquiries"
-    )
-    text = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'Inquiry from {self.user.username} at {self.created_at}'
-
-class SearchHistory(models.Model):
-    user = models.ForeignKey(
-        CustomUser, on_delete=models.CASCADE, related_name="search_histories"
-    )
-    keyword = models.CharField(max_length=50)
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f'Search by {self.user.username} for "{self.keyword}" at {self.created_at}'
-
+    def get_replies(self, obj):
+        # Fetching replies related to the current comment
+        replies = obj.replies.all()
+        return CommentSerializer(replies, many=True).data
