@@ -161,6 +161,14 @@ class Comment(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     likes = models.IntegerField(default=0)
 
+    parent_comment = models.ForeignKey(
+        'self', 
+        null=True, 
+        blank=True, 
+        related_name='replies', 
+        on_delete=models.CASCADE
+    )
+
     def __str__(self):
         return f"Comment by {self.user.email} on {self.project.title}"
     
